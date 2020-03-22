@@ -18,7 +18,7 @@ namespace FastyBird\DevicesNode\Entities;
 use Ramsey\Uuid;
 
 /**
- * Doctrine identified entity helper trait
+ * Node base entity
  *
  * @package        FastyBird:DevicesNode!
  * @subpackage     Entities
@@ -27,7 +27,7 @@ use Ramsey\Uuid;
  *
  * @property-read Uuid\UuidInterface $id
  */
-class Entity implements IEntity
+abstract class Entity implements IEntity
 {
 
 	/**
@@ -44,16 +44,6 @@ class Entity implements IEntity
 	public function getPlainId(): string
 	{
 		return $this->id->toString();
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function toArray(): array
-	{
-		return [
-			'id' => $this->getPlainId(),
-		];
 	}
 
 }

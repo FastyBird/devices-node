@@ -19,7 +19,7 @@ use IPub\DoctrineCrud;
 use Ramsey\Uuid;
 
 /**
- * Doctrine identified entity interface
+ * Node base entity interface
  *
  * @package        FastyBird:DevicesNode!
  * @subpackage     Entities
@@ -38,10 +38,5 @@ interface IEntity extends DoctrineCrud\Entities\IEntity
 	 * @return string
 	 */
 	public function getPlainId(): string;
-
-	/**
-	 * @return mixed[]
-	 */
-	public function toArray(): array;
 
 }

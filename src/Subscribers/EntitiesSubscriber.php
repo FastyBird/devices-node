@@ -15,13 +15,16 @@
 
 namespace FastyBird\DevicesNode\Subscribers;
 
+use Consistence;
 use Doctrine\Common;
 use Doctrine\ORM;
 use Doctrine\Persistence;
 use FastyBird\DevicesNode;
 use FastyBird\DevicesNode\Entities;
+use FastyBird\DevicesNode\Exceptions;
 use FastyBird\NodeLibs\Publishers as NodeLibsPublishers;
 use Nette;
+use Ramsey\Uuid;
 
 /**
  * Doctrine entities events
@@ -39,10 +42,15 @@ final class EntitiesSubscriber implements Common\EventSubscriber
 	/** @var NodeLibsPublishers\IRabbitMqPublisher */
 	private $publisher;
 
+	/** @var ORM\EntityManagerInterface */
+	private $entityManager;
+
 	public function __construct(
-		NodeLibsPublishers\IRabbitMqPublisher $publisher
+		NodeLibsPublishers\IRabbitMqPublisher $publisher,
+		ORM\EntityManagerInterface $entityManager
 	) {
 		$this->publisher = $publisher;
+		$this->entityManager = $entityManager;
 	}
 
 	/**
@@ -185,7 +193,78 @@ final class EntitiesSubscriber implements Common\EventSubscriber
 		$routingKey = DevicesNode\Constants::RABBIT_MQ_ENTITIES_ROUTING_KEYS[get_class($entity)];
 		$routingKey = str_replace(DevicesNode\Constants::RABBIT_MQ_ENTITIES_ROUTING_KEY_ACTION_REPLACE_STRING, $action, $routingKey);
 
-		$this->publisher->publish($routingKey, $entity->toArray());
+		$this->publisher->publish($routingKey, $this->toArray($entity));
+	}
+
+	/**
+	 * @param Entities\IEntity $entity
+	 *
+	 * @return mixed[]
+	 */
+	private function toArray(Entities\IEntity $entity): array
+	{
+		$metadata = $this->entityManager->getClassMetadata(get_class($entity));
+
+		$values = [];
+
+		foreach ($metadata->fieldMappings as $field) {
+			if (isset($field['fieldName'])) {
+				$fieldName = $field['fieldName'];
+
+				try {
+					$value = $this->getPropertyValue($entity, $fieldName);
+
+					if ($value instanceof Consistence\Enum\Enum) {
+						$value = $value->getValue();
+
+					} elseif ($value instanceof Uuid\UuidInterface) {
+						$value = $value->toString();
+					}
+
+					if (is_object($value)) {
+						continue;
+					}
+
+					$values[$fieldName] = $value;
+
+				} catch (Exceptions\PropertyNotExistsException $ex) {
+					// No need to do anything
+				}
+			}
+		}
+
+		return $values;
+	}
+
+	/**
+	 * @param Entities\IEntity $entity
+	 * @param string $property
+	 *
+	 * @return mixed
+	 *
+	 * @throws Exceptions\PropertyNotExistsException
+	 */
+	private function getPropertyValue(Entities\IEntity $entity, string $property)
+	{
+		$ucFirst = ucfirst($property);
+
+		$methods = [
+			'get' . $ucFirst,
+			'is' . $ucFirst,
+			'has' . $ucFirst,
+		];
+
+		foreach ($methods as $method) {
+			if (method_exists($entity, $method)) {
+				return $entity->$method();
+			}
+		}
+
+		if (!property_exists($entity, $property)) {
+			throw new Exceptions\PropertyNotExistsException(sprintf('Property "%s" does not exists on entity', $property));
+		}
+
+		return $entity->$property;
 	}
 
 }
