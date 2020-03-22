@@ -31,23 +31,6 @@ interface IChannelRepository
 {
 
 	/**
-	 * @param string $identifier
-	 *
-	 * @return Entities\Channels\IChannel
-	 */
-	public function getOneByIdentifier(string $identifier): Entities\Channels\IChannel;
-
-	/**
-	 * @param Queries\FindChannelsQuery $queryObject
-	 *
-	 * @return Entities\Channels\IChannel
-	 *
-	 * @phpstan-template T of Entities\Channels\Channel
-	 * @phpstan-param    Queries\FindChannelsQuery<T> $queryObject
-	 */
-	public function getOneBy(Queries\FindChannelsQuery $queryObject): Entities\Channels\IChannel;
-
-	/**
 	 * @param Queries\FindChannelsQuery $queryObject
 	 *
 	 * @return Entities\Channels\IChannel|null

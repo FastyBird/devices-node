@@ -31,23 +31,6 @@ interface IPropertyRepository
 {
 
 	/**
-	 * @param string $identifier
-	 *
-	 * @return Entities\Channels\Properties\IProperty
-	 */
-	public function getOneByIdentifier(string $identifier): Entities\Channels\Properties\IProperty;
-
-	/**
-	 * @param Queries\FindChannelPropertiesQuery $queryObject
-	 *
-	 * @return Entities\Channels\Properties\IProperty
-	 *
-	 * @phpstan-template T of Entities\Channels\Properties\Property
-	 * @phpstan-param    Queries\FindChannelPropertiesQuery<T> $queryObject
-	 */
-	public function getOneBy(Queries\FindChannelPropertiesQuery $queryObject): Entities\Channels\Properties\IProperty;
-
-	/**
 	 * @param Queries\FindChannelPropertiesQuery $queryObject
 	 *
 	 * @return Entities\Channels\Properties\IProperty|null

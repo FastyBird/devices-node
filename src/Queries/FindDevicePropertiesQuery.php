@@ -26,10 +26,10 @@ use Ramsey\Uuid;
 /**
  * Find device properties entities query
  *
- * @package         FastyBird:DevicesNode!
- * @subpackage      Queries
+ * @package          FastyBird:DevicesNode!
+ * @subpackage       Queries
  *
- * @author          Adam Kadlec <adam.kadlec@fastybird.com>
+ * @author           Adam Kadlec <adam.kadlec@fastybird.com>
  *
  * @phpstan-template T of Entities\Devices\Properties\Property
  * @phpstan-extends  DoctrineOrmQuery\QueryObject<T>

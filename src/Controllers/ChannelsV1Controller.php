@@ -49,7 +49,7 @@ final class ChannelsV1Controller extends BaseV1Controller
 	/** @var Models\Channels\IChannelRepository */
 	protected $channelRepository;
 
-	/** @var Hydrators\Channels\Channel */
+	/** @var Hydrators\Channels\ChannelHydrator */
 	private $channelHydrator;
 
 	/** @var string */
@@ -59,7 +59,7 @@ final class ChannelsV1Controller extends BaseV1Controller
 		Models\Devices\IDeviceRepository $deviceRepository,
 		Models\Channels\IChannelRepository $channelRepository,
 		Models\Channels\IChannelsManager $channelsManager,
-		Hydrators\Channels\Channel $channelHydrator
+		Hydrators\Channels\ChannelHydrator $channelHydrator
 	) {
 		$this->deviceRepository = $deviceRepository;
 		$this->channelRepository = $channelRepository;

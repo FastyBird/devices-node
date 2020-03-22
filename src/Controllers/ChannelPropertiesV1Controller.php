@@ -17,6 +17,7 @@ namespace FastyBird\DevicesNode\Controllers;
 
 use FastyBird\DevicesNode\Controllers;
 use FastyBird\DevicesNode\Models;
+use FastyBird\DevicesNode\Queries;
 use FastyBird\DevicesNode\Router;
 use FastyBird\DevicesNode\Schemas;
 use FastyBird\NodeWebServer\Exceptions as NodeWebServerExceptions;
@@ -44,15 +45,20 @@ final class ChannelPropertiesV1Controller extends BaseV1Controller
 	/** @var Models\Channels\IChannelRepository */
 	protected $channelRepository;
 
+	/** @var Models\Channels\Properties\IPropertyRepository */
+	protected $propertyRepository;
+
 	/** @var string */
 	protected $translationDomain = 'node.channelProperties';
 
 	public function __construct(
 		Models\Devices\IDeviceRepository $deviceRepository,
-		Models\Channels\IChannelRepository $channelRepository
+		Models\Channels\IChannelRepository $channelRepository,
+		Models\Channels\Properties\IPropertyRepository $propertyRepository
 	) {
 		$this->deviceRepository = $deviceRepository;
 		$this->channelRepository = $channelRepository;
+		$this->propertyRepository = $propertyRepository;
 	}
 
 	/**
@@ -73,8 +79,13 @@ final class ChannelPropertiesV1Controller extends BaseV1Controller
 		// & channel
 		$channel = $this->findChannel($request->getAttribute(Router\Router::URL_CHANNEL_ID), $device);
 
+		$findQuery = new Queries\FindChannelPropertiesQuery();
+		$findQuery->forChannel($channel);
+
+		$properties = $this->propertyRepository->getResultSet($findQuery);
+
 		return $response
-			->withEntity(NodeWebServerHttp\ScalarEntity::from($channel->getProperties()));
+			->withEntity(NodeWebServerHttp\ScalarEntity::from($properties));
 	}
 
 	/**
@@ -95,8 +106,12 @@ final class ChannelPropertiesV1Controller extends BaseV1Controller
 		// & channel
 		$channel = $this->findChannel($request->getAttribute(Router\Router::URL_CHANNEL_ID), $device);
 
+		$findQuery = new Queries\FindChannelPropertiesQuery();
+		$findQuery->forChannel($channel);
+		$findQuery->byProperty($request->getAttribute(Router\Router::URL_ITEM_ID));
+
 		// & property
-		$property = $channel->getProperty($request->getAttribute(Router\Router::URL_ITEM_ID));
+		$property = $this->propertyRepository->findOneBy($findQuery);
 
 		if ($property !== null) {
 			return $response
@@ -132,12 +147,9 @@ final class ChannelPropertiesV1Controller extends BaseV1Controller
 		$relationEntity = strtolower($request->getAttribute(Router\Router::RELATION_ENTITY));
 
 		if ($relationEntity === Schemas\Channels\Properties\PropertySchema::RELATIONSHIPS_CHANNEL) {
-			// & property
-			$property = $channel->getProperty($request->getAttribute(Router\Router::URL_ITEM_ID));
-
-			if ($property !== null) {
+			if ($channel->hasProperty($request->getAttribute(Router\Router::URL_ITEM_ID))) {
 				return $response
-					->withEntity(NodeWebServerHttp\ScalarEntity::from($property->getChannel()));
+					->withEntity(NodeWebServerHttp\ScalarEntity::from($channel));
 			}
 
 			throw new NodeWebServerExceptions\JsonApiErrorException(

@@ -16,7 +16,6 @@
 namespace FastyBird\DevicesNode\Models\Channels\Properties;
 
 use Doctrine\Common;
-use Doctrine\DBAL\Types;
 use Doctrine\ORM;
 use FastyBird\DevicesNode\Entities;
 use FastyBird\DevicesNode\Exceptions;
@@ -47,41 +46,6 @@ final class PropertyRepository implements IPropertyRepository
 	public function __construct(Common\Persistence\ManagerRegistry $managerRegistry)
 	{
 		$this->managerRegistry = $managerRegistry;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function getOneByIdentifier(string $identifier): Entities\Channels\Properties\IProperty
-	{
-		try {
-			/** @var Entities\Channels\Properties\IProperty|null $property */
-			$property = $this->getRepository()->findOneBy(['id' => $identifier]);
-
-			if ($property === null) {
-				throw new Exceptions\ItemNotFoundException(sprintf('Channel property entity with identifier "%s" was not found.', $identifier));
-			}
-
-		} catch (Types\ConversionException $ex) {
-			throw new Exceptions\ItemNotFoundException(sprintf('Provided channel property identifier "%s" is not valid UUID identifier.', $identifier));
-		}
-
-		return $property;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function getOneBy(Queries\FindChannelPropertiesQuery $queryObject): Entities\Channels\Properties\IProperty
-	{
-		/** @var Entities\Channels\Properties\IProperty|null $property */
-		$property = $queryObject->fetchOne($this->getRepository());
-
-		if ($property === null) {
-			throw new Exceptions\ItemNotFoundException('Channel property entity with given parameters in QueryObject was not found.');
-		}
-
-		return $property;
 	}
 
 	/**

@@ -50,11 +50,8 @@ final class FirmwareManager implements IFirmwareManager
 	public function create(
 		Utils\ArrayHash $values
 	): Entities\Devices\PhysicalDevice\IFirmware {
-		// Get entity creator
-		$creator = $this->entityCrud->getEntityCreator();
-
 		/** @var Entities\Devices\PhysicalDevice\IFirmware $entity */
-		$entity = $creator->create($values);
+		$entity = $this->entityCrud->getEntityCreator()->create($values);
 
 		return $entity;
 	}
@@ -66,11 +63,8 @@ final class FirmwareManager implements IFirmwareManager
 		Entities\Devices\PhysicalDevice\IFirmware $entity,
 		Utils\ArrayHash $values
 	): Entities\Devices\PhysicalDevice\IFirmware {
-		// Get entity updater
-		$updater = $this->entityCrud->getEntityUpdater();
-
 		/** @var Entities\Devices\PhysicalDevice\IFirmware $entity */
-		$entity = $updater->update($values, $entity);
+		$entity = $this->entityCrud->getEntityUpdater()->update($values, $entity);
 
 		return $entity;
 	}

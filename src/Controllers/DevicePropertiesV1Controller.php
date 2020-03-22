@@ -17,6 +17,7 @@ namespace FastyBird\DevicesNode\Controllers;
 
 use FastyBird\DevicesNode\Controllers;
 use FastyBird\DevicesNode\Models;
+use FastyBird\DevicesNode\Queries;
 use FastyBird\DevicesNode\Router;
 use FastyBird\DevicesNode\Schemas;
 use FastyBird\NodeWebServer\Exceptions as NodeWebServerExceptions;
@@ -31,12 +32,6 @@ use Psr\Http\Message;
  * @subpackage     Controllers
  *
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
- *
- * @Secured
- * @Secured\Permission(fastybird/iot-devices-module:access)
- * @Secured\User(loggedIn)
- *
- * @ControllerAnnotation\ControllerPath("/devices")
  */
 final class DevicePropertiesV1Controller extends BaseV1Controller
 {
@@ -46,13 +41,18 @@ final class DevicePropertiesV1Controller extends BaseV1Controller
 	/** @var Models\Devices\IDeviceRepository */
 	protected $deviceRepository;
 
+	/** @var Models\Devices\Properties\IPropertyRepository */
+	private $propertyRepository;
+
 	/** @var string */
 	protected $translationDomain = 'node.deviceProperties';
 
 	public function __construct(
-		Models\Devices\IDeviceRepository $deviceRepository
+		Models\Devices\IDeviceRepository $deviceRepository,
+		Models\Devices\Properties\IPropertyRepository $propertyRepository
 	) {
 		$this->deviceRepository = $deviceRepository;
+		$this->propertyRepository = $propertyRepository;
 	}
 
 	/**
@@ -70,8 +70,13 @@ final class DevicePropertiesV1Controller extends BaseV1Controller
 		// At first, try to load device
 		$device = $this->findDevice($request->getAttribute(Router\Router::URL_DEVICE_ID));
 
+		$findQuery = new Queries\FindDevicePropertiesQuery();
+		$findQuery->forDevice($device);
+
+		$properties = $this->propertyRepository->getResultSet($findQuery);
+
 		return $response
-			->withEntity(NodeWebServerHttp\ScalarEntity::from($device->getProperties()));
+			->withEntity(NodeWebServerHttp\ScalarEntity::from($properties));
 	}
 
 	/**
@@ -89,8 +94,12 @@ final class DevicePropertiesV1Controller extends BaseV1Controller
 		// At first, try to load device
 		$device = $this->findDevice($request->getAttribute(Router\Router::URL_DEVICE_ID));
 
+		$findQuery = new Queries\FindDevicePropertiesQuery();
+		$findQuery->forDevice($device);
+		$findQuery->byProperty($request->getAttribute(Router\Router::URL_ITEM_ID));
+
 		// & property
-		$property = $device->getProperty($request->getAttribute(Router\Router::URL_ITEM_ID));
+		$property = $this->propertyRepository->findOneBy($findQuery);
 
 		if ($property !== null) {
 			return $response
@@ -123,12 +132,9 @@ final class DevicePropertiesV1Controller extends BaseV1Controller
 		$relationEntity = strtolower($request->getAttribute(Router\Router::RELATION_ENTITY));
 
 		if ($relationEntity === Schemas\Devices\Properties\PropertySchema::RELATIONSHIPS_DEVICE) {
-			// & property
-			$property = $device->getProperty($request->getAttribute(Router\Router::URL_ITEM_ID));
-
-			if ($property !== null) {
+			if ($device->hasProperty($request->getAttribute(Router\Router::URL_ITEM_ID))) {
 				return $response
-					->withEntity(NodeWebServerHttp\ScalarEntity::from($property->getDevice()));
+					->withEntity(NodeWebServerHttp\ScalarEntity::from($device));
 			}
 
 			throw new NodeWebServerExceptions\JsonApiErrorException(

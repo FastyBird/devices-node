@@ -54,7 +54,7 @@ class DevicesV1Controller extends BaseV1Controller
 	/** @var Models\Channels\IChannelsManager */
 	protected $channelsManager;
 
-	/** @var Hydrators\Devices\PhysicalDevice */
+	/** @var Hydrators\Devices\PhysicalDeviceHydrator */
 	private $physicalDeviceHydrator;
 
 	/** @var string */
@@ -65,7 +65,7 @@ class DevicesV1Controller extends BaseV1Controller
 		Models\Devices\IDevicesManager $devicesManager,
 		Models\Channels\IChannelRepository $channelRepository,
 		Models\Channels\IChannelsManager $channelsManager,
-		Hydrators\Devices\PhysicalDevice $physicalDeviceHydrator
+		Hydrators\Devices\PhysicalDeviceHydrator $physicalDeviceHydrator
 	) {
 		$this->deviceRepository = $deviceRepository;
 		$this->devicesManager = $devicesManager;

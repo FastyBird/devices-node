@@ -31,11 +31,16 @@ interface IPropertyRepository
 {
 
 	/**
-	 * @param string $identifier
+	 * @param Queries\FindDevicePropertiesQuery $queryObject
 	 *
-	 * @return Entities\Devices\Properties\IProperty
+	 * @return Entities\Devices\Properties\IProperty|null
+	 *
+	 * @phpstan-template T of Entities\Devices\Properties\Property
+	 * @phpstan-param    Queries\FindDevicePropertiesQuery<T> $queryObject
 	 */
-	public function getOneByIdentifier(string $identifier): Entities\Devices\Properties\IProperty;
+	public function findOneBy(
+		Queries\FindDevicePropertiesQuery $queryObject
+	): ?Entities\Devices\Properties\IProperty;
 
 	/**
 	 * @param Queries\FindDevicePropertiesQuery $queryObject

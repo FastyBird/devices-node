@@ -34,21 +34,6 @@ interface IDeviceRepository
 	 * @param Queries\FindDevicesQuery $queryObject
 	 * @param string $type
 	 *
-	 * @return Entities\Devices\IDevice
-	 *
-	 * @phpstan-template T of Entities\Devices\Device
-	 * @phpstan-param    Queries\FindDevicesQuery<T> $queryObject
-	 * @phpstan-param    class-string<T> $type
-	 */
-	public function getOneBy(
-		Queries\FindDevicesQuery $queryObject,
-		string $type = Entities\Devices\Device::class
-	): Entities\Devices\IDevice;
-
-	/**
-	 * @param Queries\FindDevicesQuery $queryObject
-	 * @param string $type
-	 *
 	 * @return Entities\Devices\IDevice|null
 	 *
 	 * @phpstan-template T of Entities\Devices\Device

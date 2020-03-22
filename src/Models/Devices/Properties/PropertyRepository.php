@@ -16,7 +16,6 @@
 namespace FastyBird\DevicesNode\Models\Devices\Properties;
 
 use Doctrine\Common;
-use Doctrine\DBAL\Types;
 use Doctrine\ORM;
 use FastyBird\DevicesNode\Entities;
 use FastyBird\DevicesNode\Exceptions;
@@ -52,19 +51,12 @@ final class PropertyRepository implements IPropertyRepository
 	/**
 	 * {@inheritDoc}
 	 */
-	public function getOneByIdentifier(string $identifier): Entities\Devices\Properties\IProperty
-	{
-		try {
-			/** @var Entities\Devices\Properties\IProperty|null $property */
-			$property = $this->getRepository()->findOneBy(['id' => $identifier]);
-
-			if ($property === null) {
-				throw new Exceptions\ItemNotFoundException(sprintf('Channel property entity with identifier "%s" was not found.', $identifier));
-			}
-
-		} catch (Types\ConversionException $ex) {
-			throw new Exceptions\ItemNotFoundException(sprintf('Provided channel property identifier "%s" is not valid UUID identifier.', $identifier));
-		}
+	public function findOneBy(
+		Queries\FindDevicePropertiesQuery $queryObject,
+		string $type = Entities\Devices\Device::class
+	): ?Entities\Devices\Properties\IProperty {
+		/** @var Entities\Devices\Properties\IProperty|null $property */
+		$property = $queryObject->fetchOne($this->getRepository());
 
 		return $property;
 	}

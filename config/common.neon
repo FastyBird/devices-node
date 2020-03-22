@@ -144,6 +144,8 @@ services:
 
 	- {factory: FastyBird\DevicesNode\Subscribers\HttpServerSubscriber}
 
+	- {factory: FastyBird\DevicesNode\Subscribers\EntitiesSubscriber}
+
 	# Database repositories
 	#######################
 
@@ -239,6 +241,6 @@ services:
 	# API hydrators
 	###############
 
-	- {factory: FastyBird\DevicesNode\Hydrators\Devices\PhysicalDevice}
+	- {factory: FastyBird\DevicesNode\Hydrators\Devices\PhysicalDeviceHydrator}
 
-	- {factory: FastyBird\DevicesNode\Hydrators\Channels\Channel}
+	- {factory: FastyBird\DevicesNode\Hydrators\Channels\ChannelHydrator}

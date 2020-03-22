@@ -26,7 +26,7 @@ use IPub\JsonAPIDocument;
  *
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  */
-abstract class Device extends Hydrators\Hydrator
+abstract class DeviceHydrator extends Hydrators\Hydrator
 {
 
 	/** @var string */

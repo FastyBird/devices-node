@@ -50,11 +50,8 @@ final class HardwareManager implements IHardwareManager
 	public function create(
 		Utils\ArrayHash $values
 	): Entities\Devices\PhysicalDevice\IHardware {
-		// Get entity creator
-		$creator = $this->entityCrud->getEntityCreator();
-
 		/** @var Entities\Devices\PhysicalDevice\IHardware $entity */
-		$entity = $creator->create($values);
+		$entity = $this->entityCrud->getEntityCreator()->create($values);
 
 		return $entity;
 	}
@@ -66,11 +63,8 @@ final class HardwareManager implements IHardwareManager
 		Entities\Devices\PhysicalDevice\IHardware $entity,
 		Utils\ArrayHash $values
 	): Entities\Devices\PhysicalDevice\IHardware {
-		// Get entity updater
-		$updater = $this->entityCrud->getEntityUpdater();
-
 		/** @var Entities\Devices\PhysicalDevice\IHardware $entity */
-		$entity = $updater->update($values, $entity);
+		$entity = $this->entityCrud->getEntityUpdater()->update($values, $entity);
 
 		return $entity;
 	}

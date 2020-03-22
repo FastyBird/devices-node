@@ -16,7 +16,6 @@
 namespace FastyBird\DevicesNode\Controllers\Finders;
 
 use FastyBird\DevicesNode\Entities;
-use FastyBird\DevicesNode\Exceptions;
 use FastyBird\DevicesNode\Models;
 use FastyBird\DevicesNode\Queries;
 use FastyBird\NodeWebServer\Exceptions as NodeWebServerExceptions;
@@ -44,16 +43,17 @@ trait TDeviceFinder
 			$findDevice = new Queries\FindDevicesQuery();
 			$findDevice->byId(Uuid\Uuid::fromString($id));
 
-			$device = $this->deviceRepository->getOneBy($findDevice);
+			$device = $this->deviceRepository->findOneBy($findDevice);
+
+			if ($device === null) {
+				throw new NodeWebServerExceptions\JsonApiErrorException(
+					StatusCodeInterface::STATUS_NOT_FOUND,
+					$this->translator->translate('//node.base.messages.deviceNotFound.heading'),
+					$this->translator->translate('//node.base.messages.deviceNotFound.message')
+				);
+			}
 
 		} catch (Uuid\Exception\InvalidUuidStringException $ex) {
-			throw new NodeWebServerExceptions\JsonApiErrorException(
-				StatusCodeInterface::STATUS_NOT_FOUND,
-				$this->translator->translate('//node.base.messages.deviceNotFound.heading'),
-				$this->translator->translate('//node.base.messages.deviceNotFound.message')
-			);
-
-		} catch (Exceptions\ItemNotFoundException $ex) {
 			throw new NodeWebServerExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_NOT_FOUND,
 				$this->translator->translate('//node.base.messages.deviceNotFound.heading'),

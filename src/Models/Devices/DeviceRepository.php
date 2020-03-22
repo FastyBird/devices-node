@@ -51,23 +51,6 @@ final class DeviceRepository implements IDeviceRepository
 	/**
 	 * {@inheritDoc}
 	 */
-	public function getOneBy(
-		Queries\FindDevicesQuery $queryObject,
-		string $type = Entities\Devices\Device::class
-	): Entities\Devices\IDevice {
-		/** @var Entities\Devices\IDevice|null $device */
-		$device = $queryObject->fetchOne($this->getRepository($type));
-
-		if ($device === null) {
-			throw new Exceptions\ItemNotFoundException('Device entity with given parameters in QueryObject was not found.');
-		}
-
-		return $device;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
 	public function findOneBy(
 		Queries\FindDevicesQuery $queryObject,
 		string $type = Entities\Devices\Device::class

@@ -16,7 +16,6 @@
 namespace FastyBird\DevicesNode\Models\Channels;
 
 use Doctrine\Common;
-use Doctrine\DBAL\Types;
 use Doctrine\ORM;
 use FastyBird\DevicesNode\Entities;
 use FastyBird\DevicesNode\Exceptions;
@@ -47,41 +46,6 @@ final class ChannelRepository implements IChannelRepository
 	public function __construct(Common\Persistence\ManagerRegistry $managerRegistry)
 	{
 		$this->managerRegistry = $managerRegistry;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function getOneByIdentifier(string $identifier): Entities\Channels\IChannel
-	{
-		try {
-			/** @var Entities\Channels\IChannel|null $channel */
-			$channel = $this->getRepository()->findOneBy(['id' => $identifier]);
-
-			if ($channel === null) {
-				throw new Exceptions\ItemNotFoundException(sprintf('Channel entity with identifier "%s" was not found.', $identifier));
-			}
-
-		} catch (Types\ConversionException $ex) {
-			throw new Exceptions\ItemNotFoundException(sprintf('Provided channel identifier "%s" is not valid UUID identifier.', $identifier));
-		}
-
-		return $channel;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function getOneBy(Queries\FindChannelsQuery $queryObject): Entities\Channels\IChannel
-	{
-		/** @var Entities\Channels\IChannel|null $channel */
-		$channel = $queryObject->fetchOne($this->getRepository());
-
-		if ($channel === null) {
-			throw new Exceptions\ItemNotFoundException('Channel entity with given parameters in QueryObject was not found.');
-		}
-
-		return $channel;
 	}
 
 	/**

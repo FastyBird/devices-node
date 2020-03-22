@@ -51,10 +51,8 @@ final class CredentialsManager implements ICredentialsManager
 		Utils\ArrayHash $values
 	): Entities\Devices\Credentials\ICredentials {
 		// Get entity creator
-		$creator = $this->entityCrud->getEntityCreator();
-
 		/** @var Entities\Devices\Credentials\ICredentials $entity */
-		$entity = $creator->create($values);
+		$entity = $this->entityCrud->getEntityCreator()->create($values);
 
 		return $entity;
 	}
@@ -66,11 +64,8 @@ final class CredentialsManager implements ICredentialsManager
 		Entities\Devices\Credentials\ICredentials $entity,
 		Utils\ArrayHash $values
 	): Entities\Devices\Credentials\ICredentials {
-		// Get entity updater
-		$updater = $this->entityCrud->getEntityUpdater();
-
 		/** @var Entities\Devices\Credentials\ICredentials $entity */
-		$entity = $updater->update($values, $entity);
+		$entity = $this->entityCrud->getEntityUpdater()->update($values, $entity);
 
 		return $entity;
 	}
@@ -81,11 +76,8 @@ final class CredentialsManager implements ICredentialsManager
 	public function delete(
 		Entities\Devices\Credentials\ICredentials $entity
 	): bool {
-		// Get entity deleter
-		$deleter = $this->entityCrud->getEntityDeleter();
-
 		// Delete entity from database
-		return $deleter->delete($entity);
+		return $this->entityCrud->getEntityDeleter()->delete($entity);
 	}
 
 }

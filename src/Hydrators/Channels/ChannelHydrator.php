@@ -1,7 +1,7 @@
 <?php declare(strict_types = 1);
 
 /**
- * Channel.php
+ * ChannelHydrator.php
  *
  * @license        More in license.md
  * @copyright      https://www.fastybird.com
@@ -31,7 +31,7 @@ use Throwable;
  *
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  */
-final class Channel extends Hydrators\Hydrator
+final class ChannelHydrator extends Hydrators\Hydrator
 {
 
 	/** @var string */

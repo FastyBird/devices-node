@@ -50,11 +50,8 @@ final class ControlsManager implements IControlsManager
 	public function create(
 		Utils\ArrayHash $values
 	): Entities\Devices\Controls\IControl {
-		// Get entity creator
-		$creator = $this->entityCrud->getEntityCreator();
-
 		/** @var Entities\Devices\Controls\IControl $entity */
-		$entity = $creator->create($values);
+		$entity = $this->entityCrud->getEntityCreator()->create($values);
 
 		return $entity;
 	}
@@ -66,11 +63,8 @@ final class ControlsManager implements IControlsManager
 		Entities\Devices\Controls\IControl $entity,
 		Utils\ArrayHash $values
 	): Entities\Devices\Controls\IControl {
-		// Get entity updater
-		$updater = $this->entityCrud->getEntityUpdater();
-
 		/** @var Entities\Devices\Controls\IControl $entity */
-		$entity = $updater->update($values, $entity);
+		$entity = $this->entityCrud->getEntityUpdater()->update($values, $entity);
 
 		return $entity;
 	}
@@ -81,11 +75,8 @@ final class ControlsManager implements IControlsManager
 	public function delete(
 		Entities\Devices\Controls\IControl $entity
 	): bool {
-		// Get entity deleter
-		$deleter = $this->entityCrud->getEntityDeleter();
-
 		// Delete entity from database
-		return $deleter->delete($entity);
+		return $this->entityCrud->getEntityDeleter()->delete($entity);
 	}
 
 }

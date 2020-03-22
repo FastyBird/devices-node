@@ -1,7 +1,7 @@
 <?php declare(strict_types = 1);
 
 /**
- * MachineDevice.php
+ * PhysicalDeviceHydrator.php
  *
  * @license        More in license.md
  * @copyright      https://www.fastybird.com
@@ -31,7 +31,7 @@ use Throwable;
  *
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  */
-class PhysicalDevice extends Device
+class PhysicalDeviceHydrator extends DeviceHydrator
 {
 
 	/** @var string[] */

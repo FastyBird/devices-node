@@ -16,7 +16,6 @@
 namespace FastyBird\DevicesNode\Controllers\Finders;
 
 use FastyBird\DevicesNode\Entities;
-use FastyBird\DevicesNode\Exceptions;
 use FastyBird\DevicesNode\Models;
 use FastyBird\DevicesNode\Queries;
 use FastyBird\NodeWebServer\Exceptions as NodeWebServerExceptions;
@@ -48,16 +47,17 @@ trait TChannelFinder
 			$findChannel->byId(Uuid\Uuid::fromString($id));
 			$findChannel->forDevice($device);
 
-			$channel = $this->channelRepository->getOneBy($findChannel);
+			$channel = $this->channelRepository->findOneBy($findChannel);
+
+			if ($channel === null) {
+				throw new NodeWebServerExceptions\JsonApiErrorException(
+					StatusCodeInterface::STATUS_NOT_FOUND,
+					$this->translator->translate('//node.base.messages.channelNotFound.heading'),
+					$this->translator->translate('//node.base.messages.channelNotFound.message')
+				);
+			}
 
 		} catch (Uuid\Exception\InvalidUuidStringException $ex) {
-			throw new NodeWebServerExceptions\JsonApiErrorException(
-				StatusCodeInterface::STATUS_NOT_FOUND,
-				$this->translator->translate('//node.base.messages.channelNotFound.heading'),
-				$this->translator->translate('//node.base.messages.channelNotFound.message')
-			);
-
-		} catch (Exceptions\ItemNotFoundException $ex) {
 			throw new NodeWebServerExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_NOT_FOUND,
 				$this->translator->translate('//node.base.messages.channelNotFound.heading'),
