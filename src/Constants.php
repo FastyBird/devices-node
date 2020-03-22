@@ -15,6 +15,8 @@
 
 namespace FastyBird\DevicesNode;
 
+use FastyBird\DevicesNode\Entities as DevicesNodeEntities;
+
 /**
  * Service constants
  *
@@ -25,6 +27,20 @@ namespace FastyBird\DevicesNode;
  */
 final class Constants
 {
+
+	/**
+	 * Message bus routing keys for data entities
+	 */
+	public const RABBIT_MQ_ENTITIES_ROUTING_KEYS = [
+		DevicesNodeEntities\Devices\PhysicalDevice::class          => 'fb.bus.node.entity.[ACTION].device',
+		DevicesNodeEntities\Devices\Properties\Property::class     => 'fb.bus.node.entity.[ACTION].device.property',
+		DevicesNodeEntities\Devices\PhysicalDevice\Hardware::class => 'fb.bus.node.entity.[ACTION].device.hardware',
+		DevicesNodeEntities\Devices\PhysicalDevice\Firmware::class => 'fb.bus.node.entity.[ACTION].device.firmware',
+		DevicesNodeEntities\Channels\Channel::class                => 'fb.bus.node.entity.[ACTION].device.channel',
+		DevicesNodeEntities\Channels\Properties\Property::class    => 'fb.bus.node.entity.[ACTION].device.channel.property',
+	];
+
+	public const RABBIT_MQ_ENTITIES_ROUTING_KEY_ACTION_REPLACE_STRING = '[ACTION]';
 
 	/**
 	 * Message bus routing key for devices properties messages

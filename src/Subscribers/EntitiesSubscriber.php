@@ -18,7 +18,9 @@ namespace FastyBird\DevicesNode\Subscribers;
 use Doctrine\Common;
 use Doctrine\ORM;
 use Doctrine\Persistence;
+use FastyBird\DevicesNode;
 use FastyBird\DevicesNode\Entities;
+use FastyBird\NodeLibs\Publishers as NodeLibsPublishers;
 use Nette;
 
 /**
@@ -33,6 +35,15 @@ final class EntitiesSubscriber implements Common\EventSubscriber
 {
 
 	use Nette\SmartObject;
+
+	/** @var NodeLibsPublishers\IRabbitMqPublisher */
+	private $publisher;
+
+	public function __construct(
+		NodeLibsPublishers\IRabbitMqPublisher $publisher
+	) {
+		$this->publisher = $publisher;
+	}
 
 	/**
 	 * Register events
@@ -167,8 +178,14 @@ final class EntitiesSubscriber implements Common\EventSubscriber
 	 */
 	private function processEntityAction(Entities\IIdentifiedEntity $entity, string $action): void
 	{
-		var_dump(get_class($entity));
-		var_dump($action);
+		if (!array_key_exists(get_class($entity), DevicesNode\Constants::RABBIT_MQ_ENTITIES_ROUTING_KEYS)) {
+			return;
+		}
+
+		$routingKey = DevicesNode\Constants::RABBIT_MQ_ENTITIES_ROUTING_KEYS[get_class($entity)];
+		$routingKey = str_replace(DevicesNode\Constants::RABBIT_MQ_ENTITIES_ROUTING_KEY_ACTION_REPLACE_STRING, $action, $routingKey);
+
+		$this->publisher->publish($routingKey, $entity->toSimpleArray());
 	}
 
 }
