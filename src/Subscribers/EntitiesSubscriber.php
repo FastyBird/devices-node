@@ -37,6 +37,10 @@ use Ramsey\Uuid;
 final class EntitiesSubscriber implements Common\EventSubscriber
 {
 
+	private const ACTION_CREATED = 'created';
+	private const ACTION_UPDATED = 'updated';
+	private const ACTION_DELETED = 'deleted';
+
 	use Nette\SmartObject;
 
 	/** @var NodeLibsPublishers\IRabbitMqPublisher */
@@ -82,7 +86,7 @@ final class EntitiesSubscriber implements Common\EventSubscriber
 			return;
 		}
 
-		$this->processEntityAction($entity, 'CREATE');
+		$this->processEntityAction($entity, self::ACTION_CREATED);
 	}
 
 	/**
@@ -111,7 +115,7 @@ final class EntitiesSubscriber implements Common\EventSubscriber
 			return;
 		}
 
-		$this->processEntityAction($entity, 'UPDATE');
+		$this->processEntityAction($entity, self::ACTION_UPDATED);
 	}
 
 	/**
@@ -141,7 +145,7 @@ final class EntitiesSubscriber implements Common\EventSubscriber
 				continue;
 			}
 
-			$this->processEntityAction($entity, 'DELETE');
+			$this->processEntityAction($entity, self::ACTION_DELETED);
 		}
 	}
 
@@ -225,7 +229,7 @@ final class EntitiesSubscriber implements Common\EventSubscriber
 						continue;
 					}
 
-					$values[$fieldName] = $value;
+					$values[strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $fieldName))] = $value;
 
 				} catch (Exceptions\PropertyNotExistsException $ex) {
 					// No need to do anything
