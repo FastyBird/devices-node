@@ -1,0 +1,23 @@
+parameters:
+	logger:
+		level: \Monolog\Logger::DEBUG
+
+	database:
+		host: 127.0.0.1
+		port: 3306
+		driver: pdo_mysql
+		memory: false
+		dbname: io_server
+		username: io_server
+		password: EK59J%xZjvX5
+
+	rabbitmq:
+		host: 127.0.0.1
+		port: 5672
+		vhost: /
+		username: guest
+		password: guest
+
+	server:
+		address: 127.0.0.1
+		port: 8000

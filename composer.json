@@ -1,0 +1,83 @@
+{
+  "name" : "fastybird/devices-node",
+  "type" : "project",
+  "description" : "FastyBird devices info & basic logic service",
+  "keywords" : [
+    "fastybird",
+    "fb",
+    "devices",
+    "channels",
+    "service"
+  ],
+
+  "homepage" : "https://www.fastybird.com",
+
+  "license" : "Apache-2.0",
+
+  "authors" : [
+    {
+      "name" : "FastyBird s.r.o.",
+      "email" : "info@fastybird.com",
+      "homepage" : "https://www.fastybird.com/"
+    },
+    {
+      "name" : "Adam Kadlec",
+      "email" : "adam.kadlec@fastybird.com"
+    }
+  ],
+
+  "prefer-stable" : true,
+
+  "minimum-stability" : "dev",
+
+  "require" : {
+    "php" : ">=7.2.0",
+    "ext-json" : "*",
+    "contributte/event-dispatcher" : "^0.7.0",
+    "contributte/translation" : "^0.6",
+    "fastybird/node-libs" : "^0.2",
+    "fastybird/node-web-server" : "^0.1",
+    "ipub/doctrine-consistence" : "^0.3",
+    "ipub/doctrine-crud" : "^2.2",
+    "ipub/doctrine-orm-query" : "^0.0.4",
+    "ipub/doctrine-timestampable" : "^1.4",
+    "ipub/json-api-document" : "^0.1.0",
+    "ipub/slim-router" : "^0.1.0",
+    "neomerx/json-api" : "^4.0",
+    "nettrine/cache" : "^0.1",
+    "nettrine/orm" : "^0.5",
+    "phpdocumentor/reflection-docblock" : "^5.1",
+    "ramsey/uuid" : "^3.9",
+    "ramsey/uuid-doctrine" : "^1.6"
+  },
+
+  "require-dev" : {
+    "mockery/mockery" : "^1.3",
+    "ninjify/nunjuck" : "^0.3.0",
+    "ninjify/qa" : "^0.10.0",
+    "pds/skeleton" : "~1.0",
+    "phpstan/extension-installer" : "^1.0",
+    "phpstan/phpstan" : "^0.12.11",
+    "phpstan/phpstan-deprecation-rules" : "^0.12.2",
+    "phpstan/phpstan-doctrine" : "^0.12.9",
+    "phpstan/phpstan-nette" : "^0.12.3",
+    "tracy/tracy" : "~2.4"
+  },
+
+  "autoload" : {
+    "psr-4" : {
+      "FastyBird\\DevicesNode\\" : "src/"
+    }
+  },
+
+  "autoload-dev" : {
+    "psr-4" : {
+      "Tests\\Cases\\" : "tests/cases",
+      "Tests\\Fixtures\\" : "tests/fixtures"
+    }
+  },
+
+  "config" : {
+    "sort-packages" : true
+  }
+}

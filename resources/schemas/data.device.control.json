@@ -1,0 +1,54 @@
+{
+  "$schema" : "http://json-schema.org/draft-07/schema#",
+  "definitions" : {
+    "types" : {
+      "nullable_string" : {
+        "oneOf" : [
+          {
+            "type" : "null"
+          },
+          {
+            "type" : "string"
+          }
+        ]
+      }
+    },
+    "control" : {
+      "type" : "string",
+      "enum" : [
+        "configure",
+        "reset",
+        "reconnect",
+        "factory-reset",
+        "ota"
+      ]
+    }
+  },
+  "type" : "object",
+  "properties" : {
+    "device" : {
+      "type" : "string"
+    },
+    "control" : {
+      "$ref" : "#/definitions/control"
+    },
+    "value" : {
+      "type" : "object"
+    },
+    "schema" : {
+      "type" : "object"
+    },
+    "parent" : {
+      "$ref" : "#/definitions/types/nullable_string",
+      "default" : null
+    },
+    "retained" : {
+      "type" : "boolean",
+      "default" : false
+    }
+  },
+  "required" : [
+    "device",
+    "control"
+  ]
+}

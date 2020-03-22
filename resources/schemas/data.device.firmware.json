@@ -1,0 +1,43 @@
+{
+  "$schema" : "http://json-schema.org/draft-07/schema#",
+  "definitions" : {
+    "types" : {
+      "nullable_string" : {
+        "oneOf" : [
+          {
+            "type" : "null"
+          },
+          {
+            "type" : "string"
+          }
+        ]
+      }
+    }
+  },
+  "type" : "object",
+  "properties" : {
+    "device" : {
+      "type" : "string"
+    },
+    "manufacturer" : {
+      "type" : "string"
+    },
+    "name" : {
+      "type" : "string"
+    },
+    "version" : {
+      "type" : "string"
+    },
+    "parent" : {
+      "$ref" : "#/definitions/types/nullable_string",
+      "default" : null
+    },
+    "retained" : {
+      "type" : "boolean",
+      "default" : false
+    }
+  },
+  "required" : [
+    "device"
+  ]
+}

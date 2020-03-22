@@ -1,0 +1,244 @@
+#
+# Service DI configuration
+#
+# @license		More in license.md
+# @copyright	https://www.fastybird.com
+# @author		Adam Kadlec <adam.kadlec@fastybird.com>
+# @package		FastyBird:DevicesNode!
+# @subpackage	config
+# @since		0.1.0
+#
+# @date			15.03.20
+
+##############################
+# Node predefined parameters #
+##############################
+
+parameters:
+	origin: com.fastybird.devices-node
+
+	rabbitmq:
+		queueName: fb.devices.node.exchange
+
+#########################
+# Used Nette extensions #
+#########################
+
+extensions:
+	contributteEventDispatcher	: Contributte\EventDispatcher\DI\EventDispatcherExtension
+	contributteTranslation		: Contributte\Translation\DI\TranslationExtension
+	ipubDoctrineConsistence		: IPub\DoctrineConsistence\DI\DoctrineConsistenceExtension
+	ipubDoctrineCrud			: IPub\DoctrineCrud\DI\DoctrineCrudExtension
+	ipubDoctrineTimestampable	: IPub\DoctrineTimestampable\DI\DoctrineTimestampableExtension
+	nettrineAnnotations			: Nettrine\Annotations\DI\AnnotationsExtension
+	nettrineCache				: Nettrine\Cache\DI\CacheExtension
+	nettrineDbal				: Nettrine\DBAL\DI\DbalExtension
+	nettrineOrm					: Nettrine\ORM\DI\OrmExtension
+	nettrineOrmAnnotations		: Nettrine\ORM\DI\OrmAnnotationsExtension
+	nettrineOrmConsole			: Nettrine\ORM\DI\OrmConsoleExtension
+	nettrineOrmCache			: Nettrine\ORM\DI\OrmCacheExtension
+	nodeWebServer				: FastyBird\NodeWebServer\DI\NodeWebServerExtension
+
+##################################
+# Nette extensions configuration #
+##################################
+
+# Node web server
+#################
+nodeWebServer:
+	server:
+		address: %server.address%
+		port: %server.port%
+
+# Node translations
+###################
+contributteTranslation:
+	locales:
+		default: en_US
+		fallback: [en_US, en]
+	localeResolvers: []
+	dirs:
+		- %appDir%/src/Translations
+
+# Doctrine DBAL
+###############
+nettrineDbal:
+	connection:
+		host: %database.host%
+		port: %database.port%
+		driver: %database.driver%
+		memory: %database.memory%
+		dbname: %database.dbname%
+		user: %database.username%
+		password: %database.password%
+		charset: utf8
+
+		types:
+			uuid_binary:
+				class: Ramsey\Uuid\Doctrine\UuidBinaryType
+				commented: false
+
+		typesMapping:
+			uuid_binary: binary
+
+# Doctrine ORM annoations
+#########################
+nettrineAnnotations:
+	debug: %debugMode%
+	ignore:
+		- writable
+		- validator
+		- required
+		- module
+		- author
+		- subpackage
+		- package
+
+# Doctrine ORM
+##############
+nettrineOrm:
+	configuration:
+		proxyDir	: %tempDir%/cache/doctrine.proxies
+
+nettrineOrmAnnotations:
+	paths:
+		- %appDir%/src/Entities
+
+#############################
+# Node services definitions #
+#############################
+
+services:
+	# Http router
+	#############
+
+	- {factory: FastyBird\DevicesNode\Middleware\JsonApiMiddleware, tags: [middleware: {priority: 10}]}
+
+	-
+		factory: FastyBird\DevicesNode\Router\Router
+		setup:
+			- registerRoutes
+
+	# Console commands
+	##################
+
+	- {factory: FastyBird\DevicesNode\Commands\Devices\CreateCommand}
+
+	# Message bus messages handlers
+	###############################
+
+	- {factory: FastyBird\DevicesNode\Consumers\DeviceMessageHandler}
+
+	- {factory: FastyBird\DevicesNode\Consumers\DeviceFirmwareMessageHandler}
+
+	- {factory: FastyBird\DevicesNode\Consumers\DeviceHardwareMessageHandler}
+
+	- {factory: FastyBird\DevicesNode\Consumers\DevicePropertyMessageHandler}
+
+	- {factory: FastyBird\DevicesNode\Consumers\ChannelMessageHandler}
+
+	- {factory: FastyBird\DevicesNode\Consumers\ChannelPropertyMessageHandler}
+
+	# Events subscribers
+	####################
+
+	- {factory: FastyBird\DevicesNode\Subscribers\HttpServerSubscriber}
+
+	# Database repositories
+	#######################
+
+	- {factory: FastyBird\DevicesNode\Models\Devices\DeviceRepository}
+
+	- {factory: FastyBird\DevicesNode\Models\Devices\Properties\PropertyRepository}
+
+	- {factory: FastyBird\DevicesNode\Models\Channels\ChannelRepository}
+
+	- {factory: FastyBird\DevicesNode\Models\Channels\Properties\PropertyRepository}
+
+	# Database managers
+	###################
+
+	- {factory: FastyBird\DevicesNode\Models\Devices\DevicesManager(@ipubDoctrineCrud.crud::create(FastyBird\DevicesNode\Entities\Devices\Device))}
+
+	- {factory: FastyBird\DevicesNode\Models\Devices\Controls\ControlsManager(@ipubDoctrineCrud.crud::create(FastyBird\DevicesNode\Entities\Devices\Controls\Control))}
+
+	- {factory: FastyBird\DevicesNode\Models\Devices\Properties\PropertiesManager(@ipubDoctrineCrud.crud::create(FastyBird\DevicesNode\Entities\Devices\Properties\Property))}
+
+	- {factory: FastyBird\DevicesNode\Models\Devices\Configuration\RowsManager(@ipubDoctrineCrud.crud::create(FastyBird\DevicesNode\Entities\Devices\Configuration\Row))}
+
+	- {factory: FastyBird\DevicesNode\Models\Devices\Credentials\CredentialsManager(@ipubDoctrineCrud.crud::create(FastyBird\DevicesNode\Entities\Devices\Credentials\Credentials))}
+
+	- {factory: FastyBird\DevicesNode\Models\Devices\PhysicalDevice\HardwareManager(@ipubDoctrineCrud.crud::create(FastyBird\DevicesNode\Entities\Devices\PhysicalDevice\Hardware))}
+
+	- {factory: FastyBird\DevicesNode\Models\Devices\PhysicalDevice\FirmwareManager(@ipubDoctrineCrud.crud::create(FastyBird\DevicesNode\Entities\Devices\PhysicalDevice\Firmware))}
+
+	- {factory: FastyBird\DevicesNode\Models\Channels\ChannelsManager(@ipubDoctrineCrud.crud::create(FastyBird\DevicesNode\Entities\Channels\Channel))}
+
+	- {factory: FastyBird\DevicesNode\Models\Channels\Controls\ControlsManager(@ipubDoctrineCrud.crud::create(FastyBird\DevicesNode\Entities\Channels\Controls\Control))}
+
+	- {factory: FastyBird\DevicesNode\Models\Channels\Properties\PropertiesManager(@ipubDoctrineCrud.crud::create(FastyBird\DevicesNode\Entities\Channels\Properties\Property))}
+
+	- {factory: FastyBird\DevicesNode\Models\Channels\Configuration\RowsManager(@ipubDoctrineCrud.crud::create(FastyBird\DevicesNode\Entities\Channels\Configuration\Row))}
+
+	# API controllers
+	#################
+
+	- {factory: FastyBird\DevicesNode\Controllers\DevicesV1Controller, tags: [nette.inject]}
+
+	- {factory: FastyBird\DevicesNode\Controllers\DeviceChildrenV1Controller, tags: [nette.inject]}
+
+	- {factory: FastyBird\DevicesNode\Controllers\DevicePropertiesV1Controller, tags: [nette.inject]}
+
+	- {factory: FastyBird\DevicesNode\Controllers\DeviceConfigurationV1Controller, tags: [nette.inject]}
+
+	- {factory: FastyBird\DevicesNode\Controllers\DeviceCredentialsV1Controller, tags: [nette.inject]}
+
+	- {factory: FastyBird\DevicesNode\Controllers\DeviceHardwareV1Controller, tags: [nette.inject]}
+
+	- {factory: FastyBird\DevicesNode\Controllers\DeviceFirmwareV1Controller, tags: [nette.inject]}
+
+	- {factory: FastyBird\DevicesNode\Controllers\ChannelsV1Controller, tags: [nette.inject]}
+
+	- {factory: FastyBird\DevicesNode\Controllers\ChannelPropertiesV1Controller, tags: [nette.inject]}
+
+	- {factory: FastyBird\DevicesNode\Controllers\ChannelConfigurationV1Controller, tags: [nette.inject]}
+
+	# API schemas
+	#############
+
+	- {factory: FastyBird\DevicesNode\Schemas\Devices\PhysicalDeviceSchema}
+
+	- {factory: FastyBird\DevicesNode\Schemas\Devices\Properties\PropertySchema}
+
+	- {factory: FastyBird\DevicesNode\Schemas\Devices\Hardware\HardwareSchema}
+
+	- {factory: FastyBird\DevicesNode\Schemas\Devices\Firmware\FirmwareSchema}
+
+	- {factory: FastyBird\DevicesNode\Schemas\Devices\Credentials\CredentialsSchema}
+
+	- {factory: FastyBird\DevicesNode\Schemas\Devices\Configuration\BooleanRowSchema}
+
+	- {factory: FastyBird\DevicesNode\Schemas\Devices\Configuration\NumberRowSchema}
+
+	- {factory: FastyBird\DevicesNode\Schemas\Devices\Configuration\SelectRowSchema}
+
+	- {factory: FastyBird\DevicesNode\Schemas\Devices\Configuration\TextRowSchema}
+
+	- {factory: FastyBird\DevicesNode\Schemas\Channels\ChannelSchema}
+
+	- {factory: FastyBird\DevicesNode\Schemas\Channels\Properties\PropertySchema}
+
+	- {factory: FastyBird\DevicesNode\Schemas\Channels\Configuration\BooleanRowSchema}
+
+	- {factory: FastyBird\DevicesNode\Schemas\Channels\Configuration\NumberRowSchema}
+
+	- {factory: FastyBird\DevicesNode\Schemas\Channels\Configuration\SelectRowSchema}
+
+	- {factory: FastyBird\DevicesNode\Schemas\Channels\Configuration\TextRowSchema}
+
+	# API hydrators
+	###############
+
+	- {factory: FastyBird\DevicesNode\Hydrators\Devices\PhysicalDevice}
+
+	- {factory: FastyBird\DevicesNode\Hydrators\Channels\Channel}
