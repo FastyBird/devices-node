@@ -18,7 +18,6 @@ namespace FastyBird\DevicesNode\Entities\Channels;
 use Doctrine\Common;
 use Doctrine\ORM\Mapping as ORM;
 use FastyBird\DevicesNode\Entities;
-use IPub\DoctrineCrud;
 use IPub\DoctrineCrud\Mapping\Annotation as IPubDoctrine;
 use IPub\DoctrineTimestampable;
 use Ramsey\Uuid;
@@ -38,12 +37,10 @@ use Throwable;
  *     }
  * )
  */
-class Channel implements IChannel
+class Channel extends Entities\Entity implements IChannel
 {
 
-	use Entities\TIdentifiedEntity;
 	use Entities\TEntityParams;
-	use DoctrineCrud\Entities\TEntity;
 	use DoctrineTimestampable\Entities\TEntityCreated;
 	use DoctrineTimestampable\Entities\TEntityUpdated;
 

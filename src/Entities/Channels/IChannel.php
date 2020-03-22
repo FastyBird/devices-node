@@ -26,7 +26,7 @@ use IPub\DoctrineTimestampable;
  *
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  */
-interface IChannel extends Entities\IIdentifiedEntity,
+interface IChannel extends Entities\IEntity,
 	Entities\IEntityParams,
 	DoctrineTimestampable\Entities\IEntityCreated, DoctrineTimestampable\Entities\IEntityUpdated
 {

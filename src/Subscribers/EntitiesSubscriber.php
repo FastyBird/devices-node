@@ -70,7 +70,7 @@ final class EntitiesSubscriber implements Common\EventSubscriber
 		$entity = $eventArgs->getEntity();
 
 		// Check for valid entity
-		if (!$entity instanceof Entities\IIdentifiedEntity) {
+		if (!$entity instanceof Entities\IEntity) {
 			return;
 		}
 
@@ -99,7 +99,7 @@ final class EntitiesSubscriber implements Common\EventSubscriber
 		}
 
 		// Check for valid entity
-		if (!$entity instanceof Entities\IIdentifiedEntity) {
+		if (!$entity instanceof Entities\IEntity) {
 			return;
 		}
 
@@ -129,7 +129,7 @@ final class EntitiesSubscriber implements Common\EventSubscriber
 			$processedEntities[] = $hash;
 
 			// Check for valid entity
-			if (!$entity instanceof Entities\IIdentifiedEntity) {
+			if (!$entity instanceof Entities\IEntity) {
 				continue;
 			}
 
@@ -138,12 +138,12 @@ final class EntitiesSubscriber implements Common\EventSubscriber
 	}
 
 	/**
-	 * @param Entities\IIdentifiedEntity $entity
+	 * @param Entities\IEntity $entity
 	 * @param mixed[] $identifier
 	 *
 	 * @return string
 	 */
-	private function getHash(Entities\IIdentifiedEntity $entity, array $identifier): string
+	private function getHash(Entities\IEntity $entity, array $identifier): string
 	{
 		return implode(
 			' ',
@@ -171,12 +171,12 @@ final class EntitiesSubscriber implements Common\EventSubscriber
 	}
 
 	/**
-	 * @param Entities\IIdentifiedEntity $entity
+	 * @param Entities\IEntity $entity
 	 * @param string $action
 	 *
 	 * @return void
 	 */
-	private function processEntityAction(Entities\IIdentifiedEntity $entity, string $action): void
+	private function processEntityAction(Entities\IEntity $entity, string $action): void
 	{
 		if (!array_key_exists(get_class($entity), DevicesNode\Constants::RABBIT_MQ_ENTITIES_ROUTING_KEYS)) {
 			return;
@@ -185,7 +185,7 @@ final class EntitiesSubscriber implements Common\EventSubscriber
 		$routingKey = DevicesNode\Constants::RABBIT_MQ_ENTITIES_ROUTING_KEYS[get_class($entity)];
 		$routingKey = str_replace(DevicesNode\Constants::RABBIT_MQ_ENTITIES_ROUTING_KEY_ACTION_REPLACE_STRING, $action, $routingKey);
 
-		$this->publisher->publish($routingKey, $entity->toSimpleArray());
+		$this->publisher->publish($routingKey, $entity->toArray());
 	}
 
 }

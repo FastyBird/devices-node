@@ -21,7 +21,6 @@ use Doctrine\ORM\Mapping as ORM;
 use FastyBird\DevicesNode\Entities;
 use FastyBird\DevicesNode\Exceptions;
 use FastyBird\DevicesNode\Types;
-use IPub\DoctrineCrud;
 use IPub\DoctrineCrud\Mapping\Annotation as IPubDoctrine;
 use IPub\DoctrineTimestampable;
 use Ramsey\Uuid;
@@ -45,12 +44,10 @@ use Throwable;
  * })
  * @ORM\MappedSuperclass
  */
-abstract class Device implements IDevice
+abstract class Device extends Entities\Entity implements IDevice
 {
 
-	use Entities\TIdentifiedEntity;
 	use Entities\TEntityParams;
-	use DoctrineCrud\Entities\TEntity;
 	use DoctrineTimestampable\Entities\TEntityCreated;
 	use DoctrineTimestampable\Entities\TEntityUpdated;
 

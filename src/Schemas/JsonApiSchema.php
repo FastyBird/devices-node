@@ -29,7 +29,7 @@ use Nette;
  *
  * @author             Adam Kadlec <adam.kadlec@fastybird.com>
  *
- * @phpstan-template   T of Entities\IIdentifiedEntity
+ * @phpstan-template   T of Entities\IEntity
  * @phpstan-implements NodeWebServerJsonApi\ISchema<T>
  */
 abstract class JsonApiSchema implements NodeWebServerJsonApi\ISchema
@@ -41,7 +41,7 @@ abstract class JsonApiSchema implements NodeWebServerJsonApi\ISchema
 	private $subUrl = null;
 
 	/**
-	 * @param Entities\IIdentifiedEntity $resource
+	 * @param Entities\IEntity $resource
 	 *
 	 * @return string|null
 	 *
@@ -55,7 +55,7 @@ abstract class JsonApiSchema implements NodeWebServerJsonApi\ISchema
 	}
 
 	/**
-	 * @param Entities\IIdentifiedEntity $resource
+	 * @param Entities\IEntity $resource
 	 * @param JsonApi\Contracts\Schema\ContextInterface $context
 	 *
 	 * @return iterable<string, mixed>
@@ -70,7 +70,7 @@ abstract class JsonApiSchema implements NodeWebServerJsonApi\ISchema
 	}
 
 	/**
-	 * @param Entities\IIdentifiedEntity $resource
+	 * @param Entities\IEntity $resource
 	 *
 	 * @return JsonApi\Contracts\Schema\LinkInterface
 	 *
@@ -84,7 +84,7 @@ abstract class JsonApiSchema implements NodeWebServerJsonApi\ISchema
 	}
 
 	/**
-	 * @param Entities\IIdentifiedEntity $resource
+	 * @param Entities\IEntity $resource
 	 *
 	 * @return iterable<string, JsonApi\Contracts\Schema\LinkInterface>
 	 *
@@ -100,7 +100,7 @@ abstract class JsonApiSchema implements NodeWebServerJsonApi\ISchema
 	}
 
 	/**
-	 * @param Entities\IIdentifiedEntity $resource
+	 * @param Entities\IEntity $resource
 	 * @param string $name
 	 *
 	 * @return JsonApi\Contracts\Schema\LinkInterface
@@ -118,7 +118,7 @@ abstract class JsonApiSchema implements NodeWebServerJsonApi\ISchema
 	}
 
 	/**
-	 * @param Entities\IIdentifiedEntity $resource
+	 * @param Entities\IEntity $resource
 	 * @param string $name
 	 *
 	 * @return JsonApi\Contracts\Schema\LinkInterface
@@ -136,7 +136,7 @@ abstract class JsonApiSchema implements NodeWebServerJsonApi\ISchema
 	}
 
 	/**
-	 * @param Entities\IIdentifiedEntity $resource
+	 * @param Entities\IEntity $resource
 	 *
 	 * @return bool
 	 *
@@ -150,7 +150,7 @@ abstract class JsonApiSchema implements NodeWebServerJsonApi\ISchema
 	}
 
 	/**
-	 * @param Entities\IIdentifiedEntity $resource
+	 * @param Entities\IEntity $resource
 	 *
 	 * @return mixed
 	 *
@@ -164,7 +164,7 @@ abstract class JsonApiSchema implements NodeWebServerJsonApi\ISchema
 	}
 
 	/**
-	 * @param Entities\IIdentifiedEntity $resource
+	 * @param Entities\IEntity $resource
 	 *
 	 * @return bool
 	 *
@@ -178,7 +178,7 @@ abstract class JsonApiSchema implements NodeWebServerJsonApi\ISchema
 	}
 
 	/**
-	 * @param Entities\IIdentifiedEntity $resource
+	 * @param Entities\IEntity $resource
 	 *
 	 * @return mixed
 	 *
@@ -208,7 +208,7 @@ abstract class JsonApiSchema implements NodeWebServerJsonApi\ISchema
 	}
 
 	/**
-	 * @param Entities\IIdentifiedEntity $resource
+	 * @param Entities\IEntity $resource
 	 *
 	 * @return string
 	 *

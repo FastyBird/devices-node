@@ -1,7 +1,7 @@
 <?php declare(strict_types = 1);
 
 /**
- * TIdentifiedEntity.php
+ * Entity.php
  *
  * @license        More in license.md
  * @copyright      https://www.fastybird.com
@@ -27,11 +27,11 @@ use Ramsey\Uuid;
  *
  * @property-read Uuid\UuidInterface $id
  */
-trait TIdentifiedEntity
+class Entity implements IEntity
 {
 
 	/**
-	 * @return Uuid\UuidInterface
+	 * {@inheritDoc}
 	 */
 	public function getId(): Uuid\UuidInterface
 	{
@@ -39,11 +39,21 @@ trait TIdentifiedEntity
 	}
 
 	/**
-	 * @return string
+	 * {@inheritDoc}
 	 */
 	public function getPlainId(): string
 	{
 		return $this->id->toString();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function toArray(): array
+	{
+		return [
+			'id' => $this->getPlainId(),
+		];
 	}
 
 }

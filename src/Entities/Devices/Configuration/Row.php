@@ -17,7 +17,6 @@ namespace FastyBird\DevicesNode\Entities\Devices\Configuration;
 
 use Doctrine\ORM\Mapping as ORM;
 use FastyBird\DevicesNode\Entities;
-use IPub\DoctrineCrud;
 use IPub\DoctrineCrud\Mapping\Annotation as IPubDoctrine;
 use IPub\DoctrineTimestampable;
 use Ramsey\Uuid;
@@ -46,12 +45,10 @@ use Throwable;
  * })
  * @ORM\MappedSuperclass
  */
-abstract class Row implements IRow
+abstract class Row extends Entities\Entity implements IRow
 {
 
-	use Entities\TIdentifiedEntity;
 	use Entities\TEntityParams;
-	use DoctrineCrud\Entities\TEntity;
 	use DoctrineTimestampable\Entities\TEntityCreated;
 	use DoctrineTimestampable\Entities\TEntityUpdated;
 

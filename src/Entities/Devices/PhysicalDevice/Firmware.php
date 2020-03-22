@@ -19,7 +19,6 @@ use Consistence\Doctrine\Enum\EnumAnnotation as Enum;
 use Doctrine\ORM\Mapping as ORM;
 use FastyBird\DevicesNode\Entities;
 use FastyBird\DevicesNode\Types;
-use IPub\DoctrineCrud;
 use IPub\DoctrineCrud\Mapping\Annotation as IPubDoctrine;
 use IPub\DoctrineTimestampable;
 use Ramsey\Uuid;
@@ -36,11 +35,9 @@ use Throwable;
  *     }
  * )
  */
-class Firmware implements IFirmware
+class Firmware extends Entities\Entity implements IFirmware
 {
 
-	use Entities\TIdentifiedEntity;
-	use DoctrineCrud\Entities\TEntity;
 	use DoctrineTimestampable\Entities\TEntityCreated;
 	use DoctrineTimestampable\Entities\TEntityUpdated;
 
