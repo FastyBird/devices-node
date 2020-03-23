@@ -74,7 +74,8 @@
   "autoload-dev" : {
     "psr-4" : {
       "Tests\\Cases\\" : "tests/cases",
-      "Tests\\Fixtures\\" : "tests/fixtures"
+      "Tests\\Fixtures\\" : "tests/fixtures",
+      "Tests\\Tools\\" : "tests/tools"
     }
   },
 
@@ -84,6 +85,12 @@
 
   "extra" : {
     "patches" : {
+      "doctrine/orm" : {
+        "Bug: Ramsey uuid not working" : "patches/doctrine.orm.uuid.diff"
+      },
+      "ramsey/uuid-doctrine" : {
+        "Bug: Ramsey uuid conversion fallback" : "patches/ramsey.uuid.doctrine.diff"
+      },
       "nettrine/orm" : {
         "Enable connection overides" : "patches/nettrine.orm.mangerRegistry.diff"
       }

@@ -8,13 +8,11 @@ use FastyBird\DevicesNode\Exceptions;
 use FastyBird\NodeLibs\Boot;
 use Mockery;
 use Nette\DI;
-use Nette\Http\Session;
 use Nettrine\DBAL as NettrineDBAL;
 use Nettrine\ORM as NettrineORM;
 use Ninjify\Nunjuck\TestCase\BaseMockeryTestCase;
 use RuntimeException;
-
-require_once __DIR__ . '/../../tools/ConnectionWrapper.php';
+use Tests\Tools;
 
 abstract class DbTestCase extends BaseMockeryTestCase
 {
@@ -27,37 +25,6 @@ abstract class DbTestCase extends BaseMockeryTestCase
 
 	/** @var string[] */
 	private $sqlFiles = [];
-
-	/**
-	 * @return DI\Container
-	 */
-	protected function createContainer(): DI\Container
-	{
-		$configurator = Boot\Bootstrap::boot();
-
-		$this->container = $configurator->createContainer();
-
-		$parameters = $this->container->getParameters();
-
-		/** @var NettrineDBAL\ConnectionFactory $connectionFactory */
-		$connectionFactory = $this->container->getService('nettrineDbal.connectionFactory');
-
-		$parameters['database']['user'] = $parameters['database']['username'];
-		$parameters['database']['wrapperClass'] = ConnectionWrapper::class;
-
-		$connection = $connectionFactory->createConnection(
-			$parameters['database'],
-			$this->container->getService('nettrineDbal.configuration'),
-			$this->container->getService('nettrineDbal.eventManager')
-		);
-
-		$this->container->removeService('nettrineDbal.connection');
-		$this->container->addService('nettrineDbal.connection', $connection);
-
-		$this->setupDatabase();
-
-		return $this->container;
-	}
 
 	/**
 	 * @return DI\Container
@@ -125,16 +92,42 @@ abstract class DbTestCase extends BaseMockeryTestCase
 	 */
 	protected function tearDown(): void
 	{
-		$session = $this->getContainer()->getByType(Session::class);
-		if ($session->isStarted()) {
-			$session->destroy();
-		}
-
 		$this->container = null; // Fatal error: Cannot redeclare class SystemContainer
+		$this->isDatabaseSetUp = false;
 
 		parent::tearDown();
 
 		Mockery::close();
+	}
+
+	/**
+	 * @return DI\Container
+	 */
+	private function createContainer(): DI\Container
+	{
+		$configurator = Boot\Bootstrap::boot();
+
+		$this->container = $configurator->createContainer();
+
+		/** @var NettrineDBAL\ConnectionFactory $connectionFactory */
+		$connectionFactory = $this->container->getService('nettrineDbal.connectionFactory');
+
+		$parameters = $this->container->getParameters();
+		$parameters['database']['user'] = $parameters['database']['username'];
+		$parameters['database']['wrapperClass'] = Tools\ConnectionWrapper::class;
+
+		$connection = $connectionFactory->createConnection(
+			$parameters['database'],
+			$this->container->getService('nettrineDbal.configuration'),
+			$this->container->getService('nettrineDbal.eventManager')
+		);
+
+		$this->container->removeService('nettrineDbal.connection');
+		$this->container->addService('nettrineDbal.connection', $connection);
+
+		$this->setupDatabase();
+
+		return $this->container;
 	}
 
 	/**
@@ -169,7 +162,6 @@ abstract class DbTestCase extends BaseMockeryTestCase
 					$db->exec($sql);
 
 				} catch (DBAL\DBALException $ex) {
-					var_dump($ex->getMessage());
 					throw new RuntimeException('Database schema could not be created');
 				}
 			}

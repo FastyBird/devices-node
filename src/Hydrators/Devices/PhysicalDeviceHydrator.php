@@ -35,6 +35,14 @@ class PhysicalDeviceHydrator extends DeviceHydrator
 {
 
 	/** @var string[] */
+	protected $attributes = [
+		'identifier',
+		'title',
+		'comment',
+		'enabled',
+	];
+
+	/** @var string[] */
 	protected $relationships = [
 		Schemas\Devices\PhysicalDeviceSchema::RELATIONSHIPS_CREDENTIALS,
 	];
@@ -102,13 +110,8 @@ class PhysicalDeviceHydrator extends DeviceHydrator
 					$attributes = $included->getAttributes()->toArray();
 					$attributes['entity'] = Entities\Devices\Credentials\Credentials::class;
 
-					if (isset($attributes['id'])) {
-						if (Uuid\Uuid::isValid($attributes['id'])) {
-							$attributes['id'] = Uuid\Uuid::fromString($attributes['id']);
-
-						} else {
-							unset($attributes['id']);
-						}
+					if (Uuid\Uuid::isValid($included->getIdentifier()->getId())) {
+						$attributes['id'] = Uuid\Uuid::fromString($included->getIdentifier()->getId());
 					}
 
 					return $attributes;

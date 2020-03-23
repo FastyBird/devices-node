@@ -22,10 +22,10 @@ use Neomerx\JsonApi;
 /**
  * Machine device entity schema
  *
- * @package        FastyBird:DevicesNode!
- * @subpackage     Schemas
+ * @package         FastyBird:DevicesNode!
+ * @subpackage      Schemas
  *
- * @author         Adam Kadlec <adam.kadlec@fastybird.com>
+ * @author          Adam Kadlec <adam.kadlec@fastybird.com>
  *
  * @phpstan-extends DeviceSchema<Entities\Devices\IPhysicalDevice>
  */
@@ -58,6 +58,21 @@ final class PhysicalDeviceSchema extends DeviceSchema
 	public function getEntityClass(): string
 	{
 		return Entities\Devices\PhysicalDevice::class;
+	}
+
+	/**
+	 * @param Entities\Devices\IPhysicalDevice $device
+	 * @param JsonApi\Contracts\Schema\ContextInterface $context
+	 *
+	 * @return iterable<string, mixed>
+	 *
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
+	 */
+	public function getAttributes($device, JsonApi\Contracts\Schema\ContextInterface $context): iterable
+	{
+		return array_merge((array) parent::getAttributes($device, $context), [
+			'identifier' => $device->getIdentifier(),
+		]);
 	}
 
 	/**

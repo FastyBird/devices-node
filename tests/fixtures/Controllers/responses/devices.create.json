@@ -1,0 +1,97 @@
+{
+  "data" : {
+    "attributes" : {
+      "comment" : null,
+      "control" : [ ],
+      "identifier" : "new-device",
+      "is_enabled" : false,
+      "name" : "new-device",
+      "params" : [ ],
+      "title" : null
+    },
+    "id" : "bbbf5caa-b30e-4558-b83a-699617958cea",
+    "links" : {
+      "self" : "/v1/devices/bbbf5caa-b30e-4558-b83a-699617958cea"
+    },
+    "relationships" : {
+      "channels" : {
+        "data" : [ ],
+        "links" : {
+          "related" : {
+            "href" : "/v1/devices/bbbf5caa-b30e-4558-b83a-699617958cea/channels",
+            "meta" : {
+              "count" : 0
+            }
+          },
+          "self" : "/v1/devices/bbbf5caa-b30e-4558-b83a-699617958cea/relationships/channels"
+        }
+      },
+      "children" : {
+        "data" : [ ],
+        "links" : {
+          "related" : "/v1/devices/bbbf5caa-b30e-4558-b83a-699617958cea/children",
+          "self" : "/v1/devices/bbbf5caa-b30e-4558-b83a-699617958cea/relationships/children"
+        }
+      },
+      "configuration" : {
+        "data" : [ ],
+        "links" : {
+          "related" : {
+            "href" : "/v1/devices/bbbf5caa-b30e-4558-b83a-699617958cea/configuration",
+            "meta" : {
+              "count" : 0
+            }
+          },
+          "self" : "/v1/devices/bbbf5caa-b30e-4558-b83a-699617958cea/relationships/configuration"
+        }
+      },
+      "credentials" : {
+        "data" : {
+          "id" : "2433c2d6-d4f2-43b5-8c69-2a981dc47f30",
+          "type" : "devices-node/credentials"
+        },
+        "links" : {
+          "related" : "/v1/devices/bbbf5caa-b30e-4558-b83a-699617958cea/credentials",
+          "self" : "/v1/devices/bbbf5caa-b30e-4558-b83a-699617958cea/relationships/credentials"
+        }
+      },
+      "firmware" : {
+        "data" : null,
+        "links" : {
+          "related" : "/v1/devices/bbbf5caa-b30e-4558-b83a-699617958cea/firmware",
+          "self" : "/v1/devices/bbbf5caa-b30e-4558-b83a-699617958cea/relationships/firmware"
+        }
+      },
+      "hardware" : {
+        "data" : null,
+        "links" : {
+          "related" : "/v1/devices/bbbf5caa-b30e-4558-b83a-699617958cea/hardware",
+          "self" : "/v1/devices/bbbf5caa-b30e-4558-b83a-699617958cea/relationships/hardware"
+        }
+      },
+      "properties" : {
+        "data" : [ ],
+        "links" : {
+          "related" : {
+            "href" : "/v1/devices/bbbf5caa-b30e-4558-b83a-699617958cea/properties",
+            "meta" : {
+              "count" : 0
+            }
+          },
+          "self" : "/v1/devices/bbbf5caa-b30e-4558-b83a-699617958cea/relationships/properties"
+        }
+      }
+    },
+    "type" : "devices-node/physical-device"
+  },
+  "jsonapi" : {
+    "version" : "1.1"
+  },
+  "links" : {
+    "self" : "/v1/devices"
+  },
+  "meta" : {
+    "author" : "FastyBird dev team",
+    "copyright" : "FastyBird s.r.o"
+  }
+}

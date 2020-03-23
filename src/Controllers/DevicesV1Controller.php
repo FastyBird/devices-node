@@ -26,6 +26,7 @@ use FastyBird\DevicesNode\Schemas;
 use FastyBird\NodeWebServer\Exceptions as NodeWebServerExceptions;
 use FastyBird\NodeWebServer\Http as NodeWebServerHttp;
 use Fig\Http\Message\StatusCodeInterface;
+use IPub\DoctrineCrud\Exceptions as DoctrineCrudExceptions;
 use Psr\Http\Message;
 use Throwable;
 
@@ -141,6 +142,16 @@ class DevicesV1Controller extends BaseV1Controller
 				$this->getOrmConnection()->rollback();
 
 				throw $ex;
+
+			} catch (DoctrineCrudExceptions\MissingRequiredFieldException $ex) {
+				throw new NodeWebServerExceptions\JsonApiErrorException(
+					StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
+					$this->translator->translate('messages.notCreated.heading'),
+					$this->translator->translate('messages.notCreated.message'),
+					[
+						'pointer' => $ex->getField(),
+					]
+				);
 
 			} catch (Throwable $ex) {
 				// Revert all changes when error occur

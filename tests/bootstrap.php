@@ -10,6 +10,8 @@ if (@!include __DIR__ . '/../vendor/autoload.php') {
 define('FB_TEMP_DIR', __DIR__ . '/tmp');
 define('FB_RESOURCES_DIR', __DIR__ . '/../resources');
 
+Tester\Environment::bypassFinals();
+
 // Configure environment
 Environment::setupTester();
 Environment::setupTimezone('UTC');

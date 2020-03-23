@@ -158,6 +158,8 @@ abstract class Device extends Entities\Entity implements IDevice
 	{
 		$this->id = $id ?? Uuid\Uuid::uuid4();
 
+		$this->state = Types\DeviceConnectionState::get(Types\DeviceConnectionState::STATE_UNKNOWN);
+
 		$this->children = new Common\Collections\ArrayCollection();
 		$this->channels = new Common\Collections\ArrayCollection();
 		$this->controls = new Common\Collections\ArrayCollection();

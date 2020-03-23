@@ -2,12 +2,15 @@
 
 namespace Tests\Cases;
 
-use FastyBird\DevicesNode\Controllers;
+use FastyBird\DevicesNode\Router;
+use FastyBird\NodeLibs\Publishers as NodeLibsPublishers;
 use FastyBird\NodeWebServer\Http;
-use IPub\DoctrineOrmQuery;
+use Fig\Http\Message\RequestMethodInterface;
+use IPub\SlimRouter;
 use Mockery;
-use Psr\Http\Message\ServerRequestInterface;
+use React\Http\Io\ServerRequest;
 use Tester\Assert;
+use Tests\Tools;
 
 require_once __DIR__ . '/../../../bootstrap.php';
 require_once __DIR__ . '/../DbTestCase.php';
@@ -17,37 +20,75 @@ final class DevicesV1ControllerTest extends DbTestCase
 
 	public function setUp(): void
 	{
-		$this->registerDatabaseSchemaFile(__DIR__ . '/../../../fixtures/dummy.data.sql');
+		$this->registerDatabaseSchemaFile(__DIR__ . '/../../../sql/dummy.data.sql');
 
 		parent::setUp();
 	}
 
-	public function testReadAll(): void
+	/**
+	 * @param string $url
+	 * @param string $fixture
+	 *
+	 * @dataProvider ./../../../fixtures/Controllers/devicesRead.php
+	 */
+	public function testRead(string $url, string $fixture): void
 	{
-		$request = Mockery::mock(ServerRequestInterface::class);
-		$response = Mockery::mock(Http\Response::class);
-		$response
-			->shouldReceive('withEntity')
-			->withArgs(function ($entity): bool {
-				Assert::type(Http\ScalarEntity::class, $entity);
+		/** @var Router\Router $router */
+		$router = $this->getContainer()->getByType(Router\Router::class);
 
-				if ($entity instanceof Http\ScalarEntity) {
-					$data = $entity->getData();
+		$request = new ServerRequest(
+			RequestMethodInterface::METHOD_GET,
+			$url
+		);
 
-					Assert::type(DoctrineOrmQuery\ResultSet::class, $data);
+		$response = $router->handle($request);
 
-					if ($data instanceof DoctrineOrmQuery\ResultSet) {
-						Assert::same(3, $data->getTotalCount());
-					}
-				}
+		Tools\JsonAssert::assertFixtureMatch(
+			$fixture,
+			(string) $response->getBody()
+		);
+		Assert::type(Http\Response::class, $response);
+	}
 
+	/**
+	 * @param string $url
+	 * @param string $body
+	 * @param string $fixture
+	 *
+	 * @dataProvider ./../../../fixtures/Controllers/devicesCreate.php
+	 */
+	public function testCreate(string $url, string $body, string $fixture): void
+	{
+		/** @var Router\Router $router */
+		$router = $this->getContainer()->getByType(Router\Router::class);
+
+		$request = new ServerRequest(
+			RequestMethodInterface::METHOD_POST,
+			$url,
+			[],
+			$body
+		);
+
+		$rabbitPublisher = Mockery::mock(NodeLibsPublishers\RabbitMqPublisher::class);
+		$rabbitPublisher
+			->shouldReceive('publish')
+			->withArgs(function (string $routingKey, array $data): bool {
 				return true;
 			})
 			->times(1);
 
-		$controller = $this->getContainer()->getByType(Controllers\DevicesV1Controller::class);
+		$this->mockContainerService(
+			NodeLibsPublishers\IRabbitMqPublisher::class,
+			$rabbitPublisher
+		);
 
-		$response = $controller->index($request, $response);
+		$response = $router->handle($request);
+
+		Tools\JsonAssert::assertFixtureMatch(
+			$fixture,
+			(string) $response->getBody()
+		);
+		Assert::type(Http\Response::class, $response);
 	}
 
 }

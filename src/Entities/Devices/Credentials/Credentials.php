@@ -79,15 +79,17 @@ class Credentials extends Entities\Entity implements ICredentials
 	 * @param string $username
 	 * @param string $password
 	 * @param Entities\Devices\IPhysicalDevice $device
+	 * @param Uuid\UuidInterface|null $id
 	 *
 	 * @throws Throwable
 	 */
 	public function __construct(
 		string $username,
 		string $password,
-		Entities\Devices\IPhysicalDevice $device
+		Entities\Devices\IPhysicalDevice $device,
+		?Uuid\UuidInterface $id = null
 	) {
-		$this->id = Uuid\Uuid::uuid4();
+		$this->id = $id ?? Uuid\Uuid::uuid4();
 
 		$this->username = $username;
 		$this->password = $password;

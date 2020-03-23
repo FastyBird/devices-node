@@ -78,6 +78,9 @@ nettrineDbal:
 			uuid_binary:
 				class: Ramsey\Uuid\Doctrine\UuidBinaryType
 				commented: false
+			utcdatetime:
+				class: IPub\DoctrineTimestampable\Types\UTCDateTime
+				commented: false
 
 		typesMapping:
 			uuid_binary: binary
