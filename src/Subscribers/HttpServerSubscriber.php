@@ -74,7 +74,7 @@ final class HttpServerSubscriber implements EventDispatcher\EventSubscriberInter
 	/**
 	 * @return void
 	 */
-	public function resetEntityManager(): void
+	private function resetEntityManager(): void
 	{
 		// Flushing and then clearing Doctrine's entity manager allows
 		// for more memory to be released by PHP

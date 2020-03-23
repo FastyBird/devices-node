@@ -96,8 +96,7 @@ final class EntitiesSubscriber implements Common\EventSubscriber
 	 */
 	public function postUpdate(ORM\Event\LifecycleEventArgs $eventArgs): void
 	{
-		$entityManager = $eventArgs->getEntityManager();
-		$uow = $entityManager->getUnitOfWork();
+		$uow = $this->entityManager->getUnitOfWork();
 
 		// onFlush was executed before, everything already initialized
 		$entity = $eventArgs->getEntity();
@@ -119,19 +118,16 @@ final class EntitiesSubscriber implements Common\EventSubscriber
 	}
 
 	/**
-	 * @param ORM\Event\OnFlushEventArgs $eventArgs
-	 *
 	 * @return void
 	 */
-	public function onFlush(ORM\Event\OnFlushEventArgs $eventArgs): void
+	public function onFlush(): void
 	{
-		$entityManager = $eventArgs->getEntityManager();
-		$uow = $entityManager->getUnitOfWork();
+		$uow = $this->entityManager->getUnitOfWork();
 
 		$processedEntities = [];
 
 		foreach ($uow->getScheduledEntityDeletions() as $entity) {
-			//doctrine is fine deleting elements multiple times. We are not.
+			// Doctrine is fine deleting elements multiple times. We are not.
 			$hash = $this->getHash($entity, $uow->getEntityIdentifier($entity));
 
 			if (in_array($hash, $processedEntities)) {
