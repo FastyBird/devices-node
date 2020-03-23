@@ -6,7 +6,6 @@ use FastyBird\DevicesNode\Router;
 use FastyBird\NodeLibs\Publishers as NodeLibsPublishers;
 use FastyBird\NodeWebServer\Http;
 use Fig\Http\Message\RequestMethodInterface;
-use IPub\SlimRouter;
 use Mockery;
 use React\Http\Io\ServerRequest;
 use Tester\Assert;
