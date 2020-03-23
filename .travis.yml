@@ -6,6 +6,9 @@ php:
   - 7.4snapshot
   - nightly
 
+services:
+  - mysql
+
 before_install:
   # Turn off XDebug
   - phpenv config-rm xdebug.ini || return 0

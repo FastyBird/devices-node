@@ -3,6 +3,7 @@ parameters:
 		level: \Monolog\Logger::DEBUG
 
 	database:
+		version: 5.7
 		host: 127.0.0.1
 		port: 3306
 		driver: pdo_mysql

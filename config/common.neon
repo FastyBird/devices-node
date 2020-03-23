@@ -64,6 +64,7 @@ contributteTranslation:
 ###############
 nettrineDbal:
 	connection:
+		serverVersion: %database.version%
 		host: %database.host%
 		port: %database.port%
 		driver: %database.driver%
