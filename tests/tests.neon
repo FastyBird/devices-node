@@ -1,3 +1,0 @@
-nettrineDbal:
-	connection:
-		wrapperClass: Tests\Cases\ConnectionWrapper

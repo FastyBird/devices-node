@@ -35,6 +35,7 @@
     "ext-json" : "*",
     "contributte/event-dispatcher" : "^0.7.0",
     "contributte/translation" : "^0.6",
+    "cweagans/composer-patches" : "^1.6",
     "fastybird/node-libs" : "^0.2",
     "fastybird/node-web-server" : "^0.1",
     "ipub/doctrine-consistence" : "^0.3",
@@ -79,5 +80,13 @@
 
   "config" : {
     "sort-packages" : true
+  },
+
+  "extra" : {
+    "patches" : {
+      "nettrine/orm" : {
+        "Enable connection overides" : "patches/nettrine.orm.mangerRegistry.diff"
+      }
+    }
   }
 }
