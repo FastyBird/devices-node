@@ -8,8 +8,8 @@ parameters:
 		driver: pdo_mysql
 		memory: false
 		dbname: io_server
-		username: io_server
-		password: EK59J%xZjvX5
+		username: root
+		password:
 
 	rabbitmq:
 		host: 127.0.0.1
