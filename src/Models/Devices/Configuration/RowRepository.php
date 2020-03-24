@@ -1,7 +1,7 @@
 <?php declare(strict_types = 1);
 
 /**
- * PropertyRepository.php
+ * RowRepository.php
  *
  * @license        More in license.md
  * @copyright      https://www.fastybird.com
@@ -10,10 +10,10 @@
  * @subpackage     Models
  * @since          0.1.0
  *
- * @date           21.11.18
+ * @date           24.03.20
  */
 
-namespace FastyBird\DevicesNode\Models\Devices\Properties;
+namespace FastyBird\DevicesNode\Models\Devices\Configuration;
 
 use Doctrine\Common;
 use Doctrine\ORM;
@@ -25,14 +25,14 @@ use Nette;
 use Throwable;
 
 /**
- * Device property structure repository
+ * Device configuration row repository
  *
  * @package        FastyBird:DevicesNode!
  * @subpackage     Models
  *
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  */
-final class PropertyRepository implements IPropertyRepository
+final class RowRepository implements IRowRepository
 {
 
 	use Nette\SmartObject;
@@ -40,8 +40,8 @@ final class PropertyRepository implements IPropertyRepository
 	/** @var Common\Persistence\ManagerRegistry */
 	private $managerRegistry;
 
-	/** @var ORM\EntityRepository<Entities\Devices\Properties\Property>|null */
-	private $repository = null;
+	/** @var ORM\EntityRepository<Entities\Devices\Configuration\Row>[] */
+	private $repository = [];
 
 	public function __construct(Common\Persistence\ManagerRegistry $managerRegistry)
 	{
@@ -52,10 +52,11 @@ final class PropertyRepository implements IPropertyRepository
 	 * {@inheritDoc}
 	 */
 	public function findOneBy(
-		Queries\FindDevicePropertiesQuery $queryObject
-	): ?Entities\Devices\Properties\IProperty {
-		/** @var Entities\Devices\Properties\IProperty|null $property */
-		$property = $queryObject->fetchOne($this->getRepository());
+		Queries\FindDeviceConfigurationQuery $queryObject,
+		string $type = Entities\Devices\Configuration\Row::class
+	): ?Entities\Devices\Configuration\IRow {
+		/** @var Entities\Devices\Configuration\IRow|null $property */
+		$property = $queryObject->fetchOne($this->getRepository($type));
 
 		return $property;
 	}
@@ -66,9 +67,10 @@ final class PropertyRepository implements IPropertyRepository
 	 * @throws Throwable
 	 */
 	public function getResultSet(
-		Queries\FindDevicePropertiesQuery $queryObject
+		Queries\FindDeviceConfigurationQuery $queryObject,
+		string $type = Entities\Devices\Configuration\Row::class
 	): DoctrineOrmQuery\ResultSet {
-		$result = $queryObject->fetch($this->getRepository());
+		$result = $queryObject->fetch($this->getRepository($type));
 
 		if (!$result instanceof DoctrineOrmQuery\ResultSet) {
 			throw new Exceptions\InvalidStateException('Result set for given query could not be loaded.');
@@ -78,15 +80,20 @@ final class PropertyRepository implements IPropertyRepository
 	}
 
 	/**
-	 * @return ORM\EntityRepository<Entities\Devices\Properties\Property>
+	 * @param string $type
+	 *
+	 * @return ORM\EntityRepository<Entities\Devices\Configuration\Row>
+	 *
+	 * @phpstan-template T of Entities\Devices\Configuration\Row
+	 * @phpstan-param    class-string<T> $type
 	 */
-	private function getRepository(): ORM\EntityRepository
+	private function getRepository(string $type): ORM\EntityRepository
 	{
-		if ($this->repository === null) {
-			$this->repository = $this->managerRegistry->getRepository(Entities\Devices\Properties\Property::class);
+		if (!isset($this->repository[$type])) {
+			$this->repository[$type] = $this->managerRegistry->getRepository($type);
 		}
 
-		return $this->repository;
+		return $this->repository[$type];
 	}
 
 }

@@ -15,7 +15,7 @@ INSERT IGNORE INTO `fb_devices_properties` (`property_id`, `device_id`, `propert
 (_binary 0x28BC0D382F7C4A71AA7427B102F8DF4C, _binary 0x69786D15FD0C4D9F937833287C2009FA, 'rssi', 'rssi', 0, 1, 'integer', NULL, NULL, '2020-03-20 09:18:20', '2020-03-20 09:18:20');
 
 INSERT IGNORE INTO `fb_devices_controls` (`control_id`, `device_id`, `control_name`, `created_at`, `updated_at`) VALUES
-(_binary 0x7C055B2B60C3401793DBE9478D8AA662, _binary 0x69786D15FD0C4D9F937833287C2009FA, 'reset', '2020-03-20 09:18:20', '2020-03-20 09:18:20');
+(_binary 0x7C055B2B60C3401793DBE9478D8AA662, _binary 0x69786D15FD0C4D9F937833287C2009FA, 'configure', '2020-03-20 09:18:20', '2020-03-20 09:18:20');
 
 INSERT IGNORE INTO `fb_devices_configuration` (`configuration_id`, `device_id`, `configuration_type`, `configuration_name`, `configuration_title`, `configuration_comment`, `configuration_default`, `created_at`, `updated_at`, `params`) VALUES
 (_binary 0x138C6CFCED49476B9F1E6EE1DCB24F0B, _binary 0x69786D15FD0C4D9F937833287C2009FA, 'number', 'sensor_expected_power', NULL, NULL, NULL, '2019-11-26 18:59:07', '2019-12-10 20:35:50', '{"min_value":0,"max_value":500,"step_value":1}'),
@@ -47,3 +47,16 @@ INSERT IGNORE INTO `fb_channels_properties` (`property_id`, `channel_id`, `prope
 (_binary 0xBBCCCF8C33AB431BA795D7BB38B6B6DB, _binary 0x17C59DFA2EDD438E8C49FAA4E38E5A5E, 'switch', 'switch', 1, 1, 'enum', NULL, 'on,off,toggle', '2019-12-09 23:19:45', '2019-12-09 23:19:49'),
 (_binary 0x28BC0D382F7C4A71AA7427B102F8DF4C, _binary 0x6821F8E9AE694D5C9B7CD2B213F1AE0A, 'temperature', 'temperature', 0, 1, 'float', '°C', NULL, '2019-12-08 18:17:39', '2019-12-09 23:09:56'),
 (_binary 0x24C436F4A2E44D2BB9101A3FF785B784, _binary 0x6821F8E9AE694D5C9B7CD2B213F1AE0A, 'humidity', 'humidity', 0, 1, 'float', '%', NULL, '2019-12-08 18:17:39', '2019-12-09 23:10:00');
+
+INSERT IGNORE INTO `fb_channels_controls` (`control_id`, `channel_id`, `control_name`, `created_at`, `updated_at`) VALUES
+(_binary 0x15DB9BEF3B574A87BF67E3C19FC3BA34, _binary 0x17C59DFA2EDD438E8C49FAA4E38E5A5E, 'configure', '2020-03-20 09:18:20', '2020-03-20 09:18:20'),
+(_binary 0x177D6FC719054FD9B847E2DA8189DD6A, _binary 0x6821F8E9AE694D5C9B7CD2B213F1AE0A, 'configure', '2020-03-20 09:18:20', '2020-03-20 09:18:20');
+
+INSERT IGNORE INTO `fb_channels_configuration` (`configuration_id`, `channel_id`, `configuration_type`, `configuration_name`, `configuration_title`, `configuration_comment`, `configuration_default`, `created_at`, `updated_at`, `params`) VALUES
+(_binary 0x008D911FE6D44B17AA28939839581CDE, _binary 0x17C59DFA2EDD438E8C49FAA4E38E5A5E, 'select', 'pulse_mode', NULL, NULL, '0', '2019-12-09 23:19:46', '2019-12-09 23:19:46', '{"select_values":[{"value":"0","name":"disabled"},{"value":"1","name":"normally_off"},{"value":"2","name":"normally_on"}]}'),
+(_binary 0x31669D328CFA4A71BD06D536A2F94C2C, _binary 0x17C59DFA2EDD438E8C49FAA4E38E5A5E, 'select', 'relay_boot', NULL, NULL, '0', '2019-12-09 23:19:46', '2019-12-09 23:19:46', '{"select_values":[{"value":"0","name":"always_off"},{"value":"1","name":"always_on"},{"value":"2","name":"same_before"},{"value":"3","name":"toggle_before"}]}'),
+(_binary 0x3F83999EC7904F429E8E4DB749D0E6D4, _binary 0x17C59DFA2EDD438E8C49FAA4E38E5A5E, 'number', 'pulse_time', NULL, NULL, '1', '2019-12-09 23:19:46', '2019-12-10 20:34:43', '{"min_value":1,"max_value":60,"step_value":0.1}'),
+(_binary 0xC747CFDD654C4E5097156D14DBF20552, _binary 0x17C59DFA2EDD438E8C49FAA4E38E5A5E, 'select', 'on_disconnect', NULL, NULL, '0', '2019-12-09 23:19:46', '2019-12-09 23:19:46', '{"select_values":[{"value":"0","name":"no_change"},{"value":"1","name":"turn_off"},{"value":"2","name":"turn_on"}]}'),
+(_binary 0x1FA8E5ACD2FB4531BA643C69863AEEA3, _binary 0x6821F8E9AE694D5C9B7CD2B213F1AE0A, 'select', 'pulse_mode', NULL, NULL, '0', '2019-12-08 16:49:29', '2019-12-08 16:49:29', '{"select_values":[{"value":"0","name":"disabled"},{"value":"1","name":"normally_off"},{"value":"2","name":"normally_on"}]}'),
+(_binary 0x3134BA8EF1344BF29C80C977C4DEB0FB, _binary 0x6821F8E9AE694D5C9B7CD2B213F1AE0A, 'select', 'on_disconnect', NULL, NULL, '0', '2019-12-08 16:49:29', '2019-12-08 16:49:29', '{"select_values":[{"value":"0","name":"no_change"},{"value":"1","name":"turn_off"},{"value":"2","name":"turn_on"}]}'),
+(_binary 0xD8B0D2B4A47A4750A225DDFA973675D3, _binary 0x6821F8E9AE694D5C9B7CD2B213F1AE0A, 'select', 'relay_boot', NULL, NULL, '0', '2019-12-08 16:49:29', '2019-12-08 16:49:29', '{"select_values":[{"value":"0","name":"always_off"},{"value":"1","name":"always_on"},{"value":"2","name":"same_before"},{"value":"3","name":"toggle_before"}]}');

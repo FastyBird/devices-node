@@ -66,7 +66,7 @@ final class DeviceChildrenV1Controller extends BaseV1Controller
 		$findDevicesQuery = new Queries\FindDevicesQuery();
 		$findDevicesQuery->forParent($device);
 
-		$children = $this->deviceRepository->findAllBy($findDevicesQuery);
+		$children = $this->deviceRepository->getResultSet($findDevicesQuery);
 
 		return $response
 			->withEntity(NodeWebServerHttp\ScalarEntity::from($children));

@@ -171,6 +171,9 @@ final class ChannelsV1Controller extends BaseV1Controller
 			throw $ex;
 
 		} catch (Throwable $ex) {
+			// Revert all changes when error occur
+			$this->getOrmConnection()->rollBack();
+
 			// Log catched exception
 			$this->logger->error('[CONTROLLER] ' . $ex->getMessage(), [
 				'exception' => [
@@ -178,9 +181,6 @@ final class ChannelsV1Controller extends BaseV1Controller
 					'code'    => $ex->getCode(),
 				],
 			]);
-
-			// Revert all changes when error occur
-			$this->getOrmConnection()->rollBack();
 
 			throw new NodeWebServerExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,

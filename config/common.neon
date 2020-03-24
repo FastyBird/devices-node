@@ -157,9 +157,13 @@ services:
 
 	- {factory: FastyBird\DevicesNode\Models\Devices\Properties\PropertyRepository}
 
+	- {factory: FastyBird\DevicesNode\Models\Devices\Configuration\RowRepository}
+
 	- {factory: FastyBird\DevicesNode\Models\Channels\ChannelRepository}
 
 	- {factory: FastyBird\DevicesNode\Models\Channels\Properties\PropertyRepository}
+
+	- {factory: FastyBird\DevicesNode\Models\Channels\Configuration\RowRepository}
 
 	# Database managers
 	###################

@@ -3,7 +3,7 @@
     "attributes" : {
       "comment" : null,
       "control" : [
-        "reset"
+        "configure"
       ],
       "identifier" : "first-device",
       "is_enabled" : true,

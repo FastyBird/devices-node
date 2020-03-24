@@ -3,7 +3,7 @@
     "attributes" : {
       "comment" : null,
       "control" : [
-        "reset"
+        "configure"
       ],
       "identifier" : "updated-device",
       "is_enabled" : true,

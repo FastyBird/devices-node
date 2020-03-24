@@ -6,7 +6,7 @@
       "identifier" : "new-device",
       "comment" : null,
       "control" : [
-        "reset"
+        "configure"
       ],
       "is_enabled" : true,
       "name" : "Newly created device",

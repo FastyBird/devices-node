@@ -18,12 +18,14 @@ namespace FastyBird\DevicesNode\Controllers;
 use FastyBird\DevicesNode;
 use FastyBird\DevicesNode\Controllers;
 use FastyBird\DevicesNode\Models;
+use FastyBird\DevicesNode\Queries;
 use FastyBird\DevicesNode\Router;
 use FastyBird\DevicesNode\Schemas;
 use FastyBird\NodeWebServer\Exceptions as NodeWebServerExceptions;
 use FastyBird\NodeWebServer\Http as NodeWebServerHttp;
 use Fig\Http\Message\StatusCodeInterface;
 use Psr\Http\Message;
+use Ramsey\Uuid;
 
 /**
  * Device configuration API controller
@@ -41,16 +43,18 @@ final class DeviceConfigurationV1Controller extends BaseV1Controller
 	/** @var Models\Devices\IDeviceRepository */
 	protected $deviceRepository;
 
+	/** @var Models\Devices\Configuration\IRowRepository */
+	private $rowRepository;
+
 	/** @var string */
 	protected $translationDomain = 'node.deviceConfiguration';
 
-	/**
-	 * @param Models\Devices\IDeviceRepository $deviceRepository
-	 */
 	public function __construct(
-		Models\Devices\IDeviceRepository $deviceRepository
+		Models\Devices\IDeviceRepository $deviceRepository,
+		Models\Devices\Configuration\IRowRepository $rowRepository
 	) {
 		$this->deviceRepository = $deviceRepository;
+		$this->rowRepository = $rowRepository;
 	}
 
 	/**
@@ -76,8 +80,13 @@ final class DeviceConfigurationV1Controller extends BaseV1Controller
 			);
 		}
 
+		$findQuery = new Queries\FindDeviceConfigurationQuery();
+		$findQuery->forDevice($device);
+
+		$rows = $this->rowRepository->getResultSet($findQuery);
+
 		return $response
-			->withEntity(NodeWebServerHttp\ScalarEntity::from($device->getConfiguration()));
+			->withEntity(NodeWebServerHttp\ScalarEntity::from($rows));
 	}
 
 	/**
@@ -103,12 +112,18 @@ final class DeviceConfigurationV1Controller extends BaseV1Controller
 			);
 		}
 
-		// & configuration row
-		$row = $device->getConfigurationRow($request->getAttribute(Router\Router::URL_ITEM_ID));
+		if (Uuid\Uuid::isValid($request->getAttribute(Router\Router::URL_ITEM_ID))) {
+			$findQuery = new Queries\FindDeviceConfigurationQuery();
+			$findQuery->forDevice($device);
+			$findQuery->byId(Uuid\Uuid::fromString($request->getAttribute(Router\Router::URL_ITEM_ID)));
 
-		if ($row !== null) {
-			return $response
-				->withEntity(NodeWebServerHttp\ScalarEntity::from($row));
+			// & configuration row
+			$row = $this->rowRepository->findOneBy($findQuery);
+
+			if ($row !== null) {
+				return $response
+					->withEntity(NodeWebServerHttp\ScalarEntity::from($row));
+			}
 		}
 
 		throw new NodeWebServerExceptions\JsonApiErrorException(
@@ -144,20 +159,27 @@ final class DeviceConfigurationV1Controller extends BaseV1Controller
 		// & relation entity name
 		$relationEntity = strtolower($request->getAttribute(Router\Router::RELATION_ENTITY));
 
-		if ($relationEntity === Schemas\Devices\Configuration\RowSchema::RELATIONSHIPS_DEVICE) {
+		if (Uuid\Uuid::isValid($request->getAttribute(Router\Router::URL_ITEM_ID))) {
+			$findQuery = new Queries\FindDeviceConfigurationQuery();
+			$findQuery->forDevice($device);
+			$findQuery->byId(Uuid\Uuid::fromString($request->getAttribute(Router\Router::URL_ITEM_ID)));
+
 			// & configuration row
-			$row = $device->getConfigurationRow($request->getAttribute(Router\Router::URL_ITEM_ID));
+			$row = $this->rowRepository->findOneBy($findQuery);
 
 			if ($row !== null) {
-				return $response
-					->withEntity(NodeWebServerHttp\ScalarEntity::from($row->getDevice()));
-			}
+				if ($relationEntity === Schemas\Devices\Configuration\RowSchema::RELATIONSHIPS_DEVICE) {
+					return $response
+						->withEntity(NodeWebServerHttp\ScalarEntity::from($device));
+				}
 
-			throw new NodeWebServerExceptions\JsonApiErrorException(
-				StatusCodeInterface::STATUS_NOT_FOUND,
-				$this->translator->translate('messages.notFound.heading'),
-				$this->translator->translate('messages.notFound.message')
-			);
+			} else {
+				throw new NodeWebServerExceptions\JsonApiErrorException(
+					StatusCodeInterface::STATUS_NOT_FOUND,
+					$this->translator->translate('messages.notFound.heading'),
+					$this->translator->translate('messages.notFound.message')
+				);
+			}
 		}
 
 		$this->throwUnknownRelation($relationEntity);

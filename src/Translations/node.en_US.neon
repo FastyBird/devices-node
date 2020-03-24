@@ -19,6 +19,12 @@
 
 base:
 	messages:
+		notValidJson:
+			heading	: "Not valid content"
+			message	: "Provided request content is not valid JSON content"
+		notValidJsonApi:
+			heading	: "Not valid content"
+			message	: "Provided request content is not valid {JSON:API} content"
 		invalidDeviceType:
 			heading	: "Invalid device type"
 			message	: "Data for given device id could not be loaded"

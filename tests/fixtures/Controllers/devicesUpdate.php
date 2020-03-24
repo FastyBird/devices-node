@@ -21,6 +21,12 @@ return [
 		StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 		__DIR__ . '/responses/devices.update.invalidType.json',
 	],
+	'idMismatch' => [
+		'/v1/devices/69786d15-fd0c-4d9f-9378-33287c2009fa',
+		file_get_contents(__DIR__ . '/requests/devices.update.idMismatch.json'),
+		StatusCodeInterface::STATUS_BAD_REQUEST,
+		__DIR__ . '/responses/invalid.identifier.json',
+	],
 	'updateRelation' => [
 		'/v1/devices/69786d15-fd0c-4d9f-9378-33287c2009fa?include=credentials',
 		file_get_contents(__DIR__ . '/requests/devices.update.relation.json'),

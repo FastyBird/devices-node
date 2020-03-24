@@ -97,15 +97,15 @@ abstract class BaseV1Controller
 		} catch (Utils\JsonException $ex) {
 			throw new NodeWebServerExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_BAD_REQUEST,
-				$this->translator->translate('//node.base.messages.validation.notValidJson.heading'),
-				$this->translator->translate('//node.base.messages.validation.notValidJson.message')
+				$this->translator->translate('//node.base.messages.notValidJson.heading'),
+				$this->translator->translate('//node.base.messages.notValidJson.message')
 			);
 
 		} catch (JsonAPIDocument\Exceptions\RuntimeException $ex) {
 			throw new NodeWebServerExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_BAD_REQUEST,
-				$this->translator->translate('//node.base.messages.validation.notValidJsonApi.heading'),
-				$this->translator->translate('//node.base.messages.validation.notValidJsonApi.message')
+				$this->translator->translate('//node.base.messages.notValidJsonApi.heading'),
+				$this->translator->translate('//node.base.messages.notValidJsonApi.message')
 			);
 		}
 
