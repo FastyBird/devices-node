@@ -24,6 +24,7 @@ use FastyBird\NodeWebServer\Exceptions as NodeWebServerExceptions;
 use FastyBird\NodeWebServer\Http as NodeWebServerHttp;
 use Fig\Http\Message\StatusCodeInterface;
 use Psr\Http\Message;
+use Ramsey\Uuid;
 
 /**
  * Device properties API controller
@@ -94,16 +95,18 @@ final class DevicePropertiesV1Controller extends BaseV1Controller
 		// At first, try to load device
 		$device = $this->findDevice($request->getAttribute(Router\Router::URL_DEVICE_ID));
 
-		$findQuery = new Queries\FindDevicePropertiesQuery();
-		$findQuery->forDevice($device);
-		$findQuery->byProperty($request->getAttribute(Router\Router::URL_ITEM_ID));
+		if (Uuid\Uuid::isValid($request->getAttribute(Router\Router::URL_ITEM_ID))) {
+			$findQuery = new Queries\FindDevicePropertiesQuery();
+			$findQuery->forDevice($device);
+			$findQuery->byId(Uuid\Uuid::fromString($request->getAttribute(Router\Router::URL_ITEM_ID)));
 
-		// & property
-		$property = $this->propertyRepository->findOneBy($findQuery);
+			// & property
+			$property = $this->propertyRepository->findOneBy($findQuery);
 
-		if ($property !== null) {
-			return $response
-				->withEntity(NodeWebServerHttp\ScalarEntity::from($property));
+			if ($property !== null) {
+				return $response
+					->withEntity(NodeWebServerHttp\ScalarEntity::from($property));
+			}
 		}
 
 		throw new NodeWebServerExceptions\JsonApiErrorException(
@@ -131,17 +134,27 @@ final class DevicePropertiesV1Controller extends BaseV1Controller
 		// & relation entity name
 		$relationEntity = strtolower($request->getAttribute(Router\Router::RELATION_ENTITY));
 
-		if ($relationEntity === Schemas\Devices\Properties\PropertySchema::RELATIONSHIPS_DEVICE) {
-			if ($device->hasProperty($request->getAttribute(Router\Router::URL_ITEM_ID))) {
-				return $response
-					->withEntity(NodeWebServerHttp\ScalarEntity::from($device));
-			}
+		if (Uuid\Uuid::isValid($request->getAttribute(Router\Router::URL_ITEM_ID))) {
+			$findQuery = new Queries\FindDevicePropertiesQuery();
+			$findQuery->forDevice($device);
+			$findQuery->byId(Uuid\Uuid::fromString($request->getAttribute(Router\Router::URL_ITEM_ID)));
 
-			throw new NodeWebServerExceptions\JsonApiErrorException(
-				StatusCodeInterface::STATUS_NOT_FOUND,
-				$this->translator->translate('messages.notFound.heading'),
-				$this->translator->translate('messages.notFound.message')
-			);
+			// & property
+			$property = $this->propertyRepository->findOneBy($findQuery);
+
+			if ($property !== null) {
+				if ($relationEntity === Schemas\Devices\Properties\PropertySchema::RELATIONSHIPS_DEVICE) {
+					return $response
+						->withEntity(NodeWebServerHttp\ScalarEntity::from($device));
+				}
+
+			} else {
+				throw new NodeWebServerExceptions\JsonApiErrorException(
+					StatusCodeInterface::STATUS_NOT_FOUND,
+					$this->translator->translate('messages.notFound.heading'),
+					$this->translator->translate('messages.notFound.message')
+				);
+			}
 		}
 
 		$this->throwUnknownRelation($relationEntity);

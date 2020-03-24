@@ -142,8 +142,8 @@ class FindDevicePropertiesQuery extends DoctrineOrmQuery\QueryObject
 	private function createBasicDql(ORM\EntityRepository $repository): ORM\QueryBuilder
 	{
 		$qb = $repository->createQueryBuilder('p');
-		$qb->addSelect('channel');
-		$qb->join('p.channel', 'channel');
+		$qb->addSelect('device');
+		$qb->join('p.device', 'device');
 
 		foreach ($this->filter as $modifier) {
 			$modifier($qb);
