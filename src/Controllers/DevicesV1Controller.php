@@ -27,6 +27,7 @@ use FastyBird\NodeWebServer\Exceptions as NodeWebServerExceptions;
 use FastyBird\NodeWebServer\Http as NodeWebServerHttp;
 use Fig\Http\Message\StatusCodeInterface;
 use IPub\DoctrineCrud\Exceptions as DoctrineCrudExceptions;
+use Nette\Utils;
 use Psr\Http\Message;
 use Throwable;
 
@@ -144,13 +145,59 @@ class DevicesV1Controller extends BaseV1Controller
 				throw $ex;
 
 			} catch (DoctrineCrudExceptions\MissingRequiredFieldException $ex) {
+				// Revert all changes when error occur
+				$this->getOrmConnection()->rollback();
+
+				if ($ex->getField() === Schemas\Devices\PhysicalDeviceSchema::RELATIONSHIPS_CREDENTIALS) {
+					$pointer = 'data/relationships/' . $ex->getField();
+
+				} else {
+					$pointer = 'data/attributes/' . $ex->getField();
+				}
+
 				throw new NodeWebServerExceptions\JsonApiErrorException(
 					StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-					$this->translator->translate('messages.notCreated.heading'),
-					$this->translator->translate('messages.notCreated.message'),
+					$this->translator->translate('//node.base.messages.missingRequired.heading'),
+					$this->translator->translate('//node.base.messages.missingRequired.message'),
 					[
-						'pointer' => $ex->getField(),
+						'pointer' => $pointer,
 					]
+				);
+
+			} catch (DoctrineCrudExceptions\EntityCreationException $ex) {
+				// Revert all changes when error occur
+				$this->getOrmConnection()->rollback();
+
+				throw new NodeWebServerExceptions\JsonApiErrorException(
+					StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
+					$this->translator->translate('//node.base.messages.missingRequired.heading'),
+					$this->translator->translate('//node.base.messages.missingRequired.message'),
+					[
+						'pointer' => 'data/attributes/' . $ex->getField(),
+					]
+				);
+
+			} catch (Doctrine\DBAL\Exception\UniqueConstraintViolationException $ex) {
+				// Revert all changes when error occur
+				$this->getOrmConnection()->rollback();
+
+				if (preg_match("%key '(?P<key>.+)_unique'%", $ex->getMessage(), $match)) {
+					if (Utils\Strings::startsWith($match['key'], 'device_')) {
+						throw new NodeWebServerExceptions\JsonApiErrorException(
+							StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
+							$this->translator->translate('//node.base.messages.uniqueConstraint.heading'),
+							$this->translator->translate('//node.base.messages.uniqueConstraint.message'),
+							[
+								'pointer' => '/data/attributes/' . Utils\Strings::substring($match['key'], 7),
+							]
+						);
+					}
+				}
+
+				throw new NodeWebServerExceptions\JsonApiErrorException(
+					StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
+					$this->translator->translate('//node.base.messages.uniqueConstraint.heading'),
+					$this->translator->translate('//node.base.messages.uniqueConstraint.message')
 				);
 
 			} catch (Throwable $ex) {
@@ -177,9 +224,12 @@ class DevicesV1Controller extends BaseV1Controller
 		}
 
 		throw new NodeWebServerExceptions\JsonApiErrorException(
-			StatusCodeInterface::STATUS_BAD_REQUEST,
+			StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 			$this->translator->translate('messages.invalidType.heading'),
-			$this->translator->translate('messages.invalidType.message')
+			$this->translator->translate('messages.invalidType.message'),
+			[
+				'pointer' => '/data/type',
+			]
 		);
 	}
 
@@ -241,7 +291,33 @@ class DevicesV1Controller extends BaseV1Controller
 
 			throw $ex;
 
+		} catch (Doctrine\DBAL\Exception\UniqueConstraintViolationException $ex) {
+			// Revert all changes when error occur
+			$this->getOrmConnection()->rollback();
+
+			if (preg_match("%key '(?P<key>.+)_unique'%", $ex->getMessage(), $match)) {
+				if (Utils\Strings::startsWith($match['key'], 'device_')) {
+					throw new NodeWebServerExceptions\JsonApiErrorException(
+						StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
+						$this->translator->translate('//node.base.messages.uniqueConstraint.heading'),
+						$this->translator->translate('//node.base.messages.uniqueConstraint.message'),
+						[
+							'pointer' => '/data/attributes/' . Utils\Strings::substring($match['key'], 7),
+						]
+					);
+				}
+			}
+
+			throw new NodeWebServerExceptions\JsonApiErrorException(
+				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
+				$this->translator->translate('//node.base.messages.uniqueConstraint.heading'),
+				$this->translator->translate('//node.base.messages.uniqueConstraint.message')
+			);
+
 		} catch (Throwable $ex) {
+			// Revert all changes when error occur
+			$this->getOrmConnection()->rollback();
+
 			// Log catched exception
 			$this->logger->error('[CONTROLLER] ' . $ex->getMessage(), [
 				'exception' => [
@@ -249,9 +325,6 @@ class DevicesV1Controller extends BaseV1Controller
 					'code'    => $ex->getCode(),
 				],
 			]);
-
-			// Revert all changes when error occur
-			$this->getOrmConnection()->rollback();
 
 			throw new NodeWebServerExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,

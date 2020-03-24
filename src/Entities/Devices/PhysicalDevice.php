@@ -29,6 +29,9 @@ use Throwable;
  *       "collate"="utf8mb4_general_ci",
  *       "charset"="utf8mb4",
  *       "comment"="Physicals devices"
+ *     },
+ *     uniqueConstraints={
+ *       @ORM\UniqueConstraint(name="device_identifier_unique", columns={"device_identifier"})
  *     }
  * )
  */
@@ -38,6 +41,7 @@ class PhysicalDevice extends Device implements IPhysicalDevice
 	/**
 	 * @var string
 	 *
+	 * @IPubDoctrine\Crud(is="writable")
 	 * @ORM\Column(type="string", name="device_identifier", length=50, nullable=false)
 	 */
 	protected $identifier;
@@ -59,7 +63,7 @@ class PhysicalDevice extends Device implements IPhysicalDevice
 	protected $firmware;
 
 	/**
-	 * @var Entities\Devices\Credentials\ICredentials|null
+	 * @var Entities\Devices\Credentials\ICredentials
 	 *
 	 * @IPubDoctrine\Crud(is={"required", "writable"})
 	 * @ORM\OneToOne(targetEntity="FastyBird\DevicesNode\Entities\Devices\Credentials\Credentials", mappedBy="device", cascade={"persist", "remove"})

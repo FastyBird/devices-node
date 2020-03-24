@@ -53,6 +53,7 @@ final class EntitiesSubscriberTest extends BaseMockeryTestCase
 		$eventArgs = Mockery::mock(ORM\Event\LifecycleEventArgs::class);
 		$eventArgs
 			->shouldReceive('getEntity')
+			->withNoArgs()
 			->andReturn($entity)
 			->times(1);
 
@@ -115,6 +116,7 @@ final class EntitiesSubscriberTest extends BaseMockeryTestCase
 		$uow = Mockery::mock(ORM\UnitOfWork::class);
 		$uow
 			->shouldReceive('getScheduledEntityDeletions')
+			->withNoArgs()
 			->andReturn([$entity])
 			->times(1)
 			->getMock()
@@ -127,6 +129,7 @@ final class EntitiesSubscriberTest extends BaseMockeryTestCase
 		$entityManager = $this->getEntityManager();
 		$entityManager
 			->shouldReceive('getUnitOfWork')
+			->withNoArgs()
 			->andReturn($uow)
 			->times(1);
 
@@ -171,6 +174,7 @@ final class EntitiesSubscriberTest extends BaseMockeryTestCase
 
 			$entityManager
 				->shouldReceive('getUnitOfWork')
+				->withNoArgs()
 				->andReturn($uow)
 				->times(1);
 		}

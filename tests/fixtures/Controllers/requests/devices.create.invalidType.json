@@ -1,0 +1,34 @@
+{
+  "data" : {
+    "id" : "bbbf5caa-b30e-4558-b83a-699617958cea",
+    "type" : "devices-node/other-device",
+    "attributes" : {
+      "identifier" : "new-device",
+      "comment" : null,
+      "control" : [
+        "reset"
+      ],
+      "is_enabled" : true,
+      "name" : "Newly created device",
+      "title" : null
+    },
+    "relationships" : {
+      "credentials" : {
+        "data" : {
+          "id" : "2433c2d6-d4f2-43b5-8c69-2a981dc47f30",
+          "type" : "devices-node/credentials"
+        }
+      }
+    }
+  },
+  "included" : [
+    {
+      "type" : "devices-node/credentials",
+      "id" : "2433c2d6-d4f2-43b5-8c69-2a981dc47f30",
+      "attributes" : {
+        "username" : "deviceusername",
+        "password" : "secretpassword"
+      }
+    }
+  ]
+}

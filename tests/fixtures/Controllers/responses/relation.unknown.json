@@ -2,9 +2,9 @@
   "errors" : [
     {
       "code" : "404",
-      "detail" : "Requested relation unknown was not found",
       "status" : "404",
-      "title" : "Relation not found"
+      "title" : "Relation not found",
+      "detail" : "Requested relation unknown was not found"
     }
   ],
   "jsonapi" : {

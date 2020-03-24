@@ -40,6 +40,12 @@ base:
 		invalid:
 			heading	: "Bad request"
 			message	: "Request resource identifier is invalid"
+		missingRequired:
+			heading	: "Missing required attribute"
+			message	: "Provided request is missing required attribute or relation"
+		uniqueConstraint:
+			heading	: "Attribute not unique"
+			message	: "Provided attribute is not unique"
 
 devices:
 	messages:

@@ -2,9 +2,9 @@
   "errors" : [
     {
       "code" : "404",
-      "detail" : "Requested device was not found",
       "status" : "404",
-      "title" : "Device not found"
+      "title" : "Device not found",
+      "detail" : "Requested device was not found"
     }
   ],
   "jsonapi" : {

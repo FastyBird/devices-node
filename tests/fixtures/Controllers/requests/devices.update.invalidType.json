@@ -1,0 +1,11 @@
+{
+  "data" : {
+    "id" : "69786d15-fd0c-4d9f-9378-33287c2009fa",
+    "type" : "devices-node/other-device",
+    "attributes" : {
+      "identifier" : "updated-device",
+      "name" : "Updated device",
+      "title" : "With title"
+    }
+  }
+}

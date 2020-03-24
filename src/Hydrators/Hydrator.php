@@ -223,6 +223,11 @@ abstract class Hydrator
 				continue;
 			}
 
+			// Continue only if attribute is present
+			if (!$attributes->has($field->getFieldName())) {
+				continue;
+			}
+
 			// If there is a specific method for this attribute, we'll hydrate that
 			$value = $this->callHydrateAttribute($field->getFieldName(), $attributes);
 			$value = $value ?? $field->getValue($attributes);
