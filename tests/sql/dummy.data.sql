@@ -1,12 +1,14 @@
 INSERT IGNORE INTO `fb_devices` (`device_id`, `parent_id`, `device_name`, `device_title`, `device_comment`, `device_state`, `device_enabled`, `params`, `created_at`, `updated_at`, `device_type`) VALUES
 (_binary 0x69786D15FD0C4D9F937833287C2009FA, NULL, 'First device', NULL, NULL, 'init', 1, '[]', '2020-03-19 14:03:48', '2020-03-22 20:12:07', 'physical'),
 (_binary 0xBF4CD8702AAC45F0A85EE1CEFD2D6D9A, NULL, 'Second device', 'Custom title', NULL, 'unknown', 1, '[]', '2020-03-20 21:54:32', '2020-03-20 21:54:32', 'physical'),
-(_binary 0xE36A27881EF84CDFAB094735F191A509, NULL, 'Third device', NULL, 'Custom comment', 'unknown', 1, '[]', '2020-03-20 21:56:41', '2020-03-20 21:56:41', 'physical');
+(_binary 0xE36A27881EF84CDFAB094735F191A509, NULL, 'Third device', NULL, 'Custom comment', 'unknown', 1, '[]', '2020-03-20 21:56:41', '2020-03-20 21:56:41', 'physical'),
+(_binary 0xA1036FF86EE84405AAED58BAE0814596, _binary 0x69786D15FD0C4D9F937833287C2009FA, 'Child device', NULL, 'This is child', 'unknown', 1, '[]', '2020-03-20 21:56:41', '2020-03-20 21:56:41', 'physical');
 
 INSERT IGNORE INTO `fb_physicals_devices` (`device_id`, `device_identifier`) VALUES
 (_binary 0x69786D15FD0C4D9F937833287C2009FA, 'first-device'),
 (_binary 0xBF4CD8702AAC45F0A85EE1CEFD2D6D9A, 'second-device'),
-(_binary 0xE36A27881EF84CDFAB094735F191A509, 'third-device');
+(_binary 0xE36A27881EF84CDFAB094735F191A509, 'third-device'),
+(_binary 0xA1036FF86EE84405AAED58BAE0814596, 'child-device');
 
 INSERT IGNORE INTO `fb_devices_properties` (`property_id`, `device_id`, `property_property`, `property_name`, `property_settable`, `property_queryable`, `property_datatype`, `property_unit`, `property_format`, `created_at`, `updated_at`) VALUES
 (_binary 0xBBCCCF8C33AB431BA795D7BB38B6B6DB, _binary 0x69786D15FD0C4D9F937833287C2009FA, 'uptime', 'uptime', 0, 1, 'integer', NULL, NULL, '2020-03-20 09:18:20', '2020-03-20 09:18:20'),

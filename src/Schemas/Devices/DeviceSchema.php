@@ -240,7 +240,10 @@ abstract class DeviceSchema extends Schemas\JsonApiSchema
 						Router\Router::URL_DEVICE_ID => $device->getPlainId(),
 					]
 				),
-				false
+				true,
+				[
+					'count' => count($device->getChildren()),
+				]
 			);
 		}
 

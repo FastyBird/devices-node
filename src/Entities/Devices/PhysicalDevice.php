@@ -63,9 +63,9 @@ class PhysicalDevice extends Device implements IPhysicalDevice
 	protected $firmware;
 
 	/**
-	 * @var Entities\Devices\Credentials\ICredentials
+	 * @var Entities\Devices\Credentials\ICredentials|null
 	 *
-	 * @IPubDoctrine\Crud(is={"required", "writable"})
+	 * @IPubDoctrine\Crud(is="writable")
 	 * @ORM\OneToOne(targetEntity="FastyBird\DevicesNode\Entities\Devices\Credentials\Credentials", mappedBy="device", cascade={"persist", "remove"})
 	 */
 	protected $credentials;

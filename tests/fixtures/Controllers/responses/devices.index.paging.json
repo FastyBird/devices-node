@@ -30,7 +30,12 @@
         "children" : {
           "data" : [ ],
           "links" : {
-            "related" : "/v1/devices/bf4cd870-2aac-45f0-a85e-e1cefd2d6d9a/children",
+            "related" : {
+              "href" : "/v1/devices/bf4cd870-2aac-45f0-a85e-e1cefd2d6d9a/children",
+              "meta" : {
+                "count" : 0
+              }
+            },
             "self" : "/v1/devices/bf4cd870-2aac-45f0-a85e-e1cefd2d6d9a/relationships/children"
           }
         },
@@ -91,7 +96,7 @@
   },
   "links" : {
     "first" : "/v1/devices?page%5Boffset%5D=0&page%5Blimit%5D=1",
-    "last" : "/v1/devices?page%5Boffset%5D=2&page%5Blimit%5D=1",
+    "last" : "/v1/devices?page%5Boffset%5D=3&page%5Blimit%5D=1",
     "next" : "/v1/devices?page%5Boffset%5D=2&page%5Blimit%5D=1",
     "prev" : "/v1/devices?page%5Boffset%5D=0&page%5Blimit%5D=1",
     "self" : "/v1/devices?page%5Boffset%5D=1&page%5Blimit%5D=1"
@@ -99,6 +104,6 @@
   "meta" : {
     "author" : "FastyBird dev team",
     "copyright" : "FastyBird s.r.o",
-    "totalCount" : 3
+    "totalCount" : 4
   }
 }

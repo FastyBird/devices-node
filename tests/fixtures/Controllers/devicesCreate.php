@@ -15,12 +15,6 @@ return [
 		StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 		__DIR__ . '/responses/missing.required.json',
 	],
-	'missingRelation' => [
-		'/v1/devices',
-		file_get_contents(__DIR__ . '/requests/devices.create.missing.relation.json'),
-		StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-		__DIR__ . '/responses/devices.create.missing.relation.json',
-	],
 	'invalidType' => [
 		'/v1/devices',
 		file_get_contents(__DIR__ . '/requests/devices.create.invalidType.json'),

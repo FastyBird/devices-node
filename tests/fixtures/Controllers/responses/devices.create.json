@@ -29,7 +29,12 @@
       "children" : {
         "data" : [ ],
         "links" : {
-          "related" : "/v1/devices/bbbf5caa-b30e-4558-b83a-699617958cea/children",
+          "related" : {
+            "href" : "/v1/devices/bbbf5caa-b30e-4558-b83a-699617958cea/children",
+            "meta" : {
+              "count" : 0
+            }
+          },
           "self" : "/v1/devices/bbbf5caa-b30e-4558-b83a-699617958cea/relationships/children"
         }
       },

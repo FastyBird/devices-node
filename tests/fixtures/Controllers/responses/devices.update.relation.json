@@ -38,9 +38,19 @@
         }
       },
       "children" : {
-        "data" : [ ],
+        "data" : [
+          {
+            "id" : "a1036ff8-6ee8-4405-aaed-58bae0814596",
+            "type" : "devices-node/physical-device"
+          }
+        ],
         "links" : {
-          "related" : "/v1/devices/69786d15-fd0c-4d9f-9378-33287c2009fa/children",
+          "related" : {
+            "href" : "/v1/devices/69786d15-fd0c-4d9f-9378-33287c2009fa/children",
+            "meta" : {
+              "count" : 1
+            }
+          },
           "self" : "/v1/devices/69786d15-fd0c-4d9f-9378-33287c2009fa/relationships/children"
         }
       },

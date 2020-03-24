@@ -157,7 +157,7 @@ class Router extends Routing\Router
 				$route = $group->get('/credentials', [$this->deviceCredentialsV1Controller, 'read']);
 				$route->setName('device.credentials');
 
-				$route = $group->get('/credentials/{' . self::URL_ITEM_ID . '}/relationships/{' . self::RELATION_ENTITY . '}', [$this->deviceCredentialsV1Controller, 'readRelationship']);
+				$route = $group->get('/credentials/relationships/{' . self::RELATION_ENTITY . '}', [$this->deviceCredentialsV1Controller, 'readRelationship']);
 				$route->setName('device.credentials.relationship');
 
 				/**
@@ -166,7 +166,7 @@ class Router extends Routing\Router
 				$route = $group->get('/hardware', [$this->deviceHardwareV1Controller, 'read']);
 				$route->setName('device.hardware');
 
-				$route = $group->get('/hardware/{' . self::URL_ITEM_ID . '}/relationships/{' . self::RELATION_ENTITY . '}', [$this->deviceHardwareV1Controller, 'readRelationship']);
+				$route = $group->get('/hardware/relationships/{' . self::RELATION_ENTITY . '}', [$this->deviceHardwareV1Controller, 'readRelationship']);
 				$route->setName('device.hardware.relationship');
 
 				/**
@@ -175,7 +175,7 @@ class Router extends Routing\Router
 				$route = $group->get('/firmware', [$this->deviceFirmwareV1Controller, 'read']);
 				$route->setName('device.firmware');
 
-				$route = $group->get('/firmware/{' . self::URL_ITEM_ID . '}/relationships/{' . self::RELATION_ENTITY . '}', [$this->deviceFirmwareV1Controller, 'readRelationship']);
+				$route = $group->get('/firmware/relationships/{' . self::RELATION_ENTITY . '}', [$this->deviceFirmwareV1Controller, 'readRelationship']);
 				$route->setName('device.firmware.relationship');
 
 				$group->group('/channels', function (Routing\RouteCollector $group): void {

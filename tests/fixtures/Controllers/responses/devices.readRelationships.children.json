@@ -1,5 +1,10 @@
 {
-  "data" : [ ],
+  "data" : [
+    {
+      "id" : "a1036ff8-6ee8-4405-aaed-58bae0814596",
+      "type" : "devices-node/physical-device"
+    }
+  ],
   "jsonapi" : {
     "version" : "1.1"
   },
