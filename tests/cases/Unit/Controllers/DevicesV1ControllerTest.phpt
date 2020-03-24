@@ -155,7 +155,7 @@ final class DevicesV1ControllerTest extends DbTestCase
 
 		$request = new ServerRequest(
 			RequestMethodInterface::METHOD_DELETE,
-			$url,
+			$url
 		);
 
 		$rabbitPublisher = Mockery::mock(NodeLibsPublishers\RabbitMqPublisher::class);
