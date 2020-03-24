@@ -78,6 +78,7 @@ Configuration could be made via environment variables:
 | `FB_NODE_PARAMETER__RABBITMQ_USERNAME=guest` | Username |
 | `FB_NODE_PARAMETER__RABBITMQ_PASSWORD=guest` | Password |
 | | |
+| `FB_NODE_PARAMETER__DATABASE_VERSION=5.7` | MySQL server version |
 | `FB_NODE_PARAMETER__DATABASE_HOST=127.0.0.1` | MySQL host address |
 | `FB_NODE_PARAMETER__DATABASE_PORT=3306` | MySQL access port |
 | `FB_NODE_PARAMETER__DATABASE_DBNAME=devices_noe` | MySQL database name |

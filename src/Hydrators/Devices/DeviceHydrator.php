@@ -40,11 +40,11 @@ abstract class DeviceHydrator extends Hydrators\Hydrator
 	];
 
 	/**
-	 * @param JsonAPIDocument\Objects\StandardObject<mixed> $attributes
+	 * @param JsonAPIDocument\Objects\IStandardObject<mixed> $attributes
 	 *
 	 * @return string|null
 	 */
-	protected function hydrateTitleAttribute(JsonAPIDocument\Objects\StandardObject $attributes): ?string
+	protected function hydrateTitleAttribute(JsonAPIDocument\Objects\IStandardObject $attributes): ?string
 	{
 		if ($attributes->get('title') === null || (string) $attributes->get('title') === '') {
 			return null;
@@ -54,11 +54,11 @@ abstract class DeviceHydrator extends Hydrators\Hydrator
 	}
 
 	/**
-	 * @param JsonAPIDocument\Objects\StandardObject<mixed> $attributes
+	 * @param JsonAPIDocument\Objects\IStandardObject<mixed> $attributes
 	 *
 	 * @return string|null
 	 */
-	protected function hydrateCommentAttribute(JsonAPIDocument\Objects\StandardObject $attributes): ?string
+	protected function hydrateCommentAttribute(JsonAPIDocument\Objects\IStandardObject $attributes): ?string
 	{
 		if ($attributes->get('comment') === null || (string) $attributes->get('comment') === '') {
 			return null;
@@ -68,11 +68,11 @@ abstract class DeviceHydrator extends Hydrators\Hydrator
 	}
 
 	/**
-	 * @param JsonAPIDocument\Objects\StandardObject<mixed> $attributes
+	 * @param JsonAPIDocument\Objects\IStandardObject<mixed> $attributes
 	 *
 	 * @return bool
 	 */
-	protected function hydrateEnabledAttribute(JsonAPIDocument\Objects\StandardObject $attributes): bool
+	protected function hydrateEnabledAttribute(JsonAPIDocument\Objects\IStandardObject $attributes): bool
 	{
 		return (bool) $attributes->get('enabled');
 	}
