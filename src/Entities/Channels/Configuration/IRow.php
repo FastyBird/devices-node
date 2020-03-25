@@ -66,15 +66,27 @@ interface IRow extends Entities\IEntity,
 	public function getComment(): ?string;
 
 	/**
-	 * @param mixed|null $default
+	 * @param string|null $default
 	 *
 	 * @return void
 	 */
-	public function setDefault($default): void;
+	public function setDefault(?string $default): void;
 
 	/**
 	 * @return mixed|null
 	 */
 	public function getDefault();
+
+	/**
+	 * @param string|null $value
+	 *
+	 * @return void
+	 */
+	public function setValue(?string $value): void;
+
+	/**
+	 * @return mixed|null
+	 */
+	public function getValue();
 
 }

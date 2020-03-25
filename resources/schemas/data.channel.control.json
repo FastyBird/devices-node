@@ -11,6 +11,16 @@
             "type" : "string"
           }
         ]
+      },
+      "object_string" : {
+        "oneOf" : [
+          {
+            "type" : "object"
+          },
+          {
+            "type" : "string"
+          }
+        ]
       }
     },
     "control" : {
@@ -36,7 +46,7 @@
       "$ref" : "#/definitions/control"
     },
     "value" : {
-      "type" : "object"
+      "$ref" : "#/definitions/types/object_string"
     },
     "schema" : {
       "type" : "object"

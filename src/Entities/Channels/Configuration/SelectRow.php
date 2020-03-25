@@ -70,4 +70,16 @@ class SelectRow extends Row implements ISelectRow
 		$this->setParam('select_values', $values);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	public function getValue(): ?string
+	{
+		if ($this->value === null) {
+			return null;
+		}
+
+		return (string) $this->value;
+	}
+
 }

@@ -75,6 +75,14 @@ final class Constants
 	];
 
 	/**
+	 * Data types
+	 */
+	public const DATA_TYPE_BOOLEAN = 'boolean';
+	public const DATA_TYPE_NUMBER = 'number';
+	public const DATA_TYPE_SELECT = 'select';
+	public const DATA_TYPE_TEXT = 'text';
+
+	/**
 	 * Control actions
 	 */
 	public const CONTROL_CONFIG = 'configure';

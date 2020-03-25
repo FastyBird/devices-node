@@ -114,4 +114,16 @@ class NumberRow extends Row implements INumberRow
 		return $this->getParam('step_value', null) !== null;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	public function getValue(): ?float
+	{
+		if ($this->value === null) {
+			return null;
+		}
+
+		return (float) $this->value;
+	}
+
 }

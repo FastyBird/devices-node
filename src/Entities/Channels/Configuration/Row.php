@@ -93,6 +93,14 @@ abstract class Row extends Entities\Entity implements IRow
 	protected $default = null;
 
 	/**
+	 * @var mixed|null
+	 *
+	 * @IPubDoctrine\Crud(is="writable")
+	 * @ORM\Column(type="string", name="configuration_value", nullable=true, options={"default": null})
+	 */
+	protected $value = null;
+
+	/**
 	 * @var Entities\Channels\IChannel
 	 *
 	 * @ORM\ManyToOne(targetEntity="FastyBird\DevicesNode\Entities\Channels\Channel", inversedBy="configuration")
@@ -172,7 +180,7 @@ abstract class Row extends Entities\Entity implements IRow
 	/**
 	 * {@inheritDoc}
 	 */
-	public function setDefault($default): void
+	public function setDefault(?string $default): void
 	{
 		$this->default = $default;
 	}
@@ -183,6 +191,22 @@ abstract class Row extends Entities\Entity implements IRow
 	public function getDefault()
 	{
 		return $this->default;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function setValue(?string $value): void
+	{
+		$this->value = $value;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function getValue()
+	{
+		return $this->value;
 	}
 
 }

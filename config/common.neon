@@ -139,9 +139,13 @@ services:
 
 	- {factory: FastyBird\DevicesNode\Consumers\DevicePropertyMessageHandler}
 
+	- {factory: FastyBird\DevicesNode\Consumers\DeviceControlMessageHandler}
+
 	- {factory: FastyBird\DevicesNode\Consumers\ChannelMessageHandler}
 
 	- {factory: FastyBird\DevicesNode\Consumers\ChannelPropertyMessageHandler}
+
+	- {factory: FastyBird\DevicesNode\Consumers\ChannelControlMessageHandler}
 
 	# Events subscribers
 	####################

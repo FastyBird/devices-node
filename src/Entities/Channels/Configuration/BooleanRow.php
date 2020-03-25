@@ -16,11 +16,24 @@
 namespace FastyBird\DevicesNode\Entities\Channels\Configuration;
 
 use Doctrine\ORM\Mapping as ORM;
+use Nette\Utils;
 
 /**
  * @ORM\Entity
  */
 class BooleanRow extends Row implements IBooleanRow
 {
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function getValue(): ?bool
+	{
+		if ($this->value === null) {
+			return null;
+		}
+
+		return $this->value === '1' || Utils\Strings::lower((string) $this->value) === 'true';
+	}
 
 }

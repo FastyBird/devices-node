@@ -7,7 +7,7 @@
  * @copyright      https://www.fastybird.com
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  * @package        FastyBird:DevicesNode!
- * @subpackage     Controllers
+ * @subpackage     Middleware
  * @since          0.1.0
  *
  * @date           21.03.20
@@ -23,6 +23,14 @@ use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Throwable;
 
+/**
+ * Result set handling middleware for {JSON:API}
+ *
+ * @package        FastyBird:DevicesNode!
+ * @subpackage     Middleware
+ *
+ * @author         Adam Kadlec <adam.kadlec@fastybird.com>
+ */
 class JsonApiMiddleware implements MiddlewareInterface
 {
 

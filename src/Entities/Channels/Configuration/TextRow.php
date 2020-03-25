@@ -23,4 +23,16 @@ use Doctrine\ORM\Mapping as ORM;
 class TextRow extends Row implements ITextRow
 {
 
+	/**
+	 * {@inheritDoc}
+	 */
+	public function getValue(): ?string
+	{
+		if ($this->value === null) {
+			return null;
+		}
+
+		return (string) $this->value;
+	}
+
 }
