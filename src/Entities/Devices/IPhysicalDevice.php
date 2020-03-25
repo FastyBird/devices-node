@@ -29,18 +29,6 @@ interface IPhysicalDevice extends IDevice
 {
 
 	/**
-	 * @param string $identifier
-	 *
-	 * @return void
-	 */
-	public function setIdentifier(string $identifier): void;
-
-	/**
-	 * @return string
-	 */
-	public function getIdentifier(): string;
-
-	/**
 	 * @param Entities\Devices\PhysicalDevice\IHardware|null $hardware
 	 *
 	 * @return void

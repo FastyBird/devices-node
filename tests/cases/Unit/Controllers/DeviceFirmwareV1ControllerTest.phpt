@@ -15,13 +15,6 @@ require_once __DIR__ . '/../DbTestCase.php';
 final class DeviceFirmwareV1ControllerTest extends DbTestCase
 {
 
-	public function setUp(): void
-	{
-		$this->registerDatabaseSchemaFile(__DIR__ . '/../../../sql/dummy.data.sql');
-
-		parent::setUp();
-	}
-
 	/**
 	 * @param string $url
 	 * @param int $statusCode

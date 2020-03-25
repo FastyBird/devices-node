@@ -34,6 +34,9 @@ use Throwable;
  *       "collate"="utf8mb4_general_ci",
  *       "charset"="utf8mb4",
  *       "comment"="Smart devices"
+ *     },
+ *     uniqueConstraints={
+ *       @ORM\UniqueConstraint(name="device_identifier_unique", columns={"device_identifier"})
  *     }
  * )
  * @ORM\InheritanceType("JOINED")
@@ -59,6 +62,14 @@ abstract class Device extends Entities\Entity implements IDevice
 	 * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
 	 */
 	protected $id;
+
+	/**
+	 * @var string
+	 *
+	 * @IPubDoctrine\Crud(is="writable")
+	 * @ORM\Column(type="string", name="device_identifier", length=50, nullable=false)
+	 */
+	protected $identifier;
 
 	/**
 	 * @var Entities\Devices\IDevice|null
@@ -150,13 +161,16 @@ abstract class Device extends Entities\Entity implements IDevice
 	protected $configuration;
 
 	/**
+	 * @param string $identifier
 	 * @param Uuid\UuidInterface|null $id
 	 *
 	 * @throws Throwable
 	 */
-	public function __construct(?Uuid\UuidInterface $id = null)
+	public function __construct(string $identifier, ?Uuid\UuidInterface $id = null)
 	{
 		$this->id = $id ?? Uuid\Uuid::uuid4();
+
+		$this->identifier = $identifier;
 
 		$this->state = Types\DeviceConnectionState::get(Types\DeviceConnectionState::STATE_UNKNOWN);
 
@@ -165,6 +179,22 @@ abstract class Device extends Entities\Entity implements IDevice
 		$this->controls = new Common\Collections\ArrayCollection();
 		$this->properties = new Common\Collections\ArrayCollection();
 		$this->configuration = new Common\Collections\ArrayCollection();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function setIdentifier(string $identifier): void
+	{
+		$this->identifier = $identifier;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function getIdentifier(): string
+	{
+		return $this->identifier;
 	}
 
 	/**

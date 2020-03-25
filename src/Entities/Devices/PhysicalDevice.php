@@ -18,8 +18,6 @@ namespace FastyBird\DevicesNode\Entities\Devices;
 use Doctrine\ORM\Mapping as ORM;
 use FastyBird\DevicesNode\Entities;
 use IPub\DoctrineCrud\Mapping\Annotation as IPubDoctrine;
-use Ramsey\Uuid;
-use Throwable;
 
 /**
  * @ORM\Entity
@@ -29,22 +27,11 @@ use Throwable;
  *       "collate"="utf8mb4_general_ci",
  *       "charset"="utf8mb4",
  *       "comment"="Physicals devices"
- *     },
- *     uniqueConstraints={
- *       @ORM\UniqueConstraint(name="device_identifier_unique", columns={"device_identifier"})
  *     }
  * )
  */
 class PhysicalDevice extends Device implements IPhysicalDevice
 {
-
-	/**
-	 * @var string
-	 *
-	 * @IPubDoctrine\Crud(is="writable")
-	 * @ORM\Column(type="string", name="device_identifier", length=50, nullable=false)
-	 */
-	protected $identifier;
 
 	/**
 	 * @var Entities\Devices\PhysicalDevice\IHardware|null
@@ -71,40 +58,11 @@ class PhysicalDevice extends Device implements IPhysicalDevice
 	protected $credentials;
 
 	/**
-	 * @param string $identifier
-	 * @param Uuid\UuidInterface|null $id
-	 *
-	 * @throws Throwable
-	 */
-	public function __construct(string $identifier, ?Uuid\UuidInterface $id = null)
-	{
-		parent::__construct($id);
-
-		$this->identifier = $identifier;
-	}
-
-	/**
 	 * {@inheritDoc}
 	 */
 	public function getName(): string
 	{
 		return $this->name ?? $this->identifier;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function setIdentifier(string $identifier): void
-	{
-		$this->identifier = $identifier;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function getIdentifier(): string
-	{
-		return $this->identifier;
 	}
 
 	/**

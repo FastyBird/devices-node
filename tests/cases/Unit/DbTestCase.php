@@ -26,6 +26,13 @@ abstract class DbTestCase extends BaseMockeryTestCase
 	/** @var string[] */
 	private $sqlFiles = [];
 
+	public function setUp(): void
+	{
+		$this->registerDatabaseSchemaFile(__DIR__ . '/../../sql/dummy.data.sql');
+
+		parent::setUp();
+	}
+
 	/**
 	 * @return DI\Container
 	 */

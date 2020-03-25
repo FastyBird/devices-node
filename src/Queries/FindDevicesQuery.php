@@ -56,6 +56,18 @@ class FindDevicesQuery extends DoctrineOrmQuery\QueryObject
 	}
 
 	/**
+	 * @param string $identifier
+	 *
+	 * @return void
+	 */
+	public function byIdentifier(string $identifier): void
+	{
+		$this->filter[] = function (ORM\QueryBuilder $qb) use ($identifier): void {
+			$qb->andWhere('d.identifier = :identifier')->setParameter('identifier', $identifier);
+		};
+	}
+
+	/**
 	 * @param Entities\Devices\IDevice $device
 	 *
 	 * @return void

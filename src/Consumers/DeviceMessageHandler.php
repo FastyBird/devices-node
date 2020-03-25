@@ -15,7 +15,6 @@
 
 namespace FastyBird\DevicesNode\Consumers;
 
-use Doctrine;
 use FastyBird\DevicesNode;
 use FastyBird\DevicesNode\Entities;
 use FastyBird\DevicesNode\Exceptions;
@@ -28,6 +27,7 @@ use FastyBird\NodeLibs\Helpers as NodeLibsHelpers;
 use Nette;
 use Nette\Utils;
 use Psr\Log;
+use Throwable;
 
 /**
  * Device message consumer
@@ -91,15 +91,17 @@ final class DeviceMessageHandler implements NodeLibsConsumers\IMessageHandler
 	 * {@inheritDoc}
 	 *
 	 * @throws NodeLibsExceptions\TerminateException
+	 *
+	 * @throws NodeLibsExceptions\TerminateException
 	 */
 	public function process(
 		string $routingKey,
 		Utils\ArrayHash $message
 	): bool {
-		$findDevice = new Queries\FindPhysicalDevicesQuery();
+		$findDevice = new Queries\FindDevicesQuery();
 		$findDevice->byIdentifier($message->offsetGet('device'));
 
-		$device = $this->deviceRepository->findOneBy($findDevice, Entities\Devices\PhysicalDevice::class);
+		$device = $this->deviceRepository->findOneBy($findDevice);
 
 		if ($device === null) {
 			$this->logger->error(sprintf('[CONSUMER] Device "%s" is not registered', $message->offsetGet('device')));
@@ -119,20 +121,17 @@ final class DeviceMessageHandler implements NodeLibsConsumers\IMessageHandler
 		try {
 			switch ($routingKey) {
 				case DevicesNode\Constants::RABBIT_MQ_DEVICES_DATA_ROUTING_KEY:
-					if ($message->offsetExists('name')) {
-						$subResult = $this->setDeviceName($device, $message->offsetGet('name'));
+					$toUpdate = [];
 
-						if (!$subResult) {
-							$result = false;
-						}
+					if ($message->offsetExists('name')) {
+						$toUpdate['name'] = $message->offsetGet('name');
 					}
 
-					if ($message->offsetExists('state')) {
-						$subResult = $this->setDeviceState($device, $message->offsetGet('name'));
-
-						if (!$subResult) {
-							$result = false;
-						}
+					if (
+						$message->offsetExists('state') &&
+						Types\DeviceConnectionState::isValidValue($message->offsetGet('state'))
+					) {
+						$toUpdate['state'] = $message->offsetGet('state');
 					}
 
 					if ($message->offsetExists('properties')) {
@@ -158,14 +157,18 @@ final class DeviceMessageHandler implements NodeLibsConsumers\IMessageHandler
 							$result = false;
 						}
 					}
+
+					if ($toUpdate !== []) {
+						$this->devicesManager->update($device, Utils\ArrayHash::from($toUpdate));
+					}
 					break;
 
 				default:
 					throw new Exceptions\InvalidStateException('Unknown routing key');
 			}
 
-		} catch (Doctrine\DBAL\Driver\PDOException $ex) {
-			throw new NodeLibsExceptions\TerminateException('MySql error', $ex->getCode(), $ex);
+		} catch (Throwable $ex) {
+			throw new NodeLibsExceptions\TerminateException('An error occurred: ' . $ex->getMessage(), $ex->getCode(), $ex);
 		}
 
 		if ($result) {
@@ -201,48 +204,6 @@ final class DeviceMessageHandler implements NodeLibsConsumers\IMessageHandler
 		return [
 			DevicesNode\Constants::RABBIT_MQ_DEVICES_DATA_ROUTING_KEY,
 		];
-	}
-
-	/**
-	 * @param Entities\Devices\IDevice $device
-	 * @param string $name
-	 *
-	 * @return bool
-	 */
-	private function setDeviceName(
-		Entities\Devices\IDevice $device,
-		string $name
-	): bool {
-		$updateDevice = Utils\ArrayHash::from([
-			'name' => $name,
-		]);
-
-		$this->devicesManager->update($device, $updateDevice);
-
-		return true;
-	}
-
-	/**
-	 * @param Entities\Devices\IDevice $device
-	 * @param string $state
-	 *
-	 * @return bool
-	 */
-	private function setDeviceState(
-		Entities\Devices\IDevice $device,
-		string $state
-	): bool {
-		if (!Types\DeviceConnectionState::isValidValue($state)) {
-			return false;
-		}
-
-		$updateDevice = Utils\ArrayHash::from([
-			'state' => $state,
-		]);
-
-		$this->devicesManager->update($device, $updateDevice);
-
-		return true;
 	}
 
 	/**

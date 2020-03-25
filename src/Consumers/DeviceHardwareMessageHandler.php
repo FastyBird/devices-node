@@ -95,14 +95,26 @@ final class DeviceHardwareMessageHandler implements NodeLibsConsumers\IMessageHa
 
 		switch ($routingKey) {
 			case DevicesNode\Constants::RABBIT_MQ_DEVICES_HARDWARE_DATA_ROUTING_KEY:
+				$toUpdate = [];
+
 				foreach (['mac-address', 'manufacturer', 'model', 'version'] as $attribute) {
 					if ($message->offsetExists($attribute)) {
 						$subResult = $this->setDeviceHardwareInfo($device, $attribute, $message->offsetGet($attribute));
 
-						if (!$subResult) {
-							$result = false;
-						}
+						$toUpdate = array_merge($toUpdate, $subResult);
 					}
+				}
+
+				if ($toUpdate !== []) {
+					if ($device->getHardware() !== null) {
+						$this->hardwareManager->update($device->getHardware(), Utils\ArrayHash::from($toUpdate));
+
+					} else {
+						$this->hardwareManager->create(Utils\ArrayHash::from(array_merge($toUpdate, ['device' => $device])));
+					}
+
+				} else {
+					$result = false;
 				}
 				break;
 
@@ -150,13 +162,13 @@ final class DeviceHardwareMessageHandler implements NodeLibsConsumers\IMessageHa
 	 * @param string $parameter
 	 * @param string $value
 	 *
-	 * @return bool
+	 * @return mixed[]
 	 */
 	private function setDeviceHardwareInfo(
 		Entities\Devices\IPhysicalDevice $device,
 		string $parameter,
 		string $value
-	): bool {
+	): array {
 		$parametersMapping = [
 			'mac-address'  => 'macAddress',
 			'manufacturer' => 'manufacturer',
@@ -166,23 +178,13 @@ final class DeviceHardwareMessageHandler implements NodeLibsConsumers\IMessageHa
 
 		foreach ($parametersMapping as $key => $field) {
 			if ($parameter === $key) {
-				if ($device->getHardware() !== null) {
-					$this->hardwareManager->update($device->getHardware(), Utils\ArrayHash::from([
-						$field => $value,
-					]));
-
-				} else {
-					$this->hardwareManager->create(Utils\ArrayHash::from([
-						$field   => $value,
-						'device' => $device,
-					]));
-				}
-
-				return true;
+				return [
+					$field => $value,
+				];
 			}
 		}
 
-		return false;
+		return [];
 	}
 
 	/**

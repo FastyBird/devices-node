@@ -33,18 +33,6 @@ class FindPhysicalDevicesQuery extends FindDevicesQuery
 {
 
 	/**
-	 * @param string $identifier
-	 *
-	 * @return void
-	 */
-	public function byIdentifier(string $identifier): void
-	{
-		$this->filter[] = function (ORM\QueryBuilder $qb) use ($identifier): void {
-			$qb->andWhere('pd.identifier = :identifier')->setParameter('identifier', $identifier);
-		};
-	}
-
-	/**
 	 * @param ORM\EntityRepository $repository
 	 *
 	 * @return ORM\QueryBuilder

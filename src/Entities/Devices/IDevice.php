@@ -33,6 +33,18 @@ interface IDevice extends Entities\IEntity,
 {
 
 	/**
+	 * @param string $identifier
+	 *
+	 * @return void
+	 */
+	public function setIdentifier(string $identifier): void;
+
+	/**
+	 * @return string
+	 */
+	public function getIdentifier(): string;
+
+	/**
 	 * @param IDevice $device
 	 *
 	 * @return void
