@@ -24,6 +24,7 @@ use FastyBird\NodeWebServer\Exceptions as NodeWebServerExceptions;
 use FastyBird\NodeWebServer\Http as NodeWebServerHttp;
 use Fig\Http\Message\StatusCodeInterface;
 use Psr\Http\Message;
+use Ramsey\Uuid;
 
 /**
  * Device channel properties API controller
@@ -106,16 +107,18 @@ final class ChannelPropertiesV1Controller extends BaseV1Controller
 		// & channel
 		$channel = $this->findChannel($request->getAttribute(Router\Router::URL_CHANNEL_ID), $device);
 
-		$findQuery = new Queries\FindChannelPropertiesQuery();
-		$findQuery->forChannel($channel);
-		$findQuery->byProperty($request->getAttribute(Router\Router::URL_ITEM_ID));
+		if (Uuid\Uuid::isValid($request->getAttribute(Router\Router::URL_ITEM_ID))) {
+			$findQuery = new Queries\FindChannelPropertiesQuery();
+			$findQuery->forChannel($channel);
+			$findQuery->byId(Uuid\Uuid::fromString($request->getAttribute(Router\Router::URL_ITEM_ID)));
 
-		// & property
-		$property = $this->propertyRepository->findOneBy($findQuery);
+			// & property
+			$property = $this->propertyRepository->findOneBy($findQuery);
 
-		if ($property !== null) {
-			return $response
-				->withEntity(NodeWebServerHttp\ScalarEntity::from($property));
+			if ($property !== null) {
+				return $response
+					->withEntity(NodeWebServerHttp\ScalarEntity::from($property));
+			}
 		}
 
 		throw new NodeWebServerExceptions\JsonApiErrorException(
@@ -146,17 +149,27 @@ final class ChannelPropertiesV1Controller extends BaseV1Controller
 		// & relation entity name
 		$relationEntity = strtolower($request->getAttribute(Router\Router::RELATION_ENTITY));
 
-		if ($relationEntity === Schemas\Channels\Properties\PropertySchema::RELATIONSHIPS_CHANNEL) {
-			if ($channel->hasProperty($request->getAttribute(Router\Router::URL_ITEM_ID))) {
-				return $response
-					->withEntity(NodeWebServerHttp\ScalarEntity::from($channel));
-			}
+		if (Uuid\Uuid::isValid($request->getAttribute(Router\Router::URL_ITEM_ID))) {
+			$findQuery = new Queries\FindChannelPropertiesQuery();
+			$findQuery->forChannel($channel);
+			$findQuery->byId(Uuid\Uuid::fromString($request->getAttribute(Router\Router::URL_ITEM_ID)));
 
-			throw new NodeWebServerExceptions\JsonApiErrorException(
-				StatusCodeInterface::STATUS_NOT_FOUND,
-				$this->translator->translate('messages.notFound.heading'),
-				$this->translator->translate('messages.notFound.message')
-			);
+			// & property
+			$property = $this->propertyRepository->findOneBy($findQuery);
+
+			if ($property !== null) {
+				if ($relationEntity === Schemas\Channels\Properties\PropertySchema::RELATIONSHIPS_CHANNEL) {
+					return $response
+						->withEntity(NodeWebServerHttp\ScalarEntity::from($device));
+				}
+
+			} else {
+				throw new NodeWebServerExceptions\JsonApiErrorException(
+					StatusCodeInterface::STATUS_NOT_FOUND,
+					$this->translator->translate('messages.notFound.heading'),
+					$this->translator->translate('messages.notFound.message')
+				);
+			}
 		}
 
 		$this->throwUnknownRelation($relationEntity);

@@ -1,0 +1,13 @@
+{
+  "errors" : [
+    {
+      "code" : "404",
+      "status" : "404",
+      "title" : "Not found",
+      "detail" : "Requested property could not be found"
+    }
+  ],
+  "jsonapi" : {
+    "version" : "1.1"
+  }
+}

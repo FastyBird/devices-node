@@ -193,7 +193,7 @@ class Router extends Routing\Router
 					$route = $group->get('/{' . self::URL_ITEM_ID . '}/relationships/{' . self::RELATION_ENTITY . '}', [$this->channelsV1Controller, 'readRelationship']);
 					$route->setName('channel.relationship');
 
-					$group->group('/channels/{' . self::URL_CHANNEL_ID . '}', function (Routing\RouteCollector $group): void {
+					$group->group('/{' . self::URL_CHANNEL_ID . '}', function (Routing\RouteCollector $group): void {
 						/**
 						 * CHANNEL PROPERTIES
 						 */
