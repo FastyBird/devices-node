@@ -36,7 +36,7 @@
         ],
         "links" : {
           "related" : {
-            "href" : "/v1/devices/69786d15-fd0c-4d9f-9378-33287c2009fa/channels/channels/17c59dfa-2edd-438e-8c49-faa4e38e5a5e/configuration",
+            "href" : "/v1/devices/69786d15-fd0c-4d9f-9378-33287c2009fa/channels/17c59dfa-2edd-438e-8c49-faa4e38e5a5e/configuration",
             "meta" : {
               "count" : 4
             }
@@ -62,7 +62,7 @@
         ],
         "links" : {
           "related" : {
-            "href" : "/v1/devices/69786d15-fd0c-4d9f-9378-33287c2009fa/channels/channels/17c59dfa-2edd-438e-8c49-faa4e38e5a5e/properties",
+            "href" : "/v1/devices/69786d15-fd0c-4d9f-9378-33287c2009fa/channels/17c59dfa-2edd-438e-8c49-faa4e38e5a5e/properties",
             "meta" : {
               "count" : 1
             }
