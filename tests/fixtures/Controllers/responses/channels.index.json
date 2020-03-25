@@ -37,7 +37,7 @@
           ],
           "links" : {
             "related" : {
-              "href" : "/v1/devices/69786d15-fd0c-4d9f-9378-33287c2009fa/channels/channels/17c59dfa-2edd-438e-8c49-faa4e38e5a5e/configuration",
+              "href" : "/v1/devices/69786d15-fd0c-4d9f-9378-33287c2009fa/channels/17c59dfa-2edd-438e-8c49-faa4e38e5a5e/configuration",
               "meta" : {
                 "count" : 4
               }
@@ -63,7 +63,7 @@
           ],
           "links" : {
             "related" : {
-              "href" : "/v1/devices/69786d15-fd0c-4d9f-9378-33287c2009fa/channels/channels/17c59dfa-2edd-438e-8c49-faa4e38e5a5e/properties",
+              "href" : "/v1/devices/69786d15-fd0c-4d9f-9378-33287c2009fa/channels/17c59dfa-2edd-438e-8c49-faa4e38e5a5e/properties",
               "meta" : {
                 "count" : 1
               }
@@ -107,7 +107,7 @@
           ],
           "links" : {
             "related" : {
-              "href" : "/v1/devices/69786d15-fd0c-4d9f-9378-33287c2009fa/channels/channels/6821f8e9-ae69-4d5c-9b7c-d2b213f1ae0a/configuration",
+              "href" : "/v1/devices/69786d15-fd0c-4d9f-9378-33287c2009fa/channels/6821f8e9-ae69-4d5c-9b7c-d2b213f1ae0a/configuration",
               "meta" : {
                 "count" : 3
               }
@@ -137,7 +137,7 @@
           ],
           "links" : {
             "related" : {
-              "href" : "/v1/devices/69786d15-fd0c-4d9f-9378-33287c2009fa/channels/channels/6821f8e9-ae69-4d5c-9b7c-d2b213f1ae0a/properties",
+              "href" : "/v1/devices/69786d15-fd0c-4d9f-9378-33287c2009fa/channels/6821f8e9-ae69-4d5c-9b7c-d2b213f1ae0a/properties",
               "meta" : {
                 "count" : 2
               }
