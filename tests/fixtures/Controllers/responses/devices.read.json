@@ -6,6 +6,7 @@
         "configure"
       ],
       "identifier" : "first-device",
+      "state": "init",
       "is_enabled" : true,
       "name" : "First device",
       "params" : [ ],

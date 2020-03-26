@@ -85,9 +85,10 @@ abstract class DeviceSchema extends Schemas\JsonApiSchema
 			'title'   => $device->getTitle(),
 			'comment' => $device->getComment(),
 
-			'control' => $this->formatControls($device->getControls()),
-
+			'state'      => $device->getState()->getValue(),
 			'is_enabled' => $device->isEnabled(),
+
+			'control' => $this->formatControls($device->getControls()),
 
 			'params' => (array) $device->getParams(),
 		];

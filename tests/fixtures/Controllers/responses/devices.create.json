@@ -4,6 +4,7 @@
       "comment" : null,
       "control" : [ ],
       "identifier" : "new-device",
+      "state": "unknown",
       "is_enabled" : true,
       "name" : "new-device",
       "params" : [ ],

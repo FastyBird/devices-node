@@ -5,6 +5,7 @@
         "comment" : "This is child",
         "control" : [ ],
         "identifier" : "child-device",
+        "state": "init",
         "is_enabled" : true,
         "name" : "Child device",
         "params" : [ ],

@@ -5,6 +5,7 @@
         "comment" : null,
         "control" : [ ],
         "identifier" : "second-device",
+        "state": "unknown",
         "is_enabled" : true,
         "name" : "Second device",
         "params" : [ ],

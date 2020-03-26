@@ -99,7 +99,7 @@ final class DeviceHardwareMessageHandler implements NodeLibsConsumers\IMessageHa
 
 				foreach (['mac-address', 'manufacturer', 'model', 'version'] as $attribute) {
 					if ($message->offsetExists($attribute)) {
-						$subResult = $this->setDeviceHardwareInfo($device, $attribute, $message->offsetGet($attribute));
+						$subResult = $this->setDeviceHardwareInfo($attribute, $message->offsetGet($attribute));
 
 						$toUpdate = array_merge($toUpdate, $subResult);
 					}
@@ -158,14 +158,12 @@ final class DeviceHardwareMessageHandler implements NodeLibsConsumers\IMessageHa
 	}
 
 	/**
-	 * @param Entities\Devices\IPhysicalDevice $device
 	 * @param string $parameter
 	 * @param string $value
 	 *
 	 * @return mixed[]
 	 */
 	private function setDeviceHardwareInfo(
-		Entities\Devices\IPhysicalDevice $device,
 		string $parameter,
 		string $value
 	): array {

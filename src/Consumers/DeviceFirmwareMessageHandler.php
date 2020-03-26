@@ -95,14 +95,26 @@ final class DeviceFirmwareMessageHandler implements NodeLibsConsumers\IMessageHa
 
 		switch ($routingKey) {
 			case DevicesNode\Constants::RABBIT_MQ_DEVICES_FIRMWARE_DATA_ROUTING_KEY:
-				foreach (['mac-address', 'manufacturer', 'model', 'version'] as $attribute) {
-					if ($message->offsetExists($attribute)) {
-						$subResult = $this->setDeviceFirmwareInfo($device, $attribute, $message->offsetGet($attribute));
+				$toUpdate = [];
 
-						if (!$subResult) {
-							$result = false;
-						}
+				foreach (['manufacturer', 'name', 'version'] as $attribute) {
+					if ($message->offsetExists($attribute)) {
+						$subResult = $this->setDeviceFirmwareInfo($attribute, $message->offsetGet($attribute));
+
+						$toUpdate = array_merge($toUpdate, $subResult);
 					}
+				}
+
+				if ($toUpdate !== []) {
+					if ($device->getHardware() !== null) {
+						$this->firmwareManager->update($device->getFirmware(), Utils\ArrayHash::from($toUpdate));
+
+					} else {
+						$this->firmwareManager->create(Utils\ArrayHash::from(array_merge($toUpdate, ['device' => $device])));
+					}
+
+				} else {
+					$result = false;
 				}
 				break;
 
@@ -146,17 +158,15 @@ final class DeviceFirmwareMessageHandler implements NodeLibsConsumers\IMessageHa
 	}
 
 	/**
-	 * @param Entities\Devices\IPhysicalDevice $device
 	 * @param string $parameter
 	 * @param string $value
 	 *
-	 * @return bool
+	 * @return mixed[]
 	 */
 	private function setDeviceFirmwareInfo(
-		Entities\Devices\IPhysicalDevice $device,
 		string $parameter,
 		string $value
-	): bool {
+	): array {
 		$parametersMapping = [
 			'manufacturer' => 'manufacturer',
 			'name'         => 'name',
@@ -165,23 +175,13 @@ final class DeviceFirmwareMessageHandler implements NodeLibsConsumers\IMessageHa
 
 		foreach ($parametersMapping as $key => $field) {
 			if ($parameter === $key) {
-				if ($device->getFirmware() !== null) {
-					$this->firmwareManager->update($device->getFirmware(), Utils\ArrayHash::from([
-						$field => $value,
-					]));
-
-				} else {
-					$this->firmwareManager->create(Utils\ArrayHash::from([
-						$field   => $value,
-						'device' => $device,
-					]));
-				}
-
-				return true;
+				return [
+					$field => $value,
+				];
 			}
 		}
 
-		return false;
+		return [];
 	}
 
 	/**
