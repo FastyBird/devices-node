@@ -106,7 +106,7 @@ final class DeviceFirmwareMessageHandler implements NodeLibsConsumers\IMessageHa
 				}
 
 				if ($toUpdate !== []) {
-					if ($device->getHardware() !== null) {
+					if ($device->getFirmware() !== null) {
 						$this->firmwareManager->update($device->getFirmware(), Utils\ArrayHash::from($toUpdate));
 
 					} else {
