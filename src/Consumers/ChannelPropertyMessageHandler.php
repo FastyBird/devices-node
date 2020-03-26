@@ -158,12 +158,6 @@ final class ChannelPropertyMessageHandler implements NodeLibsConsumers\IMessageH
 					} else {
 						$toCreate = $this->getProperty($channel, $message->offsetGet('property'));
 
-						if ($toCreate === null) {
-							$this->logger->error(sprintf('[CONSUMER] Device property "%s" could not be initialized', $message->offsetGet('property')));
-
-							return true;
-						}
-
 						$this->propertiesManager->create(Utils\ArrayHash::from(array_merge($toCreate, $toUpdate)));
 					}
 
