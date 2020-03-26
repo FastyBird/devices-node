@@ -158,10 +158,12 @@ final class DevicesV1ControllerTest extends DbTestCase
 				Assert::true(in_array($routingKey, [
 					'fb.bus.node.entity.deleted.device',
 					'fb.bus.node.entity.deleted.device.property',
+					'fb.bus.node.entity.deleted.device.configuration',
 					'fb.bus.node.entity.deleted.device.hardware',
 					'fb.bus.node.entity.deleted.device.firmware',
 					'fb.bus.node.entity.deleted.device.channel',
 					'fb.bus.node.entity.deleted.device.channel.property',
+					'fb.bus.node.entity.deleted.device.channel.configuration',
 				], true));
 				Assert::false($data === []);
 
