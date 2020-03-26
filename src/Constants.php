@@ -32,12 +32,14 @@ final class Constants
 	 * Message bus routing keys for data entities
 	 */
 	public const RABBIT_MQ_ENTITIES_ROUTING_KEYS = [
-		DevicesNodeEntities\Devices\PhysicalDevice::class          => 'fb.bus.node.entity.[ACTION].device',
+		DevicesNodeEntities\Devices\Device::class                  => 'fb.bus.node.entity.[ACTION].device',
 		DevicesNodeEntities\Devices\Properties\Property::class     => 'fb.bus.node.entity.[ACTION].device.property',
+		DevicesNodeEntities\Devices\Configuration\Row::class       => 'fb.bus.node.entity.[ACTION].device.configuration',
 		DevicesNodeEntities\Devices\PhysicalDevice\Hardware::class => 'fb.bus.node.entity.[ACTION].device.hardware',
 		DevicesNodeEntities\Devices\PhysicalDevice\Firmware::class => 'fb.bus.node.entity.[ACTION].device.firmware',
 		DevicesNodeEntities\Channels\Channel::class                => 'fb.bus.node.entity.[ACTION].device.channel',
 		DevicesNodeEntities\Channels\Properties\Property::class    => 'fb.bus.node.entity.[ACTION].device.channel.property',
+		Models\Channels\Configuration\RowsManager::class           => 'fb.bus.node.entity.[ACTION].device.channel.configuration',
 	];
 
 	public const RABBIT_MQ_ENTITIES_ROUTING_KEY_ACTION_REPLACE_STRING = '[ACTION]';
