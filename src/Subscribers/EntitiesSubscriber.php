@@ -187,6 +187,14 @@ final class EntitiesSubscriber implements Common\EventSubscriber
 	private function processEntityAction(Entities\IEntity $entity, string $action): void
 	{
 		foreach (DevicesNode\Constants::RABBIT_MQ_ENTITIES_ROUTING_KEYS as $class => $routingKey) {
+			if (get_class($entity) === $class) {
+				$routingKey = str_replace(DevicesNode\Constants::RABBIT_MQ_ENTITIES_ROUTING_KEY_ACTION_REPLACE_STRING, $action, $routingKey);
+
+				$this->publisher->publish($routingKey, $this->toArray($entity));
+
+				return;
+			}
+
 			if (is_subclass_of($entity, $class)) {
 				$routingKey = str_replace(DevicesNode\Constants::RABBIT_MQ_ENTITIES_ROUTING_KEY_ACTION_REPLACE_STRING, $action, $routingKey);
 
