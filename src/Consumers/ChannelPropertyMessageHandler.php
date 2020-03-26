@@ -107,64 +107,68 @@ final class ChannelPropertyMessageHandler implements NodeLibsConsumers\IMessageH
 			return true;
 		}
 
-		$property = $this->getProperty($channel, $message->offsetGet('property'));
-
-		if ($property === null) {
-			$this->logger->error(sprintf('[CONSUMER] Channel property "%s" could not be loaded', $message->offsetGet('property')));
-
-			return true;
-		}
-
 		$result = true;
 
 		switch ($routingKey) {
 			case DevicesNode\Constants::RABBIT_MQ_DEVICES_CHANNELS_PROPERTIES_DATA_ROUTING_KEY:
-				if ($message->offsetExists('name')) {
-					$subResult = $this->setPropertyName($property, $message->offsetGet('name'));
+				$toUpdate = [];
 
-					if (!$subResult) {
-						$result = false;
-					}
+				if ($message->offsetExists('name')) {
+					$subResult = $this->setPropertyName($message->offsetGet('name'));
+
+					$toUpdate = array_merge($toUpdate, $subResult);
 				}
 
 				if ($message->offsetExists('settable')) {
-					$subResult = $this->setPropertySettable($property, (bool) $message->offsetGet('settable'));
+					$subResult = $this->setPropertySettable((bool) $message->offsetGet('settable'));
 
-					if (!$subResult) {
-						$result = false;
-					}
+					$toUpdate = array_merge($toUpdate, $subResult);
 				}
 
 				if ($message->offsetExists('queryable')) {
-					$subResult = $this->setPropertyQueryable($property, (bool) $message->offsetGet('queryable'));
+					$subResult = $this->setPropertyQueryable((bool) $message->offsetGet('queryable'));
 
-					if (!$subResult) {
-						$result = false;
-					}
+					$toUpdate = array_merge($toUpdate, $subResult);
 				}
 
 				if ($message->offsetExists('datatype')) {
-					$subResult = $this->setPropertyDatatype($property, $message->offsetGet('datatype'));
+					$subResult = $this->setPropertyDatatype($message->offsetGet('datatype'));
 
-					if (!$subResult) {
-						$result = false;
-					}
+					$toUpdate = array_merge($toUpdate, $subResult);
 				}
 
 				if ($message->offsetExists('format')) {
-					$subResult = $this->setPropertyFormat($property, $message->offsetGet('format'));
+					$subResult = $this->setPropertyFormat($message->offsetGet('format'));
 
-					if (!$subResult) {
-						$result = false;
-					}
+					$toUpdate = array_merge($toUpdate, $subResult);
 				}
 
 				if ($message->offsetExists('unit')) {
-					$subResult = $this->setPropertyUnit($property, $message->offsetGet('unit'));
+					$subResult = $this->setPropertyUnit($message->offsetGet('unit'));
 
-					if (!$subResult) {
-						$result = false;
+					$toUpdate = array_merge($toUpdate, $subResult);
+				}
+
+				if ($toUpdate !== []) {
+					$property = $channel->findProperty($message->offsetGet('property'));
+
+					if ($property !== null) {
+						$this->propertiesManager->update($property, Utils\ArrayHash::from($toUpdate));
+
+					} else {
+						$toCreate = $this->getProperty($channel, $message->offsetGet('property'));
+
+						if ($toCreate === null) {
+							$this->logger->error(sprintf('[CONSUMER] Device property "%s" could not be initialized', $message->offsetGet('property')));
+
+							return true;
+						}
+
+						$this->propertiesManager->create(Utils\ArrayHash::from(array_merge($toCreate, $toUpdate)));
 					}
+
+				} else {
+					$result = false;
 				}
 				break;
 
@@ -208,128 +212,100 @@ final class ChannelPropertyMessageHandler implements NodeLibsConsumers\IMessageH
 	}
 
 	/**
-	 * @param Entities\Channels\Properties\IProperty $property
 	 * @param string $name
 	 *
-	 * @return bool
+	 * @return mixed[]
 	 */
 	private function setPropertyName(
-		Entities\Channels\Properties\IProperty $property,
 		string $name
-	): bool {
-		$this->propertiesManager->update($property, Utils\ArrayHash::from([
+	): array {
+		return [
 			'name' => $name,
-		]));
-
-		return true;
+		];
 	}
 
 	/**
-	 * @param Entities\Channels\Properties\IProperty $property
 	 * @param bool $settable
 	 *
-	 * @return bool
+	 * @return mixed[]
 	 */
 	private function setPropertySettable(
-		Entities\Channels\Properties\IProperty $property,
 		bool $settable
-	): bool {
-		$this->propertiesManager->update($property, Utils\ArrayHash::from([
+	): array {
+		return [
 			'settable' => $settable,
-		]));
-
-		return true;
+		];
 	}
 
 	/**
-	 * @param Entities\Channels\Properties\IProperty $property
 	 * @param bool $queryable
 	 *
-	 * @return bool
+	 * @return mixed[]
 	 */
 	private function setPropertyQueryable(
-		Entities\Channels\Properties\IProperty $property,
 		bool $queryable
-	): bool {
-		$this->propertiesManager->update($property, Utils\ArrayHash::from([
+	): array {
+		return [
 			'queryable' => $queryable,
-		]));
-
-		return true;
+		];
 	}
 
 	/**
-	 * @param Entities\Channels\Properties\IProperty $property
 	 * @param string $datatype
 	 *
-	 * @return bool
+	 * @return mixed[]
 	 */
 	private function setPropertyDatatype(
-		Entities\Channels\Properties\IProperty $property,
 		string $datatype
-	): bool {
-		$this->propertiesManager->update($property, Utils\ArrayHash::from([
+	): array {
+		return [
 			'datatype' => $datatype,
-		]));
-
-		return true;
+		];
 	}
 
 	/**
-	 * @param Entities\Channels\Properties\IProperty $property
 	 * @param string $format
 	 *
-	 * @return bool
+	 * @return mixed[]
 	 */
 	private function setPropertyFormat(
-		Entities\Channels\Properties\IProperty $property,
 		string $format
-	): bool {
-		$this->propertiesManager->update($property, Utils\ArrayHash::from([
+	): array {
+		return [
 			'format' => $format,
-		]));
-
-		return true;
+		];
 	}
 
 	/**
-	 * @param Entities\Channels\Properties\IProperty $property
 	 * @param string $unit
 	 *
-	 * @return bool
+	 * @return mixed[]
 	 */
 	private function setPropertyUnit(
-		Entities\Channels\Properties\IProperty $property,
 		string $unit
-	): bool {
-		$this->propertiesManager->update($property, Utils\ArrayHash::from([
+	): array {
+		return [
 			'unit' => $unit,
-		]));
-
-		return true;
+		];
 	}
 
 	/**
 	 * @param Entities\Channels\IChannel $channel
 	 * @param string $property
 	 *
-	 * @return Entities\Channels\Properties\IProperty|null
+	 * @return mixed[]
 	 */
 	private function getProperty(
 		Entities\Channels\IChannel $channel,
 		string $property
-	): ?Entities\Channels\Properties\IProperty {
-		if ($channel->hasProperty($property)) {
-			return $channel->getProperty($property);
-		}
-
-		return $this->propertiesManager->create(Utils\ArrayHash::from([
+	): array {
+		return [
 			'channel'   => $channel,
 			'name'      => $property,
 			'property'  => $property,
 			'settable'  => false,
 			'queryable' => false,
-		]));
+		];
 	}
 
 	/**

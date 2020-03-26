@@ -121,12 +121,10 @@ final class ChannelMessageHandler implements NodeLibsConsumers\IMessageHandler
 
 		switch ($routingKey) {
 			case DevicesNode\Constants::RABBIT_MQ_DEVICES_CHANNELS_DATA_ROUTING_KEY:
-				if ($message->offsetExists('name')) {
-					$subResult = $this->setChannelName($channel, $message->offsetGet('name'));
+				$toUpdate = [];
 
-					if (!$subResult) {
-						$result = false;
-					}
+				if ($message->offsetExists('name')) {
+					$toUpdate['name'] = $message->offsetGet('name');
 				}
 
 				if ($message->offsetExists('properties')) {
@@ -143,6 +141,10 @@ final class ChannelMessageHandler implements NodeLibsConsumers\IMessageHandler
 					if (!$subResult) {
 						$result = false;
 					}
+				}
+
+				if ($toUpdate !== []) {
+					$this->channelsManager->update($channel, Utils\ArrayHash::from($toUpdate));
 				}
 				break;
 
@@ -187,25 +189,6 @@ final class ChannelMessageHandler implements NodeLibsConsumers\IMessageHandler
 
 	/**
 	 * @param Entities\Channels\IChannel $channel
-	 * @param string $name
-	 *
-	 * @return bool
-	 */
-	private function setChannelName(
-		Entities\Channels\IChannel $channel,
-		string $name
-	): bool {
-		$updateDevice = Utils\ArrayHash::from([
-			'name' => $name,
-		]);
-
-		$this->channelsManager->update($channel, $updateDevice);
-
-		return true;
-	}
-
-	/**
-	 * @param Entities\Channels\IChannel $channel
 	 * @param Utils\ArrayHash<string> $properties
 	 *
 	 * @return bool
@@ -215,7 +198,7 @@ final class ChannelMessageHandler implements NodeLibsConsumers\IMessageHandler
 		Utils\ArrayHash $properties
 	): bool {
 		foreach ($properties as $propertyName) {
-			if ($channel->hasProperty($propertyName)) {
+			if (!$channel->hasProperty($propertyName)) {
 				if (in_array($propertyName, [
 					Entities\Devices\Properties\IProperty::PROPERTY_IP_ADDRESS,
 					Entities\Devices\Properties\IProperty::PROPERTY_STATUS_LED,
