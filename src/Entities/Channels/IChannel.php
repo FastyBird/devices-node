@@ -228,4 +228,9 @@ interface IChannel extends Entities\IEntity,
 	 */
 	public function removeControl(Entities\Channels\Controls\IControl $control): void;
 
+	/**
+	 * @return mixed[]
+	 */
+	public function toArray(): array;
+
 }

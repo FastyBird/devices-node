@@ -317,4 +317,9 @@ interface IDevice extends Entities\IEntity,
 	 */
 	public function removeConfiguration(Entities\Devices\Configuration\IRow $stat): void;
 
+	/**
+	 * @return mixed[]
+	 */
+	public function toArray(): array;
+
 }

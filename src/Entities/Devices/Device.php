@@ -140,7 +140,8 @@ abstract class Device extends Entities\Entity implements IDevice
 	 * @var Common\Collections\Collection<int, Entities\Devices\Controls\IControl>
 	 *
 	 * @IPubDoctrine\Crud(is="writable")
-	 * @ORM\OneToMany(targetEntity="FastyBird\DevicesNode\Entities\Devices\Controls\Control", mappedBy="device", cascade={"persist", "remove"}, orphanRemoval=true)
+	 * @ORM\OneToMany(targetEntity="FastyBird\DevicesNode\Entities\Devices\Controls\Control", mappedBy="device", cascade={"persist", "remove"},
+	 *                                                                                        orphanRemoval=true)
 	 */
 	protected $controls;
 
@@ -148,7 +149,8 @@ abstract class Device extends Entities\Entity implements IDevice
 	 * @var Common\Collections\Collection<int, Entities\Devices\Properties\IProperty>
 	 *
 	 * @IPubDoctrine\Crud(is="writable")
-	 * @ORM\OneToMany(targetEntity="FastyBird\DevicesNode\Entities\Devices\Properties\Property", mappedBy="device", cascade={"persist", "remove"}, orphanRemoval=true)
+	 * @ORM\OneToMany(targetEntity="FastyBird\DevicesNode\Entities\Devices\Properties\Property", mappedBy="device", cascade={"persist", "remove"},
+	 *                                                                                           orphanRemoval=true)
 	 */
 	protected $properties;
 
@@ -156,7 +158,8 @@ abstract class Device extends Entities\Entity implements IDevice
 	 * @var Common\Collections\Collection<int, Entities\Devices\Configuration\IRow>
 	 *
 	 * @IPubDoctrine\Crud(is="writable")
-	 * @ORM\OneToMany(targetEntity="FastyBird\DevicesNode\Entities\Devices\Configuration\Row", mappedBy="device", cascade={"persist", "remove"}, orphanRemoval=true)
+	 * @ORM\OneToMany(targetEntity="FastyBird\DevicesNode\Entities\Devices\Configuration\Row", mappedBy="device", cascade={"persist", "remove"},
+	 *                                                                                         orphanRemoval=true)
 	 */
 	protected $configuration;
 
@@ -660,6 +663,40 @@ abstract class Device extends Entities\Entity implements IDevice
 			// ...and remove it from collection
 			$this->configuration->removeElement($stat);
 		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function toArray(): array
+	{
+		return [
+			'id'         => $this->getPlainId(),
+			'identifier' => $this->getIdentifier(),
+			'name'       => $this->getName(),
+			'title'      => $this->getTitle(),
+			'comment'    => $this->getComment(),
+			'state'      => $this->getState()->getValue(),
+			'enabled'    => $this->isEnabled(),
+
+			'control' => $this->getPlainControls(),
+
+			'params' => (array) $this->getParams(),
+		];
+	}
+
+	/**
+	 * @return string[]
+	 */
+	private function getPlainControls(): array
+	{
+		$controls = [];
+
+		foreach ($this->getControls() as $control) {
+			$controls[] = $control->getName();
+		}
+
+		return $controls;
 	}
 
 }

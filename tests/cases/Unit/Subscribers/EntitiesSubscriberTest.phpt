@@ -32,11 +32,18 @@ final class EntitiesSubscriberTest extends BaseMockeryTestCase
 		$publisher
 			->shouldReceive('publish')
 			->withArgs(function (string $key, array $data): bool {
+				unset($data['id']);
+
 				Assert::same('fb.bus.node.entity.created.device', $key);
 				Assert::same([
 					'identifier' => 'device-name',
 					'name'       => 'Device custom name',
 					'title'      => null,
+					'comment'    => null,
+					'state'      => 'unknown',
+					'enabled'    => true,
+					'control'    => [],
+					'params'     => [],
 				], $data);
 
 				return true;
@@ -66,11 +73,18 @@ final class EntitiesSubscriberTest extends BaseMockeryTestCase
 		$publisher
 			->shouldReceive('publish')
 			->withArgs(function (string $key, array $data): bool {
+				unset($data['id']);
+
 				Assert::same('fb.bus.node.entity.updated.device', $key);
 				Assert::same([
 					'identifier' => 'device-name',
 					'name'       => 'Device custom name',
 					'title'      => null,
+					'comment'    => null,
+					'state'      => 'unknown',
+					'enabled'    => true,
+					'control'    => [],
+					'params'     => [],
 				], $data);
 
 				return true;
@@ -99,11 +113,18 @@ final class EntitiesSubscriberTest extends BaseMockeryTestCase
 		$publisher
 			->shouldReceive('publish')
 			->withArgs(function (string $key, array $data): bool {
+				unset($data['id']);
+
 				Assert::same('fb.bus.node.entity.deleted.device', $key);
 				Assert::same([
 					'identifier' => 'device-name',
 					'name'       => 'Device custom name',
 					'title'      => null,
+					'comment'    => null,
+					'state'      => 'unknown',
+					'enabled'    => true,
+					'control'    => [],
+					'params'     => [],
 				], $data);
 
 				return true;
@@ -162,8 +183,7 @@ final class EntitiesSubscriberTest extends BaseMockeryTestCase
 		$entityManager
 			->shouldReceive('getClassMetadata')
 			->withArgs([Entities\Devices\PhysicalDevice::class])
-			->andReturn($metadata)
-			->times(1);
+			->andReturn($metadata);
 
 		if ($withUow) {
 			$uow = Mockery::mock(ORM\UnitOfWork::class);

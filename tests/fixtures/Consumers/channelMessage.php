@@ -23,10 +23,12 @@ return [
 		[
 			'fb.bus.node.entity.updated.device.channel' => [
 				'id'      => '17c59dfa-2edd-438e-8c49-faa4e38e5a5e',
-				'channel' => 'channel-one',
 				'name'    => 'Channel updated',
 				'title'   => null,
 				'comment' => null,
+				'channel' => 'channel-one',
+				'control' => ['configure'],
+				'params'  => [],
 			],
 		],
 	],
@@ -41,10 +43,12 @@ return [
 		[
 			'fb.bus.node.entity.updated.device.channel' => [
 				'id'      => '17c59dfa-2edd-438e-8c49-faa4e38e5a5e',
-				'channel' => 'channel-one',
 				'name'    => 'Channel updated',
 				'title'   => null,
 				'comment' => null,
+				'channel' => 'channel-one',
+				'control' => ['configure'],
+				'params'  => [],
 			],
 		],
 	],
@@ -59,10 +63,12 @@ return [
 		[
 			'fb.bus.node.entity.updated.device.channel'          => [
 				'id'      => '17c59dfa-2edd-438e-8c49-faa4e38e5a5e',
-				'channel' => 'channel-one',
 				'name'    => 'Channel updated',
 				'title'   => null,
 				'comment' => null,
+				'channel' => 'channel-one',
+				'control' => ['configure'],
+				'params'  => [],
 			],
 			'fb.bus.node.entity.created.device.channel.property' => [
 				'property'  => 'button',

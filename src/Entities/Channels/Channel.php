@@ -88,7 +88,8 @@ class Channel extends Entities\Entity implements IChannel
 	 * @var Common\Collections\Collection<int, Entities\Channels\Properties\IProperty>
 	 *
 	 * @IPubDoctrine\Crud(is="writable")
-	 * @ORM\OneToMany(targetEntity="FastyBird\DevicesNode\Entities\Channels\Properties\Property", mappedBy="channel", cascade={"persist", "remove"}, orphanRemoval=true)
+	 * @ORM\OneToMany(targetEntity="FastyBird\DevicesNode\Entities\Channels\Properties\Property", mappedBy="channel", cascade={"persist", "remove"},
+	 *                                                                                            orphanRemoval=true)
 	 */
 	private $properties;
 
@@ -96,7 +97,8 @@ class Channel extends Entities\Entity implements IChannel
 	 * @var Common\Collections\Collection<int, Entities\Channels\Configuration\IRow>
 	 *
 	 * @IPubDoctrine\Crud(is="writable")
-	 * @ORM\OneToMany(targetEntity="FastyBird\DevicesNode\Entities\Channels\Configuration\Row", mappedBy="channel", cascade={"persist", "remove"}, orphanRemoval=true)
+	 * @ORM\OneToMany(targetEntity="FastyBird\DevicesNode\Entities\Channels\Configuration\Row", mappedBy="channel", cascade={"persist", "remove"},
+	 *                                                                                          orphanRemoval=true)
 	 */
 	private $configuration;
 
@@ -104,7 +106,8 @@ class Channel extends Entities\Entity implements IChannel
 	 * @var Common\Collections\Collection<int, Entities\Channels\Controls\IControl>
 	 *
 	 * @IPubDoctrine\Crud(is="writable")
-	 * @ORM\OneToMany(targetEntity="FastyBird\DevicesNode\Entities\Channels\Controls\Control", mappedBy="channel", cascade={"persist", "remove"}, orphanRemoval=true)
+	 * @ORM\OneToMany(targetEntity="FastyBird\DevicesNode\Entities\Channels\Controls\Control", mappedBy="channel", cascade={"persist", "remove"},
+	 *                                                                                         orphanRemoval=true)
 	 */
 	private $controls;
 
@@ -481,6 +484,38 @@ class Channel extends Entities\Entity implements IChannel
 			// ...and remove it from collection
 			$this->controls->removeElement($control);
 		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function toArray(): array
+	{
+		return [
+			'id'      => $this->getPlainId(),
+			'name'    => $this->getName(),
+			'title'   => $this->getTitle(),
+			'comment' => $this->getComment(),
+			'channel' => $this->getChannel(),
+
+			'control' => $this->getPlainControls(),
+
+			'params' => (array) $this->getParams(),
+		];
+	}
+
+	/**
+	 * @return string[]
+	 */
+	private function getPlainControls(): array
+	{
+		$controls = [];
+
+		foreach ($this->getControls() as $control) {
+			$controls[] = $control->getName();
+		}
+
+		return $controls;
 	}
 
 }
