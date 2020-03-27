@@ -227,7 +227,7 @@ final class ChannelControlMessageHandler implements NodeLibsConsumers\IMessageHa
 
 					switch ($row->offsetGet('type')) {
 						case DevicesNode\Constants::DATA_TYPE_NUMBER:
-							$configurationRow->entity = Entities\Devices\Configuration\NumberRow::class;
+							$configurationRow->entity = Entities\Channels\Configuration\NumberRow::class;
 
 							foreach (['min', 'max', 'step', 'default'] as $field) {
 								if ($row->offsetExists($field)) {
@@ -240,7 +240,7 @@ final class ChannelControlMessageHandler implements NodeLibsConsumers\IMessageHa
 							break;
 
 						case DevicesNode\Constants::DATA_TYPE_TEXT:
-							$configurationRow->entity = Entities\Devices\Configuration\TextRow::class;
+							$configurationRow->entity = Entities\Channels\Configuration\TextRow::class;
 
 							if ($row->offsetExists('default')) {
 								$configurationRow->default = (string) $row->offsetGet('default');
@@ -248,7 +248,7 @@ final class ChannelControlMessageHandler implements NodeLibsConsumers\IMessageHa
 							break;
 
 						case DevicesNode\Constants::DATA_TYPE_BOOLEAN:
-							$configurationRow->entity = Entities\Devices\Configuration\BooleanRow::class;
+							$configurationRow->entity = Entities\Channels\Configuration\BooleanRow::class;
 
 							if ($row->offsetExists('default')) {
 								$configurationRow->default = (bool) $row->offsetGet('default');
@@ -256,7 +256,7 @@ final class ChannelControlMessageHandler implements NodeLibsConsumers\IMessageHa
 							break;
 
 						case DevicesNode\Constants::DATA_TYPE_SELECT:
-							$configurationRow->entity = Entities\Devices\Configuration\SelectRow::class;
+							$configurationRow->entity = Entities\Channels\Configuration\SelectRow::class;
 
 							if (
 								$row->offsetExists('values')
@@ -316,7 +316,7 @@ final class ChannelControlMessageHandler implements NodeLibsConsumers\IMessageHa
 
 			if ($configuration !== null) {
 				$this->rowsManager->update($configuration, Utils\ArrayHash::from([
-					'value' => (string) $value,
+					'value' => $value !== null ? (string) $value : null,
 				]));
 			}
 		}

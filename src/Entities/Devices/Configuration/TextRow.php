@@ -16,12 +16,16 @@
 namespace FastyBird\DevicesNode\Entities\Devices\Configuration;
 
 use Doctrine\ORM\Mapping as ORM;
+use FastyBird\DevicesNode;
 
 /**
  * @ORM\Entity
  */
 class TextRow extends Row implements ITextRow
 {
+
+	/** @var string */
+	protected $type = DevicesNode\Constants::DATA_TYPE_TEXT;
 
 	/**
 	 * {@inheritDoc}

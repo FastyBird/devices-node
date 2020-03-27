@@ -16,6 +16,7 @@
 namespace FastyBird\DevicesNode\Entities\Devices\Configuration;
 
 use Doctrine\ORM\Mapping as ORM;
+use FastyBird\DevicesNode;
 use IPub\DoctrineCrud\Mapping\Annotation as IPubDoctrine;
 use Nette\Utils;
 
@@ -30,6 +31,9 @@ class SelectRow extends Row implements ISelectRow
 	 * @IPubDoctrine\Crud(is="writable")
 	 */
 	protected $values = [];
+
+	/** @var string */
+	protected $type = DevicesNode\Constants::DATA_TYPE_SELECT;
 
 	/**
 	 * {@inheritDoc}
@@ -62,8 +66,8 @@ class SelectRow extends Row implements ISelectRow
 
 		if ($value->offsetExists('value') && $value->offsetExists('name')) {
 			$values[] = [
-				'value' => (string) $value->offsetGet('value'),
 				'name'  => (string) $value->offsetGet('name'),
+				'value' => (string) $value->offsetGet('value'),
 			];
 		}
 

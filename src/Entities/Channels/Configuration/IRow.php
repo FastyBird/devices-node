@@ -89,4 +89,9 @@ interface IRow extends Entities\IEntity,
 	 */
 	public function getValue();
 
+	/**
+	 * @return string
+	 */
+	public function getType(): string;
+
 }

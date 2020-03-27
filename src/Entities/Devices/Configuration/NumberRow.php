@@ -16,6 +16,7 @@
 namespace FastyBird\DevicesNode\Entities\Devices\Configuration;
 
 use Doctrine\ORM\Mapping as ORM;
+use FastyBird\DevicesNode;
 use IPub\DoctrineCrud\Mapping\Annotation as IPubDoctrine;
 
 /**
@@ -42,12 +43,17 @@ class NumberRow extends Row implements INumberRow
 	 */
 	protected $step = null;
 
+	/** @var string */
+	protected $type = DevicesNode\Constants::DATA_TYPE_NUMBER;
+
 	/**
 	 * {@inheritDoc}
 	 */
 	public function setMin(?float $min): void
 	{
-		$this->setParam('min_value', $min);
+		if ($this->getMin() !== $min) {
+			$this->setParam('min_value', $min);
+		}
 	}
 
 	/**
@@ -71,7 +77,9 @@ class NumberRow extends Row implements INumberRow
 	 */
 	public function setMax(?float $max): void
 	{
-		$this->setParam('max_value', $max);
+		if ($this->getMax() !== $max) {
+			$this->setParam('max_value', $max);
+		}
 	}
 
 	/**
@@ -95,7 +103,9 @@ class NumberRow extends Row implements INumberRow
 	 */
 	public function setStep(?float $step): void
 	{
-		$this->setParam('step_value', $step);
+		if ($this->getStep() !== $step) {
+			$this->setParam('step_value', $step);
+		}
 	}
 
 	/**

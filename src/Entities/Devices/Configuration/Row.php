@@ -44,6 +44,8 @@ use Throwable;
  *    "text"    = "FastyBird\DevicesNode\Entities\Devices\Configuration\TextRow"
  * })
  * @ORM\MappedSuperclass
+ *
+ * @property-read string $type
  */
 abstract class Row extends Entities\Entity implements IRow
 {
@@ -207,6 +209,14 @@ abstract class Row extends Entities\Entity implements IRow
 	public function getValue()
 	{
 		return $this->value;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function getType(): string
+	{
+		return $this->type;
 	}
 
 }

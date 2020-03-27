@@ -25,6 +25,8 @@ use FastyBird\DevicesNode\Exceptions;
 use FastyBird\NodeLibs\Publishers as NodeLibsPublishers;
 use Nette;
 use Ramsey\Uuid;
+use ReflectionClass;
+use ReflectionException;
 
 /**
  * Doctrine entities events
@@ -212,33 +214,54 @@ final class EntitiesSubscriber implements Common\EventSubscriber
 	 */
 	private function toArray(Entities\IEntity $entity): array
 	{
+		if (method_exists($entity, 'toArray')) {
+			return $entity->toArray();
+		}
+
 		$metadata = $this->entityManager->getClassMetadata(get_class($entity));
 
-		$values = [];
+		$fields = [];
 
 		foreach ($metadata->fieldMappings as $field) {
 			if (isset($field['fieldName'])) {
-				$fieldName = $field['fieldName'];
+				$fields[] = $field['fieldName'];
+			}
+		}
 
-				try {
-					$value = $this->getPropertyValue($entity, $fieldName);
+		try {
+			$rc = new ReflectionClass(get_class($entity));
 
-					if ($value instanceof Consistence\Enum\Enum) {
-						$value = $value->getValue();
+			foreach ($rc->getProperties() as $property) {
+				$fields[] = $property->getName();
+			}
 
-					} elseif ($value instanceof Uuid\UuidInterface) {
-						$value = $value->toString();
-					}
+		} catch (ReflectionException $ex) {
+			// Nothing to do, reflection could not be loaded
+		}
 
-					if (is_object($value)) {
-						continue;
-					}
+		$fields = array_unique($fields);
 
-					$values[strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $fieldName))] = $value;
+		$values = [];
 
-				} catch (Exceptions\PropertyNotExistsException $ex) {
-					// No need to do anything
+		foreach ($fields as $field) {
+			try {
+				$value = $this->getPropertyValue($entity, $field);
+
+				if ($value instanceof Consistence\Enum\Enum) {
+					$value = $value->getValue();
+
+				} elseif ($value instanceof Uuid\UuidInterface) {
+					$value = $value->toString();
 				}
+
+				if (is_object($value)) {
+					continue;
+				}
+
+				$values[strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $field))] = $value;
+
+			} catch (Exceptions\PropertyNotExistsException $ex) {
+				// No need to do anything
 			}
 		}
 

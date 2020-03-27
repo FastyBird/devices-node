@@ -16,6 +16,7 @@
 namespace FastyBird\DevicesNode\Entities\Channels\Configuration;
 
 use Doctrine\ORM\Mapping as ORM;
+use FastyBird\DevicesNode;
 use Nette\Utils;
 
 /**
@@ -23,6 +24,9 @@ use Nette\Utils;
  */
 class BooleanRow extends Row implements IBooleanRow
 {
+
+	/** @var string */
+	protected $type = DevicesNode\Constants::DATA_TYPE_BOOLEAN;
 
 	/**
 	 * {@inheritDoc}

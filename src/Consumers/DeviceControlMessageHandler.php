@@ -299,7 +299,7 @@ final class DeviceControlMessageHandler implements NodeLibsConsumers\IMessageHan
 
 			if ($configuration !== null) {
 				$this->rowsManager->update($configuration, Utils\ArrayHash::from([
-					'value' => (string) $value,
+					'value' => $value !== null ? (string) $value : null,
 				]));
 			}
 		}
