@@ -8,7 +8,7 @@ parameters:
 		port: 3306
 		driver: pdo_mysql
 		memory: false
-		dbname: io_server
+		dbname: devices_node
 		username: root
 		password:
 
@@ -20,5 +20,5 @@ parameters:
 		password: guest
 
 	server:
-		address: 127.0.0.1
+		address: 0.0.0.0
 		port: 8000

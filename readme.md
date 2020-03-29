@@ -81,11 +81,11 @@ Configuration could be made via environment variables:
 | `FB_NODE_PARAMETER__DATABASE_VERSION=5.7` | MySQL server version |
 | `FB_NODE_PARAMETER__DATABASE_HOST=127.0.0.1` | MySQL host address |
 | `FB_NODE_PARAMETER__DATABASE_PORT=3306` | MySQL access port |
-| `FB_NODE_PARAMETER__DATABASE_DBNAME=devices_noe` | MySQL database name |
-| `FB_NODE_PARAMETER__MQTT_USERNAME=guest` | Username |
-| `FB_NODE_PARAMETER__MQTT_PASSWORD=guest` | Password |
+| `FB_NODE_PARAMETER__DATABASE_DBNAME=devices_node` | MySQL database name |
+| `FB_NODE_PARAMETER__DATABASE_USERNAME=guest` | Username |
+| `FB_NODE_PARAMETER__DATABASE_PASSWORD=guest` | Password |
 | | |
-| `FB_NODE_PARAMETER__SERVER_ADDRESS=127.0.0.1` | HTTP server host address |
+| `FB_NODE_PARAMETER__SERVER_ADDRESS=0.0.0.0` | HTTP server host address |
 | `FB_NODE_PARAMETER__SERVER_PORT=8000` | HTTP server access port |
 
 > **NOTE:** In case you are not using docker image or you are not able to configure environment variables, you could edit configuration file `./config/default.neon`
