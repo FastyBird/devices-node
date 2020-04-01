@@ -40,10 +40,10 @@ trait TDeviceFinder
 	protected function findDevice(string $id): Entities\Devices\IDevice
 	{
 		try {
-			$findDevice = new Queries\FindDevicesQuery();
-			$findDevice->byId(Uuid\Uuid::fromString($id));
+			$findQuery = new Queries\FindDevicesQuery();
+			$findQuery->byId(Uuid\Uuid::fromString($id));
 
-			$device = $this->deviceRepository->findOneBy($findDevice);
+			$device = $this->deviceRepository->findOneBy($findQuery);
 
 			if ($device === null) {
 				throw new NodeWebServerExceptions\JsonApiErrorException(

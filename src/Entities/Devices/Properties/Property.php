@@ -36,6 +36,11 @@ use Throwable;
  *     },
  *     uniqueConstraints={
  *       @ORM\UniqueConstraint(name="device_property_unique", columns={"property_property", "device_id"})
+ *     },
+ *     indexes={
+ *       @ORM\Index(name="property_property_idx", columns={"property_property"}),
+ *       @ORM\Index(name="property_settable_idx", columns={"property_settable"}),
+ *       @ORM\Index(name="property_queryable_idx", columns={"property_queryable"})
  *     }
  * )
  */

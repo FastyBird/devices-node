@@ -98,10 +98,10 @@ final class DeviceMessageHandler implements NodeLibsConsumers\IMessageHandler
 		string $routingKey,
 		Utils\ArrayHash $message
 	): bool {
-		$findDevice = new Queries\FindDevicesQuery();
-		$findDevice->byIdentifier($message->offsetGet('device'));
+		$findQuery = new Queries\FindDevicesQuery();
+		$findQuery->byIdentifier($message->offsetGet('device'));
 
-		$device = $this->deviceRepository->findOneBy($findDevice);
+		$device = $this->deviceRepository->findOneBy($findQuery);
 
 		if ($device === null) {
 			$this->logger->error(sprintf('[CONSUMER] Device "%s" is not registered', $message->offsetGet('device')));
@@ -279,12 +279,12 @@ final class DeviceMessageHandler implements NodeLibsConsumers\IMessageHandler
 		Utils\ArrayHash $channels
 	): bool {
 		foreach ($channels as $channelId) {
-			$findChannelQuery = new Queries\FindChannelsQuery();
-			$findChannelQuery->forDevice($device);
-			$findChannelQuery->byChannel($channelId);
+			$findQuery = new Queries\FindChannelsQuery();
+			$findQuery->forDevice($device);
+			$findQuery->byChannel($channelId);
 
 			// Check if channel exists
-			$channel = $this->channelRepository->findOneBy($findChannelQuery);
+			$channel = $this->channelRepository->findOneBy($findQuery);
 
 			// ...if not, create it
 			if ($channel === null) {

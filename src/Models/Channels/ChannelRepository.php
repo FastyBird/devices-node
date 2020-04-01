@@ -56,10 +56,6 @@ final class ChannelRepository implements IChannelRepository
 		/** @var Entities\Channels\IChannel|null $channel */
 		$channel = $queryObject->fetchOne($this->getRepository());
 
-		if ($channel === null) {
-			return null;
-		}
-
 		return $channel;
 	}
 

@@ -72,11 +72,11 @@ final class DeviceFirmwareMessageHandler implements NodeLibsConsumers\IMessageHa
 		string $routingKey,
 		Utils\ArrayHash $message
 	): bool {
-		$findDevice = new Queries\FindPhysicalDevicesQuery();
-		$findDevice->byIdentifier($message->offsetGet('device'));
+		$findQuery = new Queries\FindPhysicalDevicesQuery();
+		$findQuery->byIdentifier($message->offsetGet('device'));
 
 		/** @var Entities\Devices\IPhysicalDevice|null $device */
-		$device = $this->deviceRepository->findOneBy($findDevice, Entities\Devices\PhysicalDevice::class);
+		$device = $this->deviceRepository->findOneBy($findQuery, Entities\Devices\PhysicalDevice::class);
 
 		if ($device === null) {
 			$this->logger->error(sprintf('[CONSUMER] Device "%s" is not registered', $message->offsetGet('device')));

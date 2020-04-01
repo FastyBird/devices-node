@@ -56,10 +56,6 @@ final class PropertyRepository implements IPropertyRepository
 		/** @var Entities\Channels\Properties\IProperty|null $property */
 		$property = $queryObject->fetchOne($this->getRepository());
 
-		if ($property === null) {
-			return null;
-		}
-
 		return $property;
 	}
 

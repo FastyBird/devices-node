@@ -26,7 +26,7 @@ use Psr\Http\Message;
 /**
  * Device children API controller
  *
- * @package        FastyBird:IOTDevicesModule!
+ * @package        FastyBird:DevicesNode!
  * @subpackage     Controllers
  *
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
@@ -63,10 +63,10 @@ final class DeviceChildrenV1Controller extends BaseV1Controller
 		// At first, try to load device
 		$device = $this->findDevice($request->getAttribute(Router\Router::URL_DEVICE_ID));
 
-		$findDevicesQuery = new Queries\FindDevicesQuery();
-		$findDevicesQuery->forParent($device);
+		$findQuery = new Queries\FindDevicesQuery();
+		$findQuery->forParent($device);
 
-		$children = $this->deviceRepository->getResultSet($findDevicesQuery);
+		$children = $this->deviceRepository->getResultSet($findQuery);
 
 		return $response
 			->withEntity(NodeWebServerHttp\ScalarEntity::from($children));

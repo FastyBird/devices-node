@@ -82,10 +82,10 @@ final class ChannelsV1Controller extends BaseV1Controller
 		// At first, try to load device
 		$device = $this->findDevice($request->getAttribute(Router\Router::URL_DEVICE_ID));
 
-		$findChannels = new Queries\FindChannelsQuery();
-		$findChannels->forDevice($device);
+		$findQuery = new Queries\FindChannelsQuery();
+		$findQuery->forDevice($device);
 
-		$channels = $this->channelRepository->getResultSet($findChannels);
+		$channels = $this->channelRepository->getResultSet($findQuery);
 
 		return $response
 			->withEntity(NodeWebServerHttp\ScalarEntity::from($channels));

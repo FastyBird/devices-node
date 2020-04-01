@@ -33,10 +33,16 @@ use Throwable;
  *     options={
  *       "collate"="utf8mb4_general_ci",
  *       "charset"="utf8mb4",
- *       "comment"="Smart devices"
+ *       "comment"="Devices"
  *     },
  *     uniqueConstraints={
  *       @ORM\UniqueConstraint(name="device_identifier_unique", columns={"device_identifier"})
+ *     },
+ *     indexes={
+ *       @ORM\Index(name="device_identifier_idx", columns={"device_identifier"}),
+ *       @ORM\Index(name="device_name_idx", columns={"device_name"}),
+ *       @ORM\Index(name="device_state_idx", columns={"device_state"}),
+ *       @ORM\Index(name="device_enabled_idx", columns={"device_enabled"})
  *     }
  * )
  * @ORM\InheritanceType("JOINED")
@@ -140,8 +146,7 @@ abstract class Device extends Entities\Entity implements IDevice
 	 * @var Common\Collections\Collection<int, Entities\Devices\Controls\IControl>
 	 *
 	 * @IPubDoctrine\Crud(is="writable")
-	 * @ORM\OneToMany(targetEntity="FastyBird\DevicesNode\Entities\Devices\Controls\Control", mappedBy="device", cascade={"persist", "remove"},
-	 *                                                                                        orphanRemoval=true)
+	 * @ORM\OneToMany(targetEntity="FastyBird\DevicesNode\Entities\Devices\Controls\Control", mappedBy="device", cascade={"persist", "remove"}, orphanRemoval=true)
 	 */
 	protected $controls;
 
@@ -149,8 +154,7 @@ abstract class Device extends Entities\Entity implements IDevice
 	 * @var Common\Collections\Collection<int, Entities\Devices\Properties\IProperty>
 	 *
 	 * @IPubDoctrine\Crud(is="writable")
-	 * @ORM\OneToMany(targetEntity="FastyBird\DevicesNode\Entities\Devices\Properties\Property", mappedBy="device", cascade={"persist", "remove"},
-	 *                                                                                           orphanRemoval=true)
+	 * @ORM\OneToMany(targetEntity="FastyBird\DevicesNode\Entities\Devices\Properties\Property", mappedBy="device", cascade={"persist", "remove"}, orphanRemoval=true)
 	 */
 	protected $properties;
 
@@ -158,8 +162,7 @@ abstract class Device extends Entities\Entity implements IDevice
 	 * @var Common\Collections\Collection<int, Entities\Devices\Configuration\IRow>
 	 *
 	 * @IPubDoctrine\Crud(is="writable")
-	 * @ORM\OneToMany(targetEntity="FastyBird\DevicesNode\Entities\Devices\Configuration\Row", mappedBy="device", cascade={"persist", "remove"},
-	 *                                                                                         orphanRemoval=true)
+	 * @ORM\OneToMany(targetEntity="FastyBird\DevicesNode\Entities\Devices\Configuration\Row", mappedBy="device", cascade={"persist", "remove"}, orphanRemoval=true)
 	 */
 	protected $configuration;
 

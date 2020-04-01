@@ -51,7 +51,7 @@ class CreateCommand extends Console\Command\Command
 	/**
 	 * @param Models\Devices\IDevicesManager $devicesManager
 	 * @param Translation\Translator $translator
-	 * @param string|NULL $name
+	 * @param string|null $name
 	 */
 	public function __construct(
 		Models\Devices\IDevicesManager $devicesManager,

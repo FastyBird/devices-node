@@ -33,6 +33,9 @@ use Throwable;
  *     },
  *     uniqueConstraints={
  *       @ORM\UniqueConstraint(name="credentials_username_unique", columns={"credentials_username"})
+ *     },
+ *     indexes={
+ *       @ORM\Index(name="credentials_username_idx", columns={"credentials_username"})
  *     }
  * )
  */

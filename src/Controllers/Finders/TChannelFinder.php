@@ -43,11 +43,11 @@ trait TChannelFinder
 		Entities\Devices\IDevice $device
 	): Entities\Channels\IChannel {
 		try {
-			$findChannel = new Queries\FindChannelsQuery();
-			$findChannel->byId(Uuid\Uuid::fromString($id));
-			$findChannel->forDevice($device);
+			$findQuery = new Queries\FindChannelsQuery();
+			$findQuery->byId(Uuid\Uuid::fromString($id));
+			$findQuery->forDevice($device);
 
-			$channel = $this->channelRepository->findOneBy($findChannel);
+			$channel = $this->channelRepository->findOneBy($findQuery);
 
 			if ($channel === null) {
 				throw new NodeWebServerExceptions\JsonApiErrorException(

@@ -29,7 +29,7 @@ use Ramsey\Uuid;
 /**
  * Device properties API controller
  *
- * @package        FastyBird:IOTDevicesModule!
+ * @package        FastyBird:DevicesNode!
  * @subpackage     Controllers
  *
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>

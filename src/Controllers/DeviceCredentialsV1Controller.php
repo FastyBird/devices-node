@@ -28,7 +28,7 @@ use Psr\Http\Message;
 /**
  * Device credentials API controller
  *
- * @package        FastyBird:MachineDevicesModule!
+ * @package        FastyBird:DevicesNode!
  * @subpackage     Controllers
  *
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>

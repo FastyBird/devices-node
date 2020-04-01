@@ -30,10 +30,13 @@ use Throwable;
  *     options={
  *       "collate"="utf8mb4_general_ci",
  *       "charset"="utf8mb4",
- *       "comment"="Devices communication channels"
+ *       "comment"="Communication channels"
  *     },
  *     uniqueConstraints={
  *       @ORM\UniqueConstraint(name="channel_unique", columns={"channel_channel", "device_id"})
+ *     },
+ *     indexes={
+ *       @ORM\Index(name="channel_channel_idx", columns={"channel_channel"})
  *     }
  * )
  */
@@ -88,8 +91,7 @@ class Channel extends Entities\Entity implements IChannel
 	 * @var Common\Collections\Collection<int, Entities\Channels\Properties\IProperty>
 	 *
 	 * @IPubDoctrine\Crud(is="writable")
-	 * @ORM\OneToMany(targetEntity="FastyBird\DevicesNode\Entities\Channels\Properties\Property", mappedBy="channel", cascade={"persist", "remove"},
-	 *                                                                                            orphanRemoval=true)
+	 * @ORM\OneToMany(targetEntity="FastyBird\DevicesNode\Entities\Channels\Properties\Property", mappedBy="channel", cascade={"persist", "remove"}, orphanRemoval=true)
 	 */
 	private $properties;
 
@@ -97,8 +99,7 @@ class Channel extends Entities\Entity implements IChannel
 	 * @var Common\Collections\Collection<int, Entities\Channels\Configuration\IRow>
 	 *
 	 * @IPubDoctrine\Crud(is="writable")
-	 * @ORM\OneToMany(targetEntity="FastyBird\DevicesNode\Entities\Channels\Configuration\Row", mappedBy="channel", cascade={"persist", "remove"},
-	 *                                                                                          orphanRemoval=true)
+	 * @ORM\OneToMany(targetEntity="FastyBird\DevicesNode\Entities\Channels\Configuration\Row", mappedBy="channel", cascade={"persist", "remove"}, orphanRemoval=true)
 	 */
 	private $configuration;
 
@@ -106,8 +107,7 @@ class Channel extends Entities\Entity implements IChannel
 	 * @var Common\Collections\Collection<int, Entities\Channels\Controls\IControl>
 	 *
 	 * @IPubDoctrine\Crud(is="writable")
-	 * @ORM\OneToMany(targetEntity="FastyBird\DevicesNode\Entities\Channels\Controls\Control", mappedBy="channel", cascade={"persist", "remove"},
-	 *                                                                                         orphanRemoval=true)
+	 * @ORM\OneToMany(targetEntity="FastyBird\DevicesNode\Entities\Channels\Controls\Control", mappedBy="channel", cascade={"persist", "remove"}, orphanRemoval=true)
 	 */
 	private $controls;
 

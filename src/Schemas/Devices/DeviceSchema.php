@@ -294,10 +294,10 @@ abstract class DeviceSchema extends Schemas\JsonApiSchema
 	 */
 	private function getChannels(Entities\Devices\IDevice $device): array
 	{
-		$findChannelsQuery = new Queries\FindChannelsQuery();
-		$findChannelsQuery->forDevice($device);
+		$findQuery = new Queries\FindChannelsQuery();
+		$findQuery->forDevice($device);
 
-		return $this->channelRepository->findAllBy($findChannelsQuery);
+		return $this->channelRepository->findAllBy($findQuery);
 	}
 
 	/**

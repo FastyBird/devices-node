@@ -32,6 +32,9 @@ use Throwable;
  *     },
  *     uniqueConstraints={
  *       @ORM\UniqueConstraint(name="device_control_unique", columns={"control_name", "device_id"})
+ *     },
+ *     indexes={
+ *       @ORM\Index(name="control_name_idx", columns={"control_name"})
  *     }
  * )
  */

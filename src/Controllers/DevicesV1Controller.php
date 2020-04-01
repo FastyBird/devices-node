@@ -421,11 +421,11 @@ class DevicesV1Controller extends BaseV1Controller
 				->withEntity(NodeWebServerHttp\ScalarEntity::from($device->getChildren()));
 
 		} elseif ($relationEntity === Schemas\Devices\DeviceSchema::RELATIONSHIPS_CHANNELS) {
-			$findChannelsQuery = new Queries\FindChannelsQuery();
-			$findChannelsQuery->forDevice($device);
+			$findQuery = new Queries\FindChannelsQuery();
+			$findQuery->forDevice($device);
 
 			return $response
-				->withEntity(NodeWebServerHttp\ScalarEntity::from($this->channelRepository->findAllBy($findChannelsQuery)));
+				->withEntity(NodeWebServerHttp\ScalarEntity::from($this->channelRepository->findAllBy($findQuery)));
 
 		} elseif (
 			$relationEntity === Schemas\Devices\PhysicalDeviceSchema::RELATIONSHIPS_CREDENTIALS

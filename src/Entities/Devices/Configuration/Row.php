@@ -33,6 +33,9 @@ use Throwable;
  *     },
  *     uniqueConstraints={
  *       @ORM\UniqueConstraint(name="device_configuration_unique", columns={"configuration_name", "device_id"})
+ *     },
+ *     indexes={
+ *       @ORM\Index(name="configuration_name_idx", columns={"configuration_name"})
  *     }
  * )
  * @ORM\InheritanceType("SINGLE_TABLE")

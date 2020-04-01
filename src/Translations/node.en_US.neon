@@ -13,10 +13,6 @@
 # @date			13.04.19
 #
 
-#
-# Miscellaneous texts
-#
-
 base:
 	messages:
 		notValidJson:

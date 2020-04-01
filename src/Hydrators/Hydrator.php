@@ -952,7 +952,7 @@ abstract class Hydrator
 	 * @param ReflectionProperty $rp
 	 * @param string $name
 	 *
-	 * @return string|NULL
+	 * @return string|null
 	 */
 	private function parseAnnotation(ReflectionProperty $rp, string $name): ?string
 	{
