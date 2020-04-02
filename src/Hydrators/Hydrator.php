@@ -224,7 +224,7 @@ abstract class Hydrator
 			}
 
 			// Continue only if attribute is present
-			if (!$attributes->has($field->getFieldName())) {
+			if (!$attributes->has($field->getMappedName())) {
 				continue;
 			}
 
@@ -273,51 +273,39 @@ abstract class Hydrator
 			}
 		}
 
-		if ($rootField === null) {
-			try {
-				if (class_exists($className)) {
-					$rc = new ReflectionClass($className);
+		try {
+			if (class_exists($className)) {
+				$rc = new ReflectionClass($className);
 
-					if ($rc->getConstructor() !== null) {
-						$constructor = $rc->getConstructor();
+				if ($rc->getConstructor() !== null) {
+					$constructor = $rc->getConstructor();
 
-						foreach ($constructor->getParameters() as $num => $parameter) {
-							if (!$parameter->isVariadic() && $attributes->has($this->getAttributeKey($parameter->getName()) ?? $parameter->getName())) {
-								// If there is a specific method for this attribute, we'll hydrate that
-								$value = $this->callHydrateAttribute($parameter->getName(), $attributes, $entity);
-								$value = $value ?? $attributes->get($this->getAttributeKey($parameter->getName()) ?? $parameter->getName());
+					foreach ($constructor->getParameters() as $num => $parameter) {
+						if (
+							!$parameter->isVariadic()
+							&& $attributes->has($this->getAttributeKey($parameter->getName()) ?? $parameter->getName())
+						) {
+							// If there is a specific method for this attribute, we'll hydrate that
+							$value = $this->callHydrateAttribute($parameter->getName(), $attributes, $entity);
+							$value = $value ?? $attributes->get($this->getAttributeKey($parameter->getName()) ?? $parameter->getName());
 
-								$data[$parameter->getName()] = $value;
+							$data[$parameter->getName()] = $value;
 
-							} elseif ($attributes->has($this->getAttributeKey((string) $num) ?? (string) $num)) {
-								// If there is a specific method for this attribute, we'll hydrate that
-								$value = $this->callHydrateAttribute((string) $num, $attributes, $entity);
-								$value = $value ?? $attributes->get($this->getAttributeKey((string) $num) ?? (string) $num);
+						} elseif ($attributes->has($this->getAttributeKey((string) $num) ?? (string) $num)) {
+							// If there is a specific method for this attribute, we'll hydrate that
+							$value = $this->callHydrateAttribute((string) $num, $attributes, $entity);
+							$value = $value ?? $attributes->get($this->getAttributeKey((string) $num) ?? (string) $num);
 
-								$data[$num] = $value;
-							}
+							$data[$num] = $value;
 						}
 					}
 				}
 
-			} catch (Throwable $ex) {
-				// Nothing to do here
+				$data['entity'] = $className;
 			}
 
-		} elseif ($rootField !== null && $attributes->has($rootField . '_type')) {
-			try {
-				if (class_exists($className)) {
-					$rc = new ReflectionClass($className);
-
-					/** @var ORM\Mapping\DiscriminatorMap $classAnnotation */
-					$classAnnotation = $this->annotationReader->getClassAnnotation($rc, ORM\Mapping\DiscriminatorMap::class);
-
-					$data['entity'] = $classAnnotation->value[$attributes->get($rootField . '_type')];
-				}
-
-			} catch (Throwable $ex) {
-				// Annotation not found
-			}
+		} catch (Throwable $ex) {
+			// Nothing to do here
 		}
 
 		return $data;
