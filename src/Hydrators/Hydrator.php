@@ -150,8 +150,8 @@ abstract class Hydrator
 		$attributes = $this->hydrateAttributes(
 			$this->getEntityName(),
 			$resource->getAttributes(),
-			$entity === null,
 			$entityMapping,
+			$entity,
 			null
 		);
 
@@ -203,8 +203,8 @@ abstract class Hydrator
 	/**
 	 * @param string $className
 	 * @param JsonAPIDocument\Objects\IStandardObject<mixed> $attributes
-	 * @param bool $isNew
 	 * @param Hydrators\Fields\IField[] $entityMapping
+	 * @param DoctrineCrud\Entities\IEntity|null $entity
 	 * @param string|null $rootField
 	 *
 	 * @return mixed[]
@@ -212,8 +212,8 @@ abstract class Hydrator
 	protected function hydrateAttributes(
 		string $className,
 		JsonAPIDocument\Objects\IStandardObject $attributes,
-		bool $isNew,
 		array $entityMapping,
+		?DoctrineCrud\Entities\IEntity $entity,
 		?string $rootField
 	): array {
 		$data = [];
@@ -229,10 +229,10 @@ abstract class Hydrator
 			}
 
 			// If there is a specific method for this attribute, we'll hydrate that
-			$value = $this->callHydrateAttribute($field->getFieldName(), $attributes);
+			$value = $this->callHydrateAttribute($field->getFieldName(), $attributes, $entity);
 			$value = $value ?? $field->getValue($attributes);
 
-			if ($value === null && $field->isRequired() && $isNew) {
+			if ($value === null && $field->isRequired() && $entity === null) {
 				$this->errors->addError(
 					StatusCodeInterface::STATUS_BAD_REQUEST,
 					$this->translator->translate('//node.base.messages.validation.parameterMissing.heading'),
@@ -242,7 +242,7 @@ abstract class Hydrator
 					]
 				);
 
-			} elseif ($field->isWritable() || ($isNew && $field->isRequired())) {
+			} elseif ($field->isWritable() || ($entity === null && $field->isRequired())) {
 				if ($field instanceof Hydrators\Fields\SingleEntityField) {
 					// Get attribute entity class name
 					$fieldClassName = $field->getClassName();
@@ -251,31 +251,15 @@ abstract class Hydrator
 					$fieldAttributes = $attributes->get($field->getMappedName());
 
 					if ($fieldAttributes instanceof JsonAPIDocument\Objects\IStandardObject) {
-						if ($fieldAttributes->has($field->getMappedName() . '_type')) {
-							try {
-								if (class_exists($fieldClassName)) {
-									$rc = new ReflectionClass($fieldClassName);
-
-									/** @var ORM\Mapping\DiscriminatorMap $classAnnotation */
-									$classAnnotation = $this->annotationReader->getClassAnnotation($rc, ORM\Mapping\DiscriminatorMap::class);
-
-									$fieldClassName = $classAnnotation->value[$fieldAttributes->get($field->getMappedName() . '_type')];
-								}
-
-							} catch (Throwable $ex) {
-								// Reflection not accessable
-							}
-						}
-
 						$data[$field->getFieldName()] = $this->hydrateAttributes(
 							$fieldClassName,
 							$fieldAttributes,
-							$isNew,
 							$this->mapEntity($fieldClassName),
+							$entity,
 							$field->getMappedName()
 						);
 
-						if ($isNew && !isset($data[$field->getFieldName()]['entity'])) {
+						if (!isset($data[$field->getFieldName()]['entity'])) {
 							$data[$field->getFieldName()]['entity'] = $fieldClassName;
 						}
 
@@ -300,14 +284,14 @@ abstract class Hydrator
 						foreach ($constructor->getParameters() as $num => $parameter) {
 							if (!$parameter->isVariadic() && $attributes->has($this->getAttributeKey($parameter->getName()) ?? $parameter->getName())) {
 								// If there is a specific method for this attribute, we'll hydrate that
-								$value = $this->callHydrateAttribute($parameter->getName(), $attributes);
+								$value = $this->callHydrateAttribute($parameter->getName(), $attributes, $entity);
 								$value = $value ?? $attributes->get($this->getAttributeKey($parameter->getName()) ?? $parameter->getName());
 
 								$data[$parameter->getName()] = $value;
 
 							} elseif ($attributes->has($this->getAttributeKey((string) $num) ?? (string) $num)) {
 								// If there is a specific method for this attribute, we'll hydrate that
-								$value = $this->callHydrateAttribute((string) $num, $attributes);
+								$value = $this->callHydrateAttribute((string) $num, $attributes, $entity);
 								$value = $value ?? $attributes->get($this->getAttributeKey((string) $num) ?? (string) $num);
 
 								$data[$num] = $value;
@@ -820,35 +804,50 @@ abstract class Hydrator
 						);
 
 					} elseif ($isClass && $className !== null) {
-						if ($rc->implementsInterface(DateTimeInterface::class) || $className === DateTimeInterface::class) {
-							$fields[] = new Hydrators\Fields\DateTimeField(
-								$isNullable,
-								$mappedKey,
-								$fieldName,
-								$crud->isRequired(),
-								$crud->isWritable()
-							);
+						try {
+							$typeRc = new ReflectionClass($className);
 
-						} elseif ($rc->isSubclassOf(Consistence\Enum\Enum::class)) {
-							$fields[] = new Hydrators\Fields\EnumField(
-								$className,
-								$isNullable,
-								$mappedKey,
-								$fieldName,
-								$crud->isRequired(),
-								$crud->isWritable()
-							);
+							if ($typeRc->implementsInterface(DateTimeInterface::class) || $className === DateTimeInterface::class) {
+								$fields[] = new Hydrators\Fields\DateTimeField(
+									$isNullable,
+									$mappedKey,
+									$fieldName,
+									$crud->isRequired(),
+									$crud->isWritable()
+								);
 
-						} elseif ($rc->implementsInterface(ArrayAccess::class)) {
-							$fields[] = new Hydrators\Fields\ArrayField(
-								$isNullable,
-								$mappedKey,
-								$fieldName,
-								$crud->isRequired(),
-								$crud->isWritable()
-							);
+							} elseif ($typeRc->isSubclassOf(Consistence\Enum\Enum::class)) {
+								$fields[] = new Hydrators\Fields\EnumField(
+									$className,
+									$isNullable,
+									$mappedKey,
+									$fieldName,
+									$crud->isRequired(),
+									$crud->isWritable()
+								);
 
-						} else {
+							} elseif ($typeRc->implementsInterface(ArrayAccess::class)) {
+								$fields[] = new Hydrators\Fields\ArrayField(
+									$isNullable,
+									$mappedKey,
+									$fieldName,
+									$crud->isRequired(),
+									$crud->isWritable()
+								);
+
+							} else {
+								$fields[] = new Hydrators\Fields\SingleEntityField(
+									$className,
+									$isNullable,
+									$mappedKey,
+									$isRelationship,
+									$fieldName,
+									$crud->isRequired(),
+									$crud->isWritable()
+								);
+							}
+
+						} catch (ReflectionException $ex) {
 							$fields[] = new Hydrators\Fields\SingleEntityField(
 								$className,
 								$isNullable,
