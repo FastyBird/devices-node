@@ -220,7 +220,8 @@ class DevicesV1Controller extends BaseV1Controller
 			}
 
 			return $response
-				->withEntity(NodeWebServerHttp\ScalarEntity::from($device));
+				->withEntity(NodeWebServerHttp\ScalarEntity::from($device))
+				->withStatus(StatusCodeInterface::STATUS_CREATED);
 		}
 
 		throw new NodeWebServerExceptions\JsonApiErrorException(

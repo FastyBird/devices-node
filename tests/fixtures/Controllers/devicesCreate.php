@@ -6,7 +6,7 @@ return [
 	'create' => [
 		'/v1/devices',
 		file_get_contents(__DIR__ . '/requests/devices.create.json'),
-		StatusCodeInterface::STATUS_OK,
+		StatusCodeInterface::STATUS_CREATED,
 		__DIR__ . '/responses/devices.create.json',
 	],
 	'missingRequired' => [
