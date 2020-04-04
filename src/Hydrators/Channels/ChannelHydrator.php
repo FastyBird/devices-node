@@ -19,6 +19,7 @@ use FastyBird\DevicesNode\Entities;
 use FastyBird\DevicesNode\Exceptions;
 use FastyBird\DevicesNode\Hydrators;
 use FastyBird\NodeWebServer\Exceptions as NodeWebServerExceptions;
+use IPub\DoctrineCrud;
 use IPub\JsonAPIDocument;
 use Nette\Utils;
 use Throwable;
@@ -45,33 +46,6 @@ final class ChannelHydrator extends Hydrators\Hydrator
 
 	/** @var string */
 	protected $translationDomain = 'node.channels';
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function hydrate(
-		JsonAPIDocument\Objects\IResourceObject $resource,
-		$entity = null
-	): Utils\ArrayHash {
-		throw new Exceptions\InvalidStateException('This method is overridden. Use method `hydrateChannel` instead.');
-	}
-
-	/**
-	 * @param JsonAPIDocument\Objects\IResourceObject<mixed> $resource
-	 * @param Entities\Channels\IChannel|null $entity
-	 *
-	 * @return Utils\ArrayHash
-	 *
-	 * @throws NodeWebServerExceptions\JsonApiErrorException
-	 * @throws NodeWebServerExceptions\JsonApiMultipleErrorException
-	 * @throws Throwable
-	 */
-	public function hydrateChannel(
-		JsonAPIDocument\Objects\IResourceObject $resource,
-		?Entities\Channels\IChannel $entity = null
-	): Utils\ArrayHash {
-		return parent::hydrate($resource, $entity);
-	}
 
 	/**
 	 * {@inheritDoc}

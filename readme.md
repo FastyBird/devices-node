@@ -10,9 +10,9 @@
 
 ## What is FastyBird devices node?
 
-Devices node is a core microservice for devices which is managing all connected devices, managing basic devices logic and expsing them for clients.
+Devices node is a core microservice for devices which is managing all connected devices, managing basic devices logic and exposing them for clients.
 
-FastyBird devices node is an Apache2 licensed distributed MQTT exchange microservice, developed in PHP with [Nette framework](https://nette.org).
+FastyBird devices node is an Apache2 licensed distributed microservice, developed in PHP with [Nette framework](https://nette.org).
 
 ## Requirements
 

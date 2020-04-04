@@ -35,7 +35,7 @@ trait TDeviceFinder
 	 *
 	 * @return Entities\Devices\IDevice
 	 *
-	 * @throws NodeWebServerExceptions\JsonApiErrorException
+	 * @throws NodeWebServerExceptions\IJsonApiException
 	 */
 	protected function findDevice(string $id): Entities\Devices\IDevice
 	{

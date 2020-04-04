@@ -36,7 +36,7 @@ trait TChannelFinder
 	 *
 	 * @return Entities\Channels\IChannel
 	 *
-	 * @throws NodeWebServerExceptions\JsonApiErrorException
+	 * @throws NodeWebServerExceptions\IJsonApiException
 	 */
 	protected function findChannel(
 		string $id,

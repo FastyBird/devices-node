@@ -139,8 +139,7 @@ abstract class Hydrator
 	 *
 	 * @return Utils\ArrayHash
 	 *
-	 * @throws NodeWebServerExceptions\JsonApiErrorException
-	 * @throws NodeWebServerExceptions\JsonApiMultipleErrorException
+	 * @throws NodeWebServerExceptions\IJsonApiException
 	 * @throws Throwable
 	 */
 	public function hydrate(JsonAPIDocument\Objects\IResourceObject $resource, ?DoctrineCrud\Entities\IEntity $entity = null): Utils\ArrayHash

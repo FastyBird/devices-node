@@ -53,7 +53,7 @@ final class DeviceCredentialsV1Controller extends BaseV1Controller
 	 *
 	 * @return NodeWebServerHttp\Response
 	 *
-	 * @throws NodeWebServerExceptions\JsonApiErrorException
+	 * @throws NodeWebServerExceptions\IJsonApiException
 	 */
 	public function read(
 		Message\ServerRequestInterface $request,
@@ -94,7 +94,7 @@ final class DeviceCredentialsV1Controller extends BaseV1Controller
 	 *
 	 * @return NodeWebServerHttp\Response
 	 *
-	 * @throws NodeWebServerExceptions\JsonApiErrorException
+	 * @throws NodeWebServerExceptions\IJsonApiException
 	 */
 	public function readRelationship(
 		Message\ServerRequestInterface $request,

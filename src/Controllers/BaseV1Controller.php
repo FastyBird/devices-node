@@ -87,7 +87,7 @@ abstract class BaseV1Controller
 	 *
 	 * @return JsonAPIDocument\IDocument<JsonAPIDocument\Objects\StandardObject>
 	 *
-	 * @throws NodeWebServerExceptions\JsonApiErrorException
+	 * @throws NodeWebServerExceptions\IJsonApiException
 	 */
 	protected function createDocument(ServerRequestInterface $request): JsonAPIDocument\IDocument
 	{
@@ -115,7 +115,7 @@ abstract class BaseV1Controller
 	/**
 	 * @param string|null $relationEntity
 	 *
-	 * @throws NodeWebServerExceptions\JsonApiErrorException
+	 * @throws NodeWebServerExceptions\IJsonApiException
 	 */
 	protected function throwUnknownRelation(?string $relationEntity): void
 	{

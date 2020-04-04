@@ -100,7 +100,7 @@ class DevicesV1Controller extends BaseV1Controller
 	 *
 	 * @return NodeWebServerHttp\Response
 	 *
-	 * @throws NodeWebServerExceptions\JsonApiErrorException
+	 * @throws NodeWebServerExceptions\IJsonApiException
 	 */
 	public function read(
 		Message\ServerRequestInterface $request,
@@ -119,7 +119,6 @@ class DevicesV1Controller extends BaseV1Controller
 	 * @return NodeWebServerHttp\Response
 	 *
 	 * @throws NodeWebServerExceptions\IJsonApiException
-	 * @throws NodeWebServerExceptions\JsonApiErrorException
 	 * @throws Doctrine\DBAL\ConnectionException
 	 */
 	public function create(
@@ -244,7 +243,6 @@ class DevicesV1Controller extends BaseV1Controller
 	 * @return NodeWebServerHttp\Response
 	 *
 	 * @throws NodeWebServerExceptions\IJsonApiException
-	 * @throws NodeWebServerExceptions\JsonApiErrorException
 	 * @throws Doctrine\DBAL\ConnectionException
 	 */
 	public function update(
@@ -347,7 +345,7 @@ class DevicesV1Controller extends BaseV1Controller
 	 *
 	 * @return NodeWebServerHttp\Response
 	 *
-	 * @throws NodeWebServerExceptions\JsonApiErrorException
+	 * @throws NodeWebServerExceptions\IJsonApiException
 	 * @throws Doctrine\DBAL\ConnectionException
 	 */
 	public function delete(
@@ -402,7 +400,7 @@ class DevicesV1Controller extends BaseV1Controller
 	 *
 	 * @return NodeWebServerHttp\Response
 	 *
-	 * @throws NodeWebServerExceptions\JsonApiErrorException
+	 * @throws NodeWebServerExceptions\IJsonApiException
 	 */
 	public function readRelationship(
 		Message\ServerRequestInterface $request,

@@ -73,7 +73,7 @@ final class ChannelsV1Controller extends BaseV1Controller
 	 *
 	 * @return NodeWebServerHttp\Response
 	 *
-	 * @throws NodeWebServerExceptions\JsonApiErrorException
+	 * @throws NodeWebServerExceptions\IJsonApiException
 	 */
 	public function index(
 		Message\ServerRequestInterface $request,
@@ -97,7 +97,7 @@ final class ChannelsV1Controller extends BaseV1Controller
 	 *
 	 * @return NodeWebServerHttp\Response
 	 *
-	 * @throws NodeWebServerExceptions\JsonApiErrorException
+	 * @throws NodeWebServerExceptions\IJsonApiException
 	 */
 	public function read(
 		Message\ServerRequestInterface $request,
@@ -119,7 +119,6 @@ final class ChannelsV1Controller extends BaseV1Controller
 	 * @return NodeWebServerHttp\Response
 	 *
 	 * @throws NodeWebServerExceptions\IJsonApiException
-	 * @throws NodeWebServerExceptions\JsonApiErrorException
 	 * @throws Doctrine\DBAL\ConnectionException
 	 */
 	public function update(
@@ -146,7 +145,7 @@ final class ChannelsV1Controller extends BaseV1Controller
 			$this->getOrmConnection()->beginTransaction();
 
 			if ($document->getResource()->getType() === Schemas\Channels\ChannelSchema::SCHEMA_TYPE) {
-				$updateChannelData = $this->channelHydrator->hydrateChannel($document->getResource(), $channel);
+				$updateChannelData = $this->channelHydrator->hydrate($document->getResource(), $channel);
 
 			} else {
 				throw new NodeWebServerExceptions\JsonApiErrorException(
@@ -199,7 +198,7 @@ final class ChannelsV1Controller extends BaseV1Controller
 	 *
 	 * @return NodeWebServerHttp\Response
 	 *
-	 * @throws NodeWebServerExceptions\JsonApiErrorException
+	 * @throws NodeWebServerExceptions\IJsonApiException
 	 */
 	public function readRelationship(
 		Message\ServerRequestInterface $request,
