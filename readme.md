@@ -82,8 +82,8 @@ Configuration could be made via environment variables:
 | `FB_NODE_PARAMETER__DATABASE_HOST=127.0.0.1` | MySQL host address |
 | `FB_NODE_PARAMETER__DATABASE_PORT=3306` | MySQL access port |
 | `FB_NODE_PARAMETER__DATABASE_DBNAME=devices_node` | MySQL database name |
-| `FB_NODE_PARAMETER__DATABASE_USERNAME=guest` | Username |
-| `FB_NODE_PARAMETER__DATABASE_PASSWORD=guest` | Password |
+| `FB_NODE_PARAMETER__DATABASE_USERNAME=root` | Username |
+| `FB_NODE_PARAMETER__DATABASE_PASSWORD=` | Password |
 | | |
 | `FB_NODE_PARAMETER__SERVER_ADDRESS=0.0.0.0` | HTTP server host address |
 | `FB_NODE_PARAMETER__SERVER_PORT=8000` | HTTP server access port |
