@@ -16,13 +16,8 @@
 namespace FastyBird\DevicesNode\Hydrators\Channels;
 
 use FastyBird\DevicesNode\Entities;
-use FastyBird\DevicesNode\Exceptions;
 use FastyBird\DevicesNode\Hydrators;
-use FastyBird\NodeWebServer\Exceptions as NodeWebServerExceptions;
-use IPub\DoctrineCrud;
 use IPub\JsonAPIDocument;
-use Nette\Utils;
-use Throwable;
 
 /**
  * Device channel entity hydrator
