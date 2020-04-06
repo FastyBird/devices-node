@@ -78,6 +78,7 @@ class Firmware extends Entities\Entity implements IFirmware
 	/**
 	 * @var Entities\Devices\IPhysicalDevice
 	 *
+	 * @IPubDoctrine\Crud(is="required")
 	 * @ORM\OneToOne(targetEntity="FastyBird\DevicesNode\Entities\Devices\PhysicalDevice", inversedBy="firmware")
 	 * @ORM\JoinColumn(name="device_id", referencedColumnName="device_id", unique=true, onDelete="CASCADE", nullable=false)
 	 */

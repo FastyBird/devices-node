@@ -56,6 +56,7 @@ class Control extends Entities\Entity implements IControl
 	/**
 	 * @var string
 	 *
+	 * @IPubDoctrine\Crud(is="required")
 	 * @ORM\Column(type="string", name="control_name", length=100, nullable=false)
 	 */
 	private $name;
@@ -63,6 +64,7 @@ class Control extends Entities\Entity implements IControl
 	/**
 	 * @var Entities\Devices\IDevice
 	 *
+	 * @IPubDoctrine\Crud(is="required")
 	 * @ORM\ManyToOne(targetEntity="FastyBird\DevicesNode\Entities\Devices\Device", inversedBy="controls")
 	 * @ORM\JoinColumn(name="device_id", referencedColumnName="device_id", onDelete="CASCADE", nullable=false)
 	 */

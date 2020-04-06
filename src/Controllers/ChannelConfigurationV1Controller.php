@@ -84,8 +84,8 @@ final class ChannelConfigurationV1Controller extends BaseV1Controller
 		if (!$channel->hasControl(DevicesNode\Constants::CONTROL_CONFIG)) {
 			throw new NodeWebServerExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_BAD_REQUEST,
-				$this->translator->translate('//node.base.messages.invalidDeviceType.heading'),
-				$this->translator->translate('//node.base.messages.invalidDeviceType.message')
+				$this->translator->translate('//node.base.messages.invalidChannelType.heading'),
+				$this->translator->translate('//node.base.messages.invalidChannelType.message')
 			);
 		}
 
@@ -119,8 +119,8 @@ final class ChannelConfigurationV1Controller extends BaseV1Controller
 		if (!$channel->hasControl(DevicesNode\Constants::CONTROL_CONFIG)) {
 			throw new NodeWebServerExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_BAD_REQUEST,
-				$this->translator->translate('//node.base.messages.invalidDeviceType.heading'),
-				$this->translator->translate('//node.base.messages.invalidDeviceType.message')
+				$this->translator->translate('//node.base.messages.invalidChannelType.heading'),
+				$this->translator->translate('//node.base.messages.invalidChannelType.message')
 			);
 		}
 
@@ -166,8 +166,8 @@ final class ChannelConfigurationV1Controller extends BaseV1Controller
 		if (!$channel->hasControl(DevicesNode\Constants::CONTROL_CONFIG)) {
 			throw new NodeWebServerExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_BAD_REQUEST,
-				$this->translator->translate('//node.base.messages.invalidDeviceType.heading'),
-				$this->translator->translate('//node.base.messages.invalidDeviceType.message')
+				$this->translator->translate('//node.base.messages.invalidChannelType.heading'),
+				$this->translator->translate('//node.base.messages.invalidChannelType.message')
 			);
 		}
 

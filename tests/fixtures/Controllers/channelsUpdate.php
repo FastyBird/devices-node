@@ -3,7 +3,7 @@
 use Fig\Http\Message\StatusCodeInterface;
 
 return [
-	'update' => [
+	'update'      => [
 		'/v1/devices/69786d15-fd0c-4d9f-9378-33287c2009fa/channels/17c59dfa-2edd-438e-8c49-faa4e38e5a5e',
 		file_get_contents(__DIR__ . '/requests/channels.update.json'),
 		StatusCodeInterface::STATUS_OK,
@@ -15,7 +15,7 @@ return [
 		StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 		__DIR__ . '/responses/channels.update.invalidType.json',
 	],
-	'idMismatch' => [
+	'idMismatch'  => [
 		'/v1/devices/69786d15-fd0c-4d9f-9378-33287c2009fa/channels/17c59dfa-2edd-438e-8c49-faa4e38e5a5e',
 		file_get_contents(__DIR__ . '/requests/channels.update.idMismatch.json'),
 		StatusCodeInterface::STATUS_BAD_REQUEST,

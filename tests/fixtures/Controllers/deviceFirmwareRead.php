@@ -3,12 +3,12 @@
 use Fig\Http\Message\StatusCodeInterface;
 
 return [
-	'read' => [
+	'read'                     => [
 		'/v1/devices/69786d15-fd0c-4d9f-9378-33287c2009fa/firmware',
 		StatusCodeInterface::STATUS_OK,
 		__DIR__ . '/responses/device.firmware.read.json',
 	],
-	'readRelationshipsDevice' => [
+	'readRelationshipsDevice'  => [
 		'/v1/devices/69786d15-fd0c-4d9f-9378-33287c2009fa/firmware/relationships/device',
 		StatusCodeInterface::STATUS_OK,
 		__DIR__ . '/responses/device.firmware.readRelationships.device.json',

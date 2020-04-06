@@ -62,6 +62,7 @@ class Property extends Entities\Entity implements IProperty
 	/**
 	 * @var string
 	 *
+	 * @IPubDoctrine\Crud(is="required")
 	 * @ORM\Column(type="string", name="property_property", length=40, nullable=false)
 	 */
 	private $property;
@@ -118,6 +119,7 @@ class Property extends Entities\Entity implements IProperty
 	/**
 	 * @var Entities\Channels\IChannel
 	 *
+	 * @IPubDoctrine\Crud(is="required")
 	 * @ORM\ManyToOne(targetEntity="FastyBird\DevicesNode\Entities\Channels\Channel", inversedBy="properties")
 	 * @ORM\JoinColumn(name="channel_id", referencedColumnName="channel_id", onDelete="CASCADE", nullable=false)
 	 */

@@ -59,6 +59,7 @@ class Channel extends Entities\Entity implements IChannel
 	/**
 	 * @var string
 	 *
+	 * @IPubDoctrine\Crud(is="required")
 	 * @ORM\Column(type="string", name="channel_channel", length=40, nullable=false)
 	 */
 	private $channel;
@@ -114,6 +115,7 @@ class Channel extends Entities\Entity implements IChannel
 	/**
 	 * @var Entities\Devices\IDevice
 	 *
+	 * @IPubDoctrine\Crud(is="required")
 	 * @ORM\ManyToOne(targetEntity="FastyBird\DevicesNode\Entities\Devices\Device", inversedBy="channels")
 	 * @ORM\JoinColumn(name="device_id", referencedColumnName="device_id", onDelete="CASCADE", nullable=false)
 	 */

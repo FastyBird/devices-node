@@ -72,7 +72,7 @@ abstract class Device extends Entities\Entity implements IDevice
 	/**
 	 * @var string
 	 *
-	 * @IPubDoctrine\Crud(is="writable")
+	 * @IPubDoctrine\Crud(is={"required", "writable"})
 	 * @ORM\Column(type="string", name="device_identifier", length=50, nullable=false)
 	 */
 	protected $identifier;
@@ -84,7 +84,7 @@ abstract class Device extends Entities\Entity implements IDevice
 	 * @ORM\ManyToOne(targetEntity="FastyBird\DevicesNode\Entities\Devices\Device", inversedBy="children")
 	 * @ORM\JoinColumn(name="parent_id", referencedColumnName="device_id", nullable=true, onDelete="SET null")
 	 */
-	protected $parent;
+	protected $parent = null;
 
 	/**
 	 * @var Common\Collections\Collection<int, IDevice>
@@ -94,12 +94,12 @@ abstract class Device extends Entities\Entity implements IDevice
 	protected $children;
 
 	/**
-	 * @var string
+	 * @var string|null
 	 *
 	 * @IPubDoctrine\Crud(is="writable")
 	 * @ORM\Column(type="string", name="device_name", nullable=true, options={"default": null})
 	 */
-	protected $name;
+	protected $name = null;
 
 	/**
 	 * @var string|null

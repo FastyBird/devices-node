@@ -69,6 +69,7 @@ abstract class Row extends Entities\Entity implements IRow
 	/**
 	 * @var string
 	 *
+	 * @IPubDoctrine\Crud(is="required")
 	 * @ORM\Column(type="string", name="configuration_name", length=40, nullable=false)
 	 */
 	protected $name;
@@ -108,6 +109,7 @@ abstract class Row extends Entities\Entity implements IRow
 	/**
 	 * @var Entities\Channels\IChannel
 	 *
+	 * @IPubDoctrine\Crud(is="required")
 	 * @ORM\ManyToOne(targetEntity="FastyBird\DevicesNode\Entities\Channels\Channel", inversedBy="configuration")
 	 * @ORM\JoinColumn(name="channel_id", referencedColumnName="channel_id", onDelete="CASCADE", nullable=false)
 	 */

@@ -3,27 +3,27 @@
 use Fig\Http\Message\StatusCodeInterface;
 
 return [
-	'readAll' => [
+	'readAll'                                => [
 		'/v1/devices/69786d15-fd0c-4d9f-9378-33287c2009fa/properties',
 		StatusCodeInterface::STATUS_OK,
 		__DIR__ . '/responses/device.properties.index.json',
 	],
-	'readAllPaging' => [
+	'readAllPaging'                          => [
 		'/v1/devices/69786d15-fd0c-4d9f-9378-33287c2009fa/properties?page[offset]=1&page[limit]=1',
 		StatusCodeInterface::STATUS_OK,
 		__DIR__ . '/responses/device.properties.index.paging.json',
 	],
-	'readOne' => [
+	'readOne'                                => [
 		'/v1/devices/69786d15-fd0c-4d9f-9378-33287c2009fa/properties/28bc0d38-2f7c-4a71-aa74-27b102f8df4c',
 		StatusCodeInterface::STATUS_OK,
 		__DIR__ . '/responses/device.properties.read.json',
 	],
-	'readOneUnknown' => [
+	'readOneUnknown'                         => [
 		'/v1/devices/69786d15-fd0c-4d9f-9378-33287c2009fa/properties/28bc0d38-2f7c-4a71-aa74-27b102f8dfc4',
 		StatusCodeInterface::STATUS_NOT_FOUND,
 		__DIR__ . '/responses/device.properties.notFound.json',
 	],
-	'readRelationshipsDevice' => [
+	'readRelationshipsDevice'                => [
 		'/v1/devices/69786d15-fd0c-4d9f-9378-33287c2009fa/properties/28bc0d38-2f7c-4a71-aa74-27b102f8df4c/relationships/device',
 		StatusCodeInterface::STATUS_OK,
 		__DIR__ . '/responses/device.properties.readRelationships.device.json',
@@ -33,7 +33,7 @@ return [
 		StatusCodeInterface::STATUS_NOT_FOUND,
 		__DIR__ . '/responses/device.properties.notFound.json',
 	],
-	'readRelationshipsUnknown' => [
+	'readRelationshipsUnknown'               => [
 		'/v1/devices/69786d15-fd0c-4d9f-9378-33287c2009fa/properties/28bc0d38-2f7c-4a71-aa74-27b102f8df4c/relationships/unknown',
 		StatusCodeInterface::STATUS_NOT_FOUND,
 		__DIR__ . '/responses/relation.unknown.json',

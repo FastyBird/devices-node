@@ -3,7 +3,7 @@
 use Fig\Http\Message\StatusCodeInterface;
 
 return [
-	'readAll' => [
+	'readAll'       => [
 		'/v1/devices/69786d15-fd0c-4d9f-9378-33287c2009fa/children',
 		StatusCodeInterface::STATUS_OK,
 		__DIR__ . '/responses/device.children.index.json',

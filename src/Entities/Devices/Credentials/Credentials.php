@@ -57,7 +57,7 @@ class Credentials extends Entities\Entity implements ICredentials
 	/**
 	 * @var string
 	 *
-	 * @IPubDoctrine\Crud(is="writable")
+	 * @IPubDoctrine\Crud(is={"required", "writable"})
 	 * @ORM\Column(type="string", name="credentials_username", length=40, nullable=false)
 	 */
 	private $username;
@@ -65,7 +65,7 @@ class Credentials extends Entities\Entity implements ICredentials
 	/**
 	 * @var string
 	 *
-	 * @IPubDoctrine\Crud(is="writable")
+	 * @IPubDoctrine\Crud(is={"required", "writable"})
 	 * @ORM\Column(type="string", name="credentials_password", length=40, nullable=false)
 	 */
 	private $password;
@@ -73,6 +73,7 @@ class Credentials extends Entities\Entity implements ICredentials
 	/**
 	 * @var Entities\Devices\IPhysicalDevice
 	 *
+	 * @IPubDoctrine\Crud(is="required")
 	 * @ORM\OneToOne(targetEntity="FastyBird\DevicesNode\Entities\Devices\PhysicalDevice", inversedBy="credentials")
 	 * @ORM\JoinColumn(name="device_id", referencedColumnName="device_id", unique=true, onDelete="CASCADE", nullable=false)
 	 */
