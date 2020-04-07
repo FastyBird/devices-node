@@ -43,8 +43,6 @@
     "ipub/doctrine-orm-query" : "^0.0.5",
     "ipub/doctrine-timestampable" : "^1.4",
     "ipub/json-api-document" : "^0.1.0",
-    "ipub/slim-router" : "^0.1.0",
-    "neomerx/json-api" : "^4.0",
     "nettrine/cache" : "^0.1",
     "nettrine/orm" : "^0.5",
     "phpdocumentor/reflection-docblock" : "^5.1",
