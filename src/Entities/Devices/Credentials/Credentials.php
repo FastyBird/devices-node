@@ -73,7 +73,6 @@ class Credentials extends Entities\Entity implements ICredentials
 	/**
 	 * @var Entities\Devices\IPhysicalDevice
 	 *
-	 * @IPubDoctrine\Crud(is="required")
 	 * @ORM\OneToOne(targetEntity="FastyBird\DevicesNode\Entities\Devices\PhysicalDevice", inversedBy="credentials")
 	 * @ORM\JoinColumn(name="device_id", referencedColumnName="device_id", unique=true, onDelete="CASCADE", nullable=false)
 	 */
