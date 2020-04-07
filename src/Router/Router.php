@@ -67,6 +67,9 @@ class Router extends Routing\Router
 	/** @var Controllers\ChannelConfigurationV1Controller */
 	private $channelConfigurationV1Controller;
 
+	/** @var Controllers\AuthenticateV1Controller */
+	private $authenticateV1Controller;
+
 	public function __construct(
 		Controllers\DevicesV1Controller $devicesV1Controller,
 		Controllers\DeviceChildrenV1Controller $deviceChildrenV1Controller,
@@ -78,6 +81,7 @@ class Router extends Routing\Router
 		Controllers\ChannelsV1Controller $channelsV1Controller,
 		Controllers\ChannelPropertiesV1Controller $channelPropertiesV1Controller,
 		Controllers\ChannelConfigurationV1Controller $channelConfigurationV1Controller,
+		Controllers\AuthenticateV1Controller $authenticateV1Controller,
 		?ResponseFactoryInterface $responseFactory = null
 	) {
 		parent::__construct($responseFactory, null);
@@ -92,6 +96,7 @@ class Router extends Routing\Router
 		$this->channelsV1Controller = $channelsV1Controller;
 		$this->channelPropertiesV1Controller = $channelPropertiesV1Controller;
 		$this->channelConfigurationV1Controller = $channelConfigurationV1Controller;
+		$this->authenticateV1Controller = $authenticateV1Controller;
 	}
 
 	/**
@@ -219,6 +224,10 @@ class Router extends Routing\Router
 						$route->setName('channel.configuration.row.relationship');
 					});
 				});
+			});
+
+			$group->group('/authenticate', function (Routing\RouteCollector $group): void {
+				$group->post('/vernemq', [$this->authenticateV1Controller, 'vernemq']);
 			});
 		});
 	}

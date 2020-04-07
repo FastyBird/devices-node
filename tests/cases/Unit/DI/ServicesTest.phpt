@@ -47,6 +47,7 @@ final class ServicesTest extends BaseTestCase
 		Assert::notNull($container->getByType(Models\Devices\DeviceRepository::class));
 		Assert::notNull($container->getByType(Models\Devices\Properties\PropertyRepository::class));
 		Assert::notNull($container->getByType(Models\Devices\Configuration\RowRepository::class));
+		Assert::notNull($container->getByType(Models\Devices\Credentials\CredentialsRepository::class));
 		Assert::notNull($container->getByType(Models\Channels\ChannelRepository::class));
 		Assert::notNull($container->getByType(Models\Channels\Properties\PropertyRepository::class));
 		Assert::notNull($container->getByType(Models\Channels\Configuration\RowRepository::class));
@@ -72,6 +73,7 @@ final class ServicesTest extends BaseTestCase
 		Assert::notNull($container->getByType(Controllers\ChannelsV1Controller::class));
 		Assert::notNull($container->getByType(Controllers\ChannelPropertiesV1Controller::class));
 		Assert::notNull($container->getByType(Controllers\ChannelConfigurationV1Controller::class));
+		Assert::notNull($container->getByType(Controllers\AuthenticateV1Controller::class));
 
 		Assert::notNull($container->getByType(Schemas\Devices\PhysicalDeviceSchema::class));
 		Assert::notNull($container->getByType(Schemas\Devices\Properties\PropertySchema::class));

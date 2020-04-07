@@ -163,6 +163,8 @@ services:
 
 	- {factory: FastyBird\DevicesNode\Models\Devices\Configuration\RowRepository}
 
+	- {factory: FastyBird\DevicesNode\Models\Devices\Credentials\CredentialsRepository}
+
 	- {factory: FastyBird\DevicesNode\Models\Channels\ChannelRepository}
 
 	- {factory: FastyBird\DevicesNode\Models\Channels\Properties\PropertyRepository}
@@ -216,6 +218,8 @@ services:
 	- {factory: FastyBird\DevicesNode\Controllers\ChannelPropertiesV1Controller, tags: [nette.inject]}
 
 	- {factory: FastyBird\DevicesNode\Controllers\ChannelConfigurationV1Controller, tags: [nette.inject]}
+
+	- {factory: FastyBird\DevicesNode\Controllers\AuthenticateV1Controller, tags: [nette.inject]}
 
 	# API schemas
 	#############
