@@ -83,13 +83,6 @@ final class DevicePropertyMessageHandler implements NodeLibsConsumers\IMessageHa
 			return true;
 		}
 
-		// Check if device is in initialize mode
-		if (!$this->isInitEnabled($device)) {
-			$this->logger->info(sprintf('[CONSUMER] Device "%s" is in "%s" state and can\'t be updated', $message->offsetGet('device'), $device->getState()->getValue()));
-
-			return true;
-		}
-
 		$result = true;
 
 		switch ($routingKey) {
@@ -315,17 +308,6 @@ final class DevicePropertyMessageHandler implements NodeLibsConsumers\IMessageHa
 		}
 
 		return null;
-	}
-
-	/**
-	 * @param Entities\Devices\IDevice $device
-	 *
-	 * @return bool
-	 */
-	private function isInitEnabled(
-		Entities\Devices\IDevice $device
-	): bool {
-		return $device->getState()->equalsValue(Types\DeviceConnectionState::STATE_INIT);
 	}
 
 }

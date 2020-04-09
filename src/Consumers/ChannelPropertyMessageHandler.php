@@ -20,7 +20,6 @@ use FastyBird\DevicesNode\Entities;
 use FastyBird\DevicesNode\Exceptions;
 use FastyBird\DevicesNode\Models;
 use FastyBird\DevicesNode\Queries;
-use FastyBird\DevicesNode\Types;
 use FastyBird\NodeLibs\Consumers as NodeLibsConsumers;
 use FastyBird\NodeLibs\Helpers as NodeLibsHelpers;
 use Nette;
@@ -84,13 +83,6 @@ final class ChannelPropertyMessageHandler implements NodeLibsConsumers\IMessageH
 
 		if ($device === null) {
 			$this->logger->error(sprintf('[CONSUMER] Device "%s" is not registered', $message->offsetGet('device')));
-
-			return true;
-		}
-
-		// Check if device is in initialize mode
-		if (!$this->isInitEnabled($device)) {
-			$this->logger->info(sprintf('[CONSUMER] Device "%s" is in "%s" state and can\'t be updated', $message->offsetGet('device'), $device->getState()->getValue()));
 
 			return true;
 		}
@@ -300,17 +292,6 @@ final class ChannelPropertyMessageHandler implements NodeLibsConsumers\IMessageH
 			'settable'  => false,
 			'queryable' => false,
 		];
-	}
-
-	/**
-	 * @param Entities\Devices\IDevice $device
-	 *
-	 * @return bool
-	 */
-	private function isInitEnabled(
-		Entities\Devices\IDevice $device
-	): bool {
-		return $device->getState()->equalsValue(Types\DeviceConnectionState::STATE_INIT);
 	}
 
 }
