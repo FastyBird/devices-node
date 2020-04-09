@@ -54,7 +54,7 @@ Docker image: [fastybird/devices-node](https://hub.docker.com/r/fastybird/device
 ### Use docker hub image
 
 ```bash
-$ docker run -d -it --name mqtt fastybird/devices-node:latest
+$ docker run -d -it --name devices fastybird/devices-node:latest
 ```
 
 ### Generate local image
