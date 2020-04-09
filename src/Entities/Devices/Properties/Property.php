@@ -294,4 +294,22 @@ class Property extends Entities\Entity implements IProperty
 		return null;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	public function toArray(): array
+	{
+		return [
+			'id'        => $this->getPlainId(),
+			'property'  => $this->getProperty(),
+			'name'      => $this->getName(),
+			'settable'  => $this->isSettable(),
+			'queryable' => $this->isQueryable(),
+			'datatype'  => $this->getDatatype() !== null ? $this->getDatatype()->getValue() : null,
+			'unit'      => $this->getUnit(),
+			'format'    => $this->getFormat(),
+			'device'    => $this->getDevice()->getIdentifier(),
+		];
+	}
+
 }

@@ -33,7 +33,7 @@ final class DeviceMessageHandlerTest extends DbTestCase
 
 				Assert::false($data === []);
 				Assert::true(isset($fixture[$routingKey]));
-				Assert::same($fixture[$routingKey], $data);
+				Assert::equal($fixture[$routingKey], $data);
 
 				return true;
 			})

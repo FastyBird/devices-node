@@ -94,4 +94,9 @@ interface IRow extends Entities\IEntity,
 	 */
 	public function getType(): string;
 
+	/**
+	 * @return mixed[]
+	 */
+	public function toArray(): array;
+
 }

@@ -72,4 +72,9 @@ interface IFirmware extends Entities\IEntity,
 	 */
 	public function getVersion(): ?string;
 
+	/**
+	 * @return mixed[]
+	 */
+	public function toArray(): array;
+
 }

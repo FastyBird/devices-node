@@ -86,4 +86,14 @@ class SelectRow extends Row implements ISelectRow
 		return (string) $this->value;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	public function toArray(): array
+	{
+		return array_merge(parent::toArray(), [
+			'values' => $this->getValues(),
+		]);
+	}
+
 }

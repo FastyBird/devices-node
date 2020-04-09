@@ -4,7 +4,7 @@ use FastyBird\DevicesNode;
 use Nette\Utils;
 
 return [
-	'messageWithoutUpdate'  => [
+	'messageWithoutUpdate' => [
 		DevicesNode\Constants::RABBIT_MQ_DEVICES_CONTROLS_DATA_ROUTING_KEY,
 		Utils\ArrayHash::from([
 			'device'  => 'first-device',
@@ -15,7 +15,7 @@ return [
 		]),
 		[],
 	],
-	'messageWithUpdate' => [
+	'messageWithUpdate'    => [
 		DevicesNode\Constants::RABBIT_MQ_DEVICES_CONTROLS_DATA_ROUTING_KEY,
 		Utils\ArrayHash::from([
 			'device'  => 'first-device',
@@ -36,6 +36,7 @@ return [
 				'max'     => 500.0,
 				'step'    => 1.0,
 				'type'    => 'number',
+				'device'  => 'first-device',
 			],
 		],
 	],

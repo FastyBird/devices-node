@@ -136,4 +136,16 @@ class NumberRow extends Row implements INumberRow
 		return (float) $this->value;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	public function toArray(): array
+	{
+		return array_merge(parent::toArray(), [
+			'min'  => $this->getMin(),
+			'max'  => $this->getMax(),
+			'step' => $this->getStep(),
+		]);
+	}
+
 }

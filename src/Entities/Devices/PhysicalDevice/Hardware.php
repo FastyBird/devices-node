@@ -202,15 +202,17 @@ class Hardware extends Entities\Entity implements IHardware
 	}
 
 	/**
-	 * @return mixed[]
+	 * {@inheritDoc}
 	 */
-	public function toSimpleArray(): array
+	public function toArray(): array
 	{
 		return [
+			'id'           => $this->getPlainId(),
 			'version'      => $this->getVersion(),
 			'manufacturer' => $this->getManufacturer()->getValue(),
 			'model'        => $this->getModel()->getValue(),
 			'mac_address'  => $this->getMacAddress(),
+			'device'       => $this->getDevice()->getIdentifier(),
 		];
 	}
 

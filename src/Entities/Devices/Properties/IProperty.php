@@ -126,4 +126,9 @@ interface IProperty extends Entities\IEntity,
 	 */
 	public function getFormat();
 
+	/**
+	 * @return mixed[]
+	 */
+	public function toArray(): array;
+
 }

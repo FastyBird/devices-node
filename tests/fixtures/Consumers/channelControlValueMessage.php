@@ -40,6 +40,8 @@ return [
 					['name' => 'normally_on', 'value' => '2'],
 				],
 				'type'    => DevicesNode\Constants::DATA_TYPE_SELECT,
+				'device'  => 'first-device',
+				'channel' => 'channel-one',
 			],
 		],
 	],

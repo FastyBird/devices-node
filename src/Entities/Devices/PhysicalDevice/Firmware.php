@@ -162,14 +162,16 @@ class Firmware extends Entities\Entity implements IFirmware
 	}
 
 	/**
-	 * @return mixed[]
+	 * {@inheritDoc}
 	 */
-	public function toSimpleArray(): array
+	public function toArray(): array
 	{
 		return [
+			'id'           => $this->getPlainId(),
 			'name'         => $this->getName(),
 			'manufacturer' => $this->getManufacturer()->getValue(),
 			'version'      => $this->getVersion(),
+			'device'       => $this->getDevice()->getIdentifier(),
 		];
 	}
 

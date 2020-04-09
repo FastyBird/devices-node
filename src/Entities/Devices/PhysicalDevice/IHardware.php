@@ -86,4 +86,9 @@ interface IHardware extends Entities\IEntity,
 	 */
 	public function getMacAddress(string $separator = ':'): ?string;
 
+	/**
+	 * @return mixed[]
+	 */
+	public function toArray(): array;
+
 }

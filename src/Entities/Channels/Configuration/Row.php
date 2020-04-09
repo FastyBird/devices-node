@@ -224,4 +224,22 @@ abstract class Row extends Entities\Entity implements IRow
 		return $this->type;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	public function toArray(): array
+	{
+		return [
+			'id'      => $this->getPlainId(),
+			'name'    => $this->getName(),
+			'title'   => $this->getTitle(),
+			'comment' => $this->getComment(),
+			'default' => $this->getDefault(),
+			'value'   => $this->getValue(),
+			'channel' => $this->getChannel()->getChannel(),
+			'device'  => $this->getChannel()->getDevice()->getIdentifier(),
+			'type'    => $this->getType(),
+		];
+	}
+
 }

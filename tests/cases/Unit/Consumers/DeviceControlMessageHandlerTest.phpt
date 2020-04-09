@@ -33,7 +33,7 @@ final class DeviceControlMessageHandlerTest extends DbTestCase
 
 				Assert::false($data === []);
 				Assert::true(isset($fixture[$routingKey]));
-				Assert::same($fixture[$routingKey], $data);
+				Assert::equal($fixture[$routingKey], $data);
 
 				return true;
 			})
@@ -65,7 +65,7 @@ final class DeviceControlMessageHandlerTest extends DbTestCase
 			->withArgs(function (string $routingKey, array $data) use ($fixture): bool {
 				Assert::false($data === []);
 				Assert::true(isset($fixture[$routingKey]));
-				Assert::same($fixture[$routingKey], $data);
+				Assert::equal($fixture[$routingKey], $data);
 
 				return true;
 			})

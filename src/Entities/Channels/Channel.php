@@ -503,6 +503,8 @@ class Channel extends Entities\Entity implements IChannel
 			'control' => $this->getPlainControls(),
 
 			'params' => (array) $this->getParams(),
+
+			'device' => $this->device->getIdentifier(),
 		];
 	}
 
