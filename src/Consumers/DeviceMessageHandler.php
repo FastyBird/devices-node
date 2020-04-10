@@ -182,7 +182,7 @@ final class DeviceMessageHandler implements NodeLibsConsumers\IMessageHandler
 	 */
 	public function getAllowedOrigin(string $routingKey)
 	{
-		DevicesNode\Constants::NODE_MQTT_ORIGIN;
+		return DevicesNode\Constants::NODE_MQTT_ORIGIN;
 	}
 
 	/**
