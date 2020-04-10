@@ -21,10 +21,12 @@ use FastyBird\DevicesNode\Exceptions;
 use FastyBird\DevicesNode\Models;
 use FastyBird\DevicesNode\Queries;
 use FastyBird\NodeLibs\Consumers as NodeLibsConsumers;
+use FastyBird\NodeLibs\Exceptions as NodeLibsExceptions;
 use FastyBird\NodeLibs\Helpers as NodeLibsHelpers;
 use Nette;
 use Nette\Utils;
 use Psr\Log;
+use Throwable;
 
 /**
  * Channel control message consumer
@@ -76,15 +78,22 @@ final class ChannelControlMessageHandler implements NodeLibsConsumers\IMessageHa
 
 	/**
 	 * {@inheritDoc}
+	 *
+	 * @throws NodeLibsExceptions\TerminateException
 	 */
 	public function process(
 		string $routingKey,
 		Utils\ArrayHash $message
 	): bool {
-		$findQuery = new Queries\FindDevicesQuery();
-		$findQuery->byIdentifier($message->offsetGet('device'));
+		try {
+			$findQuery = new Queries\FindDevicesQuery();
+			$findQuery->byIdentifier($message->offsetGet('device'));
 
-		$device = $this->deviceRepository->findOneBy($findQuery);
+			$device = $this->deviceRepository->findOneBy($findQuery);
+
+		} catch (Throwable $ex) {
+			throw new NodeLibsExceptions\TerminateException('An error occurred: ' . $ex->getMessage(), $ex->getCode(), $ex);
+		}
 
 		if ($device === null) {
 			$this->logger->error(sprintf('[CONSUMER] Device "%s" is not registered', $message->offsetGet('device')));
@@ -92,11 +101,16 @@ final class ChannelControlMessageHandler implements NodeLibsConsumers\IMessageHa
 			return true;
 		}
 
-		$findQuery = new Queries\FindChannelsQuery();
-		$findQuery->forDevice($device);
-		$findQuery->byChannel($message->offsetGet('channel'));
+		try {
+			$findQuery = new Queries\FindChannelsQuery();
+			$findQuery->forDevice($device);
+			$findQuery->byChannel($message->offsetGet('channel'));
 
-		$channel = $this->channelRepository->findOneBy($findQuery);
+			$channel = $this->channelRepository->findOneBy($findQuery);
+
+		} catch (Throwable $ex) {
+			throw new NodeLibsExceptions\TerminateException('An error occurred: ' . $ex->getMessage(), $ex->getCode(), $ex);
+		}
 
 		if ($channel === null) {
 			$this->logger->error(sprintf('[CONSUMER] Device channel "%s" is not registered', $message->offsetGet('device')));
@@ -114,29 +128,37 @@ final class ChannelControlMessageHandler implements NodeLibsConsumers\IMessageHa
 
 		$result = true;
 
-		switch ($routingKey) {
-			case DevicesNode\Constants::RABBIT_MQ_DEVICES_CHANNELS_CONTROLS_DATA_ROUTING_KEY:
-				if ($control->getName() === DevicesNode\Constants::CONTROL_CONFIG) {
-					if ($message->offsetExists('schema')) {
-						$subResult = $this->setConfigurationSchema($channel, $message->offsetGet('schema'));
+		try {
+			switch ($routingKey) {
+				case DevicesNode\Constants::RABBIT_MQ_CHANNELS_CONTROLS_DATA_ROUTING_KEY:
+					if ($control->getName() === DevicesNode\Constants::CONTROL_CONFIG) {
+						if ($message->offsetExists('schema')) {
+							$subResult = $this->setConfigurationSchema($channel, $message->offsetGet('schema'));
 
-						if (!$subResult) {
-							$result = false;
+							if (!$subResult) {
+								$result = false;
+							}
+						}
+
+						if ($message->offsetExists('value')) {
+							$subResult = $this->setConfigurationValues($channel, $message->offsetGet('value'));
+
+							if (!$subResult) {
+								$result = false;
+							}
 						}
 					}
+					break;
 
-					if ($message->offsetExists('value')) {
-						$subResult = $this->setConfigurationValues($channel, $message->offsetGet('value'));
+				default:
+					throw new Exceptions\InvalidStateException('Unknown routing key');
+			}
 
-						if (!$subResult) {
-							$result = false;
-						}
-					}
-				}
-				break;
+		} catch (Exceptions\InvalidStateException $ex) {
+			return false;
 
-			default:
-				throw new Exceptions\InvalidStateException('Unknown routing key');
+		} catch (Throwable $ex) {
+			throw new NodeLibsExceptions\TerminateException('An error occurred: ' . $ex->getMessage(), $ex->getCode(), $ex);
 		}
 
 		if ($result) {
@@ -152,7 +174,7 @@ final class ChannelControlMessageHandler implements NodeLibsConsumers\IMessageHa
 	public function getSchema(string $routingKey): string
 	{
 		switch ($routingKey) {
-			case DevicesNode\Constants::RABBIT_MQ_DEVICES_CHANNELS_CONTROLS_DATA_ROUTING_KEY:
+			case DevicesNode\Constants::RABBIT_MQ_CHANNELS_CONTROLS_DATA_ROUTING_KEY:
 				return $this->schemaLoader->load('data.channel.control.json');
 
 			default:
@@ -170,7 +192,7 @@ final class ChannelControlMessageHandler implements NodeLibsConsumers\IMessageHa
 		}
 
 		return [
-			DevicesNode\Constants::RABBIT_MQ_DEVICES_CHANNELS_CONTROLS_DATA_ROUTING_KEY,
+			DevicesNode\Constants::RABBIT_MQ_CHANNELS_CONTROLS_DATA_ROUTING_KEY,
 		];
 	}
 

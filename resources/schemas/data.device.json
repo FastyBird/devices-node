@@ -40,26 +40,26 @@
     },
     "properties" : {
       "type" : "array",
-      "items": {
-        "type": "string"
+      "items" : {
+        "type" : "string"
       }
     },
     "channels" : {
       "type" : "array",
-      "items": {
-        "type": "string"
+      "items" : {
+        "type" : "string"
       }
     },
     "extensions" : {
       "type" : "array",
-      "items": {
-        "type": "string"
+      "items" : {
+        "type" : "string"
       }
     },
     "control" : {
       "type" : "array",
-      "items": {
-        "type": "string"
+      "items" : {
+        "type" : "string"
       }
     },
     "parent" : {

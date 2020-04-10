@@ -5,7 +5,7 @@ use Nette\Utils;
 
 return [
 	'messageWithoutUpdate' => [
-		DevicesNode\Constants::RABBIT_MQ_DEVICES_CHANNELS_CONTROLS_DATA_ROUTING_KEY,
+		DevicesNode\Constants::RABBIT_MQ_CHANNELS_CONTROLS_DATA_ROUTING_KEY,
 		Utils\ArrayHash::from([
 			'device'  => 'first-device',
 			'channel' => 'channel-one',
@@ -93,7 +93,7 @@ return [
 		[],
 	],
 	'messageWithUpdate'    => [
-		DevicesNode\Constants::RABBIT_MQ_DEVICES_CHANNELS_CONTROLS_DATA_ROUTING_KEY,
+		DevicesNode\Constants::RABBIT_MQ_CHANNELS_CONTROLS_DATA_ROUTING_KEY,
 		Utils\ArrayHash::from([
 			'device'  => 'first-device',
 			'channel' => 'channel-one',
@@ -198,7 +198,7 @@ return [
 		],
 	],
 	'messageWithDelete'    => [
-		DevicesNode\Constants::RABBIT_MQ_DEVICES_CHANNELS_CONTROLS_DATA_ROUTING_KEY,
+		DevicesNode\Constants::RABBIT_MQ_CHANNELS_CONTROLS_DATA_ROUTING_KEY,
 		Utils\ArrayHash::from([
 			'device'  => 'first-device',
 			'channel' => 'channel-one',
@@ -282,7 +282,7 @@ return [
 		],
 	],
 	'messageWithCreate'    => [
-		DevicesNode\Constants::RABBIT_MQ_DEVICES_CHANNELS_CONTROLS_DATA_ROUTING_KEY,
+		DevicesNode\Constants::RABBIT_MQ_CHANNELS_CONTROLS_DATA_ROUTING_KEY,
 		Utils\ArrayHash::from([
 			'device'  => 'first-device',
 			'channel' => 'channel-one',

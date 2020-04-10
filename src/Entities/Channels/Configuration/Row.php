@@ -231,14 +231,14 @@ abstract class Row extends Entities\Entity implements IRow
 	{
 		return [
 			'id'      => $this->getPlainId(),
+			'type'    => $this->getType(),
 			'name'    => $this->getName(),
 			'title'   => $this->getTitle(),
 			'comment' => $this->getComment(),
 			'default' => $this->getDefault(),
 			'value'   => $this->getValue(),
-			'channel' => $this->getChannel()->getChannel(),
 			'device'  => $this->getChannel()->getDevice()->getIdentifier(),
-			'type'    => $this->getType(),
+			'channel' => $this->getChannel()->getChannel(),
 		];
 	}
 

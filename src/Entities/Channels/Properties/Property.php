@@ -309,8 +309,8 @@ class Property extends Entities\Entity implements IProperty
 			'datatype'  => $this->getDatatype() !== null ? $this->getDatatype()->getValue() : null,
 			'unit'      => $this->getUnit(),
 			'format'    => $this->getFormat(),
-			'channel'   => $this->getChannel()->getChannel(),
 			'device'    => $this->getChannel()->getDevice()->getIdentifier(),
+			'channel'   => $this->getChannel()->getChannel(),
 		];
 	}
 

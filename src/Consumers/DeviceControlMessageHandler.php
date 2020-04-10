@@ -21,10 +21,12 @@ use FastyBird\DevicesNode\Exceptions;
 use FastyBird\DevicesNode\Models;
 use FastyBird\DevicesNode\Queries;
 use FastyBird\NodeLibs\Consumers as NodeLibsConsumers;
+use FastyBird\NodeLibs\Exceptions as NodeLibsExceptions;
 use FastyBird\NodeLibs\Helpers as NodeLibsHelpers;
 use Nette;
 use Nette\Utils;
 use Psr\Log;
+use Throwable;
 
 /**
  * Channel control message consumer
@@ -71,15 +73,22 @@ final class DeviceControlMessageHandler implements NodeLibsConsumers\IMessageHan
 
 	/**
 	 * {@inheritDoc}
+	 *
+	 * @throws NodeLibsExceptions\TerminateException
 	 */
 	public function process(
 		string $routingKey,
 		Utils\ArrayHash $message
 	): bool {
-		$findQuery = new Queries\FindDevicesQuery();
-		$findQuery->byIdentifier($message->offsetGet('device'));
+		try {
+			$findQuery = new Queries\FindDevicesQuery();
+			$findQuery->byIdentifier($message->offsetGet('device'));
 
-		$device = $this->deviceRepository->findOneBy($findQuery);
+			$device = $this->deviceRepository->findOneBy($findQuery);
+
+		} catch (Throwable $ex) {
+			throw new NodeLibsExceptions\TerminateException('An error occurred: ' . $ex->getMessage(), $ex->getCode(), $ex);
+		}
 
 		if ($device === null) {
 			$this->logger->error(sprintf('[CONSUMER] Device "%s" is not registered', $message->offsetGet('device')));
@@ -97,29 +106,37 @@ final class DeviceControlMessageHandler implements NodeLibsConsumers\IMessageHan
 
 		$result = true;
 
-		switch ($routingKey) {
-			case DevicesNode\Constants::RABBIT_MQ_DEVICES_CONTROLS_DATA_ROUTING_KEY:
-				if ($control->getName() === DevicesNode\Constants::CONTROL_CONFIG) {
-					if ($message->offsetExists('schema')) {
-						$subResult = $this->setConfigurationSchema($device, $message->offsetGet('schema'));
+		try {
+			switch ($routingKey) {
+				case DevicesNode\Constants::RABBIT_MQ_DEVICES_CONTROLS_DATA_ROUTING_KEY:
+					if ($control->getName() === DevicesNode\Constants::CONTROL_CONFIG) {
+						if ($message->offsetExists('schema')) {
+							$subResult = $this->setConfigurationSchema($device, $message->offsetGet('schema'));
 
-						if (!$subResult) {
-							$result = false;
+							if (!$subResult) {
+								$result = false;
+							}
+						}
+
+						if ($message->offsetExists('value')) {
+							$subResult = $this->setConfigurationValues($device, $message->offsetGet('value'));
+
+							if (!$subResult) {
+								$result = false;
+							}
 						}
 					}
+					break;
 
-					if ($message->offsetExists('value')) {
-						$subResult = $this->setConfigurationValues($device, $message->offsetGet('value'));
+				default:
+					throw new Exceptions\InvalidStateException('Unknown routing key');
+			}
 
-						if (!$subResult) {
-							$result = false;
-						}
-					}
-				}
-				break;
+		} catch (Exceptions\InvalidStateException $ex) {
+			return false;
 
-			default:
-				throw new Exceptions\InvalidStateException('Unknown routing key');
+		} catch (Throwable $ex) {
+			throw new NodeLibsExceptions\TerminateException('An error occurred: ' . $ex->getMessage(), $ex->getCode(), $ex);
 		}
 
 		if ($result) {

@@ -21,10 +21,12 @@ use FastyBird\DevicesNode\Exceptions;
 use FastyBird\DevicesNode\Models;
 use FastyBird\DevicesNode\Queries;
 use FastyBird\NodeLibs\Consumers as NodeLibsConsumers;
+use FastyBird\NodeLibs\Exceptions as NodeLibsExceptions;
 use FastyBird\NodeLibs\Helpers as NodeLibsHelpers;
 use Nette;
 use Nette\Utils;
 use Psr\Log;
+use Throwable;
 
 /**
  * Channel message consumer
@@ -81,15 +83,22 @@ final class ChannelMessageHandler implements NodeLibsConsumers\IMessageHandler
 
 	/**
 	 * {@inheritDoc}
+	 *
+	 * @throws NodeLibsExceptions\TerminateException
 	 */
 	public function process(
 		string $routingKey,
 		Utils\ArrayHash $message
 	): bool {
-		$findQuery = new Queries\FindDevicesQuery();
-		$findQuery->byIdentifier($message->offsetGet('device'));
+		try {
+			$findQuery = new Queries\FindDevicesQuery();
+			$findQuery->byIdentifier($message->offsetGet('device'));
 
-		$device = $this->deviceRepository->findOneBy($findQuery);
+			$device = $this->deviceRepository->findOneBy($findQuery);
+
+		} catch (Throwable $ex) {
+			throw new NodeLibsExceptions\TerminateException('An error occurred: ' . $ex->getMessage(), $ex->getCode(), $ex);
+		}
 
 		if ($device === null) {
 			$this->logger->error(sprintf('[CONSUMER] Device "%s" is not registered', $message->offsetGet('device')));
@@ -97,11 +106,16 @@ final class ChannelMessageHandler implements NodeLibsConsumers\IMessageHandler
 			return true;
 		}
 
-		$findQuery = new Queries\FindChannelsQuery();
-		$findQuery->forDevice($device);
-		$findQuery->byChannel($message->offsetGet('channel'));
+		try {
+			$findQuery = new Queries\FindChannelsQuery();
+			$findQuery->forDevice($device);
+			$findQuery->byChannel($message->offsetGet('channel'));
 
-		$channel = $this->channelRepository->findOneBy($findQuery);
+			$channel = $this->channelRepository->findOneBy($findQuery);
+
+		} catch (Throwable $ex) {
+			throw new NodeLibsExceptions\TerminateException('An error occurred: ' . $ex->getMessage(), $ex->getCode(), $ex);
+		}
 
 		if ($channel === null) {
 			$this->logger->error(sprintf('[CONSUMER] Device channel "%s" is not registered', $message->offsetGet('device')));
@@ -111,37 +125,45 @@ final class ChannelMessageHandler implements NodeLibsConsumers\IMessageHandler
 
 		$result = true;
 
-		switch ($routingKey) {
-			case DevicesNode\Constants::RABBIT_MQ_DEVICES_CHANNELS_DATA_ROUTING_KEY:
-				$toUpdate = [];
+		try {
+			switch ($routingKey) {
+				case DevicesNode\Constants::RABBIT_MQ_CHANNELS_DATA_ROUTING_KEY:
+					$toUpdate = [];
 
-				if ($message->offsetExists('name')) {
-					$toUpdate['name'] = $message->offsetGet('name');
-				}
-
-				if ($message->offsetExists('properties')) {
-					$subResult = $this->setChannelProperties($channel, $message->offsetGet('properties'));
-
-					if (!$subResult) {
-						$result = false;
+					if ($message->offsetExists('name')) {
+						$toUpdate['name'] = $message->offsetGet('name');
 					}
-				}
 
-				if ($message->offsetExists('control')) {
-					$subResult = $this->setChannelControl($channel, $message->offsetGet('control'));
+					if ($message->offsetExists('properties')) {
+						$subResult = $this->setChannelProperties($channel, $message->offsetGet('properties'));
 
-					if (!$subResult) {
-						$result = false;
+						if (!$subResult) {
+							$result = false;
+						}
 					}
-				}
 
-				if ($toUpdate !== []) {
-					$this->channelsManager->update($channel, Utils\ArrayHash::from($toUpdate));
-				}
-				break;
+					if ($message->offsetExists('control')) {
+						$subResult = $this->setChannelControl($channel, $message->offsetGet('control'));
 
-			default:
-				throw new Exceptions\InvalidStateException('Unknown routing key');
+						if (!$subResult) {
+							$result = false;
+						}
+					}
+
+					if ($toUpdate !== []) {
+						$this->channelsManager->update($channel, Utils\ArrayHash::from($toUpdate));
+					}
+					break;
+
+				default:
+					throw new Exceptions\InvalidStateException('Unknown routing key');
+			}
+
+		} catch (Exceptions\InvalidStateException $ex) {
+			return false;
+
+		} catch (Throwable $ex) {
+			throw new NodeLibsExceptions\TerminateException('An error occurred: ' . $ex->getMessage(), $ex->getCode(), $ex);
 		}
 
 		if ($result) {
@@ -157,7 +179,7 @@ final class ChannelMessageHandler implements NodeLibsConsumers\IMessageHandler
 	public function getSchema(string $routingKey): string
 	{
 		switch ($routingKey) {
-			case DevicesNode\Constants::RABBIT_MQ_DEVICES_CHANNELS_DATA_ROUTING_KEY:
+			case DevicesNode\Constants::RABBIT_MQ_CHANNELS_DATA_ROUTING_KEY:
 				return $this->schemaLoader->load('data.channel.json');
 
 			default:
@@ -175,7 +197,7 @@ final class ChannelMessageHandler implements NodeLibsConsumers\IMessageHandler
 		}
 
 		return [
-			DevicesNode\Constants::RABBIT_MQ_DEVICES_CHANNELS_DATA_ROUTING_KEY,
+			DevicesNode\Constants::RABBIT_MQ_CHANNELS_DATA_ROUTING_KEY,
 		];
 	}
 

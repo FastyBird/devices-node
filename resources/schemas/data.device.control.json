@@ -47,8 +47,8 @@
     },
     "schema" : {
       "type" : "array",
-      "items": {
-        "type": "object"
+      "items" : {
+        "type" : "object"
       }
     },
     "parent" : {

@@ -21,10 +21,12 @@ use FastyBird\DevicesNode\Exceptions;
 use FastyBird\DevicesNode\Models;
 use FastyBird\DevicesNode\Queries;
 use FastyBird\NodeLibs\Consumers as NodeLibsConsumers;
+use FastyBird\NodeLibs\Exceptions as NodeLibsExceptions;
 use FastyBird\NodeLibs\Helpers as NodeLibsHelpers;
 use Nette;
 use Nette\Utils;
 use Psr\Log;
+use Throwable;
 
 /**
  * Device firmware message consumer
@@ -66,16 +68,23 @@ final class DeviceFirmwareMessageHandler implements NodeLibsConsumers\IMessageHa
 
 	/**
 	 * {@inheritDoc}
+	 *
+	 * @throws NodeLibsExceptions\TerminateException
 	 */
 	public function process(
 		string $routingKey,
 		Utils\ArrayHash $message
 	): bool {
-		$findQuery = new Queries\FindPhysicalDevicesQuery();
-		$findQuery->byIdentifier($message->offsetGet('device'));
+		try {
+			$findQuery = new Queries\FindPhysicalDevicesQuery();
+			$findQuery->byIdentifier($message->offsetGet('device'));
 
-		/** @var Entities\Devices\IPhysicalDevice|null $device */
-		$device = $this->deviceRepository->findOneBy($findQuery, Entities\Devices\PhysicalDevice::class);
+			/** @var Entities\Devices\IPhysicalDevice|null $device */
+			$device = $this->deviceRepository->findOneBy($findQuery, Entities\Devices\PhysicalDevice::class);
+
+		} catch (Throwable $ex) {
+			throw new NodeLibsExceptions\TerminateException('An error occurred: ' . $ex->getMessage(), $ex->getCode(), $ex);
+		}
 
 		if ($device === null) {
 			$this->logger->error(sprintf('[CONSUMER] Device "%s" is not registered', $message->offsetGet('device')));
@@ -85,33 +94,41 @@ final class DeviceFirmwareMessageHandler implements NodeLibsConsumers\IMessageHa
 
 		$result = true;
 
-		switch ($routingKey) {
-			case DevicesNode\Constants::RABBIT_MQ_DEVICES_FIRMWARE_DATA_ROUTING_KEY:
-				$toUpdate = [];
+		try {
+			switch ($routingKey) {
+				case DevicesNode\Constants::RABBIT_MQ_DEVICES_FIRMWARE_DATA_ROUTING_KEY:
+					$toUpdate = [];
 
-				foreach (['manufacturer', 'name', 'version'] as $attribute) {
-					if ($message->offsetExists($attribute)) {
-						$subResult = $this->setDeviceFirmwareInfo($attribute, $message->offsetGet($attribute));
+					foreach (['manufacturer', 'name', 'version'] as $attribute) {
+						if ($message->offsetExists($attribute)) {
+							$subResult = $this->setDeviceFirmwareInfo($attribute, $message->offsetGet($attribute));
 
-						$toUpdate = array_merge($toUpdate, $subResult);
+							$toUpdate = array_merge($toUpdate, $subResult);
+						}
 					}
-				}
 
-				if ($toUpdate !== []) {
-					if ($device->getFirmware() !== null) {
-						$this->firmwareManager->update($device->getFirmware(), Utils\ArrayHash::from($toUpdate));
+					if ($toUpdate !== []) {
+						if ($device->getFirmware() !== null) {
+							$this->firmwareManager->update($device->getFirmware(), Utils\ArrayHash::from($toUpdate));
+
+						} else {
+							$this->firmwareManager->create(Utils\ArrayHash::from(array_merge($toUpdate, ['device' => $device])));
+						}
 
 					} else {
-						$this->firmwareManager->create(Utils\ArrayHash::from(array_merge($toUpdate, ['device' => $device])));
+						$result = false;
 					}
+					break;
 
-				} else {
-					$result = false;
-				}
-				break;
+				default:
+					throw new Exceptions\InvalidStateException('Unknown routing key');
+			}
 
-			default:
-				throw new Exceptions\InvalidStateException('Unknown routing key');
+		} catch (Exceptions\InvalidStateException $ex) {
+			return false;
+
+		} catch (Throwable $ex) {
+			throw new NodeLibsExceptions\TerminateException('An error occurred: ' . $ex->getMessage(), $ex->getCode(), $ex);
 		}
 
 		if ($result) {

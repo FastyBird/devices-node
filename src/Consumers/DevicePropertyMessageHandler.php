@@ -22,10 +22,12 @@ use FastyBird\DevicesNode\Models;
 use FastyBird\DevicesNode\Queries;
 use FastyBird\DevicesNode\Types;
 use FastyBird\NodeLibs\Consumers as NodeLibsConsumers;
+use FastyBird\NodeLibs\Exceptions as NodeLibsExceptions;
 use FastyBird\NodeLibs\Helpers as NodeLibsHelpers;
 use Nette;
 use Nette\Utils;
 use Psr\Log;
+use Throwable;
 
 /**
  * Device message consumer
@@ -67,15 +69,22 @@ final class DevicePropertyMessageHandler implements NodeLibsConsumers\IMessageHa
 
 	/**
 	 * {@inheritDoc}
+	 *
+	 * @throws NodeLibsExceptions\TerminateException
 	 */
 	public function process(
 		string $routingKey,
 		Utils\ArrayHash $message
 	): bool {
-		$findQuery = new Queries\FindDevicesQuery();
-		$findQuery->byIdentifier($message->offsetGet('device'));
+		try {
+			$findQuery = new Queries\FindDevicesQuery();
+			$findQuery->byIdentifier($message->offsetGet('device'));
 
-		$device = $this->deviceRepository->findOneBy($findQuery);
+			$device = $this->deviceRepository->findOneBy($findQuery);
+
+		} catch (Throwable $ex) {
+			throw new NodeLibsExceptions\TerminateException('An error occurred: ' . $ex->getMessage(), $ex->getCode(), $ex);
+		}
 
 		if ($device === null) {
 			$this->logger->error(sprintf('[CONSUMER] Device "%s" is not registered', $message->offsetGet('device')));
@@ -85,71 +94,79 @@ final class DevicePropertyMessageHandler implements NodeLibsConsumers\IMessageHa
 
 		$result = true;
 
-		switch ($routingKey) {
-			case DevicesNode\Constants::RABBIT_MQ_DEVICES_PROPERTIES_DATA_ROUTING_KEY:
-				$toUpdate = [];
+		try {
+			switch ($routingKey) {
+				case DevicesNode\Constants::RABBIT_MQ_DEVICES_PROPERTIES_DATA_ROUTING_KEY:
+					$toUpdate = [];
 
-				if ($message->offsetExists('name')) {
-					$subResult = $this->setPropertyName($message->offsetGet('name'));
+					if ($message->offsetExists('name')) {
+						$subResult = $this->setPropertyName($message->offsetGet('name'));
 
-					$toUpdate = array_merge($toUpdate, $subResult);
-				}
-
-				if ($message->offsetExists('settable')) {
-					$subResult = $this->setPropertySettable((bool) $message->offsetGet('settable'));
-
-					$toUpdate = array_merge($toUpdate, $subResult);
-				}
-
-				if ($message->offsetExists('queryable')) {
-					$subResult = $this->setPropertyQueryable((bool) $message->offsetGet('queryable'));
-
-					$toUpdate = array_merge($toUpdate, $subResult);
-				}
-
-				if ($message->offsetExists('datatype')) {
-					$subResult = $this->setPropertyDatatype($message->offsetGet('datatype'));
-
-					$toUpdate = array_merge($toUpdate, $subResult);
-				}
-
-				if ($message->offsetExists('format')) {
-					$subResult = $this->setPropertyFormat($message->offsetGet('format'));
-
-					$toUpdate = array_merge($toUpdate, $subResult);
-				}
-
-				if ($message->offsetExists('unit')) {
-					$subResult = $this->setPropertyUnit($message->offsetGet('unit'));
-
-					$toUpdate = array_merge($toUpdate, $subResult);
-				}
-
-				if ($toUpdate !== []) {
-					$property = $device->findProperty($message->offsetGet('property'));
-
-					if ($property !== null) {
-						$this->propertiesManager->update($property, Utils\ArrayHash::from($toUpdate));
-
-					} else {
-						$toCreate = $this->getProperty($device, $message->offsetGet('property'));
-
-						if ($toCreate === null) {
-							$this->logger->error(sprintf('[CONSUMER] Device property "%s" could not be initialized', $message->offsetGet('property')));
-
-							return true;
-						}
-
-						$this->propertiesManager->create(Utils\ArrayHash::from(array_merge($toCreate, $toUpdate)));
+						$toUpdate = array_merge($toUpdate, $subResult);
 					}
 
-				} else {
-					$result = false;
-				}
-				break;
+					if ($message->offsetExists('settable')) {
+						$subResult = $this->setPropertySettable((bool) $message->offsetGet('settable'));
 
-			default:
-				throw new Exceptions\InvalidStateException('Unknown routing key');
+						$toUpdate = array_merge($toUpdate, $subResult);
+					}
+
+					if ($message->offsetExists('queryable')) {
+						$subResult = $this->setPropertyQueryable((bool) $message->offsetGet('queryable'));
+
+						$toUpdate = array_merge($toUpdate, $subResult);
+					}
+
+					if ($message->offsetExists('datatype')) {
+						$subResult = $this->setPropertyDatatype($message->offsetGet('datatype'));
+
+						$toUpdate = array_merge($toUpdate, $subResult);
+					}
+
+					if ($message->offsetExists('format')) {
+						$subResult = $this->setPropertyFormat($message->offsetGet('format'));
+
+						$toUpdate = array_merge($toUpdate, $subResult);
+					}
+
+					if ($message->offsetExists('unit')) {
+						$subResult = $this->setPropertyUnit($message->offsetGet('unit'));
+
+						$toUpdate = array_merge($toUpdate, $subResult);
+					}
+
+					if ($toUpdate !== []) {
+						$property = $device->findProperty($message->offsetGet('property'));
+
+						if ($property !== null) {
+							$this->propertiesManager->update($property, Utils\ArrayHash::from($toUpdate));
+
+						} else {
+							$toCreate = $this->getProperty($device, $message->offsetGet('property'));
+
+							if ($toCreate === null) {
+								$this->logger->error(sprintf('[CONSUMER] Device property "%s" could not be initialized', $message->offsetGet('property')));
+
+								return true;
+							}
+
+							$this->propertiesManager->create(Utils\ArrayHash::from(array_merge($toCreate, $toUpdate)));
+						}
+
+					} else {
+						$result = false;
+					}
+					break;
+
+				default:
+					throw new Exceptions\InvalidStateException('Unknown routing key');
+			}
+
+		} catch (Exceptions\InvalidStateException $ex) {
+			return false;
+
+		} catch (Throwable $ex) {
+			throw new NodeLibsExceptions\TerminateException('An error occurred: ' . $ex->getMessage(), $ex->getCode(), $ex);
 		}
 
 		if ($result) {

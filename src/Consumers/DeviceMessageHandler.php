@@ -91,17 +91,20 @@ final class DeviceMessageHandler implements NodeLibsConsumers\IMessageHandler
 	 * {@inheritDoc}
 	 *
 	 * @throws NodeLibsExceptions\TerminateException
-	 *
-	 * @throws NodeLibsExceptions\TerminateException
 	 */
 	public function process(
 		string $routingKey,
 		Utils\ArrayHash $message
 	): bool {
-		$findQuery = new Queries\FindDevicesQuery();
-		$findQuery->byIdentifier($message->offsetGet('device'));
+		try {
+			$findQuery = new Queries\FindDevicesQuery();
+			$findQuery->byIdentifier($message->offsetGet('device'));
 
-		$device = $this->deviceRepository->findOneBy($findQuery);
+			$device = $this->deviceRepository->findOneBy($findQuery);
+
+		} catch (Throwable $ex) {
+			throw new NodeLibsExceptions\TerminateException('An error occurred: ' . $ex->getMessage(), $ex->getCode(), $ex);
+		}
 
 		if ($device === null) {
 			$this->logger->error(sprintf('[CONSUMER] Device "%s" is not registered', $message->offsetGet('device')));
@@ -159,6 +162,9 @@ final class DeviceMessageHandler implements NodeLibsConsumers\IMessageHandler
 				default:
 					throw new Exceptions\InvalidStateException('Unknown routing key');
 			}
+
+		} catch (Exceptions\InvalidStateException $ex) {
+			return false;
 
 		} catch (Throwable $ex) {
 			throw new NodeLibsExceptions\TerminateException('An error occurred: ' . $ex->getMessage(), $ex->getCode(), $ex);

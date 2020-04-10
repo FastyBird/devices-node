@@ -27,14 +27,14 @@
     },
     "properties" : {
       "type" : "array",
-      "items": {
-        "type": "string"
+      "items" : {
+        "type" : "string"
       }
     },
     "control" : {
       "type" : "array",
-      "items": {
-        "type": "string"
+      "items" : {
+        "type" : "string"
       }
     },
     "parent" : {
