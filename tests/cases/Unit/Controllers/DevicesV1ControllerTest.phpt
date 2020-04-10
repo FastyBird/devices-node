@@ -161,9 +161,9 @@ final class DevicesV1ControllerTest extends DbTestCase
 					'fb.bus.node.entity.deleted.device.configuration',
 					'fb.bus.node.entity.deleted.device.hardware',
 					'fb.bus.node.entity.deleted.device.firmware',
-					'fb.bus.node.entity.deleted.device.channel',
-					'fb.bus.node.entity.deleted.device.channel.property',
-					'fb.bus.node.entity.deleted.device.channel.configuration',
+					'fb.bus.node.entity.deleted.channel',
+					'fb.bus.node.entity.deleted.channel.property',
+					'fb.bus.node.entity.deleted.channel.configuration',
 				], true));
 				Assert::false($data === []);
 

@@ -68,7 +68,7 @@ final class ChannelsV1ControllerTest extends DbTestCase
 		$rabbitPublisher
 			->shouldReceive('publish')
 			->withArgs(function (string $routingKey, array $data): bool {
-				Assert::same('fb.bus.node.entity.updated.device.channel', $routingKey);
+				Assert::same('fb.bus.node.entity.updated.channel', $routingKey);
 				Assert::false($data === []);
 
 				return true;

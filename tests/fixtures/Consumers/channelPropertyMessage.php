@@ -24,7 +24,7 @@ return [
 			'name'     => 'Relay switch',
 		]),
 		[
-			'fb.bus.node.entity.updated.device.channel.property' => [
+			'fb.bus.node.entity.updated.channel.property' => [
 				'id'        => 'bbcccf8c-33ab-431b-a795-d7bb38b6b6db',
 				'property'  => 'switch',
 				'name'      => 'Relay switch',
@@ -47,7 +47,7 @@ return [
 			'name'     => 'Device button',
 		]),
 		[
-			'fb.bus.node.entity.created.device.channel.property' => [
+			'fb.bus.node.entity.created.channel.property' => [
 				'property'  => 'button',
 				'name'      => 'Device button',
 				'settable'  => false,
@@ -70,7 +70,7 @@ return [
 			'datatype' => Types\DatatypeType::DATA_TYPE_STRING,
 		]),
 		[
-			'fb.bus.node.entity.updated.device.channel.property' => [
+			'fb.bus.node.entity.updated.channel.property' => [
 				'id'        => 'bbcccf8c-33ab-431b-a795-d7bb38b6b6db',
 				'property'  => 'switch',
 				'name'      => 'Relay switch',
@@ -95,7 +95,7 @@ return [
 			'format'   => 'on,off',
 		]),
 		[
-			'fb.bus.node.entity.updated.device.channel.property' => [
+			'fb.bus.node.entity.updated.channel.property' => [
 				'id'        => 'bbcccf8c-33ab-431b-a795-d7bb38b6b6db',
 				'property'  => 'switch',
 				'name'      => 'Relay switch',

@@ -179,7 +179,7 @@ return [
 			],
 		]),
 		[
-			'fb.bus.node.entity.updated.device.channel.configuration' => [
+			'fb.bus.node.entity.updated.channel.configuration' => [
 				'id'      => 'c747cfdd-654c-4e50-9715-6d14dbf20552',
 				'name'    => 'on_disconnect',
 				'title'   => null,
@@ -263,7 +263,7 @@ return [
 			],
 		]),
 		[
-			'fb.bus.node.entity.deleted.device.channel.configuration' => [
+			'fb.bus.node.entity.deleted.channel.configuration' => [
 				'id'      => 'c747cfdd-654c-4e50-9715-6d14dbf20552',
 				'name'    => 'on_disconnect',
 				'title'   => null,
@@ -378,7 +378,7 @@ return [
 			],
 		]),
 		[
-			'fb.bus.node.entity.created.device.channel.configuration' => [
+			'fb.bus.node.entity.created.channel.configuration' => [
 				'name'    => 'new_attribute',
 				'title'   => null,
 				'comment' => null,

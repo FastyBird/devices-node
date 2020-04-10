@@ -27,7 +27,7 @@ return [
 			],
 		]),
 		[
-			'fb.bus.node.entity.updated.device.channel.configuration' => [
+			'fb.bus.node.entity.updated.channel.configuration' => [
 				'id'      => '008d911f-e6d4-4b17-aa28-939839581cde',
 				'name'    => 'pulse_mode',
 				'title'   => null,
