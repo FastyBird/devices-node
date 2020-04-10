@@ -129,7 +129,7 @@ return [
 				'params'     => [],
 				'device'     => 'first-device',
 			],
-			'fb.bus.node.entity.created.device.channel' => [
+			'fb.bus.node.entity.created.channel' => [
 				'name'    => 'channel-three',
 				'title'   => null,
 				'comment' => null,
@@ -147,7 +147,7 @@ return [
 			'channels' => ['channel-one', 'channel-two', 'channel-three'],
 		]),
 		[
-			'fb.bus.node.entity.created.device.channel' => [
+			'fb.bus.node.entity.created.channel' => [
 				'name'    => 'channel-three',
 				'title'   => null,
 				'comment' => null,
