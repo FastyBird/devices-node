@@ -180,6 +180,14 @@ final class DeviceMessageHandler implements NodeLibsConsumers\IMessageHandler
 	/**
 	 * {@inheritDoc}
 	 */
+	public function getAllowedOrigin(string $routingKey)
+	{
+		DevicesNode\Constants::NODE_MQTT_ORIGIN;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
 	public function getSchema(string $routingKey): string
 	{
 		switch ($routingKey) {

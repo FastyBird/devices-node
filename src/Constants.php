@@ -37,9 +37,9 @@ final class Constants
 		DevicesNodeEntities\Devices\Configuration\Row::class       => 'fb.bus.node.entity.[ACTION].device.configuration',
 		DevicesNodeEntities\Devices\PhysicalDevice\Hardware::class => 'fb.bus.node.entity.[ACTION].device.hardware',
 		DevicesNodeEntities\Devices\PhysicalDevice\Firmware::class => 'fb.bus.node.entity.[ACTION].device.firmware',
-		DevicesNodeEntities\Channels\Channel::class                => 'fb.bus.node.entity.[ACTION].device.channel',
-		DevicesNodeEntities\Channels\Properties\Property::class    => 'fb.bus.node.entity.[ACTION].device.channel.property',
-		DevicesNodeEntities\Channels\Configuration\Row::class      => 'fb.bus.node.entity.[ACTION].device.channel.configuration',
+		DevicesNodeEntities\Channels\Channel::class                => 'fb.bus.node.entity.[ACTION].channel',
+		DevicesNodeEntities\Channels\Properties\Property::class    => 'fb.bus.node.entity.[ACTION].channel.property',
+		DevicesNodeEntities\Channels\Configuration\Row::class      => 'fb.bus.node.entity.[ACTION].channel.configuration',
 	];
 
 	public const RABBIT_MQ_ENTITIES_ROUTING_KEY_ACTION_REPLACE_STRING = '[ACTION]';
@@ -56,25 +56,31 @@ final class Constants
 	public const RABBIT_MQ_DEVICES_FIRMWARE_DATA_ROUTING_KEY = 'fb.bus.node.data.device.firmware';
 
 	// Channels
-	public const RABBIT_MQ_CHANNELS_DATA_ROUTING_KEY = 'fb.bus.node.data.device.channel';
-	public const RABBIT_MQ_CHANNELS_PROPERTIES_DATA_ROUTING_KEY = 'fb.bus.node.data.device.channel.property';
-	public const RABBIT_MQ_CHANNELS_CONTROLS_DATA_ROUTING_KEY = 'fb.bus.node.data.device.channel.control';
+	public const RABBIT_MQ_CHANNELS_DATA_ROUTING_KEY = 'fb.bus.node.data.channel';
+	public const RABBIT_MQ_CHANNELS_PROPERTIES_DATA_ROUTING_KEY = 'fb.bus.node.data.channel.property';
+	public const RABBIT_MQ_CHANNELS_CONTROLS_DATA_ROUTING_KEY = 'fb.bus.node.data.channel.control';
 
 	public const RABBIT_MQ_DEVICES_BINDINGS_ROUTING_KEYS = [
-		'fb.bus.node.data.device',              // Data
+		'fb.bus.node.data.device',       // Data
 	];
 
 	public const RABBIT_MQ_DEVICES_PARTS_BINDINGS_ROUTING_KEYS = [
-		'fb.bus.node.data.device.*',            // Data
+		'fb.bus.node.data.device.*',     // Data
 	];
 
 	public const RABBIT_MQ_CHANNELS_BINDINGS_ROUTING_KEY = [
-		'fb.bus.node.data.device.channel',      // Data
+		'fb.bus.node.data.channel',      // Data
 	];
 
 	public const RABBIT_MQ_CHANNELS_PARTS_BINDINGS_ROUTING_KEY = [
-		'fb.bus.node.data.device.channel.*',    // Data
+		'fb.bus.node.data.channel.*',    // Data
 	];
+
+	/**
+	 * Microservices origins
+	 */
+
+	public const NODE_MQTT_ORIGIN = 'com.fastybird.mqtt-node';
 
 	/**
 	 * Data types
