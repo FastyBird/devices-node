@@ -8,7 +8,7 @@
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  * @package        FastyBird:DevicesNode!
  * @subpackage     Hydrators
- * @since          1.0.0
+ * @since          0.1.0
  *
  * @date           13.04.19
  */
