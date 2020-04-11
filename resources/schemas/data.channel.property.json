@@ -11,6 +11,16 @@
             "type" : "string"
           }
         ]
+      },
+      "nullable_datatype" : {
+        "oneOf" : [
+          {
+            "type" : "null"
+          },
+          {
+            "$ref" : "#/definitions/datatype"
+          }
+        ]
       }
     },
     "datatype" : {
@@ -46,13 +56,16 @@
       "type" : "boolean"
     },
     "datatype" : {
-      "$ref" : "#/definitions/datatype"
+      "$ref" : "#/definitions/types/nullable_datatype",
+      "default" : null
     },
     "format" : {
-      "type" : "string"
+      "$ref" : "#/definitions/types/nullable_string",
+      "default" : null
     },
     "unit" : {
-      "type" : "string"
+      "$ref" : "#/definitions/types/nullable_string",
+      "default" : null
     },
     "parent" : {
       "$ref" : "#/definitions/types/nullable_string",
