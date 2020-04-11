@@ -161,7 +161,7 @@ final class DeviceControlMessageHandler implements NodeLibsConsumers\IMessageHan
 	{
 		switch ($routingKey) {
 			case DevicesNode\Constants::RABBIT_MQ_DEVICES_CONTROLS_DATA_ROUTING_KEY:
-				return $this->schemaLoader->load('data.channel.control.json');
+				return $this->schemaLoader->load('data.device.control.json');
 
 			default:
 				throw new Exceptions\InvalidStateException('Unknown routing key');
