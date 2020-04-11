@@ -174,7 +174,7 @@ final class DeviceControlMessageHandler implements NodeLibsConsumers\IMessageHan
 	public function getRoutingKeys(bool $binding = false): array
 	{
 		if ($binding) {
-			return DevicesNode\Constants::RABBIT_MQ_CHANNELS_PARTS_BINDINGS_ROUTING_KEY;
+			return DevicesNode\Constants::RABBIT_MQ_DEVICES_PARTS_BINDINGS_ROUTING_KEYS;
 		}
 
 		return [

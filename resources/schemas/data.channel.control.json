@@ -49,7 +49,10 @@
       "$ref" : "#/definitions/types/object_string"
     },
     "schema" : {
-      "type" : "object"
+      "type" : "array",
+      "items" : {
+        "type" : "object"
+      }
     },
     "parent" : {
       "$ref" : "#/definitions/types/nullable_string",
