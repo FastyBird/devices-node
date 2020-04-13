@@ -53,16 +53,13 @@
       "type" : "string"
     },
     "datatype" : {
-      "$ref" : "#/definitions/types/nullable_datatype",
-      "default" : null
+      "$ref" : "#/definitions/types/nullable_datatype"
     },
     "format" : {
-      "$ref" : "#/definitions/types/nullable_string",
-      "default" : null
+      "$ref" : "#/definitions/types/nullable_string"
     },
     "unit" : {
-      "$ref" : "#/definitions/types/nullable_string",
-      "default" : null
+      "$ref" : "#/definitions/types/nullable_string"
     },
     "parent" : {
       "$ref" : "#/definitions/types/nullable_string",

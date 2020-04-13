@@ -252,12 +252,12 @@ final class DevicePropertyMessageHandler implements NodeLibsConsumers\IMessageHa
 	}
 
 	/**
-	 * @param string|null $datatype
+	 * @param string $datatype
 	 *
 	 * @return mixed[]
 	 */
 	private function setPropertyDatatype(
-		?string $datatype
+		string $datatype
 	): array {
 		return [
 			'datatype' => $datatype,
@@ -265,12 +265,12 @@ final class DevicePropertyMessageHandler implements NodeLibsConsumers\IMessageHa
 	}
 
 	/**
-	 * @param string|null $format
+	 * @param string $format
 	 *
 	 * @return mixed[]
 	 */
 	private function setPropertyFormat(
-		?string $format
+		string $format
 	): array {
 		return [
 			'format' => $format,
@@ -278,12 +278,12 @@ final class DevicePropertyMessageHandler implements NodeLibsConsumers\IMessageHa
 	}
 
 	/**
-	 * @param string|null $unit
+	 * @param string $unit
 	 *
 	 * @return mixed[]
 	 */
 	private function setPropertyUnit(
-		?string $unit
+		string $unit
 	): array {
 		return [
 			'unit' => $unit,
