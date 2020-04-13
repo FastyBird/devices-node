@@ -31,6 +31,7 @@ final class ServicesTest extends BaseTestCase
 		$container = $configurator->createContainer();
 
 		Assert::notNull($container->getByType(Middleware\JsonApiMiddleware::class));
+		Assert::notNull($container->getByType(Middleware\DbErrorMiddleware::class));
 
 		Assert::notNull($container->getByType(Commands\Devices\CreateCommand::class));
 
