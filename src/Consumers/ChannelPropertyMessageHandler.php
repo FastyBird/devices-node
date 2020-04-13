@@ -267,12 +267,12 @@ final class ChannelPropertyMessageHandler implements NodeLibsConsumers\IMessageH
 	}
 
 	/**
-	 * @param string $datatype
+	 * @param string|null $datatype
 	 *
 	 * @return mixed[]
 	 */
 	private function setPropertyDatatype(
-		string $datatype
+		?string $datatype
 	): array {
 		return [
 			'datatype' => $datatype,
@@ -280,12 +280,12 @@ final class ChannelPropertyMessageHandler implements NodeLibsConsumers\IMessageH
 	}
 
 	/**
-	 * @param string $format
+	 * @param string|null $format
 	 *
 	 * @return mixed[]
 	 */
 	private function setPropertyFormat(
-		string $format
+		?string $format
 	): array {
 		return [
 			'format' => $format,
@@ -293,12 +293,12 @@ final class ChannelPropertyMessageHandler implements NodeLibsConsumers\IMessageH
 	}
 
 	/**
-	 * @param string $unit
+	 * @param string|null $unit
 	 *
 	 * @return mixed[]
 	 */
 	private function setPropertyUnit(
-		string $unit
+		?string $unit
 	): array {
 		return [
 			'unit' => $unit,
