@@ -118,6 +118,8 @@ services:
 
 	- {factory: FastyBird\DevicesNode\Middleware\JsonApiMiddleware, tags: [middleware: {priority: 10}]}
 
+	- {factory: FastyBird\TriggersNode\Middleware\DbErrorMiddleware, tags: [middleware: {priority: 50}]}
+
 	-
 		factory: FastyBird\DevicesNode\Router\Router
 		setup:
