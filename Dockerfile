@@ -77,5 +77,19 @@ RUN cd ${APP_CODE_PATH} \
 
 WORKDIR "${APP_CODE_PATH}"
 
+####################
+# SERVICES WAITING #
+####################
+
+ENV WAIT_VERSION=2.7.3
+
+## Add the wait script to the image
+ADD https://github.com/ufoscout/docker-compose-wait/releases/download/${WAIT_VERSION}/wait /wait
+RUN chmod +x /wait
+
+################
+# MAIN COMMAND #
+################
+
 # Supervisord run command
 CMD ["/usr/bin/supervisord"]
