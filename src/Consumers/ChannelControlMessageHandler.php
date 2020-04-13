@@ -252,7 +252,7 @@ final class ChannelControlMessageHandler implements NodeLibsConsumers\IMessageHa
 							$configurationRow->entity = Entities\Channels\Configuration\NumberRow::class;
 
 							foreach (['min', 'max', 'step', 'default'] as $field) {
-								if ($row->offsetExists($field)) {
+								if ($row->offsetExists($field) && $row->offsetGet($field) !== null) {
 									$configurationRow->{$field} = (float) $row->offsetGet($field);
 
 								} else {
@@ -264,7 +264,7 @@ final class ChannelControlMessageHandler implements NodeLibsConsumers\IMessageHa
 						case DevicesNode\Constants::DATA_TYPE_TEXT:
 							$configurationRow->entity = Entities\Channels\Configuration\TextRow::class;
 
-							if ($row->offsetExists('default')) {
+							if ($row->offsetExists('default') && $row->offsetGet('default') !== null) {
 								$configurationRow->default = (string) $row->offsetGet('default');
 							}
 							break;
@@ -272,7 +272,7 @@ final class ChannelControlMessageHandler implements NodeLibsConsumers\IMessageHa
 						case DevicesNode\Constants::DATA_TYPE_BOOLEAN:
 							$configurationRow->entity = Entities\Channels\Configuration\BooleanRow::class;
 
-							if ($row->offsetExists('default')) {
+							if ($row->offsetExists('default') && $row->offsetGet('default') !== null) {
 								$configurationRow->default = (bool) $row->offsetGet('default');
 							}
 							break;
@@ -290,7 +290,7 @@ final class ChannelControlMessageHandler implements NodeLibsConsumers\IMessageHa
 								$configurationRow->values = [];
 							}
 
-							if ($row->offsetExists('default')) {
+							if ($row->offsetExists('default') && $row->offsetGet('default') !== null) {
 								$configurationRow->default = (string) $row->offsetGet('default');
 							}
 							break;

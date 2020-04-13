@@ -230,7 +230,7 @@ final class DeviceControlMessageHandler implements NodeLibsConsumers\IMessageHan
 							$configurationRow->entity = Entities\Devices\Configuration\NumberRow::class;
 
 							foreach (['min', 'max', 'step', 'default'] as $field) {
-								if ($row->offsetExists($field)) {
+								if ($row->offsetExists($field) && $row->offsetGet($field) !== null) {
 									$configurationRow->{$field} = (float) $row->offsetGet($field);
 
 								} else {
@@ -242,7 +242,7 @@ final class DeviceControlMessageHandler implements NodeLibsConsumers\IMessageHan
 						case DevicesNode\Constants::DATA_TYPE_TEXT:
 							$configurationRow->entity = Entities\Devices\Configuration\TextRow::class;
 
-							if ($row->offsetExists('default')) {
+							if ($row->offsetExists('default') && $row->offsetGet('default') !== null) {
 								$configurationRow->default = (string) $row->offsetGet('default');
 							}
 							break;
@@ -250,7 +250,7 @@ final class DeviceControlMessageHandler implements NodeLibsConsumers\IMessageHan
 						case DevicesNode\Constants::DATA_TYPE_BOOLEAN:
 							$configurationRow->entity = Entities\Devices\Configuration\BooleanRow::class;
 
-							if ($row->offsetExists('default')) {
+							if ($row->offsetExists('default') && $row->offsetGet('default') !== null) {
 								$configurationRow->default = (bool) $row->offsetGet('default');
 							}
 							break;
@@ -268,7 +268,7 @@ final class DeviceControlMessageHandler implements NodeLibsConsumers\IMessageHan
 								$configurationRow->values = [];
 							}
 
-							if ($row->offsetExists('default')) {
+							if ($row->offsetExists('default') && $row->offsetGet('default') !== null) {
 								$configurationRow->default = (string) $row->offsetGet('default');
 							}
 							break;
