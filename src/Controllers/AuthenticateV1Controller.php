@@ -64,8 +64,8 @@ final class AuthenticateV1Controller extends BaseV1Controller
 			return $response;
 		}
 
-		$username = $data->offsetExists('username') ? (string) $data->offsetGet('username') : null;
-		$password = $data->offsetExists('password') ? (string) $data->offsetGet('password') : null;
+		$username = $data->offsetExists('username') && $data->offsetGet('username') !== null ? (string) $data->offsetGet('username') : null;
+		$password = $data->offsetExists('password') && $data->offsetGet('password') !== null ? (string) $data->offsetGet('password') : null;
 
 		if (
 			$username === null
