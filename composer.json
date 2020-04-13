@@ -91,6 +91,9 @@
       },
       "nettrine/orm" : {
         "Enable connection overides" : "patches/nettrine.orm.mangerRegistry.diff"
+      },
+      "nette/utils" : {
+        "Bug: Offset check with null support" : "patches/nette.array.offsetCheck.diff"
       }
     }
   }

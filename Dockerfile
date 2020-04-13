@@ -56,6 +56,7 @@ COPY ./resources/supervisor/supervisor.conf /etc/supervisor/conf.d/supervisor.co
 ##############################
 
 ADD ./config ${APP_CODE_PATH}/config
+ADD ./patches ${APP_CODE_PATH}/patches
 ADD ./resources ${APP_CODE_PATH}/resources
 ADD ./src ${APP_CODE_PATH}/src
 ADD ./var ${APP_CODE_PATH}/var
