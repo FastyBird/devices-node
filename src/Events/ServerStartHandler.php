@@ -1,7 +1,7 @@
 <?php declare(strict_types = 1);
 
 /**
- * RequestHandler.php
+ * ServerStartHandler.php
  *
  * @license        More in license.md
  * @copyright      https://www.fastybird.com
@@ -22,7 +22,7 @@ use FastyBird\NodeLibs\Exceptions as NodeLibsExceptions;
 use Nette;
 
 /**
- * After http request processed handler
+ * Http server start handler
  *
  * @package         FastyBird:DevicesNode!
  * @subpackage      Events
