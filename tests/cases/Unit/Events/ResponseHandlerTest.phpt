@@ -18,10 +18,6 @@ final class ResponseHandlerTest extends BaseMockeryTestCase
 	{
 		$manager = Mockery::mock(ORM\EntityManagerInterface::class);
 		$manager
-			->shouldReceive('flush')
-			->withNoArgs()
-			->times(1)
-			->getMock()
 			->shouldReceive('clear')
 			->withNoArgs()
 			->times(1);

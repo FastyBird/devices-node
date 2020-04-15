@@ -47,9 +47,8 @@ class ResponseHandler
 	{
 		$em = $this->managerRegistry->getManager();
 
-		// Flushing and then clearing Doctrine's entity manager allows
+		// Clearing Doctrine's entity manager allows
 		// for more memory to be released by PHP
-		$em->flush();
 		$em->clear();
 
 		// Just in case PHP would choose not to run garbage collection,
