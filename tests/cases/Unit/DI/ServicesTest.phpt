@@ -5,6 +5,7 @@ namespace Tests\Cases;
 use FastyBird\DevicesNode\Commands;
 use FastyBird\DevicesNode\Consumers;
 use FastyBird\DevicesNode\Controllers;
+use FastyBird\DevicesNode\Events;
 use FastyBird\DevicesNode\Hydrators;
 use FastyBird\DevicesNode\Middleware;
 use FastyBird\DevicesNode\Models;
@@ -33,6 +34,11 @@ final class ServicesTest extends BaseTestCase
 		Assert::notNull($container->getByType(Middleware\JsonApiMiddleware::class));
 		Assert::notNull($container->getByType(Middleware\DbErrorMiddleware::class));
 
+		Assert::notNull($container->getByType(Events\ServerStartHandler::class));
+		Assert::notNull($container->getByType(Events\RequestHandler::class));
+		Assert::notNull($container->getByType(Events\ResponseHandler::class));
+		Assert::notNull($container->getByType(Events\AfterConsumeHandler::class));
+
 		Assert::notNull($container->getByType(Commands\Devices\CreateCommand::class));
 
 		Assert::notNull($container->getByType(Consumers\DeviceMessageHandler::class));
@@ -42,7 +48,6 @@ final class ServicesTest extends BaseTestCase
 		Assert::notNull($container->getByType(Consumers\ChannelMessageHandler::class));
 		Assert::notNull($container->getByType(Consumers\ChannelPropertyMessageHandler::class));
 
-		Assert::notNull($container->getByType(Subscribers\HttpServerSubscriber::class));
 		Assert::notNull($container->getByType(Subscribers\EntitiesSubscriber::class));
 
 		Assert::notNull($container->getByType(Models\Devices\DeviceRepository::class));
