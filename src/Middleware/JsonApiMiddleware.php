@@ -72,6 +72,10 @@ class JsonApiMiddleware implements MiddlewareInterface
 						$response = $response
 							->withAttribute(NodeWebServerHttp\ResponseAttributes::ATTR_TOTAL_COUNT, $data->getTotalCount())
 							->withEntity(NodeWebServerHttp\ScalarEntity::from($data->toArray()));
+
+					} else {
+						$response = $response
+							->withEntity(NodeWebServerHttp\ScalarEntity::from($data->toArray()));
 					}
 				}
 			}

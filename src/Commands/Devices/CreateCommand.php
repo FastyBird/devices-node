@@ -29,7 +29,7 @@ use Throwable;
 /**
  * Physical device creation command
  *
- * @package        FastyBird:MachineDevicesModule!
+ * @package        FastyBird:DevicesNode!
  * @subpackage     Commands
  *
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>

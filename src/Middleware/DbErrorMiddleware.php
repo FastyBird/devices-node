@@ -1,7 +1,7 @@
 <?php declare(strict_types = 1);
 
 /**
- * JsonApiMiddleware.php
+ * DbErrorMiddleware.php
  *
  * @license        More in license.md
  * @copyright      https://www.fastybird.com
@@ -17,11 +17,11 @@ namespace FastyBird\DevicesNode\Middleware;
 
 use Doctrine;
 use FastyBird\NodeLibs\Exceptions as NodeLibsExceptions;
+use IPub\DoctrineOrmQuery;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Throwable;
 
 /**
  * Catch database errors
@@ -40,7 +40,7 @@ class DbErrorMiddleware implements MiddlewareInterface
 	 *
 	 * @return ResponseInterface
 	 *
-	 * @throws Throwable
+	 * @throws NodeLibsExceptions\TerminateException
 	 */
 	public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
 	{
@@ -48,6 +48,9 @@ class DbErrorMiddleware implements MiddlewareInterface
 			return $handler->handle($request);
 
 		} catch (Doctrine\DBAL\DBALException $ex) {
+			throw new NodeLibsExceptions\TerminateException('Database error: ' . $ex->getMessage(), $ex->getCode(), $ex);
+
+		} catch (DoctrineOrmQuery\Exceptions\QueryException $ex) {
 			throw new NodeLibsExceptions\TerminateException('Database error: ' . $ex->getMessage(), $ex->getCode(), $ex);
 		}
 	}

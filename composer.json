@@ -33,11 +33,10 @@
   "require" : {
     "php" : ">=7.2.0",
     "ext-json" : "*",
-    "contributte/event-dispatcher" : "^0.7.0",
     "contributte/translation" : "^0.6",
     "cweagans/composer-patches" : "^1.6",
     "fastybird/node-libs" : "^0.4",
-    "fastybird/node-web-server" : "^0.2",
+    "fastybird/node-web-server" : "^0.3",
     "ipub/doctrine-consistence" : "^0.3",
     "ipub/doctrine-crud" : "^2.3",
     "ipub/doctrine-orm-query" : "^0.0.5",

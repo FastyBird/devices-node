@@ -25,7 +25,6 @@ parameters:
 #########################
 
 extensions:
-	contributteEventDispatcher	: Contributte\EventDispatcher\DI\EventDispatcherExtension
 	contributteTranslation		: Contributte\Translation\DI\TranslationExtension
 	ipubDoctrineConsistence		: IPub\DoctrineConsistence\DI\DoctrineConsistenceExtension
 	ipubDoctrineCrud			: IPub\DoctrineCrud\DI\DoctrineCrudExtension
@@ -112,6 +111,14 @@ nettrineOrmAnnotations:
 # Node services definitions #
 #############################
 
+decorator:
+	FastyBird\NodeWebServer\Commands\HttpServerCommand:
+		setup:
+			- '$onServerStart[]' = @FastyBird\DevicesNode\Events\ServerStartHandler
+			- '$onRequest[]' = @FastyBird\DevicesNode\Events\RequestHandler
+			- '$onResponse[]' = @FastyBird\DevicesNode\Events\ResponseHandler
+			- '$onAfterConsumeMessage[]' = @FastyBird\DevicesNode\Events\AfterConsumeHandler
+
 services:
 	# Http router
 	#############
@@ -124,6 +131,17 @@ services:
 		factory: FastyBird\DevicesNode\Router\Router
 		setup:
 			- registerRoutes
+
+	# Node events
+	#############
+
+	- {factory: FastyBird\DevicesNode\Events\ServerStartHandler}
+
+	- {factory: FastyBird\DevicesNode\Events\RequestHandler}
+
+	- {factory: FastyBird\DevicesNode\Events\ResponseHandler}
+
+	- {factory: FastyBird\DevicesNode\Events\AfterConsumeHandler}
 
 	# Console commands
 	##################
@@ -151,8 +169,6 @@ services:
 
 	# Events subscribers
 	####################
-
-	- {factory: FastyBird\DevicesNode\Subscribers\HttpServerSubscriber}
 
 	- {factory: FastyBird\DevicesNode\Subscribers\EntitiesSubscriber}
 
