@@ -7,6 +7,7 @@ use Doctrine\ORM;
 use FastyBird\DevicesNode\Events;
 use Mockery;
 use Ninjify\Nunjuck\TestCase\BaseMockeryTestCase;
+use Tester\Assert;
 
 require_once __DIR__ . '/../../../bootstrap.php';
 
@@ -35,6 +36,8 @@ final class AfterConsumeHandlerTest extends BaseMockeryTestCase
 		$subscriber = new Events\AfterConsumeHandler($managerRegistry);
 
 		$subscriber->__invoke();
+
+		Assert::true(true);
 	}
 
 }

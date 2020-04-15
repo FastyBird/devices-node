@@ -8,6 +8,7 @@ use Doctrine\ORM;
 use FastyBird\DevicesNode\Events;
 use Mockery;
 use Ninjify\Nunjuck\TestCase\BaseMockeryTestCase;
+use Tester\Assert;
 
 require_once __DIR__ . '/../../../bootstrap.php';
 
@@ -40,6 +41,8 @@ final class ServerStartHandlerTest extends BaseMockeryTestCase
 		$subscriber = new Events\ServerStartHandler($managerRegistry);
 
 		$subscriber->__invoke();
+
+		Assert::true(true);
 	}
 
 }
