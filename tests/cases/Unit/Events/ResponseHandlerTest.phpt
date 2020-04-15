@@ -30,7 +30,7 @@ final class ResponseHandlerTest extends BaseMockeryTestCase
 			->shouldReceive('getManager')
 			->withNoArgs()
 			->andReturn($manager)
-			->times(2);
+			->times(1);
 
 		$subscriber = new Events\ResponseHandler($managerRegistry);
 

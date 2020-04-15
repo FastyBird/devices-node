@@ -35,7 +35,7 @@ final class ServerStartHandlerTest extends BaseMockeryTestCase
 			->shouldReceive('getManager')
 			->withNoArgs()
 			->andReturn($manager)
-			->times(2);
+			->times(1);
 
 		$subscriber = new Events\ServerStartHandler($managerRegistry);
 
