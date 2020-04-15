@@ -4,7 +4,7 @@ namespace Tests\Cases;
 
 use Doctrine\Common;
 use Doctrine\DBAL;
-use Doctrine\Persistence;
+use Doctrine\ORM;
 use FastyBird\DevicesNode\Events;
 use Mockery;
 use Ninjify\Nunjuck\TestCase\BaseMockeryTestCase;
@@ -23,7 +23,7 @@ final class ServerStartHandlerTest extends BaseMockeryTestCase
 			->andReturn(true)
 			->times(1);
 
-		$manager = Mockery::mock(Persistence\ObjectManager::class);
+		$manager = Mockery::mock(ORM\EntityManagerInterface::class);
 		$manager
 			->shouldReceive('getConnection')
 			->withNoArgs()

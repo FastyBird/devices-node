@@ -3,7 +3,7 @@
 namespace Tests\Cases;
 
 use Doctrine\Common;
-use Doctrine\Persistence;
+use Doctrine\ORM;
 use FastyBird\DevicesNode\Events;
 use Mockery;
 use Ninjify\Nunjuck\TestCase\BaseMockeryTestCase;
@@ -15,7 +15,7 @@ final class ResponseHandlerTest extends BaseMockeryTestCase
 
 	public function testOnResponse(): void
 	{
-		$manager = Mockery::mock(Persistence\ObjectManager::class);
+		$manager = Mockery::mock(ORM\EntityManagerInterface::class);
 		$manager
 			->shouldReceive('flush')
 			->withNoArgs()
