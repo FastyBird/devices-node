@@ -1,19 +1,19 @@
 {
   "publish_acl" : [
     {
-      "pattern" : "/fb/+/first-device/+/+/+/+/+/+"
+      "pattern" : "/fb/+/first-device/#"
     },
     {
-      "pattern" : "/fb/+/first-device/$child/+/+/+/+/+/+/+"
+      "pattern" : "/fb/+/first-device/$child/#"
     }
   ],
   "result" : "ok",
   "subscribe_acl" : [
     {
-      "pattern" : "/fb/+/first-device/+/+/+/+/+/+"
+      "pattern" : "/fb/+/first-device/#"
     },
     {
-      "pattern" : "/fb/+/first-device/$child/+/+/+/+/+/+/+"
+      "pattern" : "/fb/+/first-device/$child/#"
     }
   ]
 }

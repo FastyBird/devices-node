@@ -94,17 +94,41 @@ final class AuthenticateV1Controller extends BaseV1Controller
 			return $response;
 		}
 
-		$publishRule1 = new stdClass();
-		$publishRule1->pattern = '/fb/+/' . $credentials->getDevice()->getIdentifier() . '/+/+/+/+/+/+';
+		$publishAcl = [];
+		$subscribeAcl = [];
 
-		$publishRule2 = new stdClass();
-		$publishRule2->pattern = '/fb/+/' . $credentials->getDevice()->getIdentifier() . '/$child/+/+/+/+/+/+/+';
+		if ($credentials->getDevice()->getParent() === null) {
+			$publishRule = new stdClass();
+			$publishRule->pattern = '/fb/+/' . $credentials->getDevice()->getIdentifier() . '/#';
 
-		$subscribeRule1 = new stdClass();
-		$subscribeRule1->pattern = '/fb/+/' . $credentials->getDevice()->getIdentifier() . '/+/+/+/+/+/+';
+			$publishAcl[] = $publishRule;
 
-		$subscribeRule2 = new stdClass();
-		$subscribeRule2->pattern = '/fb/+/' . $credentials->getDevice()->getIdentifier() . '/$child/+/+/+/+/+/+/+';
+			$publishRule = new stdClass();
+			$publishRule->pattern = '/fb/+/' . $credentials->getDevice()->getIdentifier() . '/$child/#';
+
+			$publishAcl[] = $publishRule;
+
+			$subscribeRule = new stdClass();
+			$subscribeRule->pattern = '/fb/+/' . $credentials->getDevice()->getIdentifier() . '/#';
+
+			$subscribeAcl[] = $subscribeRule;
+
+			$subscribeRule = new stdClass();
+			$subscribeRule->pattern = '/fb/+/' . $credentials->getDevice()->getIdentifier() . '/$child/#';
+
+			$subscribeAcl[] = $subscribeRule;
+
+		} else {
+			$publishRule = new stdClass();
+			$publishRule->pattern = '/fb/+/' . $credentials->getDevice()->getParent()->getIdentifier() . '/$child/' . $credentials->getDevice()->getIdentifier() .'/#';
+
+			$publishAcl[] = $publishRule;
+
+			$subscribeRule = new stdClass();
+			$subscribeRule->pattern = '/fb/+/' . $credentials->getDevice()->getParent()->getIdentifier() . '/$child/' . $credentials->getDevice()->getIdentifier() .'/#';
+
+			$subscribeAcl[] = $subscribeRule;
+		}
 
 		try {
 			/** @var NodeWebServerHttp\Response $response */
@@ -112,14 +136,8 @@ final class AuthenticateV1Controller extends BaseV1Controller
 				->getBody()
 				->write(Utils\Json::encode([
 					'result'        => 'ok',
-					'publish_acl'   => [
-						$publishRule1,
-						$publishRule2,
-					],
-					'subscribe_acl' => [
-						$subscribeRule1,
-						$subscribeRule2,
-					],
+					'publish_acl'   => $publishAcl,
+					'subscribe_acl' => $subscribeAcl,
 				]));
 
 			return $response;
