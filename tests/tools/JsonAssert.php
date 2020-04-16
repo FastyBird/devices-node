@@ -45,7 +45,7 @@ class JsonAssert
 		string $actualJson,
 		?string $description = null
 	): void {
-		Assert::same(
+		Assert::equal(
 			self::normalizeJson($expectedJson),
 			self::normalizeJson($actualJson),
 			$description
