@@ -120,12 +120,12 @@ final class AuthenticateV1Controller extends BaseV1Controller
 
 		} else {
 			$publishRule = new stdClass();
-			$publishRule->pattern = '/fb/+/' . $credentials->getDevice()->getParent()->getIdentifier() . '/$child/' . $credentials->getDevice()->getIdentifier() .'/#';
+			$publishRule->pattern = '/fb/+/' . $credentials->getDevice()->getParent()->getIdentifier() . '/$child/' . $credentials->getDevice()->getIdentifier() . '/#';
 
 			$publishAcl[] = $publishRule;
 
 			$subscribeRule = new stdClass();
-			$subscribeRule->pattern = '/fb/+/' . $credentials->getDevice()->getParent()->getIdentifier() . '/$child/' . $credentials->getDevice()->getIdentifier() .'/#';
+			$subscribeRule->pattern = '/fb/+/' . $credentials->getDevice()->getParent()->getIdentifier() . '/$child/' . $credentials->getDevice()->getIdentifier() . '/#';
 
 			$subscribeAcl[] = $subscribeRule;
 		}
