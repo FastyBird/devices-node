@@ -20,9 +20,10 @@ use FastyBird\DevicesNode\Entities;
 use FastyBird\DevicesNode\Exceptions;
 use FastyBird\DevicesNode\Models;
 use FastyBird\DevicesNode\Queries;
+use FastyBird\JsonSchemas;
+use FastyBird\JsonSchemas\Loaders as JsonSchemasLoaders;
 use FastyBird\NodeLibs\Consumers as NodeLibsConsumers;
 use FastyBird\NodeLibs\Exceptions as NodeLibsExceptions;
-use FastyBird\NodeLibs\Helpers as NodeLibsHelpers;
 use Nette;
 use Nette\Utils;
 use Psr\Log;
@@ -47,7 +48,7 @@ final class DeviceHardwareMessageHandler implements NodeLibsConsumers\IMessageHa
 	/** @var Models\Devices\PhysicalDevice\IHardwareManager */
 	private $hardwareManager;
 
-	/** @var NodeLibsHelpers\ISchemaLoader */
+	/** @var JsonSchemasLoaders\ISchemaLoader */
 	private $schemaLoader;
 
 	/** @var Log\LoggerInterface */
@@ -56,7 +57,7 @@ final class DeviceHardwareMessageHandler implements NodeLibsConsumers\IMessageHa
 	public function __construct(
 		Models\Devices\IDeviceRepository $deviceRepository,
 		Models\Devices\PhysicalDevice\IHardwareManager $hardwareManager,
-		NodeLibsHelpers\ISchemaLoader $schemaLoader,
+		JsonSchemasLoaders\ISchemaLoader $schemaLoader,
 		Log\LoggerInterface $logger
 	) {
 		$this->deviceRepository = $deviceRepository;
@@ -153,7 +154,7 @@ final class DeviceHardwareMessageHandler implements NodeLibsConsumers\IMessageHa
 	{
 		switch ($routingKey) {
 			case DevicesNode\Constants::RABBIT_MQ_DEVICES_HARDWARE_DATA_ROUTING_KEY:
-				return $this->schemaLoader->load('data.device.hardware.json');
+				return $this->schemaLoader->load(JsonSchemas\Constants::MQTT_NODE_FOLDER . DS . 'data.device.hardware.json');
 
 			default:
 				throw new Exceptions\InvalidStateException('Unknown routing key');

@@ -20,9 +20,10 @@ use FastyBird\DevicesNode\Entities;
 use FastyBird\DevicesNode\Exceptions;
 use FastyBird\DevicesNode\Models;
 use FastyBird\DevicesNode\Queries;
+use FastyBird\JsonSchemas;
+use FastyBird\JsonSchemas\Loaders as JsonSchemasLoaders;
 use FastyBird\NodeLibs\Consumers as NodeLibsConsumers;
 use FastyBird\NodeLibs\Exceptions as NodeLibsExceptions;
-use FastyBird\NodeLibs\Helpers as NodeLibsHelpers;
 use Nette;
 use Nette\Utils;
 use Psr\Log;
@@ -50,7 +51,7 @@ final class ChannelPropertyMessageHandler implements NodeLibsConsumers\IMessageH
 	/** @var Models\Channels\Properties\IPropertiesManager */
 	private $propertiesManager;
 
-	/** @var NodeLibsHelpers\ISchemaLoader */
+	/** @var JsonSchemasLoaders\ISchemaLoader */
 	private $schemaLoader;
 
 	/** @var Log\LoggerInterface */
@@ -60,7 +61,7 @@ final class ChannelPropertyMessageHandler implements NodeLibsConsumers\IMessageH
 		Models\Devices\IDeviceRepository $deviceRepository,
 		Models\Channels\IChannelRepository $channelRepository,
 		Models\Channels\Properties\IPropertiesManager $propertiesManager,
-		NodeLibsHelpers\ISchemaLoader $schemaLoader,
+		JsonSchemasLoaders\ISchemaLoader $schemaLoader,
 		Log\LoggerInterface $logger
 	) {
 		$this->deviceRepository = $deviceRepository;
@@ -206,7 +207,7 @@ final class ChannelPropertyMessageHandler implements NodeLibsConsumers\IMessageH
 	{
 		switch ($routingKey) {
 			case DevicesNode\Constants::RABBIT_MQ_CHANNELS_PROPERTIES_DATA_ROUTING_KEY:
-				return $this->schemaLoader->load('data.channel.property.json');
+				return $this->schemaLoader->load(JsonSchemas\Constants::MQTT_NODE_FOLDER . DS . 'data.channel.property.json');
 
 			default:
 				throw new Exceptions\InvalidStateException('Unknown routing key');

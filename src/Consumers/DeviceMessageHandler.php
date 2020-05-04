@@ -21,9 +21,10 @@ use FastyBird\DevicesNode\Exceptions;
 use FastyBird\DevicesNode\Models;
 use FastyBird\DevicesNode\Queries;
 use FastyBird\DevicesNode\Types;
+use FastyBird\JsonSchemas;
+use FastyBird\JsonSchemas\Loaders as JsonSchemasLoaders;
 use FastyBird\NodeLibs\Consumers as NodeLibsConsumers;
 use FastyBird\NodeLibs\Exceptions as NodeLibsExceptions;
-use FastyBird\NodeLibs\Helpers as NodeLibsHelpers;
 use Nette;
 use Nette\Utils;
 use Psr\Log;
@@ -60,7 +61,7 @@ final class DeviceMessageHandler implements NodeLibsConsumers\IMessageHandler
 	/** @var Models\Channels\IChannelsManager */
 	private $channelsManager;
 
-	/** @var NodeLibsHelpers\ISchemaLoader */
+	/** @var JsonSchemasLoaders\ISchemaLoader */
 	private $schemaLoader;
 
 	/** @var Log\LoggerInterface */
@@ -73,7 +74,7 @@ final class DeviceMessageHandler implements NodeLibsConsumers\IMessageHandler
 		Models\Devices\Controls\IControlsManager $deviceControlManager,
 		Models\Channels\IChannelRepository $channelRepository,
 		Models\Channels\IChannelsManager $channelsManager,
-		NodeLibsHelpers\ISchemaLoader $schemaLoader,
+		JsonSchemasLoaders\ISchemaLoader $schemaLoader,
 		Log\LoggerInterface $logger
 	) {
 		$this->deviceRepository = $deviceRepository;
@@ -118,6 +119,17 @@ final class DeviceMessageHandler implements NodeLibsConsumers\IMessageHandler
 			switch ($routingKey) {
 				case DevicesNode\Constants::RABBIT_MQ_DEVICES_DATA_ROUTING_KEY:
 					$toUpdate = [];
+
+					if ($message->offsetExists('parent')) {
+						$findQuery = new Queries\FindDevicesQuery();
+						$findQuery->byIdentifier($message->offsetGet('parent'));
+
+						$parent = $this->deviceRepository->findOneBy($findQuery);
+
+						if ($parent) {
+							$toUpdate['parent'] = $parent;
+						}
+					}
 
 					if ($message->offsetExists('name')) {
 						$toUpdate['name'] = $message->offsetGet('name');
@@ -192,7 +204,7 @@ final class DeviceMessageHandler implements NodeLibsConsumers\IMessageHandler
 	{
 		switch ($routingKey) {
 			case DevicesNode\Constants::RABBIT_MQ_DEVICES_DATA_ROUTING_KEY:
-				return $this->schemaLoader->load('data.device.json');
+				return $this->schemaLoader->load(JsonSchemas\Constants::MQTT_NODE_FOLDER . DS . 'data.device.json');
 
 			default:
 				throw new Exceptions\InvalidStateException('Unknown routing key');
