@@ -99,4 +99,6 @@ final class Constants
 	public const CONTROL_FACTORY_RESET = 'factory-reset';
 	public const CONTROL_OTA = 'ota';
 
+	public const DUMMY = 'dummy';
+
 }
