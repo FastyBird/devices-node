@@ -120,7 +120,7 @@ final class DeviceMessageHandler implements NodeLibsConsumers\IMessageHandler
 				case DevicesNode\Constants::RABBIT_MQ_DEVICES_DATA_ROUTING_KEY:
 					$toUpdate = [];
 
-					if ($message->offsetExists('parent')) {
+					if ($message->offsetExists('parent') && $message->offsetGet('parent') !== null) {
 						$findQuery = new Queries\FindDevicesQuery();
 						$findQuery->byIdentifier($message->offsetGet('parent'));
 
