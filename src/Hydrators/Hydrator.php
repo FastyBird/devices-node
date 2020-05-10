@@ -234,8 +234,8 @@ abstract class Hydrator
 			if ($value === null && $field->isRequired() && $entity === null) {
 				$this->errors->addError(
 					StatusCodeInterface::STATUS_BAD_REQUEST,
-					$this->translator->translate('//node.base.messages.validation.parameterMissing.heading'),
-					$this->translator->translate('//node.base.messages.validation.parameterMissing.message'),
+					$this->translator->translate('//node.base.messages.parameterMissing.heading'),
+					$this->translator->translate('//node.base.messages.parameterMissing.message'),
 					[
 						'pointer' => 'data/attributes/' . $field->getMappedName(),
 					]
@@ -382,8 +382,8 @@ abstract class Hydrator
 						} elseif ($entity === null && $field->isRequired()) {
 							$this->errors->addError(
 								StatusCodeInterface::STATUS_NOT_FOUND,
-								$this->translator->translate('//node.base.messages.validation.parameterMissing.heading'),
-								$this->translator->translate('//node.base.messages.validation.parameterMissing.message'),
+								$this->translator->translate('//node.base.messages.parameterMissing.heading'),
+								$this->translator->translate('//node.base.messages.parameterMissing.message'),
 								[
 									'pointer' => 'data/relationships/' . $field->getMappedName() . '/data/id',
 								]
@@ -393,8 +393,8 @@ abstract class Hydrator
 					} elseif ($entity === null && $field->isRequired()) {
 						$this->errors->addError(
 							StatusCodeInterface::STATUS_BAD_REQUEST,
-							$this->translator->translate('//node.base.messages.validation.parameterMissing.heading'),
-							$this->translator->translate('//node.base.messages.validation.parameterMissing.message'),
+							$this->translator->translate('//node.base.messages.parameterMissing.heading'),
+							$this->translator->translate('//node.base.messages.parameterMissing.message'),
 							[
 								'pointer' => 'data/relationships/' . $field->getMappedName() . '/data/id',
 							]

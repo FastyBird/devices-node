@@ -13,20 +13,21 @@
 # @date			13.02.20
 #
 
-deviceCreate:
-	type:
-		title: "Device type"
-	name:
-		title: "Device name"
-	identifier:
-		title: "Communication identifier"
-	username:
-		title: "Communication username"
-	password:
-		title: "Communication password"
+commands:
+	deviceCreate:
+		type:
+			title: "Device type"
+		name:
+			title: "Device name"
+		identifier:
+			title: "Communication identifier"
+		username:
+			title: "Communication username"
+		password:
+			title: "Communication password"
 
-	validation:
-		device:
-			wasNotCreated: "Device could not be created in the system. Error: %error%"
+		validation:
+			device:
+				wasNotCreated: "Device could not be created in the system. Error: %error%"
 
-	success: "Device was successfuly created. Now could be connected to the server"
+		success: "Device was successfuly created. Now could be connected to the server"

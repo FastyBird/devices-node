@@ -90,6 +90,16 @@ Configuration could be made via environment variables:
 
 > **NOTE:** In case you are not using docker image or you are not able to configure environment variables, you could edit configuration file `./config/default.neon`
 
+## Initialization
+
+This microservice is using database, so you have to initialise basic database schema. It could be done via shell command:
+
+```sh
+$ php vendor/bin/doctrine orm:schema-tool:create
+```
+
+After this steps, microservice could be started with [server command](#http-server)
+
 ## Feedback
 
 Use the [issue tracker](https://github.com/FastyBird/devices-node/issues) for bugs or [mail](mailto:info@fastybird.com) or [Tweet](https://twitter.com/fastybird) us for any idea that can improve the project.
