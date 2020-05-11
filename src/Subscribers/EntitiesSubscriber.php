@@ -81,7 +81,7 @@ final class EntitiesSubscriber implements Common\EventSubscriber
 	public function postPersist(ORM\Event\LifecycleEventArgs $eventArgs): void
 	{
 		// onFlush was executed before, everything already initialized
-		$entity = $eventArgs->getEntity();
+		$entity = $eventArgs->getObject();
 
 		// Check for valid entity
 		if (!$entity instanceof Entities\IEntity) {
@@ -101,7 +101,7 @@ final class EntitiesSubscriber implements Common\EventSubscriber
 		$uow = $this->entityManager->getUnitOfWork();
 
 		// onFlush was executed before, everything already initialized
-		$entity = $eventArgs->getEntity();
+		$entity = $eventArgs->getObject();
 
 		// Get changes => should be already computed here (is a listener)
 		$changeset = $uow->getEntityChangeSet($entity);
