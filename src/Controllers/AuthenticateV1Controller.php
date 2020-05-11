@@ -97,38 +97,15 @@ final class AuthenticateV1Controller extends BaseV1Controller
 		$publishAcl = [];
 		$subscribeAcl = [];
 
-		if ($credentials->getDevice()->getParent() === null) {
-			$publishRule = new stdClass();
-			$publishRule->pattern = '/fb/+/' . $credentials->getDevice()->getIdentifier() . '/#';
+		$publishRule = new stdClass();
+		$publishRule->pattern = '/fb/+/+/#';
 
-			$publishAcl[] = $publishRule;
+		$publishAcl[] = $publishRule;
 
-			$publishRule = new stdClass();
-			$publishRule->pattern = '/fb/+/' . $credentials->getDevice()->getIdentifier() . '/$child/#';
+		$subscribeRule = new stdClass();
+		$subscribeRule->pattern = '/fb/+/+/#';
 
-			$publishAcl[] = $publishRule;
-
-			$subscribeRule = new stdClass();
-			$subscribeRule->pattern = '/fb/+/' . $credentials->getDevice()->getIdentifier() . '/#';
-
-			$subscribeAcl[] = $subscribeRule;
-
-			$subscribeRule = new stdClass();
-			$subscribeRule->pattern = '/fb/+/' . $credentials->getDevice()->getIdentifier() . '/$child/#';
-
-			$subscribeAcl[] = $subscribeRule;
-
-		} else {
-			$publishRule = new stdClass();
-			$publishRule->pattern = '/fb/+/' . $credentials->getDevice()->getParent()->getIdentifier() . '/$child/' . $credentials->getDevice()->getIdentifier() . '/#';
-
-			$publishAcl[] = $publishRule;
-
-			$subscribeRule = new stdClass();
-			$subscribeRule->pattern = '/fb/+/' . $credentials->getDevice()->getParent()->getIdentifier() . '/$child/' . $credentials->getDevice()->getIdentifier() . '/#';
-
-			$subscribeAcl[] = $subscribeRule;
-		}
+		$subscribeAcl[] = $subscribeRule;
 
 		try {
 			/** @var NodeWebServerHttp\Response $response */
