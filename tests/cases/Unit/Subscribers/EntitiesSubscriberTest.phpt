@@ -60,7 +60,7 @@ final class EntitiesSubscriberTest extends BaseMockeryTestCase
 
 		$eventArgs = Mockery::mock(ORM\Event\LifecycleEventArgs::class);
 		$eventArgs
-			->shouldReceive('getEntity')
+			->shouldReceive('getObject')
 			->withNoArgs()
 			->andReturn($entity)
 			->times(1);
@@ -102,7 +102,7 @@ final class EntitiesSubscriberTest extends BaseMockeryTestCase
 
 		$eventArgs = Mockery::mock(ORM\Event\LifecycleEventArgs::class);
 		$eventArgs
-			->shouldReceive('getEntity')
+			->shouldReceive('getObject')
 			->andReturn($entity)
 			->times(1);
 
