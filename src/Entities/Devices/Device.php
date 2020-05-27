@@ -21,6 +21,7 @@ use Doctrine\ORM\Mapping as ORM;
 use FastyBird\DevicesNode\Entities;
 use FastyBird\DevicesNode\Exceptions;
 use FastyBird\DevicesNode\Types;
+use FastyBird\NodeDatabase\Entities as NodeDatabaseEntities;
 use IPub\DoctrineCrud\Mapping\Annotation as IPubDoctrine;
 use IPub\DoctrineTimestampable;
 use Ramsey\Uuid;
@@ -53,10 +54,10 @@ use Throwable;
  * })
  * @ORM\MappedSuperclass
  */
-abstract class Device extends Entities\Entity implements IDevice
+abstract class Device extends NodeDatabaseEntities\Entity implements IDevice
 {
 
-	use Entities\TEntityParams;
+	use NodeDatabaseEntities\TEntityParams;
 	use DoctrineTimestampable\Entities\TEntityCreated;
 	use DoctrineTimestampable\Entities\TEntityUpdated;
 
@@ -146,8 +147,7 @@ abstract class Device extends Entities\Entity implements IDevice
 	 * @var Common\Collections\Collection<int, Entities\Devices\Controls\IControl>
 	 *
 	 * @IPubDoctrine\Crud(is="writable")
-	 * @ORM\OneToMany(targetEntity="FastyBird\DevicesNode\Entities\Devices\Controls\Control", mappedBy="device", cascade={"persist", "remove"},
-	 *                                                                                        orphanRemoval=true)
+	 * @ORM\OneToMany(targetEntity="FastyBird\DevicesNode\Entities\Devices\Controls\Control", mappedBy="device", cascade={"persist", "remove"}, orphanRemoval=true)
 	 */
 	protected $controls;
 
@@ -155,8 +155,7 @@ abstract class Device extends Entities\Entity implements IDevice
 	 * @var Common\Collections\Collection<int, Entities\Devices\Properties\IProperty>
 	 *
 	 * @IPubDoctrine\Crud(is="writable")
-	 * @ORM\OneToMany(targetEntity="FastyBird\DevicesNode\Entities\Devices\Properties\Property", mappedBy="device", cascade={"persist", "remove"},
-	 *                                                                                           orphanRemoval=true)
+	 * @ORM\OneToMany(targetEntity="FastyBird\DevicesNode\Entities\Devices\Properties\Property", mappedBy="device", cascade={"persist", "remove"}, orphanRemoval=true)
 	 */
 	protected $properties;
 
@@ -164,8 +163,7 @@ abstract class Device extends Entities\Entity implements IDevice
 	 * @var Common\Collections\Collection<int, Entities\Devices\Configuration\IRow>
 	 *
 	 * @IPubDoctrine\Crud(is="writable")
-	 * @ORM\OneToMany(targetEntity="FastyBird\DevicesNode\Entities\Devices\Configuration\Row", mappedBy="device", cascade={"persist", "remove"},
-	 *                                                                                         orphanRemoval=true)
+	 * @ORM\OneToMany(targetEntity="FastyBird\DevicesNode\Entities\Devices\Configuration\Row", mappedBy="device", cascade={"persist", "remove"}, orphanRemoval=true)
 	 */
 	protected $configuration;
 

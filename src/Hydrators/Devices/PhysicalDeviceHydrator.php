@@ -16,12 +16,9 @@
 namespace FastyBird\DevicesNode\Hydrators\Devices;
 
 use FastyBird\DevicesNode\Entities;
-use FastyBird\DevicesNode\Exceptions;
 use FastyBird\DevicesNode\Schemas;
 use IPub\JsonAPIDocument;
-use Nette\Utils;
 use Ramsey\Uuid;
-use Throwable;
 
 /**
  * Hardware device entity hydrator
@@ -47,40 +44,8 @@ class PhysicalDeviceHydrator extends DeviceHydrator
 		Schemas\Devices\PhysicalDeviceSchema::RELATIONSHIPS_CREDENTIALS,
 	];
 
-	/** @var JsonAPIDocument\Objects\IResourceObjectCollection<mixed>|null */
-	protected $included;
-
 	/** @var string */
 	protected $translationDomain = 'node.devices';
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function hydrate(
-		JsonAPIDocument\Objects\IResourceObject $resource,
-		$entity = null
-	): Utils\ArrayHash {
-		throw new Exceptions\InvalidStateException('This method is overridden. Use method `hydrateDevice` instead.');
-	}
-
-	/**
-	 * @param JsonAPIDocument\Objects\IResourceObject<mixed> $resource
-	 * @param JsonAPIDocument\Objects\IResourceObjectCollection<mixed>|null $included
-	 * @param Entities\Devices\IPhysicalDevice|null $entity
-	 *
-	 * @return Utils\ArrayHash
-	 *
-	 * @throws Throwable
-	 */
-	public function hydrateDevice(
-		JsonAPIDocument\Objects\IResourceObject $resource,
-		?JsonAPIDocument\Objects\IResourceObjectCollection $included,
-		?Entities\Devices\IPhysicalDevice $entity = null
-	): Utils\ArrayHash {
-		$this->included = $included;
-
-		return parent::hydrate($resource, $entity);
-	}
 
 	/**
 	 * {@inheritDoc}
@@ -92,26 +57,29 @@ class PhysicalDeviceHydrator extends DeviceHydrator
 
 	/**
 	 * @param JsonAPIDocument\Objects\IRelationship<mixed> $relationship
+	 * @param JsonAPIDocument\Objects\IResourceObjectCollection<JsonAPIDocument\Objects\IResourceObject>|null $included
 	 *
 	 * @return mixed[]|null
 	 */
-	protected function hydrateCredentialsRelationship(JsonAPIDocument\Objects\IRelationship $relationship): ?array
-	{
+	protected function hydrateCredentialsRelationship(
+		JsonAPIDocument\Objects\IRelationship $relationship,
+		?JsonAPIDocument\Objects\IResourceObjectCollection $included = null
+	): ?array {
 		if (!$relationship->isHasOne()) {
 			return null;
 		}
 
-		if ($this->included !== null) {
-			foreach ($this->included->getAll() as $included) {
+		if ($included !== null) {
+			foreach ($included->getAll() as $item) {
 				if (
 					$relationship->getIdentifier() !== null
-					&& $included->getIdentifier()->getId() === $relationship->getIdentifier()->getId()
+					&& $item->getIdentifier()->getId() === $relationship->getIdentifier()->getId()
 				) {
-					$attributes = $included->getAttributes()->toArray();
+					$attributes = $item->getAttributes()->toArray();
 					$attributes['entity'] = Entities\Devices\Credentials\Credentials::class;
 
-					if (Uuid\Uuid::isValid($included->getIdentifier()->getId())) {
-						$attributes['id'] = Uuid\Uuid::fromString($included->getIdentifier()->getId());
+					if (Uuid\Uuid::isValid($item->getIdentifier()->getId())) {
+						$attributes['id'] = Uuid\Uuid::fromString($item->getIdentifier()->getId());
 					}
 
 					return $attributes;

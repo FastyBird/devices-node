@@ -16,6 +16,7 @@
 namespace FastyBird\DevicesNode\Entities\Devices\Configuration;
 
 use FastyBird\DevicesNode\Entities;
+use FastyBird\NodeDatabase\Entities as NodeDatabaseEntities;
 use IPub\DoctrineTimestampable;
 
 /**
@@ -26,8 +27,8 @@ use IPub\DoctrineTimestampable;
  *
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  */
-interface IRow extends Entities\IEntity,
-	Entities\IEntityParams,
+interface IRow extends NodeDatabaseEntities\IEntity,
+	NodeDatabaseEntities\IEntityParams,
 	DoctrineTimestampable\Entities\IEntityCreated, DoctrineTimestampable\Entities\IEntityUpdated
 {
 

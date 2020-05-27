@@ -92,21 +92,21 @@ class CreateCommand extends Console\Command\Command
 
 		$type = $io->choice($this->translator->translate('type.title'), ['physical'], 'physical');
 
-		if ($input->hasOption('identifier') && $input->getOption('identifier')) {
+		if ($input->hasOption('identifier') && $input->getOption('identifier') !== '') {
 			$identifier = $input->getOption('identifier');
 
 		} else {
 			$identifier = $io->ask($this->translator->translate('identifier.title'));
 		}
 
-		if ($input->hasOption('username') && $input->getOption('username')) {
+		if ($input->hasOption('username') && $input->getOption('username') !== '') {
 			$username = $input->getOption('username');
 
 		} else {
 			$username = $io->ask($this->translator->translate('username.title'));
 		}
 
-		if ($input->hasOption('password') && $input->getOption('password')) {
+		if ($input->hasOption('password') && $input->getOption('password') !== '') {
 			$password = $input->getOption('password');
 
 		} else {

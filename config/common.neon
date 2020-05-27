@@ -37,6 +37,7 @@ extensions:
 	nettrineOrmConsole			: Nettrine\ORM\DI\OrmConsoleExtension
 	nettrineOrmCache			: Nettrine\ORM\DI\OrmCacheExtension
 	nodeWebServer				: FastyBird\NodeWebServer\DI\NodeWebServerExtension
+	nodeDatabase				: FastyBird\NodeDatabase\DI\NodeDatabaseExtension
 
 ##################################
 # Nette extensions configuration #
@@ -104,6 +105,8 @@ nettrineOrm:
 		proxyDir	: %tempDir%/cache/doctrine.proxies
 
 nettrineOrmAnnotations:
+	namespaces:
+		- FastyBird\DevicesNode\Entities
 	paths:
 		- %appDir%/src/Entities
 
@@ -111,37 +114,14 @@ nettrineOrmAnnotations:
 # Node services definitions #
 #############################
 
-decorator:
-	FastyBird\NodeWebServer\Commands\HttpServerCommand:
-		setup:
-			- '$onServerStart[]' = @FastyBird\DevicesNode\Events\ServerStartHandler
-			- '$onRequest[]' = @FastyBird\DevicesNode\Events\RequestHandler
-			- '$onResponse[]' = @FastyBird\DevicesNode\Events\ResponseHandler
-			- '$onAfterConsumeMessage[]' = @FastyBird\DevicesNode\Events\AfterConsumeHandler
-
 services:
 	# Http router
 	#############
-
-	- {factory: FastyBird\DevicesNode\Middleware\JsonApiMiddleware, tags: [middleware: {priority: 10}]}
-
-	- {factory: FastyBird\DevicesNode\Middleware\DbErrorMiddleware, tags: [middleware: {priority: 50}]}
 
 	-
 		factory: FastyBird\DevicesNode\Router\Router
 		setup:
 			- registerRoutes
-
-	# Node events
-	#############
-
-	- {factory: FastyBird\DevicesNode\Events\ServerStartHandler}
-
-	- {factory: FastyBird\DevicesNode\Events\RequestHandler}
-
-	- {factory: FastyBird\DevicesNode\Events\ResponseHandler}
-
-	- {factory: FastyBird\DevicesNode\Events\AfterConsumeHandler}
 
 	# Console commands
 	##################

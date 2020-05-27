@@ -16,6 +16,7 @@
 namespace FastyBird\DevicesNode\Entities\Channels\Controls;
 
 use FastyBird\DevicesNode\Entities;
+use FastyBird\NodeDatabase\Entities as NodeDatabaseEntities;
 use IPub\DoctrineTimestampable;
 
 /**
@@ -26,7 +27,7 @@ use IPub\DoctrineTimestampable;
  *
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  */
-interface IControl extends Entities\IEntity,
+interface IControl extends NodeDatabaseEntities\IEntity,
 	DoctrineTimestampable\Entities\IEntityCreated, DoctrineTimestampable\Entities\IEntityUpdated
 {
 

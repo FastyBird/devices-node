@@ -17,6 +17,7 @@ namespace FastyBird\DevicesNode\Entities\Channels\Controls;
 
 use Doctrine\ORM\Mapping as ORM;
 use FastyBird\DevicesNode\Entities;
+use FastyBird\NodeDatabase\Entities as NodeDatabaseEntities;
 use IPub\DoctrineCrud\Mapping\Annotation as IPubDoctrine;
 use IPub\DoctrineTimestampable;
 use Ramsey\Uuid;
@@ -39,7 +40,7 @@ use Throwable;
  *     }
  * )
  */
-class Control extends Entities\Entity implements IControl
+class Control extends NodeDatabaseEntities\Entity implements IControl
 {
 
 	use DoctrineTimestampable\Entities\TEntityCreated;

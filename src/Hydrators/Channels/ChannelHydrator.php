@@ -16,7 +16,7 @@
 namespace FastyBird\DevicesNode\Hydrators\Channels;
 
 use FastyBird\DevicesNode\Entities;
-use FastyBird\DevicesNode\Hydrators;
+use FastyBird\NodeDatabase\Hydrators as NodeDatabaseHydrators;
 use IPub\JsonAPIDocument;
 
 /**
@@ -27,7 +27,7 @@ use IPub\JsonAPIDocument;
  *
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  */
-final class ChannelHydrator extends Hydrators\Hydrator
+final class ChannelHydrator extends NodeDatabaseHydrators\Hydrator
 {
 
 	/** @var string */

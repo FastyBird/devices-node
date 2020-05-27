@@ -145,7 +145,7 @@ final class ChannelsV1Controller extends BaseV1Controller
 			$this->getOrmConnection()->beginTransaction();
 
 			if ($document->getResource()->getType() === Schemas\Channels\ChannelSchema::SCHEMA_TYPE) {
-				$updateChannelData = $this->channelHydrator->hydrate($document->getResource(), $channel);
+				$updateChannelData = $this->channelHydrator->hydrate($document, $channel);
 
 			} else {
 				throw new NodeWebServerExceptions\JsonApiErrorException(

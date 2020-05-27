@@ -15,8 +15,8 @@
 
 namespace FastyBird\DevicesNode\Schemas;
 
-use FastyBird\DevicesNode\Entities;
 use FastyBird\DevicesNode\Exceptions;
+use FastyBird\NodeDatabase\Entities as NodeDatabaseEntities;
 use FastyBird\NodeWebServer\JsonApi as NodeWebServerJsonApi;
 use Neomerx\JsonApi;
 use Nette;
@@ -29,7 +29,7 @@ use Nette;
  *
  * @author             Adam Kadlec <adam.kadlec@fastybird.com>
  *
- * @phpstan-template   T of Entities\IEntity
+ * @phpstan-template   T of NodeDatabaseEntities\IEntity
  * @phpstan-implements NodeWebServerJsonApi\ISchema<T>
  */
 abstract class JsonApiSchema implements NodeWebServerJsonApi\ISchema
@@ -41,7 +41,7 @@ abstract class JsonApiSchema implements NodeWebServerJsonApi\ISchema
 	private $subUrl = null;
 
 	/**
-	 * @param Entities\IEntity $resource
+	 * @param NodeDatabaseEntities\IEntity $resource
 	 *
 	 * @return string|null
 	 *
@@ -55,7 +55,7 @@ abstract class JsonApiSchema implements NodeWebServerJsonApi\ISchema
 	}
 
 	/**
-	 * @param Entities\IEntity $resource
+	 * @param NodeDatabaseEntities\IEntity $resource
 	 * @param JsonApi\Contracts\Schema\ContextInterface $context
 	 *
 	 * @return iterable<string, mixed>
@@ -70,7 +70,7 @@ abstract class JsonApiSchema implements NodeWebServerJsonApi\ISchema
 	}
 
 	/**
-	 * @param Entities\IEntity $resource
+	 * @param NodeDatabaseEntities\IEntity $resource
 	 *
 	 * @return JsonApi\Contracts\Schema\LinkInterface
 	 *
@@ -84,7 +84,7 @@ abstract class JsonApiSchema implements NodeWebServerJsonApi\ISchema
 	}
 
 	/**
-	 * @param Entities\IEntity $resource
+	 * @param NodeDatabaseEntities\IEntity $resource
 	 *
 	 * @return iterable<string, JsonApi\Contracts\Schema\LinkInterface>
 	 *
@@ -100,7 +100,7 @@ abstract class JsonApiSchema implements NodeWebServerJsonApi\ISchema
 	}
 
 	/**
-	 * @param Entities\IEntity $resource
+	 * @param NodeDatabaseEntities\IEntity $resource
 	 * @param string $name
 	 *
 	 * @return JsonApi\Contracts\Schema\LinkInterface
@@ -118,7 +118,7 @@ abstract class JsonApiSchema implements NodeWebServerJsonApi\ISchema
 	}
 
 	/**
-	 * @param Entities\IEntity $resource
+	 * @param NodeDatabaseEntities\IEntity $resource
 	 * @param string $name
 	 *
 	 * @return JsonApi\Contracts\Schema\LinkInterface
@@ -136,7 +136,7 @@ abstract class JsonApiSchema implements NodeWebServerJsonApi\ISchema
 	}
 
 	/**
-	 * @param Entities\IEntity $resource
+	 * @param NodeDatabaseEntities\IEntity $resource
 	 *
 	 * @return bool
 	 *
@@ -150,7 +150,7 @@ abstract class JsonApiSchema implements NodeWebServerJsonApi\ISchema
 	}
 
 	/**
-	 * @param Entities\IEntity $resource
+	 * @param NodeDatabaseEntities\IEntity $resource
 	 *
 	 * @return mixed
 	 *
@@ -164,7 +164,7 @@ abstract class JsonApiSchema implements NodeWebServerJsonApi\ISchema
 	}
 
 	/**
-	 * @param Entities\IEntity $resource
+	 * @param NodeDatabaseEntities\IEntity $resource
 	 *
 	 * @return bool
 	 *
@@ -178,7 +178,7 @@ abstract class JsonApiSchema implements NodeWebServerJsonApi\ISchema
 	}
 
 	/**
-	 * @param Entities\IEntity $resource
+	 * @param NodeDatabaseEntities\IEntity $resource
 	 *
 	 * @return mixed
 	 *
@@ -208,7 +208,7 @@ abstract class JsonApiSchema implements NodeWebServerJsonApi\ISchema
 	}
 
 	/**
-	 * @param Entities\IEntity $resource
+	 * @param NodeDatabaseEntities\IEntity $resource
 	 *
 	 * @return string
 	 *

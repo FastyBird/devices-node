@@ -20,6 +20,7 @@ use Doctrine\ORM\Mapping as ORM;
 use FastyBird\DevicesNode\Entities;
 use FastyBird\DevicesNode\Exceptions;
 use FastyBird\DevicesNode\Types;
+use FastyBird\NodeDatabase\Entities as NodeDatabaseEntities;
 use IPub\DoctrineCrud\Mapping\Annotation as IPubDoctrine;
 use IPub\DoctrineTimestampable;
 use Ramsey\Uuid;
@@ -44,7 +45,7 @@ use Throwable;
  *     }
  * )
  */
-class Property extends Entities\Entity implements IProperty
+class Property extends NodeDatabaseEntities\Entity implements IProperty
 {
 
 	use DoctrineTimestampable\Entities\TEntityCreated;

@@ -37,16 +37,13 @@
     "cweagans/composer-patches" : "^1.6",
     "fastybird/node-libs" : "^0.5",
     "fastybird/node-web-server" : "^0.3",
+    "fastybird/node-database": "^0.1",
     "ipub/doctrine-consistence" : "^0.3",
     "ipub/doctrine-crud" : "^2.3",
     "ipub/doctrine-orm-query" : "^0.0.5",
     "ipub/doctrine-timestampable" : "^1.4",
     "ipub/json-api-document" : "^0.1",
-    "nettrine/cache" : "^0.1",
-    "nettrine/orm" : "^0.5",
-    "phpdocumentor/reflection-docblock" : "^5.1",
-    "ramsey/uuid" : "^3.9",
-    "ramsey/uuid-doctrine" : "^1.6"
+    "phpdocumentor/reflection-docblock" : "^5.1"
   },
 
   "require-dev" : {

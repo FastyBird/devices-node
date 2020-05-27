@@ -20,8 +20,8 @@ use Doctrine\Common;
 use Doctrine\ORM;
 use Doctrine\Persistence;
 use FastyBird\DevicesNode;
-use FastyBird\DevicesNode\Entities;
 use FastyBird\DevicesNode\Exceptions;
+use FastyBird\NodeDatabase\Entities as NodeDatabaseEntities;
 use FastyBird\NodeLibs\Publishers as NodeLibsPublishers;
 use Nette;
 use Ramsey\Uuid;
@@ -62,7 +62,7 @@ final class EntitiesSubscriber implements Common\EventSubscriber
 	/**
 	 * Register events
 	 *
-	 * @return mixed[]
+	 * @return string[]
 	 */
 	public function getSubscribedEvents(): array
 	{
@@ -84,7 +84,7 @@ final class EntitiesSubscriber implements Common\EventSubscriber
 		$entity = $eventArgs->getObject();
 
 		// Check for valid entity
-		if (!$entity instanceof Entities\IEntity) {
+		if (!$entity instanceof NodeDatabaseEntities\IEntity) {
 			return;
 		}
 
@@ -112,7 +112,7 @@ final class EntitiesSubscriber implements Common\EventSubscriber
 		}
 
 		// Check for valid entity
-		if (!$entity instanceof Entities\IEntity) {
+		if (!$entity instanceof NodeDatabaseEntities\IEntity) {
 			return;
 		}
 
@@ -132,14 +132,14 @@ final class EntitiesSubscriber implements Common\EventSubscriber
 			// Doctrine is fine deleting elements multiple times. We are not.
 			$hash = $this->getHash($entity, $uow->getEntityIdentifier($entity));
 
-			if (in_array($hash, $processedEntities)) {
+			if (in_array($hash, $processedEntities, true)) {
 				continue;
 			}
 
 			$processedEntities[] = $hash;
 
 			// Check for valid entity
-			if (!$entity instanceof Entities\IEntity) {
+			if (!$entity instanceof NodeDatabaseEntities\IEntity) {
 				continue;
 			}
 
@@ -148,12 +148,12 @@ final class EntitiesSubscriber implements Common\EventSubscriber
 	}
 
 	/**
-	 * @param Entities\IEntity $entity
+	 * @param NodeDatabaseEntities\IEntity $entity
 	 * @param mixed[] $identifier
 	 *
 	 * @return string
 	 */
-	private function getHash(Entities\IEntity $entity, array $identifier): string
+	private function getHash(NodeDatabaseEntities\IEntity $entity, array $identifier): string
 	{
 		return implode(
 			' ',
@@ -181,12 +181,12 @@ final class EntitiesSubscriber implements Common\EventSubscriber
 	}
 
 	/**
-	 * @param Entities\IEntity $entity
+	 * @param NodeDatabaseEntities\IEntity $entity
 	 * @param string $action
 	 *
 	 * @return void
 	 */
-	private function processEntityAction(Entities\IEntity $entity, string $action): void
+	private function processEntityAction(NodeDatabaseEntities\IEntity $entity, string $action): void
 	{
 		foreach (DevicesNode\Constants::RABBIT_MQ_ENTITIES_ROUTING_KEYS as $class => $routingKey) {
 			if (get_class($entity) === $class) {
@@ -208,11 +208,11 @@ final class EntitiesSubscriber implements Common\EventSubscriber
 	}
 
 	/**
-	 * @param Entities\IEntity $entity
+	 * @param NodeDatabaseEntities\IEntity $entity
 	 *
 	 * @return mixed[]
 	 */
-	private function toArray(Entities\IEntity $entity): array
+	private function toArray(NodeDatabaseEntities\IEntity $entity): array
 	{
 		if (method_exists($entity, 'toArray')) {
 			return $entity->toArray();
@@ -269,14 +269,14 @@ final class EntitiesSubscriber implements Common\EventSubscriber
 	}
 
 	/**
-	 * @param Entities\IEntity $entity
+	 * @param NodeDatabaseEntities\IEntity $entity
 	 * @param string $property
 	 *
 	 * @return mixed
 	 *
 	 * @throws Exceptions\PropertyNotExistsException
 	 */
-	private function getPropertyValue(Entities\IEntity $entity, string $property)
+	private function getPropertyValue(NodeDatabaseEntities\IEntity $entity, string $property)
 	{
 		$ucFirst = ucfirst($property);
 
@@ -287,8 +287,10 @@ final class EntitiesSubscriber implements Common\EventSubscriber
 		];
 
 		foreach ($methods as $method) {
-			if (method_exists($entity, $method)) {
-				return $entity->$method();
+			$callable = [$entity, $method];
+
+			if (is_callable($callable)) {
+				return call_user_func($callable);
 			}
 		}
 
@@ -296,7 +298,7 @@ final class EntitiesSubscriber implements Common\EventSubscriber
 			throw new Exceptions\PropertyNotExistsException(sprintf('Property "%s" does not exists on entity', $property));
 		}
 
-		return $entity->$property;
+		return $entity->{$property};
 	}
 
 }

@@ -64,7 +64,7 @@ final class PhysicalDeviceSchema extends DeviceSchema
 	 * @param Entities\Devices\IPhysicalDevice $device
 	 * @param JsonApi\Contracts\Schema\ContextInterface $context
 	 *
-	 * @return iterable<string, mixed>
+	 * @return iterable<string, string|bool|string[]|null>
 	 *
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
 	 */

@@ -17,6 +17,7 @@ namespace FastyBird\DevicesNode\Entities\Devices\Credentials;
 
 use Doctrine\ORM\Mapping as ORM;
 use FastyBird\DevicesNode\Entities;
+use FastyBird\NodeDatabase\Entities as NodeDatabaseEntities;
 use IPub\DoctrineCrud\Mapping\Annotation as IPubDoctrine;
 use IPub\DoctrineTimestampable;
 use Ramsey\Uuid;
@@ -39,7 +40,7 @@ use Throwable;
  *     }
  * )
  */
-class Credentials extends Entities\Entity implements ICredentials
+class Credentials extends NodeDatabaseEntities\Entity implements ICredentials
 {
 
 	use DoctrineTimestampable\Entities\TEntityCreated;

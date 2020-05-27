@@ -5,9 +5,7 @@ namespace Tests\Cases;
 use FastyBird\DevicesNode\Commands;
 use FastyBird\DevicesNode\Consumers;
 use FastyBird\DevicesNode\Controllers;
-use FastyBird\DevicesNode\Events;
 use FastyBird\DevicesNode\Hydrators;
-use FastyBird\DevicesNode\Middleware;
 use FastyBird\DevicesNode\Models;
 use FastyBird\DevicesNode\Schemas;
 use FastyBird\DevicesNode\Subscribers;
@@ -30,14 +28,6 @@ final class ServicesTest extends BaseTestCase
 		]);
 
 		$container = $configurator->createContainer();
-
-		Assert::notNull($container->getByType(Middleware\JsonApiMiddleware::class));
-		Assert::notNull($container->getByType(Middleware\DbErrorMiddleware::class));
-
-		Assert::notNull($container->getByType(Events\ServerStartHandler::class));
-		Assert::notNull($container->getByType(Events\RequestHandler::class));
-		Assert::notNull($container->getByType(Events\ResponseHandler::class));
-		Assert::notNull($container->getByType(Events\AfterConsumeHandler::class));
 
 		Assert::notNull($container->getByType(Commands\Devices\CreateCommand::class));
 

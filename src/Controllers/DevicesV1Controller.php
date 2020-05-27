@@ -132,20 +132,20 @@ class DevicesV1Controller extends BaseV1Controller
 				// Start transaction connection to the database
 				$this->getOrmConnection()->beginTransaction();
 
-				$device = $this->devicesManager->create($this->physicalDeviceHydrator->hydrateDevice($document->getResource(), $document->getIncluded()));
+				$device = $this->devicesManager->create($this->physicalDeviceHydrator->hydrate($document));
 
 				// Commit all changes into database
 				$this->getOrmConnection()->commit();
 
 			} catch (NodeWebServerExceptions\IJsonApiException $ex) {
 				// Revert all changes when error occur
-				$this->getOrmConnection()->rollback();
+				$this->getOrmConnection()->rollBack();
 
 				throw $ex;
 
 			} catch (DoctrineCrudExceptions\MissingRequiredFieldException $ex) {
 				// Revert all changes when error occur
-				$this->getOrmConnection()->rollback();
+				$this->getOrmConnection()->rollBack();
 
 				if ($ex->getField() === Schemas\Devices\PhysicalDeviceSchema::RELATIONSHIPS_CREDENTIALS) {
 					$pointer = 'data/relationships/' . $ex->getField();
@@ -165,7 +165,7 @@ class DevicesV1Controller extends BaseV1Controller
 
 			} catch (DoctrineCrudExceptions\EntityCreationException $ex) {
 				// Revert all changes when error occur
-				$this->getOrmConnection()->rollback();
+				$this->getOrmConnection()->rollBack();
 
 				throw new NodeWebServerExceptions\JsonApiErrorException(
 					StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
@@ -178,9 +178,9 @@ class DevicesV1Controller extends BaseV1Controller
 
 			} catch (Doctrine\DBAL\Exception\UniqueConstraintViolationException $ex) {
 				// Revert all changes when error occur
-				$this->getOrmConnection()->rollback();
+				$this->getOrmConnection()->rollBack();
 
-				if (preg_match("%key '(?P<key>.+)_unique'%", $ex->getMessage(), $match)) {
+				if (preg_match("%key '(?P<key>.+)_unique'%", $ex->getMessage(), $match) !== false) {
 					if (Utils\Strings::startsWith($match['key'], 'device_')) {
 						throw new NodeWebServerExceptions\JsonApiErrorException(
 							StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
@@ -201,7 +201,7 @@ class DevicesV1Controller extends BaseV1Controller
 
 			} catch (Throwable $ex) {
 				// Revert all changes when error occur
-				$this->getOrmConnection()->rollback();
+				$this->getOrmConnection()->rollBack();
 
 				// Log catched exception
 				$this->logger->error('[CONTROLLER] ' . $ex->getMessage(), [
@@ -269,7 +269,7 @@ class DevicesV1Controller extends BaseV1Controller
 				$document->getResource()->getType() === Schemas\Devices\PhysicalDeviceSchema::SCHEMA_TYPE
 				&& $device instanceof Entities\Devices\IPhysicalDevice
 			) {
-				$updateDeviceData = $this->physicalDeviceHydrator->hydrateDevice($document->getResource(), $document->getIncluded(), $device);
+				$updateDeviceData = $this->physicalDeviceHydrator->hydrate($document, $device);
 
 			} else {
 				throw new NodeWebServerExceptions\JsonApiErrorException(
@@ -289,15 +289,15 @@ class DevicesV1Controller extends BaseV1Controller
 
 		} catch (NodeWebServerExceptions\IJsonApiException $ex) {
 			// Revert all changes when error occur
-			$this->getOrmConnection()->rollback();
+			$this->getOrmConnection()->rollBack();
 
 			throw $ex;
 
 		} catch (Doctrine\DBAL\Exception\UniqueConstraintViolationException $ex) {
 			// Revert all changes when error occur
-			$this->getOrmConnection()->rollback();
+			$this->getOrmConnection()->rollBack();
 
-			if (preg_match("%key '(?P<key>.+)_unique'%", $ex->getMessage(), $match)) {
+			if (preg_match("%key '(?P<key>.+)_unique'%", $ex->getMessage(), $match) !== false) {
 				if (Utils\Strings::startsWith($match['key'], 'device_')) {
 					throw new NodeWebServerExceptions\JsonApiErrorException(
 						StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
@@ -318,7 +318,7 @@ class DevicesV1Controller extends BaseV1Controller
 
 		} catch (Throwable $ex) {
 			// Revert all changes when error occur
-			$this->getOrmConnection()->rollback();
+			$this->getOrmConnection()->rollBack();
 
 			// Log catched exception
 			$this->logger->error('[CONTROLLER] ' . $ex->getMessage(), [
@@ -379,7 +379,7 @@ class DevicesV1Controller extends BaseV1Controller
 			]);
 
 			// Revert all changes when error occur
-			$this->getOrmConnection()->rollback();
+			$this->getOrmConnection()->rollBack();
 
 			throw new NodeWebServerExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,

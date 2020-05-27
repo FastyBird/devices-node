@@ -72,7 +72,7 @@ abstract class DeviceSchema extends Schemas\JsonApiSchema
 	 * @param Entities\Devices\IDevice $device
 	 * @param JsonApi\Contracts\Schema\ContextInterface $context
 	 *
-	 * @return iterable<string, string|string[]|bool|null>
+	 * @return iterable<string, string|bool|string[]|null>
 	 *
 	 * @phpstan-param T $device
 	 *

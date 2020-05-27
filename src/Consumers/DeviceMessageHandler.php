@@ -126,7 +126,7 @@ final class DeviceMessageHandler implements NodeLibsConsumers\IMessageHandler
 
 						$parent = $this->deviceRepository->findOneBy($findQuery);
 
-						if ($parent) {
+						if ($parent !== null) {
 							$toUpdate['parent'] = $parent;
 						}
 					}
