@@ -50,14 +50,6 @@ class PhysicalDevice extends Device implements IPhysicalDevice
 	protected $firmware;
 
 	/**
-	 * @var Entities\Devices\Credentials\ICredentials|null
-	 *
-	 * @IPubDoctrine\Crud(is="writable")
-	 * @ORM\OneToOne(targetEntity="FastyBird\DevicesNode\Entities\Devices\Credentials\Credentials", mappedBy="device", cascade={"persist", "remove"})
-	 */
-	protected $credentials;
-
-	/**
 	 * {@inheritDoc}
 	 */
 	public function getName(): string
@@ -95,22 +87,6 @@ class PhysicalDevice extends Device implements IPhysicalDevice
 	public function getFirmware(): ?Entities\Devices\PhysicalDevice\IFirmware
 	{
 		return $this->firmware;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function setCredentials(Entities\Devices\Credentials\ICredentials $credentials): void
-	{
-		$this->credentials = $credentials;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function getCredentials(): ?Entities\Devices\Credentials\ICredentials
-	{
-		return $this->credentials;
 	}
 
 }

@@ -51,16 +51,6 @@
           "self" : "/v1/devices/bbbf5caa-b30e-4558-b83a-699617958cea/relationships/configuration"
         }
       },
-      "credentials" : {
-        "data" : {
-          "id" : "2433c2d6-d4f2-43b5-8c69-2a981dc47f30",
-          "type" : "devices-node/credentials"
-        },
-        "links" : {
-          "related" : "/v1/devices/bbbf5caa-b30e-4558-b83a-699617958cea/credentials",
-          "self" : "/v1/devices/bbbf5caa-b30e-4558-b83a-699617958cea/relationships/credentials"
-        }
-      },
       "firmware" : {
         "data" : null,
         "links" : {

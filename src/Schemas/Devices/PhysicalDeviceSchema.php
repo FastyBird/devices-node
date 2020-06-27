@@ -40,7 +40,6 @@ final class PhysicalDeviceSchema extends DeviceSchema
 	/**
 	 * Define relationships names
 	 */
-	public const RELATIONSHIPS_CREDENTIALS = 'credentials';
 	public const RELATIONSHIPS_HARDWARE = 'hardware';
 	public const RELATIONSHIPS_FIRMWARE = 'firmware';
 
@@ -86,11 +85,6 @@ final class PhysicalDeviceSchema extends DeviceSchema
 	public function getRelationships($device, JsonApi\Contracts\Schema\ContextInterface $context): iterable
 	{
 		return array_merge([
-			self::RELATIONSHIPS_CREDENTIALS => [
-				self::RELATIONSHIP_DATA          => $device->getCredentials(),
-				self::RELATIONSHIP_LINKS_SELF    => true,
-				self::RELATIONSHIP_LINKS_RELATED => true,
-			],
 			self::RELATIONSHIPS_HARDWARE    => [
 				self::RELATIONSHIP_DATA          => $device->getHardware(),
 				self::RELATIONSHIP_LINKS_SELF    => true,
@@ -114,19 +108,7 @@ final class PhysicalDeviceSchema extends DeviceSchema
 	 */
 	public function getRelationshipRelatedLink($device, string $name): JsonApi\Contracts\Schema\LinkInterface
 	{
-		if ($name === self::RELATIONSHIPS_CREDENTIALS) {
-			return new JsonApi\Schema\Link(
-				false,
-				$this->router->urlFor(
-					'device.credentials',
-					[
-						Router\Router::URL_DEVICE_ID => $device->getPlainId(),
-					]
-				),
-				false
-			);
-
-		} elseif ($name === self::RELATIONSHIPS_HARDWARE) {
+		if ($name === self::RELATIONSHIPS_HARDWARE) {
 			return new JsonApi\Schema\Link(
 				false,
 				$this->router->urlFor(
@@ -165,8 +147,7 @@ final class PhysicalDeviceSchema extends DeviceSchema
 	public function getRelationshipSelfLink($device, string $name): JsonApi\Contracts\Schema\LinkInterface
 	{
 		if (
-			$name === self::RELATIONSHIPS_CREDENTIALS
-			|| $name === self::RELATIONSHIPS_HARDWARE
+			$name === self::RELATIONSHIPS_HARDWARE
 			|| $name === self::RELATIONSHIPS_FIRMWARE
 		) {
 			return new JsonApi\Schema\Link(

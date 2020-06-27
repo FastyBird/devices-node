@@ -30,9 +30,6 @@ base:
 		missingRequired:
 			heading	: "Missing required attribute"
 			message	: "Provided request is missing required attribute or relation"
-		invalid:
-			heading	: "Bad request"
-			message	: "Request resource identifier is invalid"
 		identifierInvalid:
 			heading	: "Entity identifier invalid"
 			message	: "Provided entity identifier is not valid"

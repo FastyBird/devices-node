@@ -6,23 +6,6 @@
       "identifier" : "updated-device",
       "name" : "Updated device",
       "title" : "With title"
-    },
-    "relationships" : {
-      "credentials" : {
-        "data" : {
-          "id" : "09f28b10-6b4c-4421-839c-4e484fa7011d",
-          "type" : "devices-node/credentials"
-        }
-      }
     }
-  },
-  "included" : [
-    {
-      "type" : "devices-node/credentials",
-      "id" : "09f28b10-6b4c-4421-839c-4e484fa7011d",
-      "attributes" : {
-        "password" : "updatepassword"
-      }
-    }
-  ]
+  }
 }

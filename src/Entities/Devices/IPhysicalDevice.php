@@ -52,16 +52,4 @@ interface IPhysicalDevice extends IDevice
 	 */
 	public function getFirmware(): ?Entities\Devices\PhysicalDevice\IFirmware;
 
-	/**
-	 * @param Entities\Devices\Credentials\ICredentials $credentials
-	 *
-	 * @return void
-	 */
-	public function setCredentials(Entities\Devices\Credentials\ICredentials $credentials): void;
-
-	/**
-	 * @return Entities\Devices\Credentials\ICredentials|null
-	 */
-	public function getCredentials(): ?Entities\Devices\Credentials\ICredentials;
-
 }

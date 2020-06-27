@@ -49,9 +49,6 @@ class Router extends Routing\Router
 	/** @var Controllers\DeviceConfigurationV1Controller */
 	private $deviceConfigurationV1Controller;
 
-	/** @var Controllers\DeviceCredentialsV1Controller */
-	private $deviceCredentialsV1Controller;
-
 	/** @var Controllers\DeviceHardwareV1Controller */
 	private $deviceHardwareV1Controller;
 
@@ -67,21 +64,16 @@ class Router extends Routing\Router
 	/** @var Controllers\ChannelConfigurationV1Controller */
 	private $channelConfigurationV1Controller;
 
-	/** @var Controllers\AuthenticateV1Controller */
-	private $authenticateV1Controller;
-
 	public function __construct(
 		Controllers\DevicesV1Controller $devicesV1Controller,
 		Controllers\DeviceChildrenV1Controller $deviceChildrenV1Controller,
 		Controllers\DevicePropertiesV1Controller $devicePropertiesV1Controller,
 		Controllers\DeviceConfigurationV1Controller $deviceConfigurationV1Controller,
-		Controllers\DeviceCredentialsV1Controller $deviceCredentialsV1Controller,
 		Controllers\DeviceHardwareV1Controller $deviceHardwareV1Controller,
 		Controllers\DeviceFirmwareV1Controller $deviceFirmwareV1Controller,
 		Controllers\ChannelsV1Controller $channelsV1Controller,
 		Controllers\ChannelPropertiesV1Controller $channelPropertiesV1Controller,
 		Controllers\ChannelConfigurationV1Controller $channelConfigurationV1Controller,
-		Controllers\AuthenticateV1Controller $authenticateV1Controller,
 		?ResponseFactoryInterface $responseFactory = null
 	) {
 		parent::__construct($responseFactory, null);
@@ -90,13 +82,11 @@ class Router extends Routing\Router
 		$this->deviceChildrenV1Controller = $deviceChildrenV1Controller;
 		$this->devicePropertiesV1Controller = $devicePropertiesV1Controller;
 		$this->deviceConfigurationV1Controller = $deviceConfigurationV1Controller;
-		$this->deviceCredentialsV1Controller = $deviceCredentialsV1Controller;
 		$this->deviceHardwareV1Controller = $deviceHardwareV1Controller;
 		$this->deviceFirmwareV1Controller = $deviceFirmwareV1Controller;
 		$this->channelsV1Controller = $channelsV1Controller;
 		$this->channelPropertiesV1Controller = $channelPropertiesV1Controller;
 		$this->channelConfigurationV1Controller = $channelConfigurationV1Controller;
-		$this->authenticateV1Controller = $authenticateV1Controller;
 	}
 
 	/**
@@ -157,15 +147,6 @@ class Router extends Routing\Router
 				$route->setName('device.configuration.row.relationship');
 
 				/**
-				 * DEVICE CREDENTIALS
-				 */
-				$route = $group->get('/credentials', [$this->deviceCredentialsV1Controller, 'read']);
-				$route->setName('device.credentials');
-
-				$route = $group->get('/credentials/relationships/{' . self::RELATION_ENTITY . '}', [$this->deviceCredentialsV1Controller, 'readRelationship']);
-				$route->setName('device.credentials.relationship');
-
-				/**
 				 * DEVICE HARDWARE
 				 */
 				$route = $group->get('/hardware', [$this->deviceHardwareV1Controller, 'read']);
@@ -224,10 +205,6 @@ class Router extends Routing\Router
 						$route->setName('channel.configuration.row.relationship');
 					});
 				});
-			});
-
-			$group->group('/authenticate', function (Routing\RouteCollector $group): void {
-				$group->post('/vernemq', [$this->authenticateV1Controller, 'vernemq']);
 			});
 		});
 	}

@@ -43,7 +43,6 @@ final class ServicesTest extends BaseTestCase
 		Assert::notNull($container->getByType(Models\Devices\DeviceRepository::class));
 		Assert::notNull($container->getByType(Models\Devices\Properties\PropertyRepository::class));
 		Assert::notNull($container->getByType(Models\Devices\Configuration\RowRepository::class));
-		Assert::notNull($container->getByType(Models\Devices\Credentials\CredentialsRepository::class));
 		Assert::notNull($container->getByType(Models\Channels\ChannelRepository::class));
 		Assert::notNull($container->getByType(Models\Channels\Properties\PropertyRepository::class));
 		Assert::notNull($container->getByType(Models\Channels\Configuration\RowRepository::class));
@@ -51,7 +50,6 @@ final class ServicesTest extends BaseTestCase
 		Assert::notNull($container->getByType(Models\Devices\DevicesManager::class));
 		Assert::notNull($container->getByType(Models\Devices\Controls\ControlsManager::class));
 		Assert::notNull($container->getByType(Models\Devices\Properties\PropertiesManager::class));
-		Assert::notNull($container->getByType(Models\Devices\Credentials\CredentialsManager::class));
 		Assert::notNull($container->getByType(Models\Devices\PhysicalDevice\HardwareManager::class));
 		Assert::notNull($container->getByType(Models\Devices\PhysicalDevice\FirmwareManager::class));
 		Assert::notNull($container->getByType(Models\Channels\ChannelsManager::class));
@@ -63,19 +61,16 @@ final class ServicesTest extends BaseTestCase
 		Assert::notNull($container->getByType(Controllers\DeviceChildrenV1Controller::class));
 		Assert::notNull($container->getByType(Controllers\DevicePropertiesV1Controller::class));
 		Assert::notNull($container->getByType(Controllers\DeviceConfigurationV1Controller::class));
-		Assert::notNull($container->getByType(Controllers\DeviceCredentialsV1Controller::class));
 		Assert::notNull($container->getByType(Controllers\DeviceHardwareV1Controller::class));
 		Assert::notNull($container->getByType(Controllers\DeviceFirmwareV1Controller::class));
 		Assert::notNull($container->getByType(Controllers\ChannelsV1Controller::class));
 		Assert::notNull($container->getByType(Controllers\ChannelPropertiesV1Controller::class));
 		Assert::notNull($container->getByType(Controllers\ChannelConfigurationV1Controller::class));
-		Assert::notNull($container->getByType(Controllers\AuthenticateV1Controller::class));
 
 		Assert::notNull($container->getByType(Schemas\Devices\PhysicalDeviceSchema::class));
 		Assert::notNull($container->getByType(Schemas\Devices\Properties\PropertySchema::class));
 		Assert::notNull($container->getByType(Schemas\Devices\Hardware\HardwareSchema::class));
 		Assert::notNull($container->getByType(Schemas\Devices\Firmware\FirmwareSchema::class));
-		Assert::notNull($container->getByType(Schemas\Devices\Credentials\CredentialsSchema::class));
 		Assert::notNull($container->getByType(Schemas\Devices\Configuration\BooleanRowSchema::class));
 		Assert::notNull($container->getByType(Schemas\Devices\Configuration\NumberRowSchema::class));
 		Assert::notNull($container->getByType(Schemas\Devices\Configuration\SelectRowSchema::class));

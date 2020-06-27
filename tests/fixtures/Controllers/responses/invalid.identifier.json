@@ -2,9 +2,9 @@
   "errors" : [
     {
       "code" : "400",
-      "status" : "400",
-      "title" : "Bad request",
-      "detail" : "Request resource identifier is invalid"
+      "detail": "Provided entity identifier is not valid",
+      "status": "400",
+      "title": "Entity identifier invalid"
     }
   ],
   "jsonapi" : {

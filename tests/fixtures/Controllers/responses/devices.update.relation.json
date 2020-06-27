@@ -104,16 +104,6 @@
           "self" : "/v1/devices/69786d15-fd0c-4d9f-9378-33287c2009fa/relationships/configuration"
         }
       },
-      "credentials" : {
-        "data" : {
-          "id" : "09f28b10-6b4c-4421-839c-4e484fa7011d",
-          "type" : "devices-node/credentials"
-        },
-        "links" : {
-          "related" : "/v1/devices/69786d15-fd0c-4d9f-9378-33287c2009fa/credentials",
-          "self" : "/v1/devices/69786d15-fd0c-4d9f-9378-33287c2009fa/relationships/credentials"
-        }
-      },
       "firmware" : {
         "data" : {
           "id" : "06feddf4-63e2-48bc-af13-f355f01ffbe0",
@@ -158,35 +148,11 @@
     },
     "type" : "devices-node/physical-device"
   },
-  "included" : [
-    {
-      "attributes" : {
-        "password" : "updatepassword",
-        "username" : "username-one"
-      },
-      "id" : "09f28b10-6b4c-4421-839c-4e484fa7011d",
-      "links" : {
-        "self" : "/v1/devices/69786d15-fd0c-4d9f-9378-33287c2009fa/credentials"
-      },
-      "relationships" : {
-        "device" : {
-          "data" : {
-            "id" : "69786d15-fd0c-4d9f-9378-33287c2009fa",
-            "type" : "devices-node/physical-device"
-          },
-          "links" : {
-            "related" : "/v1/devices/69786d15-fd0c-4d9f-9378-33287c2009fa"
-          }
-        }
-      },
-      "type" : "devices-node/credentials"
-    }
-  ],
   "jsonapi" : {
     "version" : "1.1"
   },
   "links" : {
-    "self" : "/v1/devices/69786d15-fd0c-4d9f-9378-33287c2009fa?include=credentials"
+    "self" : "/v1/devices/69786d15-fd0c-4d9f-9378-33287c2009fa"
   },
   "meta" : {
     "author" : "FastyBird dev team",

@@ -161,8 +161,6 @@ services:
 
 	- {factory: FastyBird\DevicesNode\Models\Devices\Configuration\RowRepository}
 
-	- {factory: FastyBird\DevicesNode\Models\Devices\Credentials\CredentialsRepository}
-
 	- {factory: FastyBird\DevicesNode\Models\Channels\ChannelRepository}
 
 	- {factory: FastyBird\DevicesNode\Models\Channels\Properties\PropertyRepository}
@@ -179,8 +177,6 @@ services:
 	- {factory: FastyBird\DevicesNode\Models\Devices\Properties\PropertiesManager(@ipubDoctrineCrud.crud::create(FastyBird\DevicesNode\Entities\Devices\Properties\Property))}
 
 	- {factory: FastyBird\DevicesNode\Models\Devices\Configuration\RowsManager(@ipubDoctrineCrud.crud::create(FastyBird\DevicesNode\Entities\Devices\Configuration\Row))}
-
-	- {factory: FastyBird\DevicesNode\Models\Devices\Credentials\CredentialsManager(@ipubDoctrineCrud.crud::create(FastyBird\DevicesNode\Entities\Devices\Credentials\Credentials))}
 
 	- {factory: FastyBird\DevicesNode\Models\Devices\PhysicalDevice\HardwareManager(@ipubDoctrineCrud.crud::create(FastyBird\DevicesNode\Entities\Devices\PhysicalDevice\Hardware))}
 
@@ -205,8 +201,6 @@ services:
 
 	- {factory: FastyBird\DevicesNode\Controllers\DeviceConfigurationV1Controller, tags: [nette.inject]}
 
-	- {factory: FastyBird\DevicesNode\Controllers\DeviceCredentialsV1Controller, tags: [nette.inject]}
-
 	- {factory: FastyBird\DevicesNode\Controllers\DeviceHardwareV1Controller, tags: [nette.inject]}
 
 	- {factory: FastyBird\DevicesNode\Controllers\DeviceFirmwareV1Controller, tags: [nette.inject]}
@@ -216,8 +210,6 @@ services:
 	- {factory: FastyBird\DevicesNode\Controllers\ChannelPropertiesV1Controller, tags: [nette.inject]}
 
 	- {factory: FastyBird\DevicesNode\Controllers\ChannelConfigurationV1Controller, tags: [nette.inject]}
-
-	- {factory: FastyBird\DevicesNode\Controllers\AuthenticateV1Controller, tags: [nette.inject]}
 
 	# API schemas
 	#############
@@ -229,8 +221,6 @@ services:
 	- {factory: FastyBird\DevicesNode\Schemas\Devices\Hardware\HardwareSchema}
 
 	- {factory: FastyBird\DevicesNode\Schemas\Devices\Firmware\FirmwareSchema}
-
-	- {factory: FastyBird\DevicesNode\Schemas\Devices\Credentials\CredentialsSchema}
 
 	- {factory: FastyBird\DevicesNode\Schemas\Devices\Configuration\BooleanRowSchema}
 

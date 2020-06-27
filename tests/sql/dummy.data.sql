@@ -28,11 +28,6 @@ INSERT IGNORE INTO `fb_devices_configuration` (`configuration_id`, `device_id`, 
 (_binary 0x8A41D824B1DB4548B07E606117DD7309, _binary 0x69786D15FD0C4D9F937833287C2009FA, 'number', 'sensor_report_interval', NULL, NULL, '10', '2019-08-31 14:32:50', '2019-12-10 20:35:50', '{"min_value":1,"max_value":60,"step_value":1}'),
 (_binary 0x8D933E4C1FC94361BA09EEBEE4592776, _binary 0x69786D15FD0C4D9F937833287C2009FA, 'select', 'sensor_power_units', NULL, NULL, '0', '2019-11-26 18:59:07', '2019-11-26 18:59:07', '{"select_values":[{"value":"0","name":"watts"},{"value":"1","name":"kilowatts"}]}');
 
-INSERT IGNORE INTO `fb_physicals_devices_credentials` (`credentials_id`, `device_id`, `credentials_username`, `credentials_password`, `created_at`, `updated_at`) VALUES
-(_binary 0x09F28B106B4C4421839C4E484FA7011D, _binary 0x69786D15FD0C4D9F937833287C2009FA, 'username-one', 'password', '2020-03-19 14:03:49', '2020-03-19 14:03:49'),
-(_binary 0x40B6ED308451422281EEFEA4AB5C15D7, _binary 0xE36A27881EF84CDFAB094735F191A509, 'username-two', 'password', '2020-03-20 21:56:41', '2020-03-20 21:56:41'),
-(_binary 0x617D8E60365A4EEC8E8725B3092EBFCA, _binary 0xBF4CD8702AAC45F0A85EE1CEFD2D6D9A, 'username-three', 'password', '2020-03-20 21:54:32', '2020-03-20 21:54:32');
-
 INSERT IGNORE INTO `fb_physicals_devices_firmwares` (`firmware_id`, `device_id`, `firmware_name`, `firmware_manufacturer`, `firmware_version`, `created_at`, `updated_at`) VALUES
 (_binary 0x06FEDDF463E248BCAF13F355F01FFBE0, _binary 0x69786D15FD0C4D9F937833287C2009FA, NULL, 'fastybird', NULL, '2020-03-22 15:09:54', '2020-03-22 21:27:32');
 

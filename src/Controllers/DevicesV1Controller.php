@@ -147,12 +147,7 @@ class DevicesV1Controller extends BaseV1Controller
 				// Revert all changes when error occur
 				$this->getOrmConnection()->rollBack();
 
-				if ($ex->getField() === Schemas\Devices\PhysicalDeviceSchema::RELATIONSHIPS_CREDENTIALS) {
-					$pointer = 'data/relationships/' . $ex->getField();
-
-				} else {
-					$pointer = 'data/attributes/' . $ex->getField();
-				}
+				$pointer = 'data/attributes/' . $ex->getField();
 
 				throw new NodeWebServerExceptions\JsonApiErrorException(
 					StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
@@ -254,8 +249,8 @@ class DevicesV1Controller extends BaseV1Controller
 		if ($request->getAttribute(Router\Router::URL_ITEM_ID) !== $document->getResource()->getIdentifier()->getId()) {
 			throw new NodeWebServerExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_BAD_REQUEST,
-				$this->translator->translate('//node.base.messages.invalid.heading'),
-				$this->translator->translate('//node.base.messages.invalid.message')
+				$this->translator->translate('//node.base.messages.identifierInvalid.heading'),
+				$this->translator->translate('//node.base.messages.identifierInvalid.message')
 			);
 		}
 
@@ -428,13 +423,6 @@ class DevicesV1Controller extends BaseV1Controller
 
 			return $response
 				->withEntity(NodeWebServerHttp\ScalarEntity::from($this->channelRepository->findAllBy($findQuery)));
-
-		} elseif (
-			$relationEntity === Schemas\Devices\PhysicalDeviceSchema::RELATIONSHIPS_CREDENTIALS
-			&& $device instanceof Entities\Devices\IPhysicalDevice
-		) {
-			return $response
-				->withEntity(NodeWebServerHttp\ScalarEntity::from($device->getCredentials()));
 
 		} elseif (
 			$relationEntity === Schemas\Devices\PhysicalDeviceSchema::RELATIONSHIPS_HARDWARE
