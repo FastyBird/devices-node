@@ -18,6 +18,7 @@ namespace FastyBird\DevicesNode\Schemas\Channels\Properties;
 use FastyBird\DevicesNode\Entities;
 use FastyBird\DevicesNode\Router;
 use FastyBird\DevicesNode\Schemas;
+use FastyBird\NodeJsonApi\Schemas as NodeJsonApiSchemas;
 use IPub\SlimRouter\Routing;
 use Neomerx\JsonApi;
 
@@ -29,9 +30,9 @@ use Neomerx\JsonApi;
  *
  * @author          Adam Kadlec <adam.kadlec@fastybird.com>
  *
- * @phpstan-extends Schemas\JsonApiSchema<Entities\Channels\Properties\IProperty>
+ * @phpstan-extends NodeJsonApiSchemas\JsonApiSchema<Entities\Channels\Properties\IProperty>
  */
-final class PropertySchema extends Schemas\JsonApiSchema
+final class PropertySchema extends NodeJsonApiSchemas\JsonApiSchema
 {
 
 	/**

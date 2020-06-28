@@ -16,7 +16,7 @@
 namespace FastyBird\DevicesNode\Models\Channels;
 
 use Doctrine\Common;
-use Doctrine\ORM;
+use Doctrine\Persistence;
 use FastyBird\DevicesNode\Entities;
 use FastyBird\DevicesNode\Exceptions;
 use FastyBird\DevicesNode\Queries;
@@ -40,7 +40,7 @@ final class ChannelRepository implements IChannelRepository
 	/** @var Common\Persistence\ManagerRegistry */
 	private $managerRegistry;
 
-	/** @var ORM\EntityRepository<Entities\Channels\Channel>|null */
+	/** @var Persistence\ObjectRepository<Entities\Channels\Channel>|null */
 	public $repository = null;
 
 	public function __construct(Common\Persistence\ManagerRegistry $managerRegistry)
@@ -89,9 +89,9 @@ final class ChannelRepository implements IChannelRepository
 	}
 
 	/**
-	 * @return ORM\EntityRepository<Entities\Channels\Channel>
+	 * @return Persistence\ObjectRepository<Entities\Channels\Channel>
 	 */
-	private function getRepository(): ORM\EntityRepository
+	private function getRepository(): Persistence\ObjectRepository
 	{
 		if ($this->repository === null) {
 			$this->repository = $this->managerRegistry->getRepository(Entities\Channels\Channel::class);

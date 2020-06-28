@@ -21,7 +21,7 @@ use FastyBird\DevicesNode\Models;
 use FastyBird\DevicesNode\Queries;
 use FastyBird\DevicesNode\Router;
 use FastyBird\DevicesNode\Schemas;
-use FastyBird\NodeWebServer\Exceptions as NodeWebServerExceptions;
+use FastyBird\NodeJsonApi\Exceptions as NodeJsonApiExceptions;
 use FastyBird\NodeWebServer\Http as NodeWebServerHttp;
 use Fig\Http\Message\StatusCodeInterface;
 use Psr\Http\Message;
@@ -63,7 +63,7 @@ final class DeviceConfigurationV1Controller extends BaseV1Controller
 	 *
 	 * @return NodeWebServerHttp\Response
 	 *
-	 * @throws NodeWebServerExceptions\IJsonApiException
+	 * @throws NodeJsonApiExceptions\IJsonApiException
 	 */
 	public function index(
 		Message\ServerRequestInterface $request,
@@ -73,7 +73,7 @@ final class DeviceConfigurationV1Controller extends BaseV1Controller
 		$device = $this->findDevice($request->getAttribute(Router\Router::URL_DEVICE_ID));
 
 		if (!$device->hasControl(DevicesNode\Constants::CONTROL_CONFIG)) {
-			throw new NodeWebServerExceptions\JsonApiErrorException(
+			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_BAD_REQUEST,
 				$this->translator->translate('//node.base.messages.invalidDeviceType.heading'),
 				$this->translator->translate('//node.base.messages.invalidDeviceType.message')
@@ -95,7 +95,7 @@ final class DeviceConfigurationV1Controller extends BaseV1Controller
 	 *
 	 * @return NodeWebServerHttp\Response
 	 *
-	 * @throws NodeWebServerExceptions\IJsonApiException
+	 * @throws NodeJsonApiExceptions\IJsonApiException
 	 */
 	public function read(
 		Message\ServerRequestInterface $request,
@@ -105,7 +105,7 @@ final class DeviceConfigurationV1Controller extends BaseV1Controller
 		$device = $this->findDevice($request->getAttribute(Router\Router::URL_DEVICE_ID));
 
 		if (!$device->hasControl(DevicesNode\Constants::CONTROL_CONFIG)) {
-			throw new NodeWebServerExceptions\JsonApiErrorException(
+			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_BAD_REQUEST,
 				$this->translator->translate('//node.base.messages.invalidDeviceType.heading'),
 				$this->translator->translate('//node.base.messages.invalidDeviceType.message')
@@ -126,7 +126,7 @@ final class DeviceConfigurationV1Controller extends BaseV1Controller
 			}
 		}
 
-		throw new NodeWebServerExceptions\JsonApiErrorException(
+		throw new NodeJsonApiExceptions\JsonApiErrorException(
 			StatusCodeInterface::STATUS_NOT_FOUND,
 			$this->translator->translate('messages.notFound.heading'),
 			$this->translator->translate('messages.notFound.message')
@@ -139,7 +139,7 @@ final class DeviceConfigurationV1Controller extends BaseV1Controller
 	 *
 	 * @return NodeWebServerHttp\Response
 	 *
-	 * @throws NodeWebServerExceptions\IJsonApiException
+	 * @throws NodeJsonApiExceptions\IJsonApiException
 	 */
 	public function readRelationship(
 		Message\ServerRequestInterface $request,
@@ -149,7 +149,7 @@ final class DeviceConfigurationV1Controller extends BaseV1Controller
 		$device = $this->findDevice($request->getAttribute(Router\Router::URL_DEVICE_ID));
 
 		if (!$device->hasControl(DevicesNode\Constants::CONTROL_CONFIG)) {
-			throw new NodeWebServerExceptions\JsonApiErrorException(
+			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_BAD_REQUEST,
 				$this->translator->translate('//node.base.messages.invalidDeviceType.heading'),
 				$this->translator->translate('//node.base.messages.invalidDeviceType.message')
@@ -174,7 +174,7 @@ final class DeviceConfigurationV1Controller extends BaseV1Controller
 				}
 
 			} else {
-				throw new NodeWebServerExceptions\JsonApiErrorException(
+				throw new NodeJsonApiExceptions\JsonApiErrorException(
 					StatusCodeInterface::STATUS_NOT_FOUND,
 					$this->translator->translate('messages.notFound.heading'),
 					$this->translator->translate('messages.notFound.message')

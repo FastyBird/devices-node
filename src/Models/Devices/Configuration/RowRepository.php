@@ -16,7 +16,7 @@
 namespace FastyBird\DevicesNode\Models\Devices\Configuration;
 
 use Doctrine\Common;
-use Doctrine\ORM;
+use Doctrine\Persistence;
 use FastyBird\DevicesNode\Entities;
 use FastyBird\DevicesNode\Exceptions;
 use FastyBird\DevicesNode\Queries;
@@ -40,7 +40,7 @@ final class RowRepository implements IRowRepository
 	/** @var Common\Persistence\ManagerRegistry */
 	private $managerRegistry;
 
-	/** @var ORM\EntityRepository<Entities\Devices\Configuration\Row>[] */
+	/** @var Persistence\ObjectRepository<Entities\Devices\Configuration\Row>[] */
 	private $repository = [];
 
 	public function __construct(Common\Persistence\ManagerRegistry $managerRegistry)
@@ -82,12 +82,12 @@ final class RowRepository implements IRowRepository
 	/**
 	 * @param string $type
 	 *
-	 * @return ORM\EntityRepository<Entities\Devices\Configuration\Row>
+	 * @return Persistence\ObjectRepository<Entities\Devices\Configuration\Row>
 	 *
 	 * @phpstan-template T of Entities\Devices\Configuration\Row
 	 * @phpstan-param    class-string<T> $type
 	 */
-	private function getRepository(string $type): ORM\EntityRepository
+	private function getRepository(string $type): Persistence\ObjectRepository
 	{
 		if (!isset($this->repository[$type])) {
 			$this->repository[$type] = $this->managerRegistry->getRepository($type);

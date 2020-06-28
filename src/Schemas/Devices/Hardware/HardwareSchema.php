@@ -18,6 +18,7 @@ namespace FastyBird\DevicesNode\Schemas\Devices\Hardware;
 use FastyBird\DevicesNode\Entities;
 use FastyBird\DevicesNode\Router;
 use FastyBird\DevicesNode\Schemas;
+use FastyBird\NodeJsonApi\Schemas as NodeJsonApiSchemas;
 use IPub\SlimRouter\Routing;
 use Neomerx\JsonApi;
 
@@ -29,9 +30,9 @@ use Neomerx\JsonApi;
  *
  * @author          Adam Kadlec <adam.kadlec@fastybird.com>
  *
- * @phpstan-extends Schemas\JsonApiSchema<Entities\Devices\PhysicalDevice\IHardware>
+ * @phpstan-extends NodeJsonApiSchemas\JsonApiSchema<Entities\Devices\PhysicalDevice\IHardware>
  */
-final class HardwareSchema extends Schemas\JsonApiSchema
+final class HardwareSchema extends NodeJsonApiSchemas\JsonApiSchema
 {
 
 	/**

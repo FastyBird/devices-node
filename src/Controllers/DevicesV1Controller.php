@@ -23,7 +23,7 @@ use FastyBird\DevicesNode\Models;
 use FastyBird\DevicesNode\Queries;
 use FastyBird\DevicesNode\Router;
 use FastyBird\DevicesNode\Schemas;
-use FastyBird\NodeWebServer\Exceptions as NodeWebServerExceptions;
+use FastyBird\NodeJsonApi\Exceptions as NodeJsonApiExceptions;
 use FastyBird\NodeWebServer\Http as NodeWebServerHttp;
 use Fig\Http\Message\StatusCodeInterface;
 use IPub\DoctrineCrud\Exceptions as DoctrineCrudExceptions;
@@ -100,7 +100,7 @@ class DevicesV1Controller extends BaseV1Controller
 	 *
 	 * @return NodeWebServerHttp\Response
 	 *
-	 * @throws NodeWebServerExceptions\IJsonApiException
+	 * @throws NodeJsonApiExceptions\IJsonApiException
 	 */
 	public function read(
 		Message\ServerRequestInterface $request,
@@ -118,7 +118,7 @@ class DevicesV1Controller extends BaseV1Controller
 	 *
 	 * @return NodeWebServerHttp\Response
 	 *
-	 * @throws NodeWebServerExceptions\IJsonApiException
+	 * @throws NodeJsonApiExceptions\IJsonApiException
 	 * @throws Doctrine\DBAL\ConnectionException
 	 */
 	public function create(
@@ -137,7 +137,7 @@ class DevicesV1Controller extends BaseV1Controller
 				// Commit all changes into database
 				$this->getOrmConnection()->commit();
 
-			} catch (NodeWebServerExceptions\IJsonApiException $ex) {
+			} catch (NodeJsonApiExceptions\IJsonApiException $ex) {
 				// Revert all changes when error occur
 				$this->getOrmConnection()->rollBack();
 
@@ -149,7 +149,7 @@ class DevicesV1Controller extends BaseV1Controller
 
 				$pointer = 'data/attributes/' . $ex->getField();
 
-				throw new NodeWebServerExceptions\JsonApiErrorException(
+				throw new NodeJsonApiExceptions\JsonApiErrorException(
 					StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 					$this->translator->translate('//node.base.messages.missingRequired.heading'),
 					$this->translator->translate('//node.base.messages.missingRequired.message'),
@@ -162,7 +162,7 @@ class DevicesV1Controller extends BaseV1Controller
 				// Revert all changes when error occur
 				$this->getOrmConnection()->rollBack();
 
-				throw new NodeWebServerExceptions\JsonApiErrorException(
+				throw new NodeJsonApiExceptions\JsonApiErrorException(
 					StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 					$this->translator->translate('//node.base.messages.missingRequired.heading'),
 					$this->translator->translate('//node.base.messages.missingRequired.message'),
@@ -177,7 +177,7 @@ class DevicesV1Controller extends BaseV1Controller
 
 				if (preg_match("%key '(?P<key>.+)_unique'%", $ex->getMessage(), $match) !== false) {
 					if (Utils\Strings::startsWith($match['key'], 'device_')) {
-						throw new NodeWebServerExceptions\JsonApiErrorException(
+						throw new NodeJsonApiExceptions\JsonApiErrorException(
 							StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 							$this->translator->translate('//node.base.messages.uniqueConstraint.heading'),
 							$this->translator->translate('//node.base.messages.uniqueConstraint.message'),
@@ -188,7 +188,7 @@ class DevicesV1Controller extends BaseV1Controller
 					}
 				}
 
-				throw new NodeWebServerExceptions\JsonApiErrorException(
+				throw new NodeJsonApiExceptions\JsonApiErrorException(
 					StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 					$this->translator->translate('//node.base.messages.uniqueConstraint.heading'),
 					$this->translator->translate('//node.base.messages.uniqueConstraint.message')
@@ -206,7 +206,7 @@ class DevicesV1Controller extends BaseV1Controller
 					],
 				]);
 
-				throw new NodeWebServerExceptions\JsonApiErrorException(
+				throw new NodeJsonApiExceptions\JsonApiErrorException(
 					StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 					$this->translator->translate('messages.notCreated.heading'),
 					$this->translator->translate('messages.notCreated.message')
@@ -221,7 +221,7 @@ class DevicesV1Controller extends BaseV1Controller
 			return $response;
 		}
 
-		throw new NodeWebServerExceptions\JsonApiErrorException(
+		throw new NodeJsonApiExceptions\JsonApiErrorException(
 			StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 			$this->translator->translate('messages.invalidType.heading'),
 			$this->translator->translate('messages.invalidType.message'),
@@ -237,7 +237,7 @@ class DevicesV1Controller extends BaseV1Controller
 	 *
 	 * @return NodeWebServerHttp\Response
 	 *
-	 * @throws NodeWebServerExceptions\IJsonApiException
+	 * @throws NodeJsonApiExceptions\IJsonApiException
 	 * @throws Doctrine\DBAL\ConnectionException
 	 */
 	public function update(
@@ -247,7 +247,7 @@ class DevicesV1Controller extends BaseV1Controller
 		$document = $this->createDocument($request);
 
 		if ($request->getAttribute(Router\Router::URL_ITEM_ID) !== $document->getResource()->getIdentifier()->getId()) {
-			throw new NodeWebServerExceptions\JsonApiErrorException(
+			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_BAD_REQUEST,
 				$this->translator->translate('//node.base.messages.identifierInvalid.heading'),
 				$this->translator->translate('//node.base.messages.identifierInvalid.message')
@@ -267,7 +267,7 @@ class DevicesV1Controller extends BaseV1Controller
 				$updateDeviceData = $this->physicalDeviceHydrator->hydrate($document, $device);
 
 			} else {
-				throw new NodeWebServerExceptions\JsonApiErrorException(
+				throw new NodeJsonApiExceptions\JsonApiErrorException(
 					StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 					$this->translator->translate('messages.invalidType.heading'),
 					$this->translator->translate('messages.invalidType.message'),
@@ -282,7 +282,7 @@ class DevicesV1Controller extends BaseV1Controller
 			// Commit all changes into database
 			$this->getOrmConnection()->commit();
 
-		} catch (NodeWebServerExceptions\IJsonApiException $ex) {
+		} catch (NodeJsonApiExceptions\IJsonApiException $ex) {
 			// Revert all changes when error occur
 			$this->getOrmConnection()->rollBack();
 
@@ -294,7 +294,7 @@ class DevicesV1Controller extends BaseV1Controller
 
 			if (preg_match("%key '(?P<key>.+)_unique'%", $ex->getMessage(), $match) !== false) {
 				if (Utils\Strings::startsWith($match['key'], 'device_')) {
-					throw new NodeWebServerExceptions\JsonApiErrorException(
+					throw new NodeJsonApiExceptions\JsonApiErrorException(
 						StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 						$this->translator->translate('//node.base.messages.uniqueConstraint.heading'),
 						$this->translator->translate('//node.base.messages.uniqueConstraint.message'),
@@ -305,7 +305,7 @@ class DevicesV1Controller extends BaseV1Controller
 				}
 			}
 
-			throw new NodeWebServerExceptions\JsonApiErrorException(
+			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 				$this->translator->translate('//node.base.messages.uniqueConstraint.heading'),
 				$this->translator->translate('//node.base.messages.uniqueConstraint.message')
@@ -323,7 +323,7 @@ class DevicesV1Controller extends BaseV1Controller
 				],
 			]);
 
-			throw new NodeWebServerExceptions\JsonApiErrorException(
+			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 				$this->translator->translate('messages.notUpdated.heading'),
 				$this->translator->translate('messages.notUpdated.message')
@@ -340,7 +340,7 @@ class DevicesV1Controller extends BaseV1Controller
 	 *
 	 * @return NodeWebServerHttp\Response
 	 *
-	 * @throws NodeWebServerExceptions\IJsonApiException
+	 * @throws NodeJsonApiExceptions\IJsonApiException
 	 * @throws Doctrine\DBAL\ConnectionException
 	 */
 	public function delete(
@@ -376,7 +376,7 @@ class DevicesV1Controller extends BaseV1Controller
 			// Revert all changes when error occur
 			$this->getOrmConnection()->rollBack();
 
-			throw new NodeWebServerExceptions\JsonApiErrorException(
+			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 				$this->translator->translate('messages.notDeleted.heading'),
 				$this->translator->translate('messages.notDeleted.message')
@@ -395,7 +395,7 @@ class DevicesV1Controller extends BaseV1Controller
 	 *
 	 * @return NodeWebServerHttp\Response
 	 *
-	 * @throws NodeWebServerExceptions\IJsonApiException
+	 * @throws NodeJsonApiExceptions\IJsonApiException
 	 */
 	public function readRelationship(
 		Message\ServerRequestInterface $request,

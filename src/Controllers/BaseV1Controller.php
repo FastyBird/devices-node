@@ -18,7 +18,7 @@ namespace FastyBird\DevicesNode\Controllers;
 use Contributte\Translation;
 use Doctrine\DBAL\Connection;
 use FastyBird\DevicesNode\Exceptions;
-use FastyBird\NodeWebServer\Exceptions as NodeWebServerExceptions;
+use FastyBird\NodeJsonApi\Exceptions as NodeJsonApiExceptions;
 use Fig\Http\Message\StatusCodeInterface;
 use IPub\JsonAPIDocument;
 use Nette;
@@ -87,7 +87,7 @@ abstract class BaseV1Controller
 	 *
 	 * @return JsonAPIDocument\IDocument<JsonAPIDocument\Objects\StandardObject>
 	 *
-	 * @throws NodeWebServerExceptions\IJsonApiException
+	 * @throws NodeJsonApiExceptions\IJsonApiException
 	 */
 	protected function createDocument(ServerRequestInterface $request): JsonAPIDocument\IDocument
 	{
@@ -95,14 +95,14 @@ abstract class BaseV1Controller
 			$document = new JsonAPIDocument\Document(Utils\Json::decode($request->getBody()->getContents()));
 
 		} catch (Utils\JsonException $ex) {
-			throw new NodeWebServerExceptions\JsonApiErrorException(
+			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_BAD_REQUEST,
 				$this->translator->translate('//node.base.messages.notValidJson.heading'),
 				$this->translator->translate('//node.base.messages.notValidJson.message')
 			);
 
 		} catch (JsonAPIDocument\Exceptions\RuntimeException $ex) {
-			throw new NodeWebServerExceptions\JsonApiErrorException(
+			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_BAD_REQUEST,
 				$this->translator->translate('//node.base.messages.notValidJsonApi.heading'),
 				$this->translator->translate('//node.base.messages.notValidJsonApi.message')
@@ -115,19 +115,19 @@ abstract class BaseV1Controller
 	/**
 	 * @param string|null $relationEntity
 	 *
-	 * @throws NodeWebServerExceptions\IJsonApiException
+	 * @throws NodeJsonApiExceptions\IJsonApiException
 	 */
 	protected function throwUnknownRelation(?string $relationEntity): void
 	{
 		if ($relationEntity !== null) {
-			throw new NodeWebServerExceptions\JsonApiErrorException(
+			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_NOT_FOUND,
 				$this->translator->translate('//node.base.messages.relationNotFound.heading'),
 				$this->translator->translate('//node.base.messages.relationNotFound.message', ['relation' => $relationEntity])
 			);
 		}
 
-		throw new NodeWebServerExceptions\JsonApiErrorException(
+		throw new NodeJsonApiExceptions\JsonApiErrorException(
 			StatusCodeInterface::STATUS_NOT_FOUND,
 			$this->translator->translate('//node.base.messages.unknownRelation.heading'),
 			$this->translator->translate('//node.base.messages.unknownRelation.message')

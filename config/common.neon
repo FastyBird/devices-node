@@ -38,6 +38,7 @@ extensions:
 	nettrineOrmCache			: Nettrine\ORM\DI\OrmCacheExtension
 	nodeWebServer				: FastyBird\NodeWebServer\DI\NodeWebServerExtension
 	nodeDatabase				: FastyBird\NodeDatabase\DI\NodeDatabaseExtension
+	nodeJsonApi					: FastyBird\NodeJsonApi\DI\NodeJsonApiExtension
 
 ##################################
 # Nette extensions configuration #

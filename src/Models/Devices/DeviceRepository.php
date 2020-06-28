@@ -16,7 +16,7 @@
 namespace FastyBird\DevicesNode\Models\Devices;
 
 use Doctrine\Common;
-use Doctrine\ORM;
+use Doctrine\Persistence;
 use FastyBird\DevicesNode\Entities;
 use FastyBird\DevicesNode\Exceptions;
 use FastyBird\DevicesNode\Queries;
@@ -40,7 +40,7 @@ final class DeviceRepository implements IDeviceRepository
 	/** @var Common\Persistence\ManagerRegistry */
 	private $managerRegistry;
 
-	/** @var ORM\EntityRepository<Entities\Devices\Device>[] */
+	/** @var Persistence\ObjectRepository<Entities\Devices\Device>[] */
 	private $repository = [];
 
 	public function __construct(Common\Persistence\ManagerRegistry $managerRegistry)
@@ -96,12 +96,12 @@ final class DeviceRepository implements IDeviceRepository
 	/**
 	 * @param string $type
 	 *
-	 * @return ORM\EntityRepository<Entities\Devices\Device>
+	 * @return Persistence\ObjectRepository<Entities\Devices\Device>
 	 *
 	 * @phpstan-template T of Entities\Devices\Device
 	 * @phpstan-param    class-string<T> $type
 	 */
-	private function getRepository(string $type): ORM\EntityRepository
+	private function getRepository(string $type): Persistence\ObjectRepository
 	{
 		if (!isset($this->repository[$type])) {
 			$this->repository[$type] = $this->managerRegistry->getRepository($type);

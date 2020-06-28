@@ -16,7 +16,7 @@
 namespace FastyBird\DevicesNode\Models\Channels\Properties;
 
 use Doctrine\Common;
-use Doctrine\ORM;
+use Doctrine\Persistence;
 use FastyBird\DevicesNode\Entities;
 use FastyBird\DevicesNode\Exceptions;
 use FastyBird\DevicesNode\Queries;
@@ -40,7 +40,7 @@ final class PropertyRepository implements IPropertyRepository
 	/** @var Common\Persistence\ManagerRegistry */
 	private $managerRegistry;
 
-	/** @var ORM\EntityRepository<Entities\Channels\Properties\Property>|null */
+	/** @var Persistence\ObjectRepository<Entities\Channels\Properties\Property>|null */
 	private $repository = null;
 
 	public function __construct(Common\Persistence\ManagerRegistry $managerRegistry)
@@ -77,9 +77,9 @@ final class PropertyRepository implements IPropertyRepository
 	}
 
 	/**
-	 * @return ORM\EntityRepository<Entities\Channels\Properties\Property>
+	 * @return Persistence\ObjectRepository<Entities\Channels\Properties\Property>
 	 */
-	private function getRepository(): ORM\EntityRepository
+	private function getRepository(): Persistence\ObjectRepository
 	{
 		if ($this->repository === null) {
 			$this->repository = $this->managerRegistry->getRepository(Entities\Channels\Properties\Property::class);

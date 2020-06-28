@@ -95,7 +95,7 @@ final class PhysicalDeviceSchema extends DeviceSchema
 				self::RELATIONSHIP_LINKS_SELF    => true,
 				self::RELATIONSHIP_LINKS_RELATED => true,
 			],
-		], parent::getRelationships($device, $context));
+		], (array) parent::getRelationships($device, $context));
 	}
 
 	/**

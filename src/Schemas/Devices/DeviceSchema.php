@@ -20,6 +20,7 @@ use FastyBird\DevicesNode\Models;
 use FastyBird\DevicesNode\Queries;
 use FastyBird\DevicesNode\Router;
 use FastyBird\DevicesNode\Schemas;
+use FastyBird\NodeJsonApi\Schemas as NodeJsonApiSchemas;
 use IPub\SlimRouter\Routing;
 use Neomerx\JsonApi;
 
@@ -32,9 +33,9 @@ use Neomerx\JsonApi;
  * @author           Adam Kadlec <adam.kadlec@fastybird.com>
  *
  * @phpstan-template T of Entities\Devices\IDevice
- * @phpstan-extends  Schemas\JsonApiSchema<T>
+ * @phpstan-extends  NodeJsonApiSchemas\JsonApiSchema<T>
  */
-abstract class DeviceSchema extends Schemas\JsonApiSchema
+abstract class DeviceSchema extends NodeJsonApiSchemas\JsonApiSchema
 {
 
 	/**
