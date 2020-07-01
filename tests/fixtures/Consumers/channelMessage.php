@@ -8,6 +8,7 @@ return [
 		DevicesNode\Constants::RABBIT_MQ_CHANNELS_DATA_ROUTING_KEY,
 		Utils\ArrayHash::from([
 			'device'  => 'first-device',
+			'parent'  => null,
 			'channel' => 'channel-one',
 			'name'    => 'Channel one',
 		]),
@@ -17,6 +18,7 @@ return [
 		DevicesNode\Constants::RABBIT_MQ_CHANNELS_DATA_ROUTING_KEY,
 		Utils\ArrayHash::from([
 			'device'  => 'first-device',
+			'parent'  => null,
 			'channel' => 'channel-one',
 			'name'    => 'Channel updated',
 		]),
@@ -29,6 +31,7 @@ return [
 				'control' => ['configure'],
 				'params'  => [],
 				'device'  => 'first-device',
+				'parent'  => null,
 				'channel' => 'channel-one',
 			],
 		],
@@ -37,6 +40,7 @@ return [
 		DevicesNode\Constants::RABBIT_MQ_CHANNELS_DATA_ROUTING_KEY,
 		Utils\ArrayHash::from([
 			'device'  => 'first-device',
+			'parent'  => null,
 			'channel' => 'channel-one',
 			'name'    => 'Channel updated',
 			'title'   => 'Channel title',
@@ -50,6 +54,7 @@ return [
 				'control' => ['configure'],
 				'params'  => [],
 				'device'  => 'first-device',
+				'parent'  => null,
 				'channel' => 'channel-one',
 			],
 		],
@@ -58,6 +63,7 @@ return [
 		DevicesNode\Constants::RABBIT_MQ_CHANNELS_DATA_ROUTING_KEY,
 		Utils\ArrayHash::from([
 			'device'     => 'first-device',
+			'parent'     => null,
 			'channel'    => 'channel-one',
 			'name'       => 'Channel updated',
 			'properties' => ['switch', 'button'],
@@ -71,6 +77,7 @@ return [
 				'control' => ['configure'],
 				'params'  => [],
 				'device'  => 'first-device',
+				'parent'  => null,
 				'channel' => 'channel-one',
 			],
 			'fb.bus.node.entity.created.channel.property' => [
@@ -82,6 +89,7 @@ return [
 				'unit'      => null,
 				'format'    => null,
 				'device'    => 'first-device',
+				'parent'    => null,
 				'channel'   => 'channel-one',
 			],
 		],
@@ -90,6 +98,7 @@ return [
 		DevicesNode\Constants::RABBIT_MQ_CHANNELS_DATA_ROUTING_KEY,
 		Utils\ArrayHash::from([
 			'device'     => 'first-device',
+			'parent'     => null,
 			'channel'    => 'channel-one',
 			'properties' => ['switch', 'button'],
 		]),
@@ -103,6 +112,7 @@ return [
 				'unit'      => null,
 				'format'    => null,
 				'device'    => 'first-device',
+				'parent'    => null,
 				'channel'   => 'channel-one',
 			],
 		],
@@ -111,6 +121,7 @@ return [
 		DevicesNode\Constants::RABBIT_MQ_CHANNELS_DATA_ROUTING_KEY,
 		Utils\ArrayHash::from([
 			'device'  => 'first-device',
+			'parent'  => null,
 			'channel' => 'channel-one',
 			'control' => ['configure', 'reset'],
 		]),

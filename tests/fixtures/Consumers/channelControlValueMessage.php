@@ -8,6 +8,7 @@ return [
 		DevicesNode\Constants::RABBIT_MQ_CHANNELS_CONTROLS_DATA_ROUTING_KEY,
 		Utils\ArrayHash::from([
 			'device'  => 'first-device',
+			'parent'  => null,
 			'channel' => 'channel-one',
 			'control' => 'configure',
 			'value'   => [
@@ -20,6 +21,7 @@ return [
 		DevicesNode\Constants::RABBIT_MQ_CHANNELS_CONTROLS_DATA_ROUTING_KEY,
 		Utils\ArrayHash::from([
 			'device'  => 'first-device',
+			'parent'  => null,
 			'channel' => 'channel-one',
 			'control' => 'configure',
 			'value'   => [
@@ -41,6 +43,7 @@ return [
 				],
 				'type'    => DevicesNode\Constants::DATA_TYPE_SELECT,
 				'device'  => 'first-device',
+				'parent'  => null,
 				'channel' => 'channel-one',
 			],
 		],

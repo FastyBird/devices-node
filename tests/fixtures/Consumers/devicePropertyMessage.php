@@ -9,6 +9,7 @@ return [
 		DevicesNode\Constants::RABBIT_MQ_DEVICES_PROPERTIES_DATA_ROUTING_KEY,
 		Utils\ArrayHash::from([
 			'device'   => 'first-device',
+			'parent'   => null,
 			'property' => 'uptime',
 			'name'     => 'uptime',
 		]),
@@ -18,6 +19,7 @@ return [
 		DevicesNode\Constants::RABBIT_MQ_DEVICES_PROPERTIES_DATA_ROUTING_KEY,
 		Utils\ArrayHash::from([
 			'device'   => 'first-device',
+			'parent'   => null,
 			'property' => 'uptime',
 			'name'     => 'Device uptime',
 		]),
@@ -32,6 +34,7 @@ return [
 				'unit'      => null,
 				'format'    => null,
 				'device'    => 'first-device',
+				'parent'    => null,
 			],
 		],
 	],
@@ -39,6 +42,7 @@ return [
 		DevicesNode\Constants::RABBIT_MQ_DEVICES_PROPERTIES_DATA_ROUTING_KEY,
 		Utils\ArrayHash::from([
 			'device'   => 'first-device',
+			'parent'   => null,
 			'property' => 'status-led',
 			'name'     => 'Device status led',
 		]),
@@ -52,6 +56,7 @@ return [
 				'unit'      => null,
 				'format'    => null,
 				'device'    => 'first-device',
+				'parent'    => null,
 			],
 		],
 	],
@@ -59,6 +64,7 @@ return [
 		DevicesNode\Constants::RABBIT_MQ_DEVICES_PROPERTIES_DATA_ROUTING_KEY,
 		Utils\ArrayHash::from([
 			'device'   => 'first-device',
+			'parent'   => null,
 			'property' => 'uptime',
 			'name'     => 'Device uptime',
 			'datatype' => Types\DatatypeType::DATA_TYPE_STRING,
@@ -74,6 +80,7 @@ return [
 				'unit'      => null,
 				'format'    => null,
 				'device'    => 'first-device',
+				'parent'    => null,
 			],
 		],
 	],
@@ -81,6 +88,7 @@ return [
 		DevicesNode\Constants::RABBIT_MQ_DEVICES_PROPERTIES_DATA_ROUTING_KEY,
 		Utils\ArrayHash::from([
 			'device'   => 'first-device',
+			'parent'   => null,
 			'property' => 'uptime',
 			'name'     => 'Device uptime',
 			'datatype' => Types\DatatypeType::DATA_TYPE_INTEGER,
@@ -97,6 +105,7 @@ return [
 				'unit'      => null,
 				'format'    => [10, 50],
 				'device'    => 'first-device',
+				'parent'    => null,
 			],
 		],
 	],

@@ -9,6 +9,7 @@ return [
 		DevicesNode\Constants::RABBIT_MQ_CHANNELS_PROPERTIES_DATA_ROUTING_KEY,
 		Utils\ArrayHash::from([
 			'device'   => 'first-device',
+			'parent'   => null,
 			'channel'  => 'channel-one',
 			'property' => 'switch',
 			'name'     => 'switch',
@@ -19,6 +20,7 @@ return [
 		DevicesNode\Constants::RABBIT_MQ_CHANNELS_PROPERTIES_DATA_ROUTING_KEY,
 		Utils\ArrayHash::from([
 			'device'   => 'first-device',
+			'parent'   => null,
 			'channel'  => 'channel-one',
 			'property' => 'switch',
 			'name'     => 'Relay switch',
@@ -34,6 +36,7 @@ return [
 				'unit'      => null,
 				'format'    => ['on', 'off', 'toggle'],
 				'device'    => 'first-device',
+				'parent'    => null,
 				'channel'   => 'channel-one',
 			],
 		],
@@ -42,6 +45,7 @@ return [
 		DevicesNode\Constants::RABBIT_MQ_CHANNELS_PROPERTIES_DATA_ROUTING_KEY,
 		Utils\ArrayHash::from([
 			'device'   => 'first-device',
+			'parent'   => null,
 			'channel'  => 'channel-one',
 			'property' => 'button',
 			'name'     => 'Device button',
@@ -56,6 +60,7 @@ return [
 				'unit'      => null,
 				'format'    => null,
 				'device'    => 'first-device',
+				'parent'    => null,
 				'channel'   => 'channel-one',
 			],
 		],
@@ -64,6 +69,7 @@ return [
 		DevicesNode\Constants::RABBIT_MQ_CHANNELS_PROPERTIES_DATA_ROUTING_KEY,
 		Utils\ArrayHash::from([
 			'device'   => 'first-device',
+			'parent'   => null,
 			'channel'  => 'channel-one',
 			'property' => 'switch',
 			'name'     => 'Relay switch',
@@ -80,6 +86,7 @@ return [
 				'unit'      => null,
 				'format'    => null,
 				'device'    => 'first-device',
+				'parent'    => null,
 				'channel'   => 'channel-one',
 			],
 		],
@@ -88,6 +95,7 @@ return [
 		DevicesNode\Constants::RABBIT_MQ_CHANNELS_PROPERTIES_DATA_ROUTING_KEY,
 		Utils\ArrayHash::from([
 			'device'   => 'first-device',
+			'parent'   => null,
 			'channel'  => 'channel-one',
 			'property' => 'switch',
 			'name'     => 'Relay switch',
@@ -105,6 +113,7 @@ return [
 				'unit'      => null,
 				'format'    => null,
 				'device'    => 'first-device',
+				'parent'    => null,
 				'channel'   => 'channel-one',
 			],
 		],

@@ -214,6 +214,7 @@ class Hardware extends NodeDatabaseEntities\Entity implements IHardware
 			'model'        => $this->getModel()->getValue(),
 			'mac_address'  => $this->getMacAddress(),
 			'device'       => $this->getDevice()->getIdentifier(),
+			'parent'       => $this->getDevice()->getParent() !== null ? $this->getDevice()->getParent()->getIdentifier() : null,
 		];
 	}
 

@@ -8,6 +8,7 @@ return [
 		DevicesNode\Constants::RABBIT_MQ_DEVICES_HARDWARE_DATA_ROUTING_KEY,
 		Utils\ArrayHash::from([
 			'device'       => 'first-device',
+			'parent'       => null,
 			'manufacturer' => 'itead',
 		]),
 		[],
@@ -16,6 +17,7 @@ return [
 		DevicesNode\Constants::RABBIT_MQ_DEVICES_HARDWARE_DATA_ROUTING_KEY,
 		Utils\ArrayHash::from([
 			'device'       => 'first-device',
+			'parent'       => null,
 			'manufacturer' => 'fastybird',
 		]),
 		[
@@ -26,6 +28,7 @@ return [
 				'version'      => 'rev1',
 				'mac_address'  => '80:7d:3a:3d:be:6d',
 				'device'       => 'first-device',
+				'parent'       => null,
 			],
 		],
 	],
@@ -33,6 +36,7 @@ return [
 		DevicesNode\Constants::RABBIT_MQ_DEVICES_HARDWARE_DATA_ROUTING_KEY,
 		Utils\ArrayHash::from([
 			'device'       => 'first-device',
+			'parent'       => null,
 			'manufacturer' => 'fastybird',
 			'version'      => 'rev2',
 		]),
@@ -44,6 +48,7 @@ return [
 				'version'      => 'rev2',
 				'mac_address'  => '80:7d:3a:3d:be:6d',
 				'device'       => 'first-device',
+				'parent'       => null,
 			],
 		],
 	],
@@ -51,6 +56,7 @@ return [
 		DevicesNode\Constants::RABBIT_MQ_DEVICES_HARDWARE_DATA_ROUTING_KEY,
 		Utils\ArrayHash::from([
 			'device'       => 'child-device',
+			'parent'       => 'first-device',
 			'manufacturer' => 'fastybird',
 		]),
 		[
@@ -60,6 +66,7 @@ return [
 				'version'      => null,
 				'mac_address'  => null,
 				'device'       => 'child-device',
+				'parent'       => 'first-device',
 			],
 		],
 	],

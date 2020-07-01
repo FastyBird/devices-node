@@ -19,6 +19,11 @@ parameters:
 
 	rabbitmq:
 		queueName: fb.devices.node.exchange
+		routing:
+			- fb.bus.node.data.device
+			- fb.bus.node.data.device.*
+			- fb.bus.node.data.channel
+			- fb.bus.node.data.channel.*
 
 #########################
 # Used Nette extensions #
@@ -50,6 +55,7 @@ nodeWebServer:
 	server:
 		address: %server.address%
 		port: %server.port%
+	routingKeys: %rabbitmq.routing%
 
 # Node translations
 ###################

@@ -311,6 +311,7 @@ class Property extends NodeDatabaseEntities\Entity implements IProperty
 			'unit'      => $this->getUnit(),
 			'format'    => $this->getFormat(),
 			'device'    => $this->getChannel()->getDevice()->getIdentifier(),
+			'parent'    => $this->getChannel()->getDevice()->getParent() !== null ? $this->getChannel()->getDevice()->getParent()->getIdentifier() : null,
 			'channel'   => $this->getChannel()->getChannel(),
 		];
 	}

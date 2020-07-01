@@ -173,6 +173,7 @@ class Firmware extends NodeDatabaseEntities\Entity implements IFirmware
 			'manufacturer' => $this->getManufacturer()->getValue(),
 			'version'      => $this->getVersion(),
 			'device'       => $this->getDevice()->getIdentifier(),
+			'parent'       => $this->getDevice()->getParent() !== null ? $this->getDevice()->getParent()->getIdentifier() : null,
 		];
 	}
 

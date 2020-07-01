@@ -8,6 +8,7 @@ return [
 		DevicesNode\Constants::RABBIT_MQ_DEVICES_CONTROLS_DATA_ROUTING_KEY,
 		Utils\ArrayHash::from([
 			'device'  => 'first-device',
+			'parent'  => null,
 			'control' => 'configure',
 			'schema'  => [
 				[
@@ -165,6 +166,7 @@ return [
 		DevicesNode\Constants::RABBIT_MQ_DEVICES_CONTROLS_DATA_ROUTING_KEY,
 		Utils\ArrayHash::from([
 			'device'  => 'first-device',
+			'parent'  => null,
 			'control' => 'configure',
 			'schema'  => [
 				[
@@ -329,6 +331,7 @@ return [
 				'step'    => 1.0,
 				'type'    => DevicesNode\Constants::DATA_TYPE_NUMBER,
 				'device'  => 'first-device',
+				'parent'  => null,
 			],
 		],
 	],
@@ -336,6 +339,7 @@ return [
 		DevicesNode\Constants::RABBIT_MQ_DEVICES_CONTROLS_DATA_ROUTING_KEY,
 		Utils\ArrayHash::from([
 			'device'  => 'first-device',
+			'parent'  => null,
 			'control' => 'configure',
 			'schema'  => [
 				[
@@ -484,6 +488,7 @@ return [
 				],
 				'type'    => DevicesNode\Constants::DATA_TYPE_SELECT,
 				'device'  => 'first-device',
+				'parent'  => null,
 			],
 		],
 	],
@@ -491,6 +496,7 @@ return [
 		DevicesNode\Constants::RABBIT_MQ_DEVICES_CONTROLS_DATA_ROUTING_KEY,
 		Utils\ArrayHash::from([
 			'device'  => 'first-device',
+			'parent'  => null,
 			'control' => 'configure',
 			'schema'  => [
 				[
@@ -668,6 +674,7 @@ return [
 				'value'   => null,
 				'type'    => DevicesNode\Constants::DATA_TYPE_TEXT,
 				'device'  => 'first-device',
+				'parent'  => null,
 			],
 		],
 	],

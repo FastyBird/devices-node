@@ -93,7 +93,8 @@ class Channel extends NodeDatabaseEntities\Entity implements IChannel
 	 * @var Common\Collections\Collection<int, Entities\Channels\Properties\IProperty>
 	 *
 	 * @IPubDoctrine\Crud(is="writable")
-	 * @ORM\OneToMany(targetEntity="FastyBird\DevicesNode\Entities\Channels\Properties\Property", mappedBy="channel", cascade={"persist", "remove"}, orphanRemoval=true)
+	 * @ORM\OneToMany(targetEntity="FastyBird\DevicesNode\Entities\Channels\Properties\Property", mappedBy="channel", cascade={"persist", "remove"},
+	 *                                                                                            orphanRemoval=true)
 	 */
 	private $properties;
 
@@ -101,7 +102,8 @@ class Channel extends NodeDatabaseEntities\Entity implements IChannel
 	 * @var Common\Collections\Collection<int, Entities\Channels\Configuration\IRow>
 	 *
 	 * @IPubDoctrine\Crud(is="writable")
-	 * @ORM\OneToMany(targetEntity="FastyBird\DevicesNode\Entities\Channels\Configuration\Row", mappedBy="channel", cascade={"persist", "remove"}, orphanRemoval=true)
+	 * @ORM\OneToMany(targetEntity="FastyBird\DevicesNode\Entities\Channels\Configuration\Row", mappedBy="channel", cascade={"persist", "remove"},
+	 *                                                                                          orphanRemoval=true)
 	 */
 	private $configuration;
 
@@ -109,7 +111,8 @@ class Channel extends NodeDatabaseEntities\Entity implements IChannel
 	 * @var Common\Collections\Collection<int, Entities\Channels\Controls\IControl>
 	 *
 	 * @IPubDoctrine\Crud(is="writable")
-	 * @ORM\OneToMany(targetEntity="FastyBird\DevicesNode\Entities\Channels\Controls\Control", mappedBy="channel", cascade={"persist", "remove"}, orphanRemoval=true)
+	 * @ORM\OneToMany(targetEntity="FastyBird\DevicesNode\Entities\Channels\Controls\Control", mappedBy="channel", cascade={"persist", "remove"},
+	 *                                                                                         orphanRemoval=true)
 	 */
 	private $controls;
 
@@ -505,7 +508,8 @@ class Channel extends NodeDatabaseEntities\Entity implements IChannel
 
 			'params' => (array) $this->getParams(),
 
-			'device' => $this->device->getIdentifier(),
+			'device' => $this->getDevice()->getIdentifier(),
+			'parent' => $this->getDevice()->getParent() !== null ? $this->getDevice()->getParent()->getIdentifier() : null,
 		];
 	}
 

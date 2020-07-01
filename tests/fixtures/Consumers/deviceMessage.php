@@ -9,6 +9,7 @@ return [
 		DevicesNode\Constants::RABBIT_MQ_DEVICES_DATA_ROUTING_KEY,
 		Utils\ArrayHash::from([
 			'device' => 'first-device',
+			'parent' => null,
 			'name'   => 'First device',
 		]),
 		[],
@@ -17,6 +18,7 @@ return [
 		DevicesNode\Constants::RABBIT_MQ_DEVICES_DATA_ROUTING_KEY,
 		Utils\ArrayHash::from([
 			'device' => 'first-device',
+			'parent' => null,
 			'name'   => 'Name from message bus',
 		]),
 		[
@@ -31,6 +33,7 @@ return [
 				'control'    => ['configure'],
 				'params'     => [],
 				'device'     => 'first-device',
+				'parent'     => null,
 			],
 		],
 	],
@@ -38,6 +41,7 @@ return [
 		DevicesNode\Constants::RABBIT_MQ_DEVICES_DATA_ROUTING_KEY,
 		Utils\ArrayHash::from([
 			'device' => 'first-device',
+			'parent' => null,
 			'name'   => 'Name from message bus',
 			'state'  => Types\DeviceConnectionState::STATE_READY,
 		]),
@@ -53,6 +57,7 @@ return [
 				'control'    => ['configure'],
 				'params'     => [],
 				'device'     => 'first-device',
+				'parent'     => null,
 			],
 		],
 	],
@@ -60,6 +65,7 @@ return [
 		DevicesNode\Constants::RABBIT_MQ_DEVICES_DATA_ROUTING_KEY,
 		Utils\ArrayHash::from([
 			'device'     => 'first-device',
+			'parent'     => null,
 			'name'       => 'Name from message bus',
 			'state'      => Types\DeviceConnectionState::STATE_READY,
 			'properties' => ['uptime', 'rssi', 'led'],
@@ -76,6 +82,7 @@ return [
 				'control'    => ['configure'],
 				'params'     => [],
 				'device'     => 'first-device',
+				'parent'     => null,
 			],
 			'fb.bus.node.entity.created.device.property' => [
 				'property'  => 'led',
@@ -86,6 +93,7 @@ return [
 				'unit'      => null,
 				'format'    => null,
 				'device'    => 'first-device',
+				'parent'    => null,
 			],
 		],
 	],
@@ -93,6 +101,7 @@ return [
 		DevicesNode\Constants::RABBIT_MQ_DEVICES_DATA_ROUTING_KEY,
 		Utils\ArrayHash::from([
 			'device'     => 'first-device',
+			'parent'     => null,
 			'properties' => ['uptime', 'rssi', 'led'],
 		]),
 		[
@@ -105,6 +114,7 @@ return [
 				'unit'      => null,
 				'format'    => null,
 				'device'    => 'first-device',
+				'parent'    => null,
 			],
 		],
 	],
@@ -112,12 +122,13 @@ return [
 		DevicesNode\Constants::RABBIT_MQ_DEVICES_DATA_ROUTING_KEY,
 		Utils\ArrayHash::from([
 			'device'   => 'first-device',
+			'parent'   => null,
 			'name'     => 'Name from message bus',
 			'state'    => Types\DeviceConnectionState::STATE_READY,
 			'channels' => ['channel-one', 'channel-two', 'channel-three'],
 		]),
 		[
-			'fb.bus.node.entity.updated.device'         => [
+			'fb.bus.node.entity.updated.device'  => [
 				'id'         => '69786d15-fd0c-4d9f-9378-33287c2009fa',
 				'identifier' => 'first-device',
 				'name'       => 'Name from message bus',
@@ -128,6 +139,7 @@ return [
 				'control'    => ['configure'],
 				'params'     => [],
 				'device'     => 'first-device',
+				'parent'     => null,
 			],
 			'fb.bus.node.entity.created.channel' => [
 				'name'    => 'channel-three',
@@ -137,6 +149,7 @@ return [
 				'control' => [],
 				'params'  => [],
 				'device'  => 'first-device',
+				'parent'  => null,
 			],
 		],
 	],
@@ -144,6 +157,7 @@ return [
 		DevicesNode\Constants::RABBIT_MQ_DEVICES_DATA_ROUTING_KEY,
 		Utils\ArrayHash::from([
 			'device'   => 'first-device',
+			'parent'   => null,
 			'channels' => ['channel-one', 'channel-two', 'channel-three'],
 		]),
 		[
@@ -155,6 +169,7 @@ return [
 				'control' => [],
 				'params'  => [],
 				'device'  => 'first-device',
+				'parent'  => null,
 			],
 		],
 	],
@@ -162,6 +177,7 @@ return [
 		DevicesNode\Constants::RABBIT_MQ_DEVICES_DATA_ROUTING_KEY,
 		Utils\ArrayHash::from([
 			'device'  => 'first-device',
+			'parent'  => null,
 			'control' => ['configure', 'reset'],
 		]),
 		[],

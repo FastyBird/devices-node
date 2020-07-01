@@ -8,6 +8,7 @@ return [
 		DevicesNode\Constants::RABBIT_MQ_DEVICES_CONTROLS_DATA_ROUTING_KEY,
 		Utils\ArrayHash::from([
 			'device'  => 'first-device',
+			'parent'  => null,
 			'control' => 'configure',
 			'value'   => [
 				'sensor_expected_power' => null,
@@ -19,6 +20,7 @@ return [
 		DevicesNode\Constants::RABBIT_MQ_DEVICES_CONTROLS_DATA_ROUTING_KEY,
 		Utils\ArrayHash::from([
 			'device'  => 'first-device',
+			'parent'  => null,
 			'control' => 'configure',
 			'value'   => [
 				'sensor_expected_power' => 300,
@@ -37,6 +39,7 @@ return [
 				'step'    => 1.0,
 				'type'    => 'number',
 				'device'  => 'first-device',
+				'parent'  => null,
 			],
 		],
 	],

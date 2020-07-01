@@ -239,6 +239,7 @@ abstract class Row extends NodeDatabaseEntities\Entity implements IRow
 			'default' => $this->getDefault(),
 			'value'   => $this->getValue(),
 			'device'  => $this->getChannel()->getDevice()->getIdentifier(),
+			'parent'  => $this->getChannel()->getDevice()->getParent() !== null ? $this->getChannel()->getDevice()->getParent()->getIdentifier() : null,
 			'channel' => $this->getChannel()->getChannel(),
 		];
 	}

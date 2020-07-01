@@ -150,37 +150,16 @@ final class DeviceControlMessageHandler implements NodeLibsConsumers\IMessageHan
 	/**
 	 * {@inheritDoc}
 	 */
-	public function getAllowedOrigin(string $routingKey)
+	public function getSchema(string $routingKey, string $origin): ?string
 	{
-		return DevicesNode\Constants::NODE_MQTT_ORIGIN;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function getSchema(string $routingKey): string
-	{
-		switch ($routingKey) {
-			case DevicesNode\Constants::RABBIT_MQ_DEVICES_CONTROLS_DATA_ROUTING_KEY:
-				return $this->schemaLoader->load(JsonSchemas\Constants::MQTT_NODE_FOLDER . DS . 'data.device.control.json');
-
-			default:
-				throw new Exceptions\InvalidStateException('Unknown routing key');
-		}
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function getRoutingKeys(bool $binding = false): array
-	{
-		if ($binding) {
-			return DevicesNode\Constants::RABBIT_MQ_DEVICES_PARTS_BINDINGS_ROUTING_KEYS;
+		if ($origin === DevicesNode\Constants::NODE_MQTT_ORIGIN) {
+			switch ($routingKey) {
+				case DevicesNode\Constants::RABBIT_MQ_DEVICES_CONTROLS_DATA_ROUTING_KEY:
+					return $this->schemaLoader->load(JsonSchemas\Constants::MQTT_NODE_FOLDER . DS . 'data.device.control.json');
+			}
 		}
 
-		return [
-			DevicesNode\Constants::RABBIT_MQ_DEVICES_CONTROLS_DATA_ROUTING_KEY,
-		];
+		return null;
 	}
 
 	/**
