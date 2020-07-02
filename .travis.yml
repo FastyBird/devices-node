@@ -15,6 +15,7 @@ before_install:
 
 install:
   # Install dependencies
+  - rm composer.lock
   - travis_retry composer install --no-progress --prefer-dist
 
 script:
