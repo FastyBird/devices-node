@@ -29,9 +29,9 @@ final class Constants
 {
 
 	/**
-	 * Message bus routing keys for data entities
+	 * Message bus routing keys mapping
 	 */
-	public const RABBIT_MQ_ENTITIES_ROUTING_KEYS = [
+	public const RABBIT_MQ_ENTITIES_ROUTING_KEYS_MAPPING = [
 		DevicesNodeEntities\Devices\Device::class                  => 'fb.bus.node.entity.[ACTION].device',
 		DevicesNodeEntities\Devices\Properties\Property::class     => 'fb.bus.node.entity.[ACTION].device.property',
 		DevicesNodeEntities\Devices\Configuration\Row::class       => 'fb.bus.node.entity.[ACTION].device.configuration',
@@ -59,22 +59,6 @@ final class Constants
 	public const RABBIT_MQ_CHANNELS_DATA_ROUTING_KEY = 'fb.bus.node.data.channel';
 	public const RABBIT_MQ_CHANNELS_PROPERTIES_DATA_ROUTING_KEY = 'fb.bus.node.data.channel.property';
 	public const RABBIT_MQ_CHANNELS_CONTROLS_DATA_ROUTING_KEY = 'fb.bus.node.data.channel.control';
-
-	public const RABBIT_MQ_DEVICES_BINDINGS_ROUTING_KEYS = [
-		'fb.bus.node.data.device',       // Data
-	];
-
-	public const RABBIT_MQ_DEVICES_PARTS_BINDINGS_ROUTING_KEYS = [
-		'fb.bus.node.data.device.*',     // Data
-	];
-
-	public const RABBIT_MQ_CHANNELS_BINDINGS_ROUTING_KEY = [
-		'fb.bus.node.data.channel',      // Data
-	];
-
-	public const RABBIT_MQ_CHANNELS_PARTS_BINDINGS_ROUTING_KEY = [
-		'fb.bus.node.data.channel.*',    // Data
-	];
 
 	/**
 	 * Microservices origins
