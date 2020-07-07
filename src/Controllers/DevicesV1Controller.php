@@ -176,13 +176,16 @@ class DevicesV1Controller extends BaseV1Controller
 				$this->getOrmConnection()->rollBack();
 
 				if (preg_match("%key '(?P<key>.+)_unique'%", $ex->getMessage(), $match) !== false) {
-					if (Utils\Strings::startsWith($match['key'], 'device_')) {
+					$columnParts = explode('.', $match['key']);
+					$columnKey = end($columnParts);
+
+					if (is_string($columnKey) && Utils\Strings::startsWith($columnKey, 'device_')) {
 						throw new NodeJsonApiExceptions\JsonApiErrorException(
 							StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 							$this->translator->translate('//node.base.messages.uniqueConstraint.heading'),
 							$this->translator->translate('//node.base.messages.uniqueConstraint.message'),
 							[
-								'pointer' => '/data/attributes/' . Utils\Strings::substring($match['key'], 7),
+								'pointer' => '/data/attributes/' . Utils\Strings::substring($columnKey, 7),
 							]
 						);
 					}
@@ -293,13 +296,16 @@ class DevicesV1Controller extends BaseV1Controller
 			$this->getOrmConnection()->rollBack();
 
 			if (preg_match("%key '(?P<key>.+)_unique'%", $ex->getMessage(), $match) !== false) {
-				if (Utils\Strings::startsWith($match['key'], 'device_')) {
+				$columnParts = explode('.', $match['key']);
+				$columnKey = end($columnParts);
+
+				if (is_string($columnKey) && Utils\Strings::startsWith($columnKey, 'device_')) {
 					throw new NodeJsonApiExceptions\JsonApiErrorException(
 						StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 						$this->translator->translate('//node.base.messages.uniqueConstraint.heading'),
 						$this->translator->translate('//node.base.messages.uniqueConstraint.message'),
 						[
-							'pointer' => '/data/attributes/' . Utils\Strings::substring($match['key'], 7),
+							'pointer' => '/data/attributes/' . Utils\Strings::substring($columnKey, 7),
 						]
 					);
 				}
