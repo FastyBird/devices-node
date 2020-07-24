@@ -163,6 +163,8 @@ services:
 	# Http router
 	#############
 
+	- {factory: FastyBird\DevicesNode\Middleware\AccessMiddleware, tags: [middleware: {priority: 50}]}
+
 	-
 		factory: FastyBird\DevicesNode\Router\Router
 		setup:

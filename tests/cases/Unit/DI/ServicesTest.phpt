@@ -6,6 +6,7 @@ use FastyBird\DevicesNode\Commands;
 use FastyBird\DevicesNode\Consumers;
 use FastyBird\DevicesNode\Controllers;
 use FastyBird\DevicesNode\Hydrators;
+use FastyBird\DevicesNode\Middleware;
 use FastyBird\DevicesNode\Models;
 use FastyBird\DevicesNode\Schemas;
 use FastyBird\DevicesNode\Subscribers;
@@ -42,6 +43,8 @@ final class ServicesTest extends BaseTestCase
 		Assert::notNull($container->getByType(Consumers\ChannelPropertyMessageHandler::class));
 
 		Assert::notNull($container->getByType(Subscribers\EntitiesSubscriber::class));
+
+		Assert::notNull($container->getByType(Middleware\AccessMiddleware::class));
 
 		Assert::notNull($container->getByType(Models\Devices\DeviceRepository::class));
 		Assert::notNull($container->getByType(Models\Devices\Properties\PropertyRepository::class));
