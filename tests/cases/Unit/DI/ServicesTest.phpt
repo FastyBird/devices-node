@@ -9,12 +9,15 @@ use FastyBird\DevicesNode\Hydrators;
 use FastyBird\DevicesNode\Models;
 use FastyBird\DevicesNode\Schemas;
 use FastyBird\DevicesNode\Subscribers;
-use FastyBird\NodeLibs\Boot;
+use FastyBird\NodeBootstrap\Boot;
 use Ninjify\Nunjuck\TestCase\BaseTestCase;
 use Tester\Assert;
 
 require_once __DIR__ . '/../../../bootstrap.php';
 
+/**
+ * @testCase
+ */
 final class ServicesTest extends BaseTestCase
 {
 

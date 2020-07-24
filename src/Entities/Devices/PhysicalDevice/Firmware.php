@@ -4,7 +4,7 @@
  * Firmware.php
  *
  * @license        More in license.md
- * @copyright      https://www.fastybird.com
+ * @copyright      https://fastybird.com
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  * @package        FastyBird:DevicesNode!
  * @subpackage     Entities
@@ -36,9 +36,10 @@ use Throwable;
  *     }
  * )
  */
-class Firmware extends NodeDatabaseEntities\Entity implements IFirmware
+class Firmware implements IFirmware
 {
 
+	use NodeDatabaseEntities\TEntity;
 	use DoctrineTimestampable\Entities\TEntityCreated;
 	use DoctrineTimestampable\Entities\TEntityUpdated;
 

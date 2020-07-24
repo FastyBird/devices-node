@@ -5,7 +5,7 @@ namespace Tests\Cases;
 use Doctrine\ORM;
 use FastyBird\DevicesNode\Entities;
 use FastyBird\DevicesNode\Subscribers;
-use FastyBird\NodeLibs\Publishers as NodeLibsPublishers;
+use FastyBird\NodeExchange\Publishers as NodeExchangePublishers;
 use Mockery;
 use Ninjify\Nunjuck\TestCase\BaseMockeryTestCase;
 use stdClass;
@@ -13,12 +13,15 @@ use Tester\Assert;
 
 require_once __DIR__ . '/../../../bootstrap.php';
 
+/**
+ * @testCase
+ */
 final class EntitiesSubscriberTest extends BaseMockeryTestCase
 {
 
 	public function testSubscriberEvents(): void
 	{
-		$publisher = Mockery::mock(NodeLibsPublishers\IRabbitMqPublisher::class);
+		$publisher = Mockery::mock(NodeExchangePublishers\IRabbitMqPublisher::class);
 		$entityManager = Mockery::mock(ORM\EntityManagerInterface::class);
 
 		$subscriber = new Subscribers\EntitiesSubscriber($publisher, $entityManager);
@@ -28,7 +31,7 @@ final class EntitiesSubscriberTest extends BaseMockeryTestCase
 
 	public function testPublishCreatedEntity(): void
 	{
-		$publisher = Mockery::mock(NodeLibsPublishers\IRabbitMqPublisher::class);
+		$publisher = Mockery::mock(NodeExchangePublishers\IRabbitMqPublisher::class);
 		$publisher
 			->shouldReceive('publish')
 			->withArgs(function (string $key, array $data): bool {
@@ -71,7 +74,7 @@ final class EntitiesSubscriberTest extends BaseMockeryTestCase
 
 	public function testPublishUpdatedEntity(): void
 	{
-		$publisher = Mockery::mock(NodeLibsPublishers\IRabbitMqPublisher::class);
+		$publisher = Mockery::mock(NodeExchangePublishers\IRabbitMqPublisher::class);
 		$publisher
 			->shouldReceive('publish')
 			->withArgs(function (string $key, array $data): bool {
@@ -113,7 +116,7 @@ final class EntitiesSubscriberTest extends BaseMockeryTestCase
 
 	public function testPublishDeletedEntity(): void
 	{
-		$publisher = Mockery::mock(NodeLibsPublishers\IRabbitMqPublisher::class);
+		$publisher = Mockery::mock(NodeExchangePublishers\IRabbitMqPublisher::class);
 		$publisher
 			->shouldReceive('publish')
 			->withArgs(function (string $key, array $data): bool {

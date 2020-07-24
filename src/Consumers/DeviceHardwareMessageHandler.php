@@ -4,7 +4,7 @@
  * DeviceHardwareMessageHandler.php
  *
  * @license        More in license.md
- * @copyright      https://www.fastybird.com
+ * @copyright      https://fastybird.com
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  * @package        FastyBird:DevicesNode!
  * @subpackage     Consumers
@@ -20,10 +20,10 @@ use FastyBird\DevicesNode\Entities;
 use FastyBird\DevicesNode\Exceptions;
 use FastyBird\DevicesNode\Models;
 use FastyBird\DevicesNode\Queries;
-use FastyBird\JsonSchemas;
-use FastyBird\JsonSchemas\Loaders as JsonSchemasLoaders;
-use FastyBird\NodeLibs\Consumers as NodeLibsConsumers;
-use FastyBird\NodeLibs\Exceptions as NodeLibsExceptions;
+use FastyBird\NodeExchange\Consumers as NodeExchangeConsumers;
+use FastyBird\NodeExchange\Exceptions as NodeExchangeExceptions;
+use FastyBird\NodeMetadata;
+use FastyBird\NodeMetadata\Loaders as NodeMetadataLoaders;
 use Nette;
 use Nette\Utils;
 use Psr\Log;
@@ -37,7 +37,7 @@ use Throwable;
  *
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  */
-final class DeviceHardwareMessageHandler implements NodeLibsConsumers\IMessageHandler
+final class DeviceHardwareMessageHandler implements NodeExchangeConsumers\IMessageHandler
 {
 
 	use Nette\SmartObject;
@@ -48,7 +48,7 @@ final class DeviceHardwareMessageHandler implements NodeLibsConsumers\IMessageHa
 	/** @var Models\Devices\PhysicalDevice\IHardwareManager */
 	private $hardwareManager;
 
-	/** @var JsonSchemasLoaders\ISchemaLoader */
+	/** @var NodeMetadataLoaders\ISchemaLoader */
 	private $schemaLoader;
 
 	/** @var Log\LoggerInterface */
@@ -57,7 +57,7 @@ final class DeviceHardwareMessageHandler implements NodeLibsConsumers\IMessageHa
 	public function __construct(
 		Models\Devices\IDeviceRepository $deviceRepository,
 		Models\Devices\PhysicalDevice\IHardwareManager $hardwareManager,
-		JsonSchemasLoaders\ISchemaLoader $schemaLoader,
+		NodeMetadataLoaders\ISchemaLoader $schemaLoader,
 		Log\LoggerInterface $logger
 	) {
 		$this->deviceRepository = $deviceRepository;
@@ -70,7 +70,7 @@ final class DeviceHardwareMessageHandler implements NodeLibsConsumers\IMessageHa
 	/**
 	 * {@inheritDoc}
 	 *
-	 * @throws NodeLibsExceptions\TerminateException
+	 * @throws NodeExchangeExceptions\TerminateException
 	 */
 	public function process(
 		string $routingKey,
@@ -84,7 +84,7 @@ final class DeviceHardwareMessageHandler implements NodeLibsConsumers\IMessageHa
 			$device = $this->deviceRepository->findOneBy($findQuery, Entities\Devices\PhysicalDevice::class);
 
 		} catch (Throwable $ex) {
-			throw new NodeLibsExceptions\TerminateException('An error occurred: ' . $ex->getMessage(), $ex->getCode(), $ex);
+			throw new NodeExchangeExceptions\TerminateException('An error occurred: ' . $ex->getMessage(), $ex->getCode(), $ex);
 		}
 
 		if ($device === null) {
@@ -129,7 +129,7 @@ final class DeviceHardwareMessageHandler implements NodeLibsConsumers\IMessageHa
 			return false;
 
 		} catch (Throwable $ex) {
-			throw new NodeLibsExceptions\TerminateException('An error occurred: ' . $ex->getMessage(), $ex->getCode(), $ex);
+			throw new NodeExchangeExceptions\TerminateException('An error occurred: ' . $ex->getMessage(), $ex->getCode(), $ex);
 		}
 
 		if ($result) {
@@ -147,7 +147,7 @@ final class DeviceHardwareMessageHandler implements NodeLibsConsumers\IMessageHa
 		if ($origin === DevicesNode\Constants::NODE_MQTT_ORIGIN) {
 			switch ($routingKey) {
 				case DevicesNode\Constants::RABBIT_MQ_DEVICES_HARDWARE_DATA_ROUTING_KEY:
-					return $this->schemaLoader->load(JsonSchemas\Constants::MQTT_NODE_FOLDER . DS . 'data.device.hardware.json');
+					return $this->schemaLoader->load(NodeMetadata\Constants::RESOURCES_FOLDER . '/schemas/mqtt-node/data.device.hardware.json');
 			}
 		}
 

@@ -3,7 +3,7 @@
 namespace Tests\Cases;
 
 use FastyBird\DevicesNode\Consumers;
-use FastyBird\NodeLibs\Publishers as NodeLibsPublishers;
+use FastyBird\NodeExchange\Publishers as NodeExchangePublishers;
 use Mockery;
 use Nette\Utils;
 use Tester\Assert;
@@ -11,6 +11,9 @@ use Tester\Assert;
 require_once __DIR__ . '/../../../bootstrap.php';
 require_once __DIR__ . '/../DbTestCase.php';
 
+/**
+ * @testCase
+ */
 final class DeviceHardwareMessageHandlerTest extends DbTestCase
 {
 
@@ -23,7 +26,7 @@ final class DeviceHardwareMessageHandlerTest extends DbTestCase
 	 */
 	public function testProcessMessage(string $routingKey, Utils\ArrayHash $message, array $fixture): void
 	{
-		$rabbitPublisher = Mockery::mock(NodeLibsPublishers\RabbitMqPublisher::class);
+		$rabbitPublisher = Mockery::mock(NodeExchangePublishers\RabbitMqPublisher::class);
 		$rabbitPublisher
 			->shouldReceive('publish')
 			->withArgs(function (string $routingKey, array $data) use ($fixture): bool {
@@ -40,7 +43,7 @@ final class DeviceHardwareMessageHandlerTest extends DbTestCase
 			->times(count($fixture));
 
 		$this->mockContainerService(
-			NodeLibsPublishers\IRabbitMqPublisher::class,
+			NodeExchangePublishers\IRabbitMqPublisher::class,
 			$rabbitPublisher
 		);
 

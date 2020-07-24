@@ -4,7 +4,7 @@
  * Control.php
  *
  * @license        More in license.md
- * @copyright      https://www.fastybird.com
+ * @copyright      https://fastybird.com
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  * @package        FastyBird:DevicesNode!
  * @subpackage     Entities
@@ -40,9 +40,10 @@ use Throwable;
  *     }
  * )
  */
-class Control extends NodeDatabaseEntities\Entity implements IControl
+class Control implements IControl
 {
 
+	use NodeDatabaseEntities\TEntity;
 	use DoctrineTimestampable\Entities\TEntityCreated;
 	use DoctrineTimestampable\Entities\TEntityUpdated;
 

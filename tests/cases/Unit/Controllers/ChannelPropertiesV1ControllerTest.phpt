@@ -12,6 +12,9 @@ use Tests\Tools;
 require_once __DIR__ . '/../../../bootstrap.php';
 require_once __DIR__ . '/../DbTestCase.php';
 
+/**
+ * @testCase
+ */
 final class ChannelPropertiesV1ControllerTest extends DbTestCase
 {
 

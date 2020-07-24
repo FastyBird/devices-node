@@ -2,7 +2,7 @@
 # Service DI configuration
 #
 # @license		More in license.md
-# @copyright	https://www.fastybird.com
+# @copyright	https://fastybird.com
 # @author		Adam Kadlec <adam.kadlec@fastybird.com>
 # @package		FastyBird:DevicesNode!
 # @subpackage	config
@@ -15,6 +15,10 @@
 ##############################
 
 parameters:
+	security:
+		token:
+			issuer: com.fastybird.devices-node
+
 	origin: com.fastybird.devices-node
 
 	rabbitmq:
@@ -30,24 +34,57 @@ parameters:
 #########################
 
 extensions:
-	contributteTranslation		: Contributte\Translation\DI\TranslationExtension
-	ipubDoctrineConsistence		: IPub\DoctrineConsistence\DI\DoctrineConsistenceExtension
-	ipubDoctrineCrud			: IPub\DoctrineCrud\DI\DoctrineCrudExtension
-	ipubDoctrineTimestampable	: IPub\DoctrineTimestampable\DI\DoctrineTimestampableExtension
-	nettrineAnnotations			: Nettrine\Annotations\DI\AnnotationsExtension
-	nettrineCache				: Nettrine\Cache\DI\CacheExtension
-	nettrineDbal				: Nettrine\DBAL\DI\DbalExtension
-	nettrineOrm					: Nettrine\ORM\DI\OrmExtension
-	nettrineOrmAnnotations		: Nettrine\ORM\DI\OrmAnnotationsExtension
-	nettrineOrmConsole			: Nettrine\ORM\DI\OrmConsoleExtension
-	nettrineOrmCache			: Nettrine\ORM\DI\OrmCacheExtension
-	nodeWebServer				: FastyBird\NodeWebServer\DI\NodeWebServerExtension
-	nodeDatabase				: FastyBird\NodeDatabase\DI\NodeDatabaseExtension
-	nodeJsonApi					: FastyBird\NodeJsonApi\DI\NodeJsonApiExtension
+	contributteTranslation				: Contributte\Translation\DI\TranslationExtension
+	nettrineAnnotations					: Nettrine\Annotations\DI\AnnotationsExtension
+	nettrineCache						: Nettrine\Cache\DI\CacheExtension
+	nettrineDbal						: Nettrine\DBAL\DI\DbalExtension
+	nettrineOrm							: Nettrine\ORM\DI\OrmExtension
+	nettrineOrmAnnotations				: Nettrine\ORM\DI\OrmAnnotationsExtension
+	nettrineOrmConsole					: Nettrine\ORM\DI\OrmConsoleExtension
+	nettrineOrmCache					: Nettrine\ORM\DI\OrmCacheExtension
+	ipubDoctrineConsistence				: IPub\DoctrineConsistence\DI\DoctrineConsistenceExtension
+	ipubDoctrineCrud					: IPub\DoctrineCrud\DI\DoctrineCrudExtension
+	ipubDoctrineTimestampable			: IPub\DoctrineTimestampable\DI\DoctrineTimestampableExtension
+	fbDateTimeFactory					: FastyBird\DateTimeFactory\DI\DateTimeFactoryExtension
+	nodeAuth							: FastyBird\NodeAuth\DI\NodeAuthExtension
+	nodeDatabase						: FastyBird\NodeDatabase\DI\NodeDatabaseExtension
+	nodeExchange						: FastyBird\NodeExchange\DI\NodeExchangeExtension
+	nodeJsonApi							: FastyBird\NodeJsonApi\DI\NodeJsonApiExtension
+	nodeMetadata						: FastyBird\NodeMetadata\DI\NodeMetadataExtension
+	nodeWebServer						: FastyBird\NodeWebServer\DI\NodeWebServerExtension
 
 ##################################
 # Nette extensions configuration #
 ##################################
+
+# Node authentication
+#####################
+nodeAuth:
+	token:
+		issuer: %security.token.issuer%
+		signature: %security.token.signature%
+	enable:
+		middleware: true
+		doctrine:
+			mapping: true
+	services:
+		identity: true
+
+# Node data exchange
+####################
+nodeExchange:
+	origin: %origin%
+	rabbitMQ:
+		connection:
+			host: %rabbitmq.host%
+			port: %rabbitmq.port%
+			vhost: %rabbitmq.vhost%
+			username: %rabbitmq.username%
+			password: %rabbitmq.password%
+		queue:
+			name: %rabbitmq.queueName%
+		routing:
+			keys: %rabbitmq.routing%
 
 # Node web server
 #################
@@ -55,7 +92,6 @@ nodeWebServer:
 	server:
 		address: %server.address%
 		port: %server.port%
-	routingKeys: %rabbitmq.routing%
 
 # Node translations
 ###################
@@ -99,11 +135,11 @@ nettrineAnnotations:
 	ignore:
 		- writable
 		- validator
-		- required
 		- module
 		- author
 		- subpackage
 		- package
+		- phpcsSuppress
 
 # Doctrine ORM
 ##############
@@ -114,8 +150,10 @@ nettrineOrm:
 nettrineOrmAnnotations:
 	namespaces:
 		- FastyBird\DevicesNode\Entities
+		- FastyBird\NodeAuth\Entities
 	paths:
 		- %appDir%/src/Entities
+		- %appDir%/vendor/fastybird/node-auth/src/Entities
 
 #############################
 # Node services definitions #

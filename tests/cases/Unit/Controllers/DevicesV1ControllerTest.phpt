@@ -3,7 +3,7 @@
 namespace Tests\Cases;
 
 use FastyBird\DevicesNode\Router;
-use FastyBird\NodeLibs\Publishers as NodeLibsPublishers;
+use FastyBird\NodeExchange\Publishers as NodeExchangePublishers;
 use FastyBird\NodeWebServer\Http;
 use Fig\Http\Message\RequestMethodInterface;
 use Mockery;
@@ -14,6 +14,9 @@ use Tests\Tools;
 require_once __DIR__ . '/../../../bootstrap.php';
 require_once __DIR__ . '/../DbTestCase.php';
 
+/**
+ * @testCase
+ */
 final class DevicesV1ControllerTest extends DbTestCase
 {
 
@@ -64,7 +67,7 @@ final class DevicesV1ControllerTest extends DbTestCase
 			$body
 		);
 
-		$rabbitPublisher = Mockery::mock(NodeLibsPublishers\RabbitMqPublisher::class);
+		$rabbitPublisher = Mockery::mock(NodeExchangePublishers\RabbitMqPublisher::class);
 		$rabbitPublisher
 			->shouldReceive('publish')
 			->withArgs(function (string $routingKey, array $data): bool {
@@ -75,7 +78,7 @@ final class DevicesV1ControllerTest extends DbTestCase
 			});
 
 		$this->mockContainerService(
-			NodeLibsPublishers\IRabbitMqPublisher::class,
+			NodeExchangePublishers\IRabbitMqPublisher::class,
 			$rabbitPublisher
 		);
 
@@ -109,7 +112,7 @@ final class DevicesV1ControllerTest extends DbTestCase
 			$body
 		);
 
-		$rabbitPublisher = Mockery::mock(NodeLibsPublishers\RabbitMqPublisher::class);
+		$rabbitPublisher = Mockery::mock(NodeExchangePublishers\RabbitMqPublisher::class);
 		$rabbitPublisher
 			->shouldReceive('publish')
 			->withArgs(function (string $routingKey, array $data): bool {
@@ -120,7 +123,7 @@ final class DevicesV1ControllerTest extends DbTestCase
 			});
 
 		$this->mockContainerService(
-			NodeLibsPublishers\IRabbitMqPublisher::class,
+			NodeExchangePublishers\IRabbitMqPublisher::class,
 			$rabbitPublisher
 		);
 
@@ -151,7 +154,7 @@ final class DevicesV1ControllerTest extends DbTestCase
 			$url
 		);
 
-		$rabbitPublisher = Mockery::mock(NodeLibsPublishers\RabbitMqPublisher::class);
+		$rabbitPublisher = Mockery::mock(NodeExchangePublishers\RabbitMqPublisher::class);
 		$rabbitPublisher
 			->shouldReceive('publish')
 			->withArgs(function (string $routingKey, array $data): bool {
@@ -171,7 +174,7 @@ final class DevicesV1ControllerTest extends DbTestCase
 			});
 
 		$this->mockContainerService(
-			NodeLibsPublishers\IRabbitMqPublisher::class,
+			NodeExchangePublishers\IRabbitMqPublisher::class,
 			$rabbitPublisher
 		);
 

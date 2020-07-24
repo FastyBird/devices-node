@@ -16,7 +16,7 @@ FastyBird devices node is an Apache2 licensed distributed microservice, develope
 
 ## Requirements
 
-FastyBird devices node is tested against PHP 7.3 and [ReactPHP http](https://github.com/reactphp/http) 0.8 event-driven, streaming plaintext HTTP server and [RabbitMQ](https://www.rabbitmq.com/) 3.7 message broker
+FastyBird devices node is tested against PHP 7.4 and [ReactPHP http](https://github.com/reactphp/http) 0.8 event-driven, streaming plaintext HTTP server and [RabbitMQ](https://www.rabbitmq.com/) 3.7 message broker
 
 ## Getting started
 
@@ -87,6 +87,8 @@ Configuration could be made via environment variables:
 | | |
 | `FB_NODE_PARAMETER__SERVER_ADDRESS=0.0.0.0` | HTTP server host address |
 | `FB_NODE_PARAMETER__SERVER_PORT=8000` | HTTP server access port |
+| | |
+| `FB_NODE_PARAMETER__SECURITY_TOKEN_SIGNATURE=` | Account access token signature string |
 
 > **NOTE:** In case you are not using docker image or you are not able to configure environment variables, you could edit configuration file `./config/default.neon`
 
@@ -127,4 +129,4 @@ For release info check [release page](https://github.com/FastyBird/devices-node/
 </table>
 
 ***
-Homepage [http://www.fastybird.com](http://www.fastybird.com) and repository [http://github.com/fastybird/devices-node](http://github.com/fastybird/devices-node).
+Homepage [http://fastybird.com](http://fastybird.com) and repository [http://github.com/fastybird/devices-node](http://github.com/fastybird/devices-node).

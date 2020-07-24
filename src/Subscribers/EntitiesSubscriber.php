@@ -4,7 +4,7 @@
  * EntitiesSubscriber.php
  *
  * @license        More in license.md
- * @copyright      https://www.fastybird.com
+ * @copyright      https://fastybird.com
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  * @package        FastyBird:DevicesNode!
  * @subpackage     Subscribers
@@ -22,7 +22,7 @@ use Doctrine\Persistence;
 use FastyBird\DevicesNode;
 use FastyBird\DevicesNode\Exceptions;
 use FastyBird\NodeDatabase\Entities as NodeDatabaseEntities;
-use FastyBird\NodeLibs\Publishers as NodeLibsPublishers;
+use FastyBird\NodeExchange\Publishers as NodeExchangePublishers;
 use Nette;
 use Ramsey\Uuid;
 use ReflectionClass;
@@ -45,14 +45,14 @@ final class EntitiesSubscriber implements Common\EventSubscriber
 
 	use Nette\SmartObject;
 
-	/** @var NodeLibsPublishers\IRabbitMqPublisher */
+	/** @var NodeExchangePublishers\IRabbitMqPublisher */
 	private $publisher;
 
 	/** @var ORM\EntityManagerInterface */
 	private $entityManager;
 
 	public function __construct(
-		NodeLibsPublishers\IRabbitMqPublisher $publisher,
+		NodeExchangePublishers\IRabbitMqPublisher $publisher,
 		ORM\EntityManagerInterface $entityManager
 	) {
 		$this->publisher = $publisher;

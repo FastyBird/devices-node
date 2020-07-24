@@ -6,6 +6,7 @@ use Closure;
 use Nette\StaticClass;
 use Nette\Utils;
 use Tester\Assert;
+use Tester\AssertException;
 
 class JsonAssert
 {
@@ -17,13 +18,16 @@ class JsonAssert
 	 * @param string $actualJson
 	 * @param Closure|null $transformFixture
 	 *
-	 * @return void
+	 * @throws AssertException
+	 *
+	 * @throws Utils\JsonException
 	 */
 	public static function assertFixtureMatch(
 		string $fixturePath,
 		string $actualJson,
 		?Closure $transformFixture = null
-	): void {
+	): void
+	{
 		$expectation = Utils\FileSystem::read($fixturePath);
 
 		if ($transformFixture !== null) {
@@ -36,66 +40,63 @@ class JsonAssert
 	/**
 	 * @param string $expectedJson
 	 * @param string $actualJson
-	 * @param string|null $description
 	 *
-	 * @return void
+	 * @throws AssertException
+	 *
+	 * @throws Utils\JsonException
 	 */
 	public static function assertMatch(
 		string $expectedJson,
-		string $actualJson,
-		?string $description = null
-	): void {
-		Assert::equal(
-			self::normalizeJson($expectedJson),
-			self::normalizeJson($actualJson),
-			$description
-		);
+		string $actualJson
+	): void
+	{
+		$decodedExpectedJson = self::jsonDecode($expectedJson, 'Expected-json');
+		$decodedInput = self::jsonDecode($actualJson, 'Actual-json');
+
+		try {
+			Assert::equal($decodedExpectedJson, $decodedInput);
+
+		} catch (AssertException $e) {
+			throw new AssertException(
+				'%1 should be equal to %2',
+				self::makeJsonPretty($expectedJson),
+				self::makeJsonPretty($actualJson)
+			);
+		}
 	}
 
 	/**
-	 * @param string $json
+	 * @param string $jsonString
 	 *
 	 * @return string
+	 *
+	 * @throws Utils\JsonException
 	 */
-	private static function normalizeJson(string $json): string
+	private static function makeJsonPretty(string $jsonString): string
 	{
-		try {
-			ini_set('serialize_precision', '10');
-
-			$data = Utils\Json::decode($json, Utils\Json::FORCE_ARRAY);
-			$data = self::normalizeArrays($data);
-
-			return Utils\Json::encode($data, Utils\Json::PRETTY);
-
-		} catch (Utils\JsonException $ex) {
-			return $json;
-
-		} finally {
-			ini_restore('serialize_precision');
-		}
+		return Utils\Json::encode(Utils\Json::decode($jsonString), Utils\Json::PRETTY);
 	}
 
 	/**
-	 * @param mixed $data
+	 * @param string $input
+	 * @param string $nameForMessage
 	 *
-	 * @return mixed
+	 * @return mixed[]
+	 *
+	 * @throws Utils\JsonException
 	 */
-	private static function normalizeArrays($data)
+	public static function jsonDecode(string $input, string $nameForMessage): array
 	{
-		if (!is_array($data)) {
-			return $data;
+		if ($input === '') {
+			return [];
 		}
 
-		ksort($data);
+		try {
+			return Utils\Json::decode($input, Utils\Json::FORCE_ARRAY);
 
-		array_walk(
-			$data,
-			function (&$item): void {
-				$item = self::normalizeArrays($item);
-			}
-		);
-
-		return $data;
+		} catch (Utils\JsonException $e) {
+			throw new Utils\JsonException(sprintf('%s is invalid: "%s"', $nameForMessage, $e->getMessage()), $e->getCode(), $e);
+		}
 	}
 
 }

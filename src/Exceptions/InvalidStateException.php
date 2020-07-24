@@ -4,7 +4,7 @@
  * InvalidStateException.php
  *
  * @license        More in license.md
- * @copyright      https://www.fastybird.com
+ * @copyright      https://fastybird.com
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  * @package        FastyBird:DevicesNode!
  * @subpackage     Exceptions
@@ -15,9 +15,9 @@
 
 namespace FastyBird\DevicesNode\Exceptions;
 
-use FastyBird\NodeLibs\Exceptions as NodeLibsExceptions;
+use RuntimeException;
 
-class InvalidStateException extends NodeLibsExceptions\InvalidStateException implements IException
+class InvalidStateException extends RuntimeException implements IException
 {
 
 }

@@ -2,10 +2,12 @@
 
 namespace Tests\Cases;
 
+use DateTimeImmutable;
 use Doctrine\DBAL;
 use Doctrine\ORM;
+use FastyBird\DateTimeFactory;
 use FastyBird\DevicesNode\Exceptions;
-use FastyBird\NodeLibs\Boot;
+use FastyBird\NodeBootstrap\Boot;
 use Mockery;
 use Nette\DI;
 use Nettrine\DBAL as NettrineDBAL;
@@ -31,6 +33,16 @@ abstract class DbTestCase extends BaseMockeryTestCase
 		$this->registerDatabaseSchemaFile(__DIR__ . '/../../sql/dummy.data.sql');
 
 		parent::setUp();
+
+		$dateTimeFactory = Mockery::mock(DateTimeFactory\DateTimeFactory::class);
+		$dateTimeFactory
+			->shouldReceive('getNow')
+			->andReturn(new DateTimeImmutable('2020-04-01T12:00:00+00:00'));
+
+		$this->mockContainerService(
+			DateTimeFactory\DateTimeFactory::class,
+			$dateTimeFactory
+		);
 	}
 
 	/**
@@ -50,8 +62,9 @@ abstract class DbTestCase extends BaseMockeryTestCase
 	 */
 	protected function registerDatabaseSchemaFile(string $file): void
 	{
-		$this->sqlFiles[] = $file;
-		$this->sqlFiles = array_unique($this->sqlFiles);
+		if (!in_array($file, $this->sqlFiles, true)) {
+			$this->sqlFiles[] = $file;
+		}
 	}
 
 	/**
@@ -173,7 +186,7 @@ abstract class DbTestCase extends BaseMockeryTestCase
 				}
 			}
 
-			foreach ($this->sqlFiles as $file) {
+			foreach (array_reverse($this->sqlFiles) as $file) {
 				$this->loadFromFile($db, $file);
 			}
 
