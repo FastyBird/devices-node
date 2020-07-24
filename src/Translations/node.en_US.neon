@@ -48,6 +48,12 @@ base:
 		uniqueConstraint:
 			heading	: "Attribute not unique"
 			message	: "Provided attribute is not unique"
+		notAuthorized:
+			heading	: "Not authorized"
+			message	: "You are not authorized to perform this action"
+		forbidden:
+			heading	: "Not allowed"
+			message	: "You are not allowed to perform this action"
 
 devices:
 	messages:

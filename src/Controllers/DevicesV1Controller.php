@@ -38,6 +38,9 @@ use Throwable;
  * @subpackage     Controllers
  *
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
+ *
+ * @Secured
+ * @Secured\User(loggedIn)
  */
 class DevicesV1Controller extends BaseV1Controller
 {
@@ -120,6 +123,9 @@ class DevicesV1Controller extends BaseV1Controller
 	 *
 	 * @throws NodeJsonApiExceptions\IJsonApiException
 	 * @throws Doctrine\DBAL\ConnectionException
+	 *
+	 * @Secured
+	 * @Secured\Role(manager,administrator)
 	 */
 	public function create(
 		Message\ServerRequestInterface $request,
@@ -242,6 +248,9 @@ class DevicesV1Controller extends BaseV1Controller
 	 *
 	 * @throws NodeJsonApiExceptions\IJsonApiException
 	 * @throws Doctrine\DBAL\ConnectionException
+	 *
+	 * @Secured
+	 * @Secured\Role(manager,administrator)
 	 */
 	public function update(
 		Message\ServerRequestInterface $request,
@@ -348,6 +357,9 @@ class DevicesV1Controller extends BaseV1Controller
 	 *
 	 * @throws NodeJsonApiExceptions\IJsonApiException
 	 * @throws Doctrine\DBAL\ConnectionException
+	 *
+	 * @Secured
+	 * @Secured\Role(manager,administrator)
 	 */
 	public function delete(
 		Message\ServerRequestInterface $request,

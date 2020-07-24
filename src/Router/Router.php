@@ -16,6 +16,7 @@
 namespace FastyBird\DevicesNode\Router;
 
 use FastyBird\DevicesNode\Controllers;
+use FastyBird\NodeAuth\Middleware as NodeAuthMiddleware;
 use IPub\SlimRouter\Routing;
 use Psr\Http\Message\ResponseFactoryInterface;
 
@@ -64,6 +65,9 @@ class Router extends Routing\Router
 	/** @var Controllers\ChannelConfigurationV1Controller */
 	private $channelConfigurationV1Controller;
 
+	/** @var NodeAuthMiddleware\Route\AccessMiddleware */
+	private $accessControlMiddleware;
+
 	public function __construct(
 		Controllers\DevicesV1Controller $devicesV1Controller,
 		Controllers\DeviceChildrenV1Controller $deviceChildrenV1Controller,
@@ -74,6 +78,7 @@ class Router extends Routing\Router
 		Controllers\ChannelsV1Controller $channelsV1Controller,
 		Controllers\ChannelPropertiesV1Controller $channelPropertiesV1Controller,
 		Controllers\ChannelConfigurationV1Controller $channelConfigurationV1Controller,
+		NodeAuthMiddleware\Route\AccessMiddleware $accessControlMiddleware,
 		?ResponseFactoryInterface $responseFactory = null
 	) {
 		parent::__construct($responseFactory, null);
@@ -87,6 +92,8 @@ class Router extends Routing\Router
 		$this->channelsV1Controller = $channelsV1Controller;
 		$this->channelPropertiesV1Controller = $channelPropertiesV1Controller;
 		$this->channelConfigurationV1Controller = $channelConfigurationV1Controller;
+
+		$this->accessControlMiddleware = $accessControlMiddleware;
 	}
 
 	/**
@@ -206,7 +213,8 @@ class Router extends Routing\Router
 					});
 				});
 			});
-		});
+		})
+			->addMiddleware($this->accessControlMiddleware);
 	}
 
 }
