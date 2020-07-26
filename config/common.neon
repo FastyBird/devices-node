@@ -30,24 +30,24 @@ parameters:
 #########################
 
 extensions:
-	contributteTranslation				: Contributte\Translation\DI\TranslationExtension
-	nettrineAnnotations					: Nettrine\Annotations\DI\AnnotationsExtension
-	nettrineCache						: Nettrine\Cache\DI\CacheExtension
-	nettrineDbal						: Nettrine\DBAL\DI\DbalExtension
-	nettrineOrm							: Nettrine\ORM\DI\OrmExtension
-	nettrineOrmAnnotations				: Nettrine\ORM\DI\OrmAnnotationsExtension
-	nettrineOrmConsole					: Nettrine\ORM\DI\OrmConsoleExtension
-	nettrineOrmCache					: Nettrine\ORM\DI\OrmCacheExtension
-	ipubDoctrineConsistence				: IPub\DoctrineConsistence\DI\DoctrineConsistenceExtension
-	ipubDoctrineCrud					: IPub\DoctrineCrud\DI\DoctrineCrudExtension
-	ipubDoctrineTimestampable			: IPub\DoctrineTimestampable\DI\DoctrineTimestampableExtension
-	fbDateTimeFactory					: FastyBird\DateTimeFactory\DI\DateTimeFactoryExtension
-	nodeAuth							: FastyBird\NodeAuth\DI\NodeAuthExtension
-	nodeDatabase						: FastyBird\NodeDatabase\DI\NodeDatabaseExtension
-	nodeExchange						: FastyBird\NodeExchange\DI\NodeExchangeExtension
-	nodeJsonApi							: FastyBird\NodeJsonApi\DI\NodeJsonApiExtension
-	nodeMetadata						: FastyBird\NodeMetadata\DI\NodeMetadataExtension
-	nodeWebServer						: FastyBird\NodeWebServer\DI\NodeWebServerExtension
+	contributteTranslation		: Contributte\Translation\DI\TranslationExtension
+	nettrineAnnotations			: Nettrine\Annotations\DI\AnnotationsExtension
+	nettrineCache				: Nettrine\Cache\DI\CacheExtension
+	nettrineDbal				: Nettrine\DBAL\DI\DbalExtension
+	nettrineOrm					: Nettrine\ORM\DI\OrmExtension
+	nettrineOrmAnnotations		: Nettrine\ORM\DI\OrmAnnotationsExtension
+	nettrineOrmConsole			: Nettrine\ORM\DI\OrmConsoleExtension
+	nettrineOrmCache			: Nettrine\ORM\DI\OrmCacheExtension
+	ipubDoctrineConsistence		: IPub\DoctrineConsistence\DI\DoctrineConsistenceExtension
+	ipubDoctrineCrud			: IPub\DoctrineCrud\DI\DoctrineCrudExtension
+	ipubDoctrineTimestampable	: IPub\DoctrineTimestampable\DI\DoctrineTimestampableExtension
+	fbDateTimeFactory			: FastyBird\DateTimeFactory\DI\DateTimeFactoryExtension
+	nodeAuth					: FastyBird\NodeAuth\DI\NodeAuthExtension
+	nodeDatabase				: FastyBird\NodeDatabase\DI\NodeDatabaseExtension
+	nodeExchange				: FastyBird\NodeExchange\DI\NodeExchangeExtension
+	nodeJsonApi					: FastyBird\NodeJsonApi\DI\NodeJsonApiExtension
+	nodeMetadata				: FastyBird\NodeMetadata\DI\NodeMetadataExtension
+	nodeWebServer				: FastyBird\NodeWebServer\DI\NodeWebServerExtension
 
 ##################################
 # Nette extensions configuration #
@@ -72,11 +72,11 @@ nodeExchange:
 	origin: %origin%
 	rabbitMQ:
 		connection:
-			host: %rabbitmq.host%
-			port: %rabbitmq.port%
-			vhost: %rabbitmq.vhost%
-			username: %rabbitmq.username%
-			password: %rabbitmq.password%
+			host: %exchange.host%
+			port: %exchange.port%
+			vhost: %exchange.vhost%
+			username: %exchange.username%
+			password: %exchange.password%
 		queue:
 			name: %rabbitmq.queueName%
 		routing:

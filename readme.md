@@ -10,7 +10,7 @@
 
 ## What is FastyBird devices node?
 
-Devices node is a core microservice for devices which is managing all connected devices, managing basic devices logic and exposing them for clients.
+Devices node is a core microservice for managing all connected devices, managing basic devices logic and exposing them for clients.
 
 FastyBird devices node is an Apache2 licensed distributed microservice, developed in PHP with [Nette framework](https://nette.org).
 
@@ -32,7 +32,7 @@ $ cd path/to/install
 
 Everything required will be then installed in the provided folder `path/to/install`
 
-This microservice is composed from one console command.
+This microservice has several console command.
 
 ##### HTTP server
 
@@ -40,8 +40,7 @@ This microservice is composed from one console command.
 $ vendor/bin/fb-console fb:node:server:start
 ```
 
-This server is listening for incoming http api request messages from clients.
-And also is listening for new data from exchange bus from other microservices.
+This command is to start build in web server which is listening for incoming http api request messages from clients and is listening for new data from exchange bus from other microservices. 
 
 ## Install with docker
 
@@ -72,11 +71,11 @@ Configuration could be made via environment variables:
 
 | Environment Variable | Description |
 | ---------------------- | ---------------------------- |
-| `FB_NODE_PARAMETER__RABBITMQ_HOST=127.0.0.1` | RabbitMQ host address |
-| `FB_NODE_PARAMETER__RABBITMQ_PORT=5672` | RabbitMQ access port |
-| `FB_NODE_PARAMETER__RABBITMQ_VHOST=/` | RabbitMQ vhost |
-| `FB_NODE_PARAMETER__RABBITMQ_USERNAME=guest` | Username |
-| `FB_NODE_PARAMETER__RABBITMQ_PASSWORD=guest` | Password |
+| `FB_NODE_PARAMETER__EXCHANGE_HOST=127.0.0.1` | RabbitMQ host address |
+| `FB_NODE_PARAMETER__EXCHANGE_PORT=5672` | RabbitMQ access port |
+| `FB_NODE_PARAMETER__EXCHANGE_VHOST=/` | RabbitMQ vhost |
+| `FB_NODE_PARAMETER__EXCHANGE_USERNAME=guest` | Username |
+| `FB_NODE_PARAMETER__EXCHANGE_PASSWORD=guest` | Password |
 | | |
 | `FB_NODE_PARAMETER__DATABASE_VERSION=5.7` | MySQL server version |
 | `FB_NODE_PARAMETER__DATABASE_HOST=127.0.0.1` | MySQL host address |
@@ -94,7 +93,7 @@ Configuration could be made via environment variables:
 
 ## Initialization
 
-This microservice is using database, so you have to initialise basic database schema. It could be done via shell command:
+This microservice is using database, so database have to be initialise with basic database schema. It could be done via shell command:
 
 ```sh
 $ php vendor/bin/doctrine orm:schema-tool:create
@@ -104,13 +103,13 @@ After this steps, microservice could be started with [server command](#http-serv
 
 ## Feedback
 
-Use the [issue tracker](https://github.com/FastyBird/devices-node/issues) for bugs or [mail](mailto:info@fastybird.com) or [Tweet](https://twitter.com/fastybird) us for any idea that can improve the project.
+Use the [issue tracker](https://github.com/FastyBird/auth-node/issues) for bugs or [mail](mailto:code@fastybird.com) or [Tweet](https://twitter.com/fastybird) us for any idea that can improve the project.
 
 Thank you for testing, reporting and contributing.
 
 ## Changelog
 
-For release info check [release page](https://github.com/FastyBird/devices-node/releases)
+For release info check [release page](https://github.com/FastyBird/auth-node/releases)
 
 ## Maintainers
 
