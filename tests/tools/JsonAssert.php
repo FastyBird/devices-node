@@ -26,8 +26,7 @@ class JsonAssert
 		string $fixturePath,
 		string $actualJson,
 		?Closure $transformFixture = null
-	): void
-	{
+	): void {
 		$expectation = Utils\FileSystem::read($fixturePath);
 
 		if ($transformFixture !== null) {
@@ -48,8 +47,7 @@ class JsonAssert
 	public static function assertMatch(
 		string $expectedJson,
 		string $actualJson
-	): void
-	{
+	): void {
 		$decodedExpectedJson = self::jsonDecode($expectedJson, 'Expected-json');
 		$decodedInput = self::jsonDecode($actualJson, 'Actual-json');
 

@@ -15,13 +15,17 @@ abstract class QueryObject
 	 *
 	 * @return ORM\Query|ORM\QueryBuilder
 	 */
-	protected function doCreateQuery(ORM\EntityRepository $repository) {}
+	protected function doCreateQuery(ORM\EntityRepository $repository)
+	{
+	}
 
 	/**
 	 * @param ORM\EntityRepository<TEntityClass> $repository
 	 *
 	 * @return ORM\Query|ORM\QueryBuilder
 	 */
-	protected function doCreateCountQuery(ORM\EntityRepository $repository) {}
+	protected function doCreateCountQuery(ORM\EntityRepository $repository)
+	{
+	}
 
 }

@@ -1,15 +1,15 @@
 {
-  "data" : {
-    "id" : "bbbf5caa-b30e-4558-b83a-699617958cea",
-    "type" : "devices-node/physical-device",
-    "attributes" : {
-      "comment" : null,
-      "control" : [
+  "data": {
+    "id": "bbbf5caa-b30e-4558-b83a-699617958cea",
+    "type": "devices-node/physical-device",
+    "attributes": {
+      "comment": null,
+      "control": [
         "configure"
       ],
-      "is_enabled" : true,
-      "name" : "Newly created device",
-      "title" : null
+      "is_enabled": true,
+      "name": "Newly created device",
+      "title": null
     }
   }
 }

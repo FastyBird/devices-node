@@ -85,12 +85,12 @@ final class PhysicalDeviceSchema extends DeviceSchema
 	public function getRelationships($device, JsonApi\Contracts\Schema\ContextInterface $context): iterable
 	{
 		return array_merge([
-			self::RELATIONSHIPS_HARDWARE    => [
+			self::RELATIONSHIPS_HARDWARE => [
 				self::RELATIONSHIP_DATA          => $device->getHardware(),
 				self::RELATIONSHIP_LINKS_SELF    => true,
 				self::RELATIONSHIP_LINKS_RELATED => true,
 			],
-			self::RELATIONSHIPS_FIRMWARE    => [
+			self::RELATIONSHIPS_FIRMWARE => [
 				self::RELATIONSHIP_DATA          => $device->getFirmware(),
 				self::RELATIONSHIP_LINKS_SELF    => true,
 				self::RELATIONSHIP_LINKS_RELATED => true,

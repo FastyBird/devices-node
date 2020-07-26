@@ -1,39 +1,39 @@
 {
-  "data" : {
-    "attributes" : {
-      "datatype" : "integer",
-      "format" : null,
-      "is_queryable" : true,
-      "is_settable" : false,
-      "name" : "rssi",
-      "property" : "rssi",
-      "unit" : null
+  "data": {
+    "attributes": {
+      "datatype": "integer",
+      "format": null,
+      "is_queryable": true,
+      "is_settable": false,
+      "name": "rssi",
+      "property": "rssi",
+      "unit": null
     },
-    "id" : "28bc0d38-2f7c-4a71-aa74-27b102f8df4c",
-    "links" : {
-      "self" : "/v1/devices/69786d15-fd0c-4d9f-9378-33287c2009fa/properties/28bc0d38-2f7c-4a71-aa74-27b102f8df4c"
+    "id": "28bc0d38-2f7c-4a71-aa74-27b102f8df4c",
+    "links": {
+      "self": "/v1/devices/69786d15-fd0c-4d9f-9378-33287c2009fa/properties/28bc0d38-2f7c-4a71-aa74-27b102f8df4c"
     },
-    "relationships" : {
-      "device" : {
-        "data" : {
-          "id" : "28bc0d38-2f7c-4a71-aa74-27b102f8df4c",
-          "type" : "devices-node/device-property"
+    "relationships": {
+      "device": {
+        "data": {
+          "id": "28bc0d38-2f7c-4a71-aa74-27b102f8df4c",
+          "type": "devices-node/device-property"
         },
-        "links" : {
-          "related" : "/v1/devices/69786d15-fd0c-4d9f-9378-33287c2009fa"
+        "links": {
+          "related": "/v1/devices/69786d15-fd0c-4d9f-9378-33287c2009fa"
         }
       }
     },
-    "type" : "devices-node/device-property"
+    "type": "devices-node/device-property"
   },
-  "jsonapi" : {
-    "version" : "1.1"
+  "jsonapi": {
+    "version": "1.1"
   },
-  "links" : {
-    "self" : "/v1/devices/69786d15-fd0c-4d9f-9378-33287c2009fa/properties/28bc0d38-2f7c-4a71-aa74-27b102f8df4c"
+  "links": {
+    "self": "/v1/devices/69786d15-fd0c-4d9f-9378-33287c2009fa/properties/28bc0d38-2f7c-4a71-aa74-27b102f8df4c"
   },
-  "meta" : {
-    "author" : "FastyBird dev team",
-    "copyright" : "FastyBird s.r.o"
+  "meta": {
+    "author": "FastyBird dev team",
+    "copyright": "FastyBird s.r.o"
   }
 }

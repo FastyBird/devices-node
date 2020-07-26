@@ -1,13 +1,13 @@
 {
-  "publish_acl" : [
+  "publish_acl": [
     {
-      "pattern" : "/fb/+/+/#"
+      "pattern": "/fb/+/+/#"
     }
   ],
-  "result" : "ok",
-  "subscribe_acl" : [
+  "result": "ok",
+  "subscribe_acl": [
     {
-      "pattern" : "/fb/+/+/#"
+      "pattern": "/fb/+/+/#"
     }
   ]
 }

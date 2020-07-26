@@ -311,7 +311,7 @@ class Property implements IProperty
 			'unit'      => $this->getUnit(),
 			'format'    => $this->getFormat(),
 			'device'    => $this->getDevice()->getIdentifier(),
-			'parent'       => $this->getDevice()->getParent() !== null ? $this->getDevice()->getParent()->getIdentifier() : null,
+			'parent'    => $this->getDevice()->getParent() !== null ? $this->getDevice()->getParent()->getIdentifier() : null,
 		];
 	}
 
