@@ -61,8 +61,8 @@ extensions:
 #####################
 nodeAuth:
 	token:
-		issuer: %security.token.issuer%
-		signature: %security.token.signature%
+		issuer: %origin%
+		signature: %security.signature%
 	enable:
 		middleware: true
 		doctrine:
@@ -159,6 +159,11 @@ nettrineOrmAnnotations:
 # Node services definitions #
 #############################
 
+decorator:
+	FastyBird\NodeWebServer\Commands\HttpServerCommand:
+		setup:
+			- '$onBeforeServerStart[]' = @FastyBird\DevicesNode\Events\ServerBeforeStartHandler
+
 services:
 	# Http router
 	#############
@@ -193,6 +198,10 @@ services:
 	- {factory: FastyBird\DevicesNode\Consumers\ChannelPropertyMessageHandler}
 
 	- {factory: FastyBird\DevicesNode\Consumers\ChannelControlMessageHandler}
+
+	# Node events
+	#############
+	- {factory: FastyBird\DevicesNode\Events\ServerBeforeStartHandler}
 
 	# Events subscribers
 	####################

@@ -24,5 +24,4 @@ parameters:
 		port: 8000
 
 	security:
-		token:
-			signature: 'g3xHbkELpMD9LRqW4WmJkHL7kz2bdNYAQJyEuFVzR3k='
+		signature: 'g3xHbkELpMD9LRqW4WmJkHL7kz2bdNYAQJyEuFVzR3k='

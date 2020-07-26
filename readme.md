@@ -88,7 +88,7 @@ Configuration could be made via environment variables:
 | `FB_NODE_PARAMETER__SERVER_ADDRESS=0.0.0.0` | HTTP server host address |
 | `FB_NODE_PARAMETER__SERVER_PORT=8000` | HTTP server access port |
 | | |
-| `FB_NODE_PARAMETER__SECURITY_TOKEN_SIGNATURE=` | Account access token signature string |
+| `FB_NODE_PARAMETER__SECURITY_SIGNATURE=` | Account access token signature string |
 
 > **NOTE:** In case you are not using docker image or you are not able to configure environment variables, you could edit configuration file `./config/default.neon`
 
