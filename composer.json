@@ -42,7 +42,8 @@
     "fastybird/node-metadata": "^0.1",
     "fastybird/node-web-server": "^0.1",
     "ipub/doctrine-consistence": "^0.3",
-    "ipub/doctrine-timestampable": "^1.4"
+    "ipub/doctrine-timestampable": "^1.4",
+    "php-on-couch/php-on-couch" : "^3.0"
   },
 
   "require-dev": {

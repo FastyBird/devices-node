@@ -2,10 +2,14 @@
 
 namespace Tests\Cases;
 
+use FastyBird\DevicesNode\Connections;
 use FastyBird\DevicesNode\Consumers;
 use FastyBird\NodeExchange\Publishers as NodeExchangePublishers;
 use Mockery;
 use Nette\Utils;
+use PHPOnCouch;
+use Ramsey\Uuid;
+use stdClass;
 use Tester\Assert;
 
 require_once __DIR__ . '/../../../bootstrap.php';
@@ -16,6 +20,38 @@ require_once __DIR__ . '/../DbTestCase.php';
  */
 final class ChannelMessageHandlerTest extends DbTestCase
 {
+
+	public function setUp(): void
+	{
+		parent::setUp();
+
+		$doc = new stdClass();
+		$doc->id = Uuid\Uuid::uuid4();
+
+		$docs = [];
+		$docs[] = $doc;
+
+		$storageClient = Mockery::mock(PHPOnCouch\CouchClient::class);
+		$storageClient
+			->shouldReceive('asCouchDocuments')
+			->getMock()
+			->shouldReceive('find')
+			->andReturn($docs)
+			->getMock()
+			->shouldReceive('storeDoc')
+			->getMock();
+
+		$storageConnection = Mockery::mock(Connections\CouchDbConnection::class);
+		$storageConnection
+			->shouldReceive('getClient')
+			->andReturn($storageClient)
+			->getMock();
+
+		$this->mockContainerService(
+			Connections\CouchDbConnection::class,
+			$storageConnection
+		);
+	}
 
 	/**
 	 * @param string $routingKey

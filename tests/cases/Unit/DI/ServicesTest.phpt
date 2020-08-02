@@ -5,6 +5,7 @@ namespace Tests\Cases;
 use FastyBird\DevicesNode\Commands;
 use FastyBird\DevicesNode\Consumers;
 use FastyBird\DevicesNode\Controllers;
+use FastyBird\DevicesNode\Events;
 use FastyBird\DevicesNode\Hydrators;
 use FastyBird\DevicesNode\Middleware;
 use FastyBird\DevicesNode\Models;
@@ -44,6 +45,9 @@ final class ServicesTest extends BaseTestCase
 
 		Assert::notNull($container->getByType(Subscribers\EntitiesSubscriber::class));
 
+		Assert::notNull($container->getByType(Events\ServerBeforeStartHandler::class));
+		Assert::notNull($container->getByType(Events\PropertyStateUpdatedHandler::class));
+
 		Assert::notNull($container->getByType(Middleware\AccessMiddleware::class));
 
 		Assert::notNull($container->getByType(Models\Devices\DeviceRepository::class));
@@ -62,6 +66,11 @@ final class ServicesTest extends BaseTestCase
 		Assert::notNull($container->getByType(Models\Channels\Controls\ControlsManager::class));
 		Assert::notNull($container->getByType(Models\Channels\Properties\PropertiesManager::class));
 		Assert::notNull($container->getByType(Models\Channels\Configuration\RowsManager::class));
+
+		Assert::notNull($container->getByType(Models\States\Devices\PropertyRepository::class));
+		Assert::notNull($container->getByType(Models\States\Devices\PropertiesManager::class));
+		Assert::notNull($container->getByType(Models\States\Channels\PropertyRepository::class));
+		Assert::notNull($container->getByType(Models\States\Channels\PropertiesManager::class));
 
 		Assert::notNull($container->getByType(Controllers\DevicesV1Controller::class));
 		Assert::notNull($container->getByType(Controllers\DeviceChildrenV1Controller::class));

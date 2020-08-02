@@ -84,6 +84,11 @@ Configuration could be made via environment variables:
 | `FB_NODE_PARAMETER__DATABASE_USERNAME=root` | Username |
 | `FB_NODE_PARAMETER__DATABASE_PASSWORD=` | Password |
 | | |
+| `FB_NODE_PARAMETER__STORAGE_HOST=127.0.0.1` | CouchDB host address |
+| `FB_NODE_PARAMETER__STORAGE_PORT=1883` | CouchDB access port |
+| `FB_NODE_PARAMETER__STORAGE_USERNAME=null` | Username |
+| `FB_NODE_PARAMETER__STORAGE_PASSWORD=null` | Password |
+| | |
 | `FB_NODE_PARAMETER__SERVER_ADDRESS=0.0.0.0` | HTTP server host address |
 | `FB_NODE_PARAMETER__SERVER_PORT=8000` | HTTP server access port |
 | | |

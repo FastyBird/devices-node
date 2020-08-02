@@ -171,6 +171,28 @@ services:
 		setup:
 			- registerRoutes
 
+	# CouchDB clients
+	#################
+	devicesPropertiesDatabaseConnection:
+		factory: FastyBird\DevicesNode\Connections\CouchDbConnection
+		arguments:
+			database: devices/properties
+			host: %storage.host%
+			port: %storage.port%
+			username: %storage.username%
+			password: %storage.password%
+		autowired: false
+
+	channelsPropertiesDatabaseConnection:
+		factory: FastyBird\DevicesNode\Connections\CouchDbConnection
+		arguments:
+			database: channels/properties
+			host: %storage.host%
+			port: %storage.port%
+			username: %storage.username%
+			password: %storage.password%
+		autowired: false
+
 	# Console commands
 	##################
 
@@ -197,7 +219,10 @@ services:
 
 	# Node events
 	#############
+
 	- {factory: FastyBird\DevicesNode\Events\ServerBeforeStartHandler}
+
+	- {factory: FastyBird\DevicesNode\Events\PropertyStateUpdatedHandler}
 
 	# Events subscribers
 	####################
@@ -241,6 +266,30 @@ services:
 	- {factory: FastyBird\DevicesNode\Models\Channels\Properties\PropertiesManager(@ipubDoctrineCrud.crud::create(FastyBird\DevicesNode\Entities\Channels\Properties\Property))}
 
 	- {factory: FastyBird\DevicesNode\Models\Channels\Configuration\RowsManager(@ipubDoctrineCrud.crud::create(FastyBird\DevicesNode\Entities\Channels\Configuration\Row))}
+
+	-
+		factory: FastyBird\DevicesNode\Models\States\Devices\PropertiesManager
+		arguments:
+			dbClient: @devicesPropertiesDatabaseConnection
+		setup:
+			- '$onAfterUpdate[]' = @FastyBird\DevicesNode\Events\PropertyStateUpdatedHandler
+
+	-
+		factory: FastyBird\DevicesNode\Models\States\Devices\PropertyRepository
+		arguments:
+			dbClient: @devicesPropertiesDatabaseConnection
+
+	-
+		factory: FastyBird\DevicesNode\Models\States\Channels\PropertiesManager
+		arguments:
+			dbClient: @channelsPropertiesDatabaseConnection
+		setup:
+			- '$onAfterUpdate[]' = @FastyBird\DevicesNode\Events\PropertyStateUpdatedHandler
+
+	-
+		factory: FastyBird\DevicesNode\Models\States\Channels\PropertyRepository
+		arguments:
+			dbClient: @channelsPropertiesDatabaseConnection
 
 	# API controllers
 	#################

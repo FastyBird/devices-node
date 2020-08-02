@@ -49,6 +49,12 @@ final class DevicePropertyMessageHandler implements NodeExchangeConsumers\IMessa
 	/** @var Models\Devices\Properties\IPropertiesManager */
 	private $propertiesManager;
 
+	/** @var Models\States\Devices\IPropertiesManager */
+	private $propertiesStatesManager;
+
+	/** @var Models\States\Devices\IPropertyRepository */
+	private $propertyStateRepository;
+
 	/** @var NodeMetadataLoaders\ISchemaLoader */
 	private $schemaLoader;
 
@@ -58,11 +64,15 @@ final class DevicePropertyMessageHandler implements NodeExchangeConsumers\IMessa
 	public function __construct(
 		Models\Devices\IDeviceRepository $deviceRepository,
 		Models\Devices\Properties\IPropertiesManager $propertiesManager,
+		Models\States\Devices\IPropertiesManager $propertiesStatesManager,
+		Models\States\Devices\IPropertyRepository $propertyStateRepository,
 		NodeMetadataLoaders\ISchemaLoader $schemaLoader,
 		Log\LoggerInterface $logger
 	) {
 		$this->deviceRepository = $deviceRepository;
 		$this->propertiesManager = $propertiesManager;
+		$this->propertiesStatesManager = $propertiesStatesManager;
+		$this->propertyStateRepository = $propertyStateRepository;
 
 		$this->schemaLoader = $schemaLoader;
 		$this->logger = $logger;
@@ -93,7 +103,7 @@ final class DevicePropertyMessageHandler implements NodeExchangeConsumers\IMessa
 			return true;
 		}
 
-		$result = true;
+		$dataConsumed = false;
 
 		try {
 			switch ($routingKey) {
@@ -154,8 +164,36 @@ final class DevicePropertyMessageHandler implements NodeExchangeConsumers\IMessa
 							$this->propertiesManager->create(Utils\ArrayHash::from(array_merge($toCreate, $toUpdate)));
 						}
 
-					} else {
-						$result = false;
+						$dataConsumed = true;
+					}
+
+					if (
+						$message->offsetExists('expected')
+						|| $message->offsetExists('value')
+					) {
+						$property = $device->findProperty($message->offsetGet('property'));
+
+						if ($property !== null) {
+							$propertyState = $this->propertyStateRepository->findOne($property->getId());
+
+							if ($message->offsetExists('expected')) {
+								$message->offsetSet('pending', true);
+							}
+
+							if ($propertyState !== null) {
+								if (
+									$message->offsetExists('value')
+									&& (string) $propertyState->getExpected() === (string) $message->offsetGet('value')
+								) {
+									$message->offsetSet('pending', false);
+									$message->offsetSet('expected', null);
+								}
+
+								$this->propertiesStatesManager->updateState($propertyState, $property, $message);
+
+								$dataConsumed = true;
+							}
+						}
 					}
 					break;
 
@@ -170,7 +208,7 @@ final class DevicePropertyMessageHandler implements NodeExchangeConsumers\IMessa
 			throw new NodeExchangeExceptions\TerminateException('An error occurred: ' . $ex->getMessage(), $ex->getCode(), $ex);
 		}
 
-		if ($result) {
+		if ($dataConsumed) {
 			$this->logger->info('[CONSUMER] Successfully consumed entity message');
 		}
 
@@ -182,11 +220,17 @@ final class DevicePropertyMessageHandler implements NodeExchangeConsumers\IMessa
 	 */
 	public function getSchema(string $routingKey, string $origin): ?string
 	{
-		if ($origin === DevicesNode\Constants::NODE_MQTT_ORIGIN) {
-			switch ($routingKey) {
-				case DevicesNode\Constants::RABBIT_MQ_DEVICES_PROPERTIES_DATA_ROUTING_KEY:
+		switch ($routingKey) {
+			case DevicesNode\Constants::RABBIT_MQ_DEVICES_PROPERTIES_DATA_ROUTING_KEY:
+				if ($origin === DevicesNode\Constants::NODE_MQTT_ORIGIN) {
 					return $this->schemaLoader->load(NodeMetadata\Constants::RESOURCES_FOLDER . '/schemas/mqtt-node/data.device.property.json');
-			}
+
+				} elseif (
+					$origin === DevicesNode\Constants::NODE_TRIGGERS_ORIGIN
+					|| $origin === DevicesNode\Constants::NODE_WEBSOCKETS_ORIGIN
+				) {
+					return $this->schemaLoader->load(NodeMetadata\Constants::RESOURCES_FOLDER . '/schemas/data/data.device.property.json');
+				}
 		}
 
 		return null;

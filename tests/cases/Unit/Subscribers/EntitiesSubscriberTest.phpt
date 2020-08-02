@@ -4,6 +4,7 @@ namespace Tests\Cases;
 
 use Doctrine\ORM;
 use FastyBird\DevicesNode\Entities;
+use FastyBird\DevicesNode\Models;
 use FastyBird\DevicesNode\Subscribers;
 use FastyBird\NodeExchange\Publishers as NodeExchangePublishers;
 use Mockery;
@@ -24,7 +25,19 @@ final class EntitiesSubscriberTest extends BaseMockeryTestCase
 		$publisher = Mockery::mock(NodeExchangePublishers\IRabbitMqPublisher::class);
 		$entityManager = Mockery::mock(ORM\EntityManagerInterface::class);
 
-		$subscriber = new Subscribers\EntitiesSubscriber($publisher, $entityManager);
+		$devicesPropertiesStatesManager = Mockery::mock(Models\States\Devices\PropertiesManager::class);
+		$devicesPropertyStateRepository = Mockery::mock(Models\States\Devices\PropertyRepository::class);
+		$channelsPropertiesStatesManager = Mockery::mock(Models\States\Channels\PropertiesManager::class);
+		$channelPropertyStateRepository = Mockery::mock(Models\States\Channels\PropertyRepository::class);
+
+		$subscriber = new Subscribers\EntitiesSubscriber(
+			$devicesPropertiesStatesManager,
+			$devicesPropertyStateRepository,
+			$channelsPropertiesStatesManager,
+			$channelPropertyStateRepository,
+			$publisher,
+			$entityManager
+		);
 
 		Assert::same(['onFlush', 'postPersist', 'postUpdate'], $subscriber->getSubscribedEvents());
 	}
@@ -57,7 +70,19 @@ final class EntitiesSubscriberTest extends BaseMockeryTestCase
 
 		$entityManager = $this->getEntityManager();
 
-		$subscriber = new Subscribers\EntitiesSubscriber($publisher, $entityManager);
+		$devicesPropertiesStatesManager = Mockery::mock(Models\States\Devices\PropertiesManager::class);
+		$devicesPropertyStateRepository = Mockery::mock(Models\States\Devices\PropertyRepository::class);
+		$channelsPropertiesStatesManager = Mockery::mock(Models\States\Channels\PropertiesManager::class);
+		$channelPropertyStateRepository = Mockery::mock(Models\States\Channels\PropertyRepository::class);
+
+		$subscriber = new Subscribers\EntitiesSubscriber(
+			$devicesPropertiesStatesManager,
+			$devicesPropertyStateRepository,
+			$channelsPropertiesStatesManager,
+			$channelPropertyStateRepository,
+			$publisher,
+			$entityManager
+		);
 
 		$entity = new Entities\Devices\PhysicalDevice('device-name');
 		$entity->setName('Device custom name');
@@ -100,7 +125,19 @@ final class EntitiesSubscriberTest extends BaseMockeryTestCase
 
 		$entityManager = $this->getEntityManager(true);
 
-		$subscriber = new Subscribers\EntitiesSubscriber($publisher, $entityManager);
+		$devicesPropertiesStatesManager = Mockery::mock(Models\States\Devices\PropertiesManager::class);
+		$devicesPropertyStateRepository = Mockery::mock(Models\States\Devices\PropertyRepository::class);
+		$channelsPropertiesStatesManager = Mockery::mock(Models\States\Channels\PropertiesManager::class);
+		$channelPropertyStateRepository = Mockery::mock(Models\States\Channels\PropertyRepository::class);
+
+		$subscriber = new Subscribers\EntitiesSubscriber(
+			$devicesPropertiesStatesManager,
+			$devicesPropertyStateRepository,
+			$channelsPropertiesStatesManager,
+			$channelPropertyStateRepository,
+			$publisher,
+			$entityManager
+		);
 
 		$entity = new Entities\Devices\PhysicalDevice('device-name');
 		$entity->setName('Device custom name');
@@ -163,7 +200,19 @@ final class EntitiesSubscriberTest extends BaseMockeryTestCase
 			->andReturn($uow)
 			->times(1);
 
-		$subscriber = new Subscribers\EntitiesSubscriber($publisher, $entityManager);
+		$devicesPropertiesStatesManager = Mockery::mock(Models\States\Devices\PropertiesManager::class);
+		$devicesPropertyStateRepository = Mockery::mock(Models\States\Devices\PropertyRepository::class);
+		$channelsPropertiesStatesManager = Mockery::mock(Models\States\Channels\PropertiesManager::class);
+		$channelPropertyStateRepository = Mockery::mock(Models\States\Channels\PropertyRepository::class);
+
+		$subscriber = new Subscribers\EntitiesSubscriber(
+			$devicesPropertiesStatesManager,
+			$devicesPropertyStateRepository,
+			$channelsPropertiesStatesManager,
+			$channelPropertyStateRepository,
+			$publisher,
+			$entityManager
+		);
 
 		$subscriber->onFlush();
 	}

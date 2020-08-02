@@ -20,7 +20,9 @@ use Doctrine\Common;
 use Doctrine\ORM;
 use Doctrine\Persistence;
 use FastyBird\DevicesNode;
+use FastyBird\DevicesNode\Entities;
 use FastyBird\DevicesNode\Exceptions;
+use FastyBird\DevicesNode\Models;
 use FastyBird\NodeDatabase\Entities as NodeDatabaseEntities;
 use FastyBird\NodeExchange\Publishers as NodeExchangePublishers;
 use Nette;
@@ -45,6 +47,18 @@ final class EntitiesSubscriber implements Common\EventSubscriber
 
 	use Nette\SmartObject;
 
+	/** @var Models\States\Devices\IPropertiesManager */
+	private $devicesPropertiesStatesManager;
+
+	/** @var Models\States\Devices\IPropertyRepository */
+	private $devicesPropertyStateRepository;
+
+	/** @var Models\States\Channels\IPropertiesManager */
+	private $channelsPropertiesStatesManager;
+
+	/** @var Models\States\Channels\IPropertyRepository */
+	private $channelPropertyStateRepository;
+
 	/** @var NodeExchangePublishers\IRabbitMqPublisher */
 	private $publisher;
 
@@ -52,9 +66,18 @@ final class EntitiesSubscriber implements Common\EventSubscriber
 	private $entityManager;
 
 	public function __construct(
+		Models\States\Devices\IPropertiesManager $devicesPropertiesStatesManager,
+		Models\States\Devices\IPropertyRepository $devicesPropertyStateRepository,
+		Models\States\Channels\IPropertiesManager $channelsPropertiesStatesManager,
+		Models\States\Channels\IPropertyRepository $channelPropertyStateRepository,
 		NodeExchangePublishers\IRabbitMqPublisher $publisher,
 		ORM\EntityManagerInterface $entityManager
 	) {
+		$this->devicesPropertiesStatesManager = $devicesPropertiesStatesManager;
+		$this->devicesPropertyStateRepository = $devicesPropertyStateRepository;
+		$this->channelsPropertiesStatesManager = $channelsPropertiesStatesManager;
+		$this->channelPropertyStateRepository = $channelPropertyStateRepository;
+
 		$this->publisher = $publisher;
 		$this->entityManager = $entityManager;
 	}
@@ -188,11 +211,65 @@ final class EntitiesSubscriber implements Common\EventSubscriber
 	 */
 	private function processEntityAction(NodeDatabaseEntities\IEntity $entity, string $action): void
 	{
+		if ($entity instanceof Entities\Devices\Properties\IProperty) {
+			$state = $this->devicesPropertyStateRepository->findOne($entity->getId());
+
+			switch ($action) {
+				case self::ACTION_CREATED:
+				case self::ACTION_UPDATED:
+					if ($state === null) {
+						$this->devicesPropertiesStatesManager->create($entity);
+					}
+					break;
+
+				case self::ACTION_DELETED:
+					if ($state !== null) {
+						$this->devicesPropertiesStatesManager->delete($state);
+					}
+					break;
+			}
+
+		} elseif ($entity instanceof Entities\Channels\Properties\IProperty) {
+			$state = $this->channelPropertyStateRepository->findOne($entity->getId());
+
+			switch ($action) {
+				case self::ACTION_CREATED:
+				case self::ACTION_UPDATED:
+					if ($state === null) {
+						$this->channelsPropertiesStatesManager->create($entity);
+					}
+					break;
+
+				case self::ACTION_DELETED:
+					if ($state !== null) {
+						$this->channelsPropertiesStatesManager->delete($state);
+					}
+					break;
+			}
+		}
+
 		foreach (DevicesNode\Constants::RABBIT_MQ_ENTITIES_ROUTING_KEYS_MAPPING as $class => $routingKey) {
 			if (get_class($entity) === $class) {
 				$routingKey = str_replace(DevicesNode\Constants::RABBIT_MQ_ENTITIES_ROUTING_KEY_ACTION_REPLACE_STRING, $action, $routingKey);
 
-				$this->publisher->publish($routingKey, $this->toArray($entity));
+				if (
+					$entity instanceof Entities\Devices\Properties\IProperty
+					|| $entity instanceof Entities\Channels\Properties\IProperty
+				) {
+					$state = null;
+
+					if ($entity instanceof Entities\Devices\Properties\IProperty) {
+						$state = $this->devicesPropertyStateRepository->findOne($entity->getId());
+
+					} elseif ($entity instanceof Entities\Channels\Properties\IProperty) {
+						$state = $this->channelPropertyStateRepository->findOne($entity->getId());
+					}
+
+					$this->publisher->publish($routingKey, array_merge($state !== null ? $state->toArray() : [], $this->toArray($entity)));
+
+				} else {
+					$this->publisher->publish($routingKey, $this->toArray($entity));
+				}
 
 				return;
 			}
@@ -200,7 +277,24 @@ final class EntitiesSubscriber implements Common\EventSubscriber
 			if (is_subclass_of($entity, $class)) {
 				$routingKey = str_replace(DevicesNode\Constants::RABBIT_MQ_ENTITIES_ROUTING_KEY_ACTION_REPLACE_STRING, $action, $routingKey);
 
-				$this->publisher->publish($routingKey, $this->toArray($entity));
+				if (
+					$entity instanceof Entities\Devices\Properties\IProperty
+					|| $entity instanceof Entities\Channels\Properties\IProperty
+				) {
+					$state = null;
+
+					if ($entity instanceof Entities\Devices\Properties\IProperty) {
+						$state = $this->devicesPropertyStateRepository->findOne($entity->getId());
+
+					} elseif ($entity instanceof Entities\Channels\Properties\IProperty) {
+						$state = $this->channelPropertyStateRepository->findOne($entity->getId());
+					}
+
+					$this->publisher->publish($routingKey, array_merge($state !== null ? $state->toArray() : [], $this->toArray($entity)));
+
+				} else {
+					$this->publisher->publish($routingKey, $this->toArray($entity));
+				}
 
 				return;
 			}

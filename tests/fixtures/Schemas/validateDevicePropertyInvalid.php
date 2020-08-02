@@ -1,0 +1,29 @@
+<?php declare(strict_types = 1);
+
+use FastyBird\DevicesNode\Types;
+
+return [
+	'one'   => [
+		[
+			'device'   => 'device_name',
+			'property' => 'property_name',
+			'datatype' => 'unknown',
+			'format'   => null,
+		],
+	],
+	'two'   => [
+		[
+			'property' => 'property_name',
+			'datatype' => Types\DatatypeType::DATA_TYPE_INTEGER,
+			'format'   => '0:10',
+		],
+	],
+	'three' => [
+		[
+			'device'   => 'device_name',
+			'property' => 'property_name',
+			'format'   => '0:10',
+			'settable' => 'string',
+		],
+	],
+];

@@ -16,6 +16,7 @@
 namespace FastyBird\DevicesNode;
 
 use FastyBird\DevicesNode\Entities as DevicesNodeEntities;
+use FastyBird\DevicesNode\States as DevicesNodeStates;
 
 /**
  * Service constants
@@ -40,6 +41,9 @@ final class Constants
 		DevicesNodeEntities\Channels\Channel::class                => 'fb.bus.node.entity.[ACTION].channel',
 		DevicesNodeEntities\Channels\Properties\Property::class    => 'fb.bus.node.entity.[ACTION].channel.property',
 		DevicesNodeEntities\Channels\Configuration\Row::class      => 'fb.bus.node.entity.[ACTION].channel.configuration',
+
+		DevicesNodeStates\Devices\Property::class  => 'fb.bus.node.entity.[ACTION].device.property',
+		DevicesNodeStates\Channels\Property::class => 'fb.bus.node.entity.[ACTION].channel.property',
 	];
 
 	public const RABBIT_MQ_ENTITIES_ROUTING_KEY_ACTION_REPLACE_STRING = '[ACTION]';
@@ -65,6 +69,8 @@ final class Constants
 	 */
 
 	public const NODE_MQTT_ORIGIN = 'com.fastybird.mqtt-node';
+	public const NODE_WEBSOCKETS_ORIGIN = 'com.fastybird.websockets-node';
+	public const NODE_TRIGGERS_ORIGIN = 'com.fastybird.triggers-node';
 
 	/**
 	 * Data types
