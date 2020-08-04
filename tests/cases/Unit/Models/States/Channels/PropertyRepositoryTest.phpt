@@ -4,8 +4,8 @@ namespace Tests\Cases;
 
 use FastyBird\DevicesNode\Connections;
 use FastyBird\DevicesNode\Entities;
-use FastyBird\DevicesNode\States;
 use FastyBird\DevicesNode\Models;
+use FastyBird\DevicesNode\States;
 use FastyBird\DevicesNode\Types;
 use Mockery;
 use Ninjify\Nunjuck\TestCase\BaseMockeryTestCase;
@@ -104,7 +104,7 @@ final class PropertyRepositoryTest extends BaseMockeryTestCase
 			->andReturn($data['datatype'] !== null ? Types\DatatypeType::get($data['datatype']) : null)
 			->getMock()
 			->shouldReceive('getFormat')
-			->andReturn(isset($data['format']) ? $data['format'] : null)
+			->andReturn($data['format'] ?? null)
 			->getMock();
 
 		$propertyRepository = Mockery::mock(Models\Channels\Properties\PropertyRepository::class);

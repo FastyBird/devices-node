@@ -4,8 +4,8 @@ namespace Tests\Cases;
 
 use FastyBird\DevicesNode\Connections;
 use FastyBird\DevicesNode\Router;
-use FastyBird\NodeWebServer\Http;
 use FastyBird\NodeExchange\Publishers as NodeExchangePublishers;
+use FastyBird\NodeWebServer\Http;
 use Fig\Http\Message\RequestMethodInterface;
 use Mockery;
 use PHPOnCouch;
