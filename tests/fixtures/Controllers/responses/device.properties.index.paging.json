@@ -8,7 +8,10 @@
         "is_settable": false,
         "name": "uptime",
         "property": "uptime",
-        "unit": null
+        "unit": null,
+        "value": null,
+        "expected": null,
+        "pending": false
       },
       "id": "bbcccf8c-33ab-431b-a795-d7bb38b6b6db",
       "links": {

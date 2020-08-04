@@ -7,7 +7,10 @@
       "is_settable": true,
       "name": "switch",
       "property": "switch",
-      "unit": null
+      "unit": null,
+      "value": null,
+      "expected": null,
+      "pending": false
     },
     "id": "bbcccf8c-33ab-431b-a795-d7bb38b6b6db",
     "links": {

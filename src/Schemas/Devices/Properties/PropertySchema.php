@@ -16,6 +16,7 @@
 namespace FastyBird\DevicesNode\Schemas\Devices\Properties;
 
 use FastyBird\DevicesNode\Entities;
+use FastyBird\DevicesNode\Models;
 use FastyBird\DevicesNode\Router;
 use FastyBird\DevicesNode\Schemas;
 use FastyBird\NodeJsonApi\Schemas as NodeJsonApiSchemas;
@@ -48,9 +49,15 @@ final class PropertySchema extends NodeJsonApiSchemas\JsonApiSchema
 	/** @var Routing\IRouter */
 	private $router;
 
-	public function __construct(Routing\IRouter $router)
-	{
+	/** @var Models\States\Devices\IPropertyRepository */
+	private $propertyRepository;
+
+	public function __construct(
+		Routing\IRouter $router,
+		Models\States\Devices\IPropertyRepository $propertyRepository
+	) {
 		$this->router = $router;
+		$this->propertyRepository = $propertyRepository;
 	}
 
 	/**
@@ -79,6 +86,8 @@ final class PropertySchema extends NodeJsonApiSchemas\JsonApiSchema
 	 */
 	public function getAttributes($property, JsonApi\Contracts\Schema\ContextInterface $context): iterable
 	{
+		$state = $this->propertyRepository->findOne($property->getId());
+
 		return [
 			'property'     => $property->getProperty(),
 			'name'         => $property->getName(),
@@ -87,6 +96,9 @@ final class PropertySchema extends NodeJsonApiSchemas\JsonApiSchema
 			'datatype'     => $property->getDatatype() !== null ? $property->getDatatype()->getValue() : null,
 			'unit'         => $property->getUnit(),
 			'format'       => is_array($property->getFormat()) ? implode(',', $property->getFormat()) : $property->getFormat(),
+			'value'        => $state !== null ? $state->getValue() : null,
+			'expected'     => $state !== null ? $state->getExpected() : null,
+			'pending'      => $state !== null ? $state->isPending() : false,
 		];
 	}
 
