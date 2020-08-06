@@ -145,13 +145,17 @@ class DevicesV1Controller extends BaseV1Controller
 
 			} catch (NodeJsonApiExceptions\IJsonApiException $ex) {
 				// Revert all changes when error occur
-				$this->getOrmConnection()->rollBack();
+				if ($this->getOrmConnection()->isTransactionActive()) {
+					$this->getOrmConnection()->rollBack();
+				}
 
 				throw $ex;
 
 			} catch (DoctrineCrudExceptions\MissingRequiredFieldException $ex) {
 				// Revert all changes when error occur
-				$this->getOrmConnection()->rollBack();
+				if ($this->getOrmConnection()->isTransactionActive()) {
+					$this->getOrmConnection()->rollBack();
+				}
 
 				$pointer = 'data/attributes/' . $ex->getField();
 
@@ -166,7 +170,9 @@ class DevicesV1Controller extends BaseV1Controller
 
 			} catch (DoctrineCrudExceptions\EntityCreationException $ex) {
 				// Revert all changes when error occur
-				$this->getOrmConnection()->rollBack();
+				if ($this->getOrmConnection()->isTransactionActive()) {
+					$this->getOrmConnection()->rollBack();
+				}
 
 				throw new NodeJsonApiExceptions\JsonApiErrorException(
 					StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
@@ -179,7 +185,9 @@ class DevicesV1Controller extends BaseV1Controller
 
 			} catch (Doctrine\DBAL\Exception\UniqueConstraintViolationException $ex) {
 				// Revert all changes when error occur
-				$this->getOrmConnection()->rollBack();
+				if ($this->getOrmConnection()->isTransactionActive()) {
+					$this->getOrmConnection()->rollBack();
+				}
 
 				if (preg_match("%key '(?P<key>.+)_unique'%", $ex->getMessage(), $match) !== false) {
 					$columnParts = explode('.', $match['key']);
@@ -205,7 +213,9 @@ class DevicesV1Controller extends BaseV1Controller
 
 			} catch (Throwable $ex) {
 				// Revert all changes when error occur
-				$this->getOrmConnection()->rollBack();
+				if ($this->getOrmConnection()->isTransactionActive()) {
+					$this->getOrmConnection()->rollBack();
+				}
 
 				// Log catched exception
 				$this->logger->error('[CONTROLLER] ' . $ex->getMessage(), [
@@ -296,13 +306,17 @@ class DevicesV1Controller extends BaseV1Controller
 
 		} catch (NodeJsonApiExceptions\IJsonApiException $ex) {
 			// Revert all changes when error occur
-			$this->getOrmConnection()->rollBack();
+			if ($this->getOrmConnection()->isTransactionActive()) {
+				$this->getOrmConnection()->rollBack();
+			}
 
 			throw $ex;
 
 		} catch (Doctrine\DBAL\Exception\UniqueConstraintViolationException $ex) {
 			// Revert all changes when error occur
-			$this->getOrmConnection()->rollBack();
+			if ($this->getOrmConnection()->isTransactionActive()) {
+				$this->getOrmConnection()->rollBack();
+			}
 
 			if (preg_match("%key '(?P<key>.+)_unique'%", $ex->getMessage(), $match) !== false) {
 				$columnParts = explode('.', $match['key']);
@@ -328,7 +342,9 @@ class DevicesV1Controller extends BaseV1Controller
 
 		} catch (Throwable $ex) {
 			// Revert all changes when error occur
-			$this->getOrmConnection()->rollBack();
+			if ($this->getOrmConnection()->isTransactionActive()) {
+				$this->getOrmConnection()->rollBack();
+			}
 
 			// Log catched exception
 			$this->logger->error('[CONTROLLER] ' . $ex->getMessage(), [
@@ -392,7 +408,9 @@ class DevicesV1Controller extends BaseV1Controller
 			]);
 
 			// Revert all changes when error occur
-			$this->getOrmConnection()->rollBack();
+			if ($this->getOrmConnection()->isTransactionActive()) {
+				$this->getOrmConnection()->rollBack();
+			}
 
 			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
