@@ -148,8 +148,7 @@ abstract class Device implements IDevice
 	 * @var Common\Collections\Collection<int, Entities\Devices\Controls\IControl>
 	 *
 	 * @IPubDoctrine\Crud(is="writable")
-	 * @ORM\OneToMany(targetEntity="FastyBird\DevicesNode\Entities\Devices\Controls\Control", mappedBy="device", cascade={"persist", "remove"},
-	 *                                                                                        orphanRemoval=true)
+	 * @ORM\OneToMany(targetEntity="FastyBird\DevicesNode\Entities\Devices\Controls\Control", mappedBy="device", cascade={"persist", "remove"}, orphanRemoval=true)
 	 */
 	protected $controls;
 
@@ -157,8 +156,7 @@ abstract class Device implements IDevice
 	 * @var Common\Collections\Collection<int, Entities\Devices\Properties\IProperty>
 	 *
 	 * @IPubDoctrine\Crud(is="writable")
-	 * @ORM\OneToMany(targetEntity="FastyBird\DevicesNode\Entities\Devices\Properties\Property", mappedBy="device", cascade={"persist", "remove"},
-	 *                                                                                           orphanRemoval=true)
+	 * @ORM\OneToMany(targetEntity="FastyBird\DevicesNode\Entities\Devices\Properties\Property", mappedBy="device", cascade={"persist", "remove"}, orphanRemoval=true)
 	 */
 	protected $properties;
 
@@ -166,8 +164,7 @@ abstract class Device implements IDevice
 	 * @var Common\Collections\Collection<int, Entities\Devices\Configuration\IRow>
 	 *
 	 * @IPubDoctrine\Crud(is="writable")
-	 * @ORM\OneToMany(targetEntity="FastyBird\DevicesNode\Entities\Devices\Configuration\Row", mappedBy="device", cascade={"persist", "remove"},
-	 *                                                                                         orphanRemoval=true)
+	 * @ORM\OneToMany(targetEntity="FastyBird\DevicesNode\Entities\Devices\Configuration\Row", mappedBy="device", cascade={"persist", "remove"}, orphanRemoval=true)
 	 */
 	protected $configuration;
 

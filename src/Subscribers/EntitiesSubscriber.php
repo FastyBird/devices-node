@@ -249,32 +249,10 @@ final class EntitiesSubscriber implements Common\EventSubscriber
 		}
 
 		foreach (DevicesNode\Constants::RABBIT_MQ_ENTITIES_ROUTING_KEYS_MAPPING as $class => $routingKey) {
-			if (get_class($entity) === $class) {
-				$routingKey = str_replace(DevicesNode\Constants::RABBIT_MQ_ENTITIES_ROUTING_KEY_ACTION_REPLACE_STRING, $action, $routingKey);
-
-				if (
-					$entity instanceof Entities\Devices\Properties\IProperty
-					|| $entity instanceof Entities\Channels\Properties\IProperty
-				) {
-					$state = null;
-
-					if ($entity instanceof Entities\Devices\Properties\IProperty) {
-						$state = $this->devicesPropertyStateRepository->findOne($entity->getId());
-
-					} elseif ($entity instanceof Entities\Channels\Properties\IProperty) {
-						$state = $this->channelPropertyStateRepository->findOne($entity->getId());
-					}
-
-					$this->publisher->publish($routingKey, array_merge($state !== null ? $state->toArray() : [], $this->toArray($entity)));
-
-				} else {
-					$this->publisher->publish($routingKey, $this->toArray($entity));
-				}
-
-				return;
-			}
-
-			if (is_subclass_of($entity, $class)) {
+			if (
+				get_class($entity) === $class
+				|| is_subclass_of($entity, $class)
+			) {
 				$routingKey = str_replace(DevicesNode\Constants::RABBIT_MQ_ENTITIES_ROUTING_KEY_ACTION_REPLACE_STRING, $action, $routingKey);
 
 				if (
