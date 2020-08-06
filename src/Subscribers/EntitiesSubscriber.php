@@ -250,8 +250,7 @@ final class EntitiesSubscriber implements Common\EventSubscriber
 
 		foreach (DevicesNode\Constants::RABBIT_MQ_ENTITIES_ROUTING_KEYS_MAPPING as $class => $routingKey) {
 			if (
-				get_class($entity) === $class
-				|| is_subclass_of($entity, $class)
+				$this->validateEntity($entity, $class)
 			) {
 				$routingKey = str_replace(DevicesNode\Constants::RABBIT_MQ_ENTITIES_ROUTING_KEY_ACTION_REPLACE_STRING, $action, $routingKey);
 
@@ -277,6 +276,27 @@ final class EntitiesSubscriber implements Common\EventSubscriber
 				return;
 			}
 		}
+	}
+
+	/**
+	 * @param NodeDatabaseEntities\IEntity $entity
+	 * @param string $class
+	 *
+	 * @return bool
+	 */
+	private function validateEntity(NodeDatabaseEntities\IEntity $entity, string $class): bool
+	{
+		$result = false;
+
+		if (get_class($entity) === $class) {
+			$result = true;
+		}
+
+		if (is_subclass_of($entity, $class)) {
+			$result = true;
+		}
+
+		return $result;
 	}
 
 	/**
