@@ -33,6 +33,9 @@ use Throwable;
  *
  * @package        FastyBird:DevicesNode!
  * @subpackage     Controllers
+ *
+ * @Secured
+ * @Secured\User(loggedIn)
  */
 final class ChannelsV1Controller extends BaseV1Controller
 {
@@ -120,6 +123,9 @@ final class ChannelsV1Controller extends BaseV1Controller
 	 *
 	 * @throws NodeJsonApiExceptions\IJsonApiException
 	 * @throws Doctrine\DBAL\ConnectionException
+	 *
+	 * @Secured
+	 * @Secured\Role(manager,administrator)
 	 */
 	public function update(
 		Message\ServerRequestInterface $request,

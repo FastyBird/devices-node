@@ -57,19 +57,27 @@ final class ChannelPropertiesV1ControllerTest extends DbTestCase
 
 	/**
 	 * @param string $url
+	 * @param string|null $token
 	 * @param int $statusCode
 	 * @param string $fixture
 	 *
 	 * @dataProvider ./../../../fixtures/Controllers/channelPropertiesRead.php
 	 */
-	public function testRead(string $url, int $statusCode, string $fixture): void
+	public function testRead(string $url, ?string $token, int $statusCode, string $fixture): void
 	{
 		/** @var Router\Router $router */
 		$router = $this->getContainer()->getByType(Router\Router::class);
 
+		$headers = [];
+
+		if ($token !== null) {
+			$headers['authorization'] = $token;
+		}
+
 		$request = new ServerRequest(
 			RequestMethodInterface::METHOD_GET,
-			$url
+			$url,
+			$headers
 		);
 
 		$response = $router->handle($request);

@@ -30,6 +30,9 @@ use Psr\Http\Message;
  * @subpackage     Controllers
  *
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
+ *
+ * @Secured
+ * @Secured\User(loggedIn)
  */
 final class DeviceChildrenV1Controller extends BaseV1Controller
 {

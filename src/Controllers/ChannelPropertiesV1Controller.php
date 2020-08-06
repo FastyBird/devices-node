@@ -33,6 +33,9 @@ use Ramsey\Uuid;
  * @subpackage     Controllers
  *
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
+ *
+ * @Secured
+ * @Secured\User(loggedIn)
  */
 final class ChannelPropertiesV1Controller extends BaseV1Controller
 {

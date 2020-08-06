@@ -69,13 +69,10 @@ final class DevicesV1ControllerTest extends DbTestCase
 		/** @var Router\Router $router */
 		$router = $this->getContainer()->getByType(Router\Router::class);
 
-		if ($token === null) {
-			$headers = [];
+		$headers = [];
 
-		} else {
-			$headers = [
-				'authorization' => $token,
-			];
+		if ($token !== null) {
+			$headers['authorization'] = $token;
 		}
 
 		$request = new ServerRequest(
@@ -108,13 +105,10 @@ final class DevicesV1ControllerTest extends DbTestCase
 		/** @var Router\Router $router */
 		$router = $this->getContainer()->getByType(Router\Router::class);
 
-		if ($token === null) {
-			$headers = [];
+		$headers = [];
 
-		} else {
-			$headers = [
-				'authorization' => $token,
-			];
+		if ($token !== null) {
+			$headers['authorization'] = $token;
 		}
 
 		$request = new ServerRequest(
@@ -163,13 +157,10 @@ final class DevicesV1ControllerTest extends DbTestCase
 		/** @var Router\Router $router */
 		$router = $this->getContainer()->getByType(Router\Router::class);
 
-		if ($token === null) {
-			$headers = [];
+		$headers = [];
 
-		} else {
-			$headers = [
-				'authorization' => $token,
-			];
+		if ($token !== null) {
+			$headers['authorization'] = $token;
 		}
 
 		$request = new ServerRequest(
@@ -217,13 +208,10 @@ final class DevicesV1ControllerTest extends DbTestCase
 		/** @var Router\Router $router */
 		$router = $this->getContainer()->getByType(Router\Router::class);
 
-		if ($token === null) {
-			$headers = [];
+		$headers = [];
 
-		} else {
-			$headers = [
-				'authorization' => $token,
-			];
+		if ($token !== null) {
+			$headers['authorization'] = $token;
 		}
 
 		$request = new ServerRequest(
