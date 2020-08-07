@@ -90,6 +90,7 @@ final class EntitiesSubscriber implements Common\EventSubscriber
 	public function getSubscribedEvents(): array
 	{
 		return [
+			ORM\Events::preFlush,
 			ORM\Events::onFlush,
 			ORM\Events::postPersist,
 			ORM\Events::postUpdate,
@@ -135,11 +136,58 @@ final class EntitiesSubscriber implements Common\EventSubscriber
 		}
 
 		// Check for valid entity
-		if (!$entity instanceof NodeDatabaseEntities\IEntity) {
+		if (
+			!$entity instanceof NodeDatabaseEntities\IEntity
+			|| $uow->isScheduledForDelete($entity)
+		) {
+			return;
+		}
+
+		if (
+			$entity instanceof Entities\Channels\Controls\IControl
+			&& $uow->isScheduledForUpdate($entity->getChannel())
+		) {
+			return;
+		}
+
+		if (
+			$entity instanceof Entities\Devices\Controls\IControl
+			&& $uow->isScheduledForUpdate($entity->getDevice())
+		) {
 			return;
 		}
 
 		$this->processEntityAction($entity, self::ACTION_UPDATED);
+	}
+
+	/**
+	 * @return void
+	 */
+	public function preFlush(): void
+	{
+		$uow = $this->entityManager->getUnitOfWork();
+
+		foreach ($uow->getScheduledEntityDeletions() as $entity) {
+			if (
+				(
+					$entity instanceof Entities\Devices\Controls\IControl
+					|| $entity instanceof Entities\Channels\Controls\IControl
+				)
+				&& $entity->getName() === DevicesNode\Constants::CONTROL_CONFIG
+			) {
+				if ($entity instanceof Entities\Devices\Controls\IControl) {
+					foreach ($entity->getDevice()->getConfiguration() as $row) {
+						$uow->scheduleForDelete($row);
+					}
+				}
+
+				if ($entity instanceof Entities\Channels\Controls\IControl) {
+					foreach ($entity->getChannel()->getConfiguration() as $row) {
+						$uow->scheduleForDelete($row);
+					}
+				}
+			}
+		}
 	}
 
 	/**
@@ -150,6 +198,8 @@ final class EntitiesSubscriber implements Common\EventSubscriber
 		$uow = $this->entityManager->getUnitOfWork();
 
 		$processedEntities = [];
+
+		$processEntities = [];
 
 		foreach ($uow->getScheduledEntityDeletions() as $entity) {
 			// Doctrine is fine deleting elements multiple times. We are not.
@@ -166,6 +216,24 @@ final class EntitiesSubscriber implements Common\EventSubscriber
 				continue;
 			}
 
+			if (
+				$entity instanceof Entities\Devices\Controls\IControl
+				&& $uow->isScheduledForDelete($entity->getDevice())
+			) {
+				continue;
+			}
+
+			if (
+				$entity instanceof Entities\Channels\Controls\IControl
+				&& $uow->isScheduledForDelete($entity->getChannel())
+			) {
+				continue;
+			}
+
+			$processEntities[] = $entity;
+		}
+
+		foreach ($processEntities as $entity) {
 			$this->processEntityAction($entity, self::ACTION_DELETED);
 		}
 	}
@@ -211,6 +279,16 @@ final class EntitiesSubscriber implements Common\EventSubscriber
 	 */
 	private function processEntityAction(NodeDatabaseEntities\IEntity $entity, string $action): void
 	{
+		if ($entity instanceof Entities\Devices\Controls\IControl) {
+			$entity = $entity->getDevice();
+			$action = self::ACTION_UPDATED;
+		}
+
+		if ($entity instanceof Entities\Channels\Controls\IControl) {
+			$entity = $entity->getChannel();
+			$action = self::ACTION_UPDATED;
+		}
+
 		if ($entity instanceof Entities\Devices\Properties\IProperty) {
 			$state = $this->devicesPropertyStateRepository->findOne($entity->getId());
 
@@ -250,7 +328,7 @@ final class EntitiesSubscriber implements Common\EventSubscriber
 
 		foreach (DevicesNode\Constants::RABBIT_MQ_ENTITIES_ROUTING_KEYS_MAPPING as $class => $routingKey) {
 			if (
-				$this->validateEntity($entity, $class)
+			$this->validateEntity($entity, $class)
 			) {
 				$routingKey = str_replace(DevicesNode\Constants::RABBIT_MQ_ENTITIES_ROUTING_KEY_ACTION_REPLACE_STRING, $action, $routingKey);
 

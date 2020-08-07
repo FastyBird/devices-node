@@ -16,8 +16,6 @@
 namespace FastyBird\DevicesNode\Entities\Channels\Configuration;
 
 use FastyBird\DevicesNode\Entities;
-use FastyBird\NodeDatabase\Entities as NodeDatabaseEntities;
-use IPub\DoctrineTimestampable;
 
 /**
  * Channel configuration row entity interface
@@ -27,77 +25,12 @@ use IPub\DoctrineTimestampable;
  *
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  */
-interface IRow extends NodeDatabaseEntities\IEntity,
-	NodeDatabaseEntities\IEntityParams,
-	DoctrineTimestampable\Entities\IEntityCreated, DoctrineTimestampable\Entities\IEntityUpdated
+interface IRow extends Entities\IRow
 {
 
 	/**
 	 * @return Entities\Channels\IChannel
 	 */
 	public function getChannel(): Entities\Channels\IChannel;
-
-	/**
-	 * @return string
-	 */
-	public function getName(): string;
-
-	/**
-	 * @param string|null $title
-	 *
-	 * @return void
-	 */
-	public function setTitle(?string $title): void;
-
-	/**
-	 * @return string|null
-	 */
-	public function getTitle(): ?string;
-
-	/**
-	 * @param string|null $comment
-	 *
-	 * @return void
-	 */
-	public function setComment(?string $comment): void;
-
-	/**
-	 * @return string|null
-	 */
-	public function getComment(): ?string;
-
-	/**
-	 * @param string|null $default
-	 *
-	 * @return void
-	 */
-	public function setDefault(?string $default): void;
-
-	/**
-	 * @return mixed|null
-	 */
-	public function getDefault();
-
-	/**
-	 * @param string|null $value
-	 *
-	 * @return void
-	 */
-	public function setValue(?string $value): void;
-
-	/**
-	 * @return mixed|null
-	 */
-	public function getValue();
-
-	/**
-	 * @return string
-	 */
-	public function getType(): string;
-
-	/**
-	 * @return mixed[]
-	 */
-	public function toArray(): array;
 
 }

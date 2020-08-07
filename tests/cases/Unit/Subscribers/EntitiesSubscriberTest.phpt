@@ -39,7 +39,7 @@ final class EntitiesSubscriberTest extends BaseMockeryTestCase
 			$entityManager
 		);
 
-		Assert::same(['onFlush', 'postPersist', 'postUpdate'], $subscriber->getSubscribedEvents());
+		Assert::same(['preFlush', 'onFlush', 'postPersist', 'postUpdate'], $subscriber->getSubscribedEvents());
 	}
 
 	public function testPublishCreatedEntity(): void
@@ -248,7 +248,11 @@ final class EntitiesSubscriberTest extends BaseMockeryTestCase
 			$uow
 				->shouldReceive('getEntityChangeSet')
 				->andReturn(['name'])
-				->times(1);
+				->times(1)
+				->getMock()
+				->shouldReceive('isScheduledForDelete')
+				->andReturn(false)
+				->getMock();
 
 			$entityManager
 				->shouldReceive('getUnitOfWork')

@@ -95,4 +95,11 @@ interface IProperty extends IState
 	 */
 	public function getFormat();
 
+	/**
+	 * @param string|null $value
+	 *
+	 * @return int|float|string|bool|null
+	 */
+	public function normalizeValue(?string $value);
+
 }

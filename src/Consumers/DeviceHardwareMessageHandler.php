@@ -15,6 +15,9 @@
 
 namespace FastyBird\DevicesNode\Consumers;
 
+use Doctrine\Common;
+use Doctrine\DBAL;
+use Doctrine\DBAL\Connection;
 use FastyBird\DevicesNode;
 use FastyBird\DevicesNode\Entities;
 use FastyBird\DevicesNode\Exceptions;
@@ -54,22 +57,28 @@ final class DeviceHardwareMessageHandler implements NodeExchangeConsumers\IMessa
 	/** @var Log\LoggerInterface */
 	private $logger;
 
+	/** @var Common\Persistence\ManagerRegistry */
+	private $managerRegistry;
+
 	public function __construct(
 		Models\Devices\IDeviceRepository $deviceRepository,
 		Models\Devices\PhysicalDevice\IHardwareManager $hardwareManager,
 		NodeMetadataLoaders\ISchemaLoader $schemaLoader,
-		Log\LoggerInterface $logger
+		Log\LoggerInterface $logger,
+		Common\Persistence\ManagerRegistry $managerRegistry
 	) {
 		$this->deviceRepository = $deviceRepository;
 		$this->hardwareManager = $hardwareManager;
 
 		$this->schemaLoader = $schemaLoader;
 		$this->logger = $logger;
+		$this->managerRegistry = $managerRegistry;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 *
+	 * @throws DBAL\ConnectionException
 	 * @throws NodeExchangeExceptions\TerminateException
 	 */
 	public function process(
@@ -93,11 +102,12 @@ final class DeviceHardwareMessageHandler implements NodeExchangeConsumers\IMessa
 			return true;
 		}
 
-		$result = true;
-
 		try {
 			switch ($routingKey) {
 				case DevicesNode\Constants::RABBIT_MQ_DEVICES_HARDWARE_DATA_ROUTING_KEY:
+					// Start transaction connection to the database
+					$this->getOrmConnection()->beginTransaction();
+
 					$toUpdate = [];
 
 					foreach (['mac-address', 'manufacturer', 'model', 'version'] as $attribute) {
@@ -115,10 +125,10 @@ final class DeviceHardwareMessageHandler implements NodeExchangeConsumers\IMessa
 						} else {
 							$this->hardwareManager->create(Utils\ArrayHash::from(array_merge($toUpdate, ['device' => $device])));
 						}
-
-					} else {
-						$result = false;
 					}
+
+					// Commit all changes into database
+					$this->getOrmConnection()->commit();
 					break;
 
 				default:
@@ -130,11 +140,15 @@ final class DeviceHardwareMessageHandler implements NodeExchangeConsumers\IMessa
 
 		} catch (Throwable $ex) {
 			throw new NodeExchangeExceptions\TerminateException('An error occurred: ' . $ex->getMessage(), $ex->getCode(), $ex);
+
+		} finally {
+			// Revert all changes when error occur
+			if ($this->getOrmConnection()->isTransactionActive()) {
+				$this->getOrmConnection()->rollBack();
+			}
 		}
 
-		if ($result) {
-			$this->logger->info('[CONSUMER] Successfully consumed entity message');
-		}
+		$this->logger->info('[CONSUMER] Successfully consumed entity message');
 
 		return true;
 	}
@@ -180,6 +194,20 @@ final class DeviceHardwareMessageHandler implements NodeExchangeConsumers\IMessa
 		}
 
 		return [];
+	}
+
+	/**
+	 * @return Connection
+	 */
+	protected function getOrmConnection(): Connection
+	{
+		$connection = $this->managerRegistry->getConnection();
+
+		if ($connection instanceof Connection) {
+			return $connection;
+		}
+
+		throw new Exceptions\RuntimeException('Entity manager could not be loaded');
 	}
 
 }

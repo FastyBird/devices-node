@@ -40,13 +40,15 @@ final class ServicesTest extends BaseTestCase
 		Assert::notNull($container->getByType(Consumers\DeviceFirmwareMessageHandler::class));
 		Assert::notNull($container->getByType(Consumers\DeviceHardwareMessageHandler::class));
 		Assert::notNull($container->getByType(Consumers\DevicePropertyMessageHandler::class));
+		Assert::notNull($container->getByType(Consumers\DeviceControlMessageHandler::class));
 		Assert::notNull($container->getByType(Consumers\ChannelMessageHandler::class));
 		Assert::notNull($container->getByType(Consumers\ChannelPropertyMessageHandler::class));
-
-		Assert::notNull($container->getByType(Subscribers\EntitiesSubscriber::class));
+		Assert::notNull($container->getByType(Consumers\ChannelControlMessageHandler::class));
 
 		Assert::notNull($container->getByType(Events\ServerBeforeStartHandler::class));
 		Assert::notNull($container->getByType(Events\PropertyStateUpdatedHandler::class));
+
+		Assert::notNull($container->getByType(Subscribers\EntitiesSubscriber::class));
 
 		Assert::notNull($container->getByType(Middleware\AccessMiddleware::class));
 
@@ -89,6 +91,7 @@ final class ServicesTest extends BaseTestCase
 		Assert::notNull($container->getByType(Schemas\Devices\Configuration\BooleanRowSchema::class));
 		Assert::notNull($container->getByType(Schemas\Devices\Configuration\NumberRowSchema::class));
 		Assert::notNull($container->getByType(Schemas\Devices\Configuration\SelectRowSchema::class));
+		Assert::notNull($container->getByType(Schemas\Devices\Configuration\TextRowSchema::class));
 		Assert::notNull($container->getByType(Schemas\Channels\ChannelSchema::class));
 		Assert::notNull($container->getByType(Schemas\Channels\Properties\PropertySchema::class));
 		Assert::notNull($container->getByType(Schemas\Channels\Configuration\BooleanRowSchema::class));

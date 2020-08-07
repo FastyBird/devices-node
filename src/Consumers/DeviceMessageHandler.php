@@ -15,6 +15,9 @@
 
 namespace FastyBird\DevicesNode\Consumers;
 
+use Doctrine\Common;
+use Doctrine\DBAL;
+use Doctrine\DBAL\Connection;
 use FastyBird\DevicesNode;
 use FastyBird\DevicesNode\Entities;
 use FastyBird\DevicesNode\Exceptions;
@@ -67,6 +70,9 @@ final class DeviceMessageHandler implements NodeExchangeConsumers\IMessageHandle
 	/** @var Log\LoggerInterface */
 	private $logger;
 
+	/** @var Common\Persistence\ManagerRegistry */
+	private $managerRegistry;
+
 	public function __construct(
 		Models\Devices\IDeviceRepository $deviceRepository,
 		Models\Devices\IDevicesManager $devicesManager,
@@ -75,7 +81,8 @@ final class DeviceMessageHandler implements NodeExchangeConsumers\IMessageHandle
 		Models\Channels\IChannelRepository $channelRepository,
 		Models\Channels\IChannelsManager $channelsManager,
 		NodeMetadataLoaders\ISchemaLoader $schemaLoader,
-		Log\LoggerInterface $logger
+		Log\LoggerInterface $logger,
+		Common\Persistence\ManagerRegistry $managerRegistry
 	) {
 		$this->deviceRepository = $deviceRepository;
 		$this->devicesManager = $devicesManager;
@@ -86,11 +93,13 @@ final class DeviceMessageHandler implements NodeExchangeConsumers\IMessageHandle
 
 		$this->schemaLoader = $schemaLoader;
 		$this->logger = $logger;
+		$this->managerRegistry = $managerRegistry;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 *
+	 * @throws DBAL\ConnectionException
 	 * @throws NodeExchangeExceptions\TerminateException
 	 */
 	public function process(
@@ -113,11 +122,12 @@ final class DeviceMessageHandler implements NodeExchangeConsumers\IMessageHandle
 			return true;
 		}
 
-		$result = true;
-
 		try {
 			switch ($routingKey) {
 				case DevicesNode\Constants::RABBIT_MQ_DEVICES_DATA_ROUTING_KEY:
+					// Start transaction connection to the database
+					$this->getOrmConnection()->beginTransaction();
+
 					$toUpdate = [];
 
 					if ($message->offsetExists('parent') && $message->offsetGet('parent') !== null) {
@@ -143,32 +153,23 @@ final class DeviceMessageHandler implements NodeExchangeConsumers\IMessageHandle
 					}
 
 					if ($message->offsetExists('properties')) {
-						$subResult = $this->setDeviceProperties($device, $message->offsetGet('properties'));
-
-						if (!$subResult) {
-							$result = false;
-						}
+						$this->setDeviceProperties($device, $message->offsetGet('properties'));
 					}
 
 					if ($message->offsetExists('channels')) {
-						$subResult = $this->setDeviceChannels($device, $message->offsetGet('channels'));
-
-						if (!$subResult) {
-							$result = false;
-						}
+						$this->setDeviceChannels($device, $message->offsetGet('channels'));
 					}
 
 					if ($message->offsetExists('control')) {
-						$subResult = $this->setDeviceControl($device, $message->offsetGet('control'));
-
-						if (!$subResult) {
-							$result = false;
-						}
+						$this->setDeviceControl($device, $message->offsetGet('control'));
 					}
 
 					if ($toUpdate !== []) {
 						$this->devicesManager->update($device, Utils\ArrayHash::from($toUpdate));
 					}
+
+					// Commit all changes into database
+					$this->getOrmConnection()->commit();
 					break;
 
 				default:
@@ -180,11 +181,15 @@ final class DeviceMessageHandler implements NodeExchangeConsumers\IMessageHandle
 
 		} catch (Throwable $ex) {
 			throw new NodeExchangeExceptions\TerminateException('An error occurred: ' . $ex->getMessage(), $ex->getCode(), $ex);
+
+		} finally {
+			// Revert all changes when error occur
+			if ($this->getOrmConnection()->isTransactionActive()) {
+				$this->getOrmConnection()->rollBack();
+			}
 		}
 
-		if ($result) {
-			$this->logger->info('[CONSUMER] Successfully consumed entity message');
-		}
+		$this->logger->info('[CONSUMER] Successfully consumed entity message');
 
 		return true;
 	}
@@ -208,12 +213,12 @@ final class DeviceMessageHandler implements NodeExchangeConsumers\IMessageHandle
 	 * @param Entities\Devices\IDevice $device
 	 * @param Utils\ArrayHash<string> $properties
 	 *
-	 * @return bool
+	 * @return void
 	 */
 	private function setDeviceProperties(
 		Entities\Devices\IDevice $device,
 		Utils\ArrayHash $properties
-	): bool {
+	): void {
 		foreach ($properties as $propertyName) {
 			if (!$device->hasProperty($propertyName)) {
 				if (in_array($propertyName, [
@@ -262,20 +267,18 @@ final class DeviceMessageHandler implements NodeExchangeConsumers\IMessageHandle
 				$this->devicePropertiesManager->delete($property);
 			}
 		}
-
-		return true;
 	}
 
 	/**
 	 * @param Entities\Devices\IDevice $device
 	 * @param Utils\ArrayHash<string> $channels
 	 *
-	 * @return bool
+	 * @return void
 	 */
 	private function setDeviceChannels(
 		Entities\Devices\IDevice $device,
 		Utils\ArrayHash $channels
-	): bool {
+	): void {
 		foreach ($channels as $channelId) {
 			$findQuery = new Queries\FindChannelsQuery();
 			$findQuery->forDevice($device);
@@ -299,20 +302,18 @@ final class DeviceMessageHandler implements NodeExchangeConsumers\IMessageHandle
 				$this->channelsManager->delete($channel);
 			}
 		}
-
-		return true;
 	}
 
 	/**
 	 * @param Entities\Devices\IDevice $device
 	 * @param Utils\ArrayHash<string> $controls
 	 *
-	 * @return bool
+	 * @return void
 	 */
 	private function setDeviceControl(
 		Entities\Devices\IDevice $device,
 		Utils\ArrayHash $controls
-	): bool {
+	): void {
 		$availableControls = [
 			DevicesNode\Constants::CONTROL_CONFIG,
 			DevicesNode\Constants::CONTROL_RESET,
@@ -321,26 +322,13 @@ final class DeviceMessageHandler implements NodeExchangeConsumers\IMessageHandle
 			DevicesNode\Constants::CONTROL_OTA,
 		];
 
-		foreach ($availableControls as $availableControl) {
-			if (array_search($availableControl, (array) $controls, true) !== false) {
-				if (!$device->hasControl($availableControl)) {
+		foreach ($controls as $controlName) {
+			if (in_array($controlName, $availableControls, true)) {
+				if (!$device->hasControl($controlName)) {
 					$this->deviceControlManager->create(Utils\ArrayHash::from([
 						'device' => $device,
-						'name'   => $availableControl,
+						'name'   => $controlName,
 					]));
-				}
-
-			} else {
-				if ($availableControl === DevicesNode\Constants::CONTROL_CONFIG) {
-					$this->devicesManager->update($device, Utils\ArrayHash::from([
-						'configuration' => [],
-					]));
-				}
-
-				$control = $device->getControl($availableControl);
-
-				if ($control !== null) {
-					$this->deviceControlManager->delete($control);
 				}
 			}
 		}
@@ -351,8 +339,20 @@ final class DeviceMessageHandler implements NodeExchangeConsumers\IMessageHandle
 				$this->deviceControlManager->delete($control);
 			}
 		}
+	}
 
-		return true;
+	/**
+	 * @return Connection
+	 */
+	protected function getOrmConnection(): Connection
+	{
+		$connection = $this->managerRegistry->getConnection();
+
+		if ($connection instanceof Connection) {
+			return $connection;
+		}
+
+		throw new Exceptions\RuntimeException('Entity manager could not be loaded');
 	}
 
 }

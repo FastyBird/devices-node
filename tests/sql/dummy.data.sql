@@ -1,6 +1,6 @@
 INSERT IGNORE INTO `fb_devices` (`device_id`, `parent_id`, `device_identifier`, `device_name`, `device_title`, `device_comment`, `device_state`, `device_enabled`, `params`, `created_at`, `updated_at`, `device_type`) VALUES
 (_binary 0x69786D15FD0C4D9F937833287C2009FA, NULL, 'first-device', 'First device', NULL, NULL, 'init', 1, '[]', '2020-03-19 14:03:48', '2020-03-22 20:12:07', 'physical'),
-(_binary 0xBF4CD8702AAC45F0A85EE1CEFD2D6D9A, NULL, 'second-device', 'Second device', 'Custom title', NULL, 'unknown', 1, '[]', '2020-03-20 21:54:32', '2020-03-20 21:54:32', 'physical'),
+(_binary 0xBF4CD8702AAC45F0A85EE1CEFD2D6D9A, NULL, 'second-device', 'Second device', 'Custom title', NULL, 'init', 1, '[]', '2020-03-20 21:54:32', '2020-03-20 21:54:32', 'physical'),
 (_binary 0xE36A27881EF84CDFAB094735F191A509, NULL, 'third-device', 'Third device', NULL, 'Custom comment', 'unknown', 1, '[]', '2020-03-20 21:56:41', '2020-03-20 21:56:41', 'physical'),
 (_binary 0xA1036FF86EE84405AAED58BAE0814596, _binary 0x69786D15FD0C4D9F937833287C2009FA, 'child-device', 'Child device', NULL, 'This is child', 'init', 1, '[]', '2020-03-20 21:56:41', '2020-03-20 21:56:41', 'physical');
 
@@ -36,7 +36,8 @@ INSERT IGNORE INTO `fb_physicals_devices_hardwares` (`hardware_id`, `device_id`,
 
 INSERT IGNORE INTO `fb_channels` (`channel_id`, `device_id`, `channel_name`, `channel_title`, `channel_comment`, `channel_channel`, `params`, `created_at`, `updated_at`) VALUES
 (_binary 0x17C59DFA2EDD438E8C49FAA4E38E5A5E, _binary 0x69786D15FD0C4D9F937833287C2009FA, 'Channel one', NULL, NULL, 'channel-one', '[]', '2020-03-20 09:22:12', '2020-03-20 22:37:14'),
-(_binary 0x6821F8E9AE694D5C9B7CD2B213F1AE0A, _binary 0x69786D15FD0C4D9F937833287C2009FA, 'Channel two', NULL, NULL, 'channel-two', '[]', '2020-03-20 09:22:13', '2020-03-20 09:22:13');
+(_binary 0x6821F8E9AE694D5C9B7CD2B213F1AE0A, _binary 0x69786D15FD0C4D9F937833287C2009FA, 'Channel two', NULL, NULL, 'channel-two', '[]', '2020-03-20 09:22:13', '2020-03-20 09:22:13'),
+(_binary 0xBBCCCF8C33AB431BA795D7BB38B6B6DB, _binary 0xBF4CD8702AAC45F0A85EE1CEFD2D6D9A, 'Channel one', NULL, NULL, 'channel-one', '[]', '2020-03-20 09:22:13', '2020-03-20 09:22:13');
 
 INSERT IGNORE INTO `fb_channels_properties` (`property_id`, `channel_id`, `property_property`, `property_name`, `property_settable`, `property_queryable`, `property_datatype`, `property_unit`, `property_format`, `created_at`, `updated_at`) VALUES
 (_binary 0xBBCCCF8C33AB431BA795D7BB38B6B6DB, _binary 0x17C59DFA2EDD438E8C49FAA4E38E5A5E, 'switch', 'switch', 1, 1, 'enum', NULL, 'on,off,toggle', '2019-12-09 23:19:45', '2019-12-09 23:19:49'),

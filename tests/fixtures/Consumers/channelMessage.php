@@ -4,28 +4,29 @@ use FastyBird\DevicesNode;
 use Nette\Utils;
 
 return [
-	'messageWithoutUpdate'                => [
+	'messageWithoutUpdate'                   => [
 		DevicesNode\Constants::RABBIT_MQ_CHANNELS_DATA_ROUTING_KEY,
 		Utils\ArrayHash::from([
 			'device'  => 'first-device',
 			'parent'  => null,
 			'channel' => 'channel-one',
-			'name'    => 'Channel one',
 		]),
+		0,
 		[],
 	],
-	'messageWithUpdate'                   => [
+	'messageWithUpdate'                      => [
 		DevicesNode\Constants::RABBIT_MQ_CHANNELS_DATA_ROUTING_KEY,
 		Utils\ArrayHash::from([
 			'device'  => 'first-device',
 			'parent'  => null,
 			'channel' => 'channel-one',
-			'name'    => 'Channel updated',
+			'name'    => 'Name from message bus',
 		]),
+		1,
 		[
 			'fb.bus.node.entity.updated.channel' => [
 				'id'      => '17c59dfa-2edd-438e-8c49-faa4e38e5a5e',
-				'name'    => 'Channel updated',
+				'name'    => 'Name from message bus',
 				'title'   => null,
 				'comment' => null,
 				'control' => ['configure'],
@@ -36,19 +37,20 @@ return [
 			],
 		],
 	],
-	'messageWithMultiUpdate'              => [
+	'messageWithMultiRowUpdate'              => [
 		DevicesNode\Constants::RABBIT_MQ_CHANNELS_DATA_ROUTING_KEY,
 		Utils\ArrayHash::from([
 			'device'  => 'first-device',
 			'parent'  => null,
 			'channel' => 'channel-one',
-			'name'    => 'Channel updated',
+			'name'    => 'Name from message bus',
 			'title'   => 'Channel title',
 		]),
+		1,
 		[
 			'fb.bus.node.entity.updated.channel' => [
 				'id'      => '17c59dfa-2edd-438e-8c49-faa4e38e5a5e',
-				'name'    => 'Channel updated',
+				'name'    => 'Name from message bus',
 				'title'   => null,
 				'comment' => null,
 				'control' => ['configure'],
@@ -59,19 +61,20 @@ return [
 			],
 		],
 	],
-	'messageWithMultiUpdateAndProperties' => [
+	'messageWithMultiRowUpdateAndProperties' => [
 		DevicesNode\Constants::RABBIT_MQ_CHANNELS_DATA_ROUTING_KEY,
 		Utils\ArrayHash::from([
 			'device'     => 'first-device',
 			'parent'     => null,
 			'channel'    => 'channel-one',
-			'name'       => 'Channel updated',
+			'name'       => 'Name from message bus',
 			'properties' => ['switch', 'button'],
 		]),
+		2,
 		[
 			'fb.bus.node.entity.updated.channel'          => [
 				'id'      => '17c59dfa-2edd-438e-8c49-faa4e38e5a5e',
-				'name'    => 'Channel updated',
+				'name'    => 'Name from message bus',
 				'title'   => null,
 				'comment' => null,
 				'control' => ['configure'],
@@ -97,7 +100,7 @@ return [
 			],
 		],
 	],
-	'messageWithProperties'               => [
+	'messageWithAddedProperty'               => [
 		DevicesNode\Constants::RABBIT_MQ_CHANNELS_DATA_ROUTING_KEY,
 		Utils\ArrayHash::from([
 			'device'     => 'first-device',
@@ -105,6 +108,7 @@ return [
 			'channel'    => 'channel-one',
 			'properties' => ['switch', 'button'],
 		]),
+		1,
 		[
 			'fb.bus.node.entity.created.channel.property' => [
 				'property'  => 'button',
@@ -123,7 +127,58 @@ return [
 			],
 		],
 	],
-	'messageWithControls'                 => [
+	'messageWithRemovedProperty'             => [
+		DevicesNode\Constants::RABBIT_MQ_CHANNELS_DATA_ROUTING_KEY,
+		Utils\ArrayHash::from([
+			'device'     => 'first-device',
+			'parent'     => null,
+			'channel'    => 'channel-one',
+			'properties' => [],
+		]),
+		1,
+		[
+			'fb.bus.node.entity.deleted.channel.property' => [
+				'value'     => null,
+				'expected'  => null,
+				'pending'   => false,
+				'id'        => 'bbcccf8c-33ab-431b-a795-d7bb38b6b6db',
+				'property'  => 'switch',
+				'name'      => 'switch',
+				'settable'  => true,
+				'queryable' => true,
+				'datatype'  => 'enum',
+				'unit'      => null,
+				'format'    => ['on', 'off', 'toggle'],
+				'device'    => 'first-device',
+				'parent'    => null,
+				'channel'   => 'channel-one',
+			],
+		],
+	],
+	'messageWithCreateControl'               => [
+		DevicesNode\Constants::RABBIT_MQ_CHANNELS_DATA_ROUTING_KEY,
+		Utils\ArrayHash::from([
+			'device'  => 'second-device',
+			'parent'  => null,
+			'channel' => 'channel-one',
+			'control' => ['configure'],
+		]),
+		1,
+		[
+			'fb.bus.node.entity.updated.channel' => [
+				'id'      => 'bbcccf8c-33ab-431b-a795-d7bb38b6b6db',
+				'name'    => 'Channel one',
+				'title'   => null,
+				'comment' => null,
+				'channel' => 'channel-one',
+				'control' => ['configure'],
+				'params'  => [],
+				'device'  => 'second-device',
+				'parent'  => null,
+			],
+		],
+	],
+	'messageWithInvalidControl'              => [
 		DevicesNode\Constants::RABBIT_MQ_CHANNELS_DATA_ROUTING_KEY,
 		Utils\ArrayHash::from([
 			'device'  => 'first-device',
@@ -131,6 +186,100 @@ return [
 			'channel' => 'channel-one',
 			'control' => ['configure', 'reset'],
 		]),
+		0,
 		[],
+	],
+	'messageWithRemovedControl'              => [
+		DevicesNode\Constants::RABBIT_MQ_CHANNELS_DATA_ROUTING_KEY,
+		Utils\ArrayHash::from([
+			'device'  => 'first-device',
+			'parent'  => null,
+			'channel' => 'channel-one',
+			'control' => [],
+		]),
+		5,
+		[
+			'fb.bus.node.entity.updated.channel'               => [
+				'id'      => '17c59dfa-2edd-438e-8c49-faa4e38e5a5e',
+				'name'    => 'Channel one',
+				'title'   => null,
+				'comment' => null,
+				'channel' => 'channel-one',
+				'control' => [],
+				'params'  => [],
+				'device'  => 'first-device',
+				'parent'  => null,
+			],
+			'fb.bus.node.entity.deleted.channel.configuration' => [
+				'primaryKey'    => 'name',
+				'pulse_mode'    => [
+					'id'      => '008d911f-e6d4-4b17-aa28-939839581cde',
+					'type'    => 'select',
+					'name'    => 'pulse_mode',
+					'title'   => null,
+					'comment' => null,
+					'default' => '0',
+					'value'   => null,
+					'device'  => 'first-device',
+					'parent'  => null,
+					'channel' => 'channel-one',
+					'values'  => [
+						['name' => 'disabled', 'value' => '0'],
+						['name' => 'normally_off', 'value' => '1'],
+						['name' => 'normally_on', 'value' => '2'],
+					],
+				],
+				'relay_boot'    => [
+					'id'      => '31669d32-8cfa-4a71-bd06-d536a2f94c2c',
+					'type'    => 'select',
+					'name'    => 'relay_boot',
+					'title'   => null,
+					'comment' => null,
+					'default' => '0',
+					'value'   => null,
+					'device'  => 'first-device',
+					'parent'  => null,
+					'channel' => 'channel-one',
+					'values'  => [
+						['name' => 'always_off', 'value' => '0'],
+						['name' => 'always_on', 'value' => '1'],
+						['name' => 'same_before', 'value' => '2'],
+						['name' => 'toggle_before', 'value' => '3'],
+					],
+				],
+				'pulse_time'    => [
+					'id'      => '3f83999e-c790-4f42-9e8e-4db749d0e6d4',
+					'type'    => 'number',
+					'name'    => 'pulse_time',
+					'title'   => null,
+					'comment' => null,
+					'default' => '1',
+					'value'   => null,
+					'device'  => 'first-device',
+					'parent'  => null,
+					'channel' => 'channel-one',
+					'min'     => 1.0,
+					'max'     => 60.0,
+					'step'    => 0.1,
+				],
+				'on_disconnect' => [
+					'id'      => 'c747cfdd-654c-4e50-9715-6d14dbf20552',
+					'type'    => 'select',
+					'name'    => 'on_disconnect',
+					'title'   => null,
+					'comment' => null,
+					'default' => '0',
+					'value'   => null,
+					'device'  => 'first-device',
+					'parent'  => null,
+					'channel' => 'channel-one',
+					'values'  => [
+						['name' => 'no_change', 'value' => '0'],
+						['name' => 'turn_off', 'value' => '1'],
+						['name' => 'turn_on', 'value' => '2'],
+					],
+				],
+			],
+		],
 	],
 ];

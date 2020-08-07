@@ -42,7 +42,7 @@ final class ChannelRepositoryTest extends DbTestCase
 		$resultSet = $repository->getResultSet($findQuery);
 
 		Assert::type(DoctrineOrmQuery\ResultSet::class, $resultSet);
-		Assert::same(2, $resultSet->getTotalCount());
+		Assert::same(3, $resultSet->getTotalCount());
 	}
 
 }

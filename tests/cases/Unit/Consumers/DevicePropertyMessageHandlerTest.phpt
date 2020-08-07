@@ -2,14 +2,12 @@
 
 namespace Tests\Cases;
 
-use FastyBird\DevicesNode\Connections;
 use FastyBird\DevicesNode\Consumers;
+use FastyBird\DevicesNode\Models;
+use FastyBird\DevicesNode\States;
 use FastyBird\NodeExchange\Publishers as NodeExchangePublishers;
 use Mockery;
 use Nette\Utils;
-use PHPOnCouch;
-use Ramsey\Uuid;
-use stdClass;
 use Tester\Assert;
 
 require_once __DIR__ . '/../../../bootstrap.php';
@@ -25,30 +23,116 @@ final class DevicePropertyMessageHandlerTest extends DbTestCase
 	{
 		parent::setUp();
 
-		$doc = new stdClass();
-		$doc->id = Uuid\Uuid::uuid4();
-
-		$docs = [];
-		$docs[] = $doc;
-
-		$storageClient = Mockery::mock(PHPOnCouch\CouchClient::class);
-		$storageClient
-			->shouldReceive('asCouchDocuments')
-			->andReturn($storageClient)
+		$deviceStateMock = Mockery::mock(States\Devices\IProperty::class);
+		$deviceStateMock
+			->shouldReceive('getValue')
+			->andReturn(null)
 			->getMock()
-			->shouldReceive('find')
-			->andReturn($docs)
+			->shouldReceive('getExpected')
+			->andReturn(null)
+			->getMock()
+			->shouldReceive('isPending')
+			->andReturn(false)
+			->getMock()
+			->shouldReceive('toArray')
+			->andReturn([
+				'value'    => null,
+				'expected' => null,
+				'pending'  => false,
+			])
 			->getMock();
 
-		$storageConnection = Mockery::mock(Connections\CouchDbConnection::class);
-		$storageConnection
-			->shouldReceive('getClient')
-			->andReturn($storageClient)
+		$deviceStatePropertyRepositoryMock = Mockery::mock(Models\States\Devices\PropertyRepository::class);
+		$deviceStatePropertyRepositoryMock
+			->shouldReceive('findOne')
+			->andReturn($deviceStateMock)
+			->getMock()
+			->shouldReceive('findValue')
+			->andReturn(null)
+			->getMock()
+			->shouldReceive('findExpected')
+			->andReturn(null)
 			->getMock();
 
 		$this->mockContainerService(
-			Connections\CouchDbConnection::class,
-			$storageConnection
+			Models\States\Devices\PropertyRepository::class,
+			$deviceStatePropertyRepositoryMock
+		);
+
+		$deviceStatePropertiesManagerMock = Mockery::mock(Models\States\Devices\PropertiesManager::class);
+		$deviceStatePropertiesManagerMock
+			->shouldReceive('create')
+			->andReturn($deviceStateMock)
+			->getMock()
+			->shouldReceive('update')
+			->andReturn($deviceStateMock)
+			->getMock()
+			->shouldReceive('updateState')
+			->andReturn($deviceStateMock)
+			->getMock()
+			->shouldReceive('delete')
+			->andReturn(true)
+			->getMock();
+
+		$this->mockContainerService(
+			Models\States\Devices\PropertiesManager::class,
+			$deviceStatePropertiesManagerMock
+		);
+
+		$channelStateMock = Mockery::mock(States\Channels\IProperty::class);
+		$channelStateMock
+			->shouldReceive('getValue')
+			->andReturn(null)
+			->getMock()
+			->shouldReceive('getExpected')
+			->andReturn(null)
+			->getMock()
+			->shouldReceive('isPending')
+			->andReturn(false)
+			->getMock()
+			->shouldReceive('toArray')
+			->andReturn([
+				'value'    => null,
+				'expected' => null,
+				'pending'  => false,
+			])
+			->getMock();
+
+		$channelStatePropertyRepositoryMock = Mockery::mock(Models\States\Channels\PropertyRepository::class);
+		$channelStatePropertyRepositoryMock
+			->shouldReceive('findOne')
+			->andReturn($channelStateMock)
+			->getMock()
+			->shouldReceive('findValue')
+			->andReturn(null)
+			->getMock()
+			->shouldReceive('findExpected')
+			->andReturn(null)
+			->getMock();
+
+		$this->mockContainerService(
+			Models\States\Channels\PropertyRepository::class,
+			$channelStatePropertyRepositoryMock
+		);
+
+		$channelStatePropertiesManagerMock = Mockery::mock(Models\States\Channels\PropertiesManager::class);
+		$channelStatePropertiesManagerMock
+			->shouldReceive('create')
+			->andReturn($channelStateMock)
+			->getMock()
+			->shouldReceive('update')
+			->andReturn($channelStateMock)
+			->getMock()
+			->shouldReceive('updateState')
+			->andReturn($channelStateMock)
+			->getMock()
+			->shouldReceive('delete')
+			->andReturn(true)
+			->getMock();
+
+		$this->mockContainerService(
+			Models\States\Channels\PropertiesManager::class,
+			$channelStatePropertiesManagerMock
 		);
 	}
 

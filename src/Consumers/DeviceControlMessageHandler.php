@@ -15,6 +15,9 @@
 
 namespace FastyBird\DevicesNode\Consumers;
 
+use Doctrine\Common;
+use Doctrine\DBAL;
+use Doctrine\DBAL\Connection;
 use FastyBird\DevicesNode;
 use FastyBird\DevicesNode\Entities;
 use FastyBird\DevicesNode\Exceptions;
@@ -41,12 +44,10 @@ final class DeviceControlMessageHandler implements NodeExchangeConsumers\IMessag
 {
 
 	use Nette\SmartObject;
+	use TControlMessageHandler;
 
 	/** @var Models\Devices\IDeviceRepository */
 	private $deviceRepository;
-
-	/** @var Models\Devices\Controls\IControlsManager */
-	private $controlsManager;
 
 	/** @var Models\Devices\Configuration\IRowsManager */
 	private $rowsManager;
@@ -57,24 +58,28 @@ final class DeviceControlMessageHandler implements NodeExchangeConsumers\IMessag
 	/** @var Log\LoggerInterface */
 	private $logger;
 
+	/** @var Common\Persistence\ManagerRegistry */
+	private $managerRegistry;
+
 	public function __construct(
 		Models\Devices\IDeviceRepository $deviceRepository,
-		Models\Devices\Controls\IControlsManager $controlsManager,
 		Models\Devices\Configuration\IRowsManager $rowsManager,
 		NodeMetadataLoaders\ISchemaLoader $schemaLoader,
-		Log\LoggerInterface $logger
+		Log\LoggerInterface $logger,
+		Common\Persistence\ManagerRegistry $managerRegistry
 	) {
 		$this->deviceRepository = $deviceRepository;
-		$this->controlsManager = $controlsManager;
 		$this->rowsManager = $rowsManager;
 
 		$this->schemaLoader = $schemaLoader;
 		$this->logger = $logger;
+		$this->managerRegistry = $managerRegistry;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 *
+	 * @throws DBAL\ConnectionException
 	 * @throws NodeExchangeExceptions\TerminateException
 	 */
 	public function process(
@@ -97,7 +102,7 @@ final class DeviceControlMessageHandler implements NodeExchangeConsumers\IMessag
 			return true;
 		}
 
-		$control = $this->getControl($device, $message->offsetGet('control'));
+		$control = $device->getControl($message->offsetGet('control'));
 
 		if ($control === null) {
 			$this->logger->error(sprintf('[CONSUMER] Channel control "%s" could not be loaded', $message->offsetGet('control')));
@@ -105,28 +110,24 @@ final class DeviceControlMessageHandler implements NodeExchangeConsumers\IMessag
 			return true;
 		}
 
-		$result = true;
-
 		try {
 			switch ($routingKey) {
 				case DevicesNode\Constants::RABBIT_MQ_DEVICES_CONTROLS_DATA_ROUTING_KEY:
+					// Start transaction connection to the database
+					$this->getOrmConnection()->beginTransaction();
+
 					if ($control->getName() === DevicesNode\Constants::CONTROL_CONFIG) {
 						if ($message->offsetExists('schema')) {
-							$subResult = $this->setConfigurationSchema($device, $message->offsetGet('schema'));
-
-							if (!$subResult) {
-								$result = false;
-							}
+							$this->setConfigurationSchema($device, $message->offsetGet('schema'));
 						}
 
 						if ($message->offsetExists('value')) {
-							$subResult = $this->setConfigurationValues($device, $message->offsetGet('value'));
-
-							if (!$subResult) {
-								$result = false;
-							}
+							$this->setConfigurationValues($device, $message->offsetGet('value'));
 						}
 					}
+
+					// Commit all changes into database
+					$this->getOrmConnection()->commit();
 					break;
 
 				default:
@@ -138,11 +139,15 @@ final class DeviceControlMessageHandler implements NodeExchangeConsumers\IMessag
 
 		} catch (Throwable $ex) {
 			throw new NodeExchangeExceptions\TerminateException('An error occurred: ' . $ex->getMessage(), $ex->getCode(), $ex);
+
+		} finally {
+			// Revert all changes when error occur
+			if ($this->getOrmConnection()->isTransactionActive()) {
+				$this->getOrmConnection()->rollBack();
+			}
 		}
 
-		if ($result) {
-			$this->logger->info('[CONSUMER] Successfully consumed entity message');
-		}
+		$this->logger->info('[CONSUMER] Successfully consumed entity message');
 
 		return true;
 	}
@@ -166,108 +171,28 @@ final class DeviceControlMessageHandler implements NodeExchangeConsumers\IMessag
 	 * @param Entities\Devices\IDevice $device
 	 * @param Utils\ArrayHash $schema
 	 *
-	 * @return bool
+	 * @return void
 	 */
 	private function setConfigurationSchema(
 		Entities\Devices\IDevice $device,
 		Utils\ArrayHash $schema
-	): bool {
+	): void {
 		$elements = [];
 
-		$configurationRow = new Utils\ArrayHash();
-		$configurationRow->device = $device;
+		$configurationRows = $this->handleControlConfigurationSchema($schema, true);
 
-		/** @var Utils\ArrayHash $row */
-		foreach ($schema as $row) {
-			try {
-				if ($row->offsetExists('type')) {
-					if ($row->offsetExists('name')) {
-						$configurationRow->name = $row->offsetGet('name');
+		foreach ($configurationRows as $configurationRow) {
+			$configuration = $device->findConfiguration($configurationRow['name']);
 
-					} else {
-						throw new Exceptions\InvalidStateException('Field name have to be set');
-					}
+			$configurationRow['device'] = $device;
 
-					if ($row->offsetExists('title')) {
-						$configurationRow->title = $row->offsetGet('title');
+			$elements[] = $configurationRow['name'];
 
-					} else {
-						$configurationRow->title = null;
-					}
+			if ($configuration === null) {
+				$this->rowsManager->create(Utils\ArrayHash::from($configurationRow));
 
-					if ($row->offsetExists('comment')) {
-						$configurationRow->comment = $row->offsetGet('comment');
-
-					} else {
-						$configurationRow->comment = null;
-					}
-
-					$configurationRow->default = null;
-					$configurationRow->value = null;
-
-					switch ($row->offsetGet('type')) {
-						case DevicesNode\Constants::DATA_TYPE_NUMBER:
-							$configurationRow->entity = Entities\Devices\Configuration\NumberRow::class;
-
-							foreach (['min', 'max', 'step', 'default'] as $field) {
-								if ($row->offsetExists($field) && $row->offsetGet($field) !== null) {
-									$configurationRow->{$field} = (float) $row->offsetGet($field);
-
-								} else {
-									$configurationRow->{$field} = null;
-								}
-							}
-							break;
-
-						case DevicesNode\Constants::DATA_TYPE_TEXT:
-							$configurationRow->entity = Entities\Devices\Configuration\TextRow::class;
-
-							if ($row->offsetExists('default') && $row->offsetGet('default') !== null) {
-								$configurationRow->default = (string) $row->offsetGet('default');
-							}
-							break;
-
-						case DevicesNode\Constants::DATA_TYPE_BOOLEAN:
-							$configurationRow->entity = Entities\Devices\Configuration\BooleanRow::class;
-
-							if ($row->offsetExists('default') && $row->offsetGet('default') !== null) {
-								$configurationRow->default = (bool) $row->offsetGet('default');
-							}
-							break;
-
-						case DevicesNode\Constants::DATA_TYPE_SELECT:
-							$configurationRow->entity = Entities\Devices\Configuration\SelectRow::class;
-
-							if (
-								$row->offsetExists('values')
-								&& $row->offsetGet('values') instanceof Utils\ArrayHash
-							) {
-								$configurationRow->values = $row->offsetGet('values');
-
-							} else {
-								$configurationRow->values = [];
-							}
-
-							if ($row->offsetExists('default') && $row->offsetGet('default') !== null) {
-								$configurationRow->default = (string) $row->offsetGet('default');
-							}
-							break;
-					}
-
-					$configuration = $device->findConfiguration($row->offsetGet('name'));
-
-					$elements[] = $row->offsetGet('name');
-
-					if ($configuration === null) {
-						$this->rowsManager->create($configurationRow);
-
-					} else {
-						$this->rowsManager->update($configuration, $configurationRow);
-					}
-				}
-
-			} catch (Exceptions\InvalidStateException $ex) {
-				// Missing field name
+			} else {
+				$this->rowsManager->update($configuration, Utils\ArrayHash::from($configurationRow));
 			}
 		}
 
@@ -277,20 +202,18 @@ final class DeviceControlMessageHandler implements NodeExchangeConsumers\IMessag
 				$this->rowsManager->delete($row);
 			}
 		}
-
-		return true;
 	}
 
 	/**
 	 * @param Entities\Devices\IDevice $device
 	 * @param Utils\ArrayHash $values
 	 *
-	 * @return bool
+	 * @return void
 	 */
 	private function setConfigurationValues(
 		Entities\Devices\IDevice $device,
 		Utils\ArrayHash $values
-	): bool {
+	): void {
 		foreach ($values as $name => $value) {
 			$configuration = $device->findConfiguration($name);
 
@@ -300,28 +223,20 @@ final class DeviceControlMessageHandler implements NodeExchangeConsumers\IMessag
 				]));
 			}
 		}
-
-		return true;
 	}
 
 	/**
-	 * @param Entities\Devices\IDevice $device
-	 * @param string $control
-	 *
-	 * @return Entities\Devices\Controls\IControl|null
+	 * @return Connection
 	 */
-	private function getControl(
-		Entities\Devices\IDevice $device,
-		string $control
-	): ?Entities\Devices\Controls\IControl {
-		if ($device->hasControl($control)) {
-			return $device->getControl($control);
+	protected function getOrmConnection(): Connection
+	{
+		$connection = $this->managerRegistry->getConnection();
+
+		if ($connection instanceof Connection) {
+			return $connection;
 		}
 
-		return $this->controlsManager->create(Utils\ArrayHash::from([
-			'device' => $device,
-			'name'   => $control,
-		]));
+		throw new Exceptions\RuntimeException('Entity manager could not be loaded');
 	}
 
 }

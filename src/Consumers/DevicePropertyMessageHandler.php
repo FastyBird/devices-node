@@ -15,12 +15,13 @@
 
 namespace FastyBird\DevicesNode\Consumers;
 
+use Doctrine\Common;
+use Doctrine\DBAL;
+use Doctrine\DBAL\Connection;
 use FastyBird\DevicesNode;
-use FastyBird\DevicesNode\Entities;
 use FastyBird\DevicesNode\Exceptions;
 use FastyBird\DevicesNode\Models;
 use FastyBird\DevicesNode\Queries;
-use FastyBird\DevicesNode\Types;
 use FastyBird\NodeExchange\Consumers as NodeExchangeConsumers;
 use FastyBird\NodeExchange\Exceptions as NodeExchangeExceptions;
 use FastyBird\NodeMetadata;
@@ -42,6 +43,7 @@ final class DevicePropertyMessageHandler implements NodeExchangeConsumers\IMessa
 {
 
 	use Nette\SmartObject;
+	use TPropertyMessageHandler;
 
 	/** @var Models\Devices\IDeviceRepository */
 	private $deviceRepository;
@@ -61,13 +63,17 @@ final class DevicePropertyMessageHandler implements NodeExchangeConsumers\IMessa
 	/** @var Log\LoggerInterface */
 	private $logger;
 
+	/** @var Common\Persistence\ManagerRegistry */
+	private $managerRegistry;
+
 	public function __construct(
 		Models\Devices\IDeviceRepository $deviceRepository,
 		Models\Devices\Properties\IPropertiesManager $propertiesManager,
 		Models\States\Devices\IPropertiesManager $propertiesStatesManager,
 		Models\States\Devices\IPropertyRepository $propertyStateRepository,
 		NodeMetadataLoaders\ISchemaLoader $schemaLoader,
-		Log\LoggerInterface $logger
+		Log\LoggerInterface $logger,
+		Common\Persistence\ManagerRegistry $managerRegistry
 	) {
 		$this->deviceRepository = $deviceRepository;
 		$this->propertiesManager = $propertiesManager;
@@ -76,11 +82,13 @@ final class DevicePropertyMessageHandler implements NodeExchangeConsumers\IMessa
 
 		$this->schemaLoader = $schemaLoader;
 		$this->logger = $logger;
+		$this->managerRegistry = $managerRegistry;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 *
+	 * @throws DBAL\ConnectionException
 	 * @throws NodeExchangeExceptions\TerminateException
 	 */
 	public function process(
@@ -103,98 +111,57 @@ final class DevicePropertyMessageHandler implements NodeExchangeConsumers\IMessa
 			return true;
 		}
 
-		$dataConsumed = false;
+		$property = $device->findProperty($message->offsetGet('property'));
+
+		if ($property === null) {
+			$this->logger->error(sprintf('[CONSUMER] Property "%s" is not registered', $message->offsetGet('property')));
+
+			return true;
+		}
+
+		if (
+			$message->offsetExists('expected')
+			&& $message->offsetExists('value')
+		) {
+			$this->logger->error('[CONSUMER] Message format is invalid. Message can\'t contain both expected value & current value');
+
+			return true;
+		}
 
 		try {
 			switch ($routingKey) {
 				case DevicesNode\Constants::RABBIT_MQ_DEVICES_PROPERTIES_DATA_ROUTING_KEY:
-					$toUpdate = [];
+					// Start transaction connection to the database
+					$this->getOrmConnection()->beginTransaction();
 
-					if ($message->offsetExists('name')) {
-						$subResult = $this->setPropertyName($message->offsetGet('name'));
-
-						$toUpdate = array_merge($toUpdate, $subResult);
-					}
-
-					if ($message->offsetExists('settable')) {
-						$subResult = $this->setPropertySettable((bool) $message->offsetGet('settable'));
-
-						$toUpdate = array_merge($toUpdate, $subResult);
-					}
-
-					if ($message->offsetExists('queryable')) {
-						$subResult = $this->setPropertyQueryable((bool) $message->offsetGet('queryable'));
-
-						$toUpdate = array_merge($toUpdate, $subResult);
-					}
-
-					if ($message->offsetExists('datatype')) {
-						$subResult = $this->setPropertyDatatype($message->offsetGet('datatype'));
-
-						$toUpdate = array_merge($toUpdate, $subResult);
-					}
-
-					if ($message->offsetExists('format')) {
-						$subResult = $this->setPropertyFormat($message->offsetGet('format'));
-
-						$toUpdate = array_merge($toUpdate, $subResult);
-					}
-
-					if ($message->offsetExists('unit')) {
-						$subResult = $this->setPropertyUnit($message->offsetGet('unit'));
-
-						$toUpdate = array_merge($toUpdate, $subResult);
-					}
+					$toUpdate = $this->handlePropertyConfiguration($message);
 
 					if ($toUpdate !== []) {
-						$property = $device->findProperty($message->offsetGet('property'));
-
-						if ($property !== null) {
-							$this->propertiesManager->update($property, Utils\ArrayHash::from($toUpdate));
-
-						} else {
-							$toCreate = $this->getProperty($device, $message->offsetGet('property'));
-
-							if ($toCreate === null) {
-								$this->logger->error(sprintf('[CONSUMER] Device property "%s" could not be initialized', $message->offsetGet('property')));
-
-								return true;
-							}
-
-							$this->propertiesManager->create(Utils\ArrayHash::from(array_merge($toCreate, $toUpdate)));
-						}
-
-						$dataConsumed = true;
+						$this->propertiesManager->update($property, Utils\ArrayHash::from($toUpdate));
 					}
 
 					if (
 						$message->offsetExists('expected')
 						|| $message->offsetExists('value')
 					) {
-						$property = $device->findProperty($message->offsetGet('property'));
-
-						if ($property !== null) {
+						// Property have to be configured & have to be settable
+						if ($property->isSettable()) {
 							$propertyState = $this->propertyStateRepository->findOne($property->getId());
 
-							if ($message->offsetExists('expected')) {
-								$message->offsetSet('pending', true);
-							}
-
 							if ($propertyState !== null) {
-								if (
-									$message->offsetExists('value')
-									&& (string) $propertyState->getExpected() === (string) $message->offsetGet('value')
-								) {
-									$message->offsetSet('pending', false);
-									$message->offsetSet('expected', null);
-								}
+								$toUpdate = $this->handlePropertyState($propertyState, $message);
 
-								$this->propertiesStatesManager->updateState($propertyState, $property, $message);
-
-								$dataConsumed = true;
+								$this->propertiesStatesManager->updateState(
+									$propertyState,
+									$property,
+									Utils\ArrayHash::from($toUpdate)
+								);
 							}
 						}
 					}
+
+					// Commit all changes into database
+					$this->getOrmConnection()->commit();
 					break;
 
 				default:
@@ -206,11 +173,15 @@ final class DevicePropertyMessageHandler implements NodeExchangeConsumers\IMessa
 
 		} catch (Throwable $ex) {
 			throw new NodeExchangeExceptions\TerminateException('An error occurred: ' . $ex->getMessage(), $ex->getCode(), $ex);
+
+		} finally {
+			// Revert all changes when error occur
+			if ($this->getOrmConnection()->isTransactionActive()) {
+				$this->getOrmConnection()->rollBack();
+			}
 		}
 
-		if ($dataConsumed) {
-			$this->logger->info('[CONSUMER] Successfully consumed entity message');
-		}
+		$this->logger->info('[CONSUMER] Successfully consumed entity message');
 
 		return true;
 	}
@@ -237,126 +208,17 @@ final class DevicePropertyMessageHandler implements NodeExchangeConsumers\IMessa
 	}
 
 	/**
-	 * @param string $name
-	 *
-	 * @return mixed[]
+	 * @return Connection
 	 */
-	private function setPropertyName(
-		string $name
-	): array {
-		return [
-			'name' => $name,
-		];
-	}
+	protected function getOrmConnection(): Connection
+	{
+		$connection = $this->managerRegistry->getConnection();
 
-	/**
-	 * @param bool $settable
-	 *
-	 * @return mixed[]
-	 */
-	private function setPropertySettable(
-		bool $settable
-	): array {
-		return [
-			'settable' => $settable,
-		];
-	}
-
-	/**
-	 * @param bool $queryable
-	 *
-	 * @return mixed[]
-	 */
-	private function setPropertyQueryable(
-		bool $queryable
-	): array {
-		return [
-			'queryable' => $queryable,
-		];
-	}
-
-	/**
-	 * @param string|null $datatype
-	 *
-	 * @return mixed[]
-	 */
-	private function setPropertyDatatype(
-		?string $datatype
-	): array {
-		return [
-			'datatype' => $datatype,
-		];
-	}
-
-	/**
-	 * @param string|null $format
-	 *
-	 * @return mixed[]
-	 */
-	private function setPropertyFormat(
-		?string $format
-	): array {
-		return [
-			'format' => $format,
-		];
-	}
-
-	/**
-	 * @param string|null $unit
-	 *
-	 * @return mixed[]
-	 */
-	private function setPropertyUnit(
-		?string $unit
-	): array {
-		return [
-			'unit' => $unit,
-		];
-	}
-
-	/**
-	 * @param Entities\Devices\IDevice $device
-	 * @param string $property
-	 *
-	 * @return mixed[]|null
-	 */
-	private function getProperty(
-		Entities\Devices\IDevice $device,
-		string $property
-	): ?array {
-		if (in_array($property, [
-			Entities\Devices\Properties\IProperty::PROPERTY_IP_ADDRESS,
-			Entities\Devices\Properties\IProperty::PROPERTY_STATUS_LED,
-			Entities\Devices\Properties\IProperty::PROPERTY_SSID,
-		], true)) {
-			return [
-				'device'    => $device,
-				'name'      => $property,
-				'property'  => $property,
-				'settable'  => false,
-				'queryable' => false,
-				'datatype'  => Types\DatatypeType::DATA_TYPE_STRING,
-			];
-
-		} elseif (in_array($property, [
-			Entities\Devices\Properties\IProperty::PROPERTY_INTERVAL,
-			Entities\Devices\Properties\IProperty::PROPERTY_UPTIME,
-			Entities\Devices\Properties\IProperty::PROPERTY_FREE_HEAP,
-			Entities\Devices\Properties\IProperty::PROPERTY_CPU_LOAD,
-			Entities\Devices\Properties\IProperty::PROPERTY_VCC,
-			Entities\Devices\Properties\IProperty::PROPERTY_RSSI,
-		], true)) {
-			return [
-				'device'    => $device,
-				'name'      => $property,
-				'property'  => $property,
-				'settable'  => false,
-				'queryable' => false,
-				'datatype'  => Types\DatatypeType::DATA_TYPE_INTEGER,
-			];
+		if ($connection instanceof Connection) {
+			return $connection;
 		}
 
-		return null;
+		throw new Exceptions\RuntimeException('Entity manager could not be loaded');
 	}
 
 }

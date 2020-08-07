@@ -17,9 +17,7 @@ namespace FastyBird\DevicesNode\Entities\Devices\Configuration;
 
 use Doctrine\ORM\Mapping as ORM;
 use FastyBird\DevicesNode\Entities;
-use FastyBird\NodeDatabase\Entities as NodeDatabaseEntities;
 use IPub\DoctrineCrud\Mapping\Annotation as IPubDoctrine;
-use IPub\DoctrineTimestampable;
 use Ramsey\Uuid;
 use Throwable;
 
@@ -51,62 +49,8 @@ use Throwable;
  *
  * @property-read string $type
  */
-abstract class Row implements IRow
+abstract class Row extends Entities\Row implements IRow
 {
-
-	use NodeDatabaseEntities\TEntity;
-	use NodeDatabaseEntities\TEntityParams;
-	use DoctrineTimestampable\Entities\TEntityCreated;
-	use DoctrineTimestampable\Entities\TEntityUpdated;
-
-	/**
-	 * @var Uuid\UuidInterface
-	 *
-	 * @ORM\Id
-	 * @ORM\Column(type="uuid_binary", name="configuration_id")
-	 * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
-	 */
-	protected $id;
-
-	/**
-	 * @var string
-	 *
-	 * @IPubDoctrine\Crud(is="required")
-	 * @ORM\Column(type="string", name="configuration_name", length=40, nullable=false)
-	 */
-	protected $name;
-
-	/**
-	 * @var string|null
-	 *
-	 * @IPubDoctrine\Crud(is="writable")
-	 * @ORM\Column(type="string", name="configuration_title", nullable=true, options={"default": null})
-	 */
-	protected $title = null;
-
-	/**
-	 * @var string|null
-	 *
-	 * @IPubDoctrine\Crud(is="writable")
-	 * @ORM\Column(type="text", name="configuration_comment", nullable=true, options={"default": null})
-	 */
-	protected $comment = null;
-
-	/**
-	 * @var mixed|null
-	 *
-	 * @IPubDoctrine\Crud(is="writable")
-	 * @ORM\Column(type="string", name="configuration_default", nullable=true, options={"default": null})
-	 */
-	protected $default = null;
-
-	/**
-	 * @var mixed|null
-	 *
-	 * @IPubDoctrine\Crud(is="writable")
-	 * @ORM\Column(type="string", name="configuration_value", nullable=true, options={"default": null})
-	 */
-	protected $value = null;
 
 	/**
 	 * @var Entities\Devices\IDevice
@@ -129,9 +73,7 @@ abstract class Row implements IRow
 		string $name,
 		?Uuid\UuidInterface $id = null
 	) {
-		$this->id = $id ?? Uuid\Uuid::uuid4();
-
-		$this->name = $name;
+		parent::__construct($name, $id);
 
 		$this->device = $device;
 
@@ -149,99 +91,12 @@ abstract class Row implements IRow
 	/**
 	 * {@inheritDoc}
 	 */
-	public function getName(): string
-	{
-		return $this->name;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function setTitle(?string $title): void
-	{
-		$this->title = $title;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function getTitle(): ?string
-	{
-		return $this->title;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function setComment(?string $comment): void
-	{
-		$this->comment = $comment;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function getComment(): ?string
-	{
-		return $this->comment;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function setDefault(?string $default): void
-	{
-		$this->default = $default;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function getDefault()
-	{
-		return $this->default;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function setValue(?string $value): void
-	{
-		$this->value = $value;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function getValue()
-	{
-		return $this->value;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function getType(): string
-	{
-		return $this->type;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
 	public function toArray(): array
 	{
-		return [
-			'id'      => $this->getPlainId(),
-			'type'    => $this->getType(),
-			'name'    => $this->getName(),
-			'title'   => $this->getTitle(),
-			'comment' => $this->getComment(),
-			'default' => $this->getDefault(),
-			'value'   => $this->getValue(),
-			'device'  => $this->getDevice()->getIdentifier(),
-			'parent'  => $this->getDevice()->getParent() !== null ? $this->getDevice()->getParent()->getIdentifier() : null,
-		];
+		return array_merge(parent::toArray(), [
+			'device' => $this->getDevice()->getIdentifier(),
+			'parent' => $this->getDevice()->getParent() !== null ? $this->getDevice()->getParent()->getIdentifier() : null,
+		]);
 	}
 
 }

@@ -44,34 +44,7 @@ return [
 			],
 		],
 	],
-	'messageWithCreate'       => [
-		DevicesNode\Constants::RABBIT_MQ_CHANNELS_PROPERTIES_DATA_ROUTING_KEY,
-		Utils\ArrayHash::from([
-			'device'   => 'first-device',
-			'parent'   => null,
-			'channel'  => 'channel-one',
-			'property' => 'button',
-			'name'     => 'Device button',
-		]),
-		[
-			'fb.bus.node.entity.created.channel.property' => [
-				'property'  => 'button',
-				'name'      => 'Device button',
-				'settable'  => false,
-				'queryable' => false,
-				'datatype'  => null,
-				'unit'      => null,
-				'format'    => null,
-				'device'    => 'first-device',
-				'parent'    => null,
-				'channel'   => 'channel-one',
-				'value'     => null,
-				'expected'  => null,
-				'pending'   => false,
-			],
-		],
-	],
-	'messageWithSecondUpdate' => [
+	'messageWithMultiRowUpdate' => [
 		DevicesNode\Constants::RABBIT_MQ_CHANNELS_PROPERTIES_DATA_ROUTING_KEY,
 		Utils\ArrayHash::from([
 			'device'   => 'first-device',
@@ -101,6 +74,36 @@ return [
 		],
 	],
 	'messageWithFormatUpdate' => [
+		DevicesNode\Constants::RABBIT_MQ_CHANNELS_PROPERTIES_DATA_ROUTING_KEY,
+		Utils\ArrayHash::from([
+			'device'   => 'first-device',
+			'parent'   => null,
+			'channel'  => 'channel-one',
+			'property' => 'switch',
+			'name'     => 'Relay switch',
+			'datatype' => Types\DatatypeType::DATA_TYPE_INTEGER,
+			'format'   => '10:50',
+		]),
+		[
+			'fb.bus.node.entity.updated.channel.property' => [
+				'id'        => 'bbcccf8c-33ab-431b-a795-d7bb38b6b6db',
+				'property'  => 'switch',
+				'name'      => 'Relay switch',
+				'settable'  => true,
+				'queryable' => true,
+				'datatype'  => 'integer',
+				'unit'      => null,
+				'format'    => [10, 50],
+				'device'    => 'first-device',
+				'parent'    => null,
+				'channel'   => 'channel-one',
+				'value'     => null,
+				'expected'  => null,
+				'pending'   => false,
+			],
+		],
+	],
+	'messageWithBadFormatUpdate' => [
 		DevicesNode\Constants::RABBIT_MQ_CHANNELS_PROPERTIES_DATA_ROUTING_KEY,
 		Utils\ArrayHash::from([
 			'device'   => 'first-device',

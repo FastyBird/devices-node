@@ -15,6 +15,9 @@
 
 namespace FastyBird\DevicesNode\Consumers;
 
+use Doctrine\Common;
+use Doctrine\DBAL;
+use Doctrine\DBAL\Connection;
 use FastyBird\DevicesNode;
 use FastyBird\DevicesNode\Entities;
 use FastyBird\DevicesNode\Exceptions;
@@ -63,6 +66,9 @@ final class ChannelMessageHandler implements NodeExchangeConsumers\IMessageHandl
 	/** @var Log\LoggerInterface */
 	private $logger;
 
+	/** @var Common\Persistence\ManagerRegistry */
+	private $managerRegistry;
+
 	public function __construct(
 		Models\Devices\IDeviceRepository $deviceRepository,
 		Models\Channels\IChannelRepository $channelRepository,
@@ -70,7 +76,8 @@ final class ChannelMessageHandler implements NodeExchangeConsumers\IMessageHandl
 		Models\Channels\Properties\IPropertiesManager $channelPropertiesManager,
 		Models\Channels\Controls\IControlsManager $channelControlManager,
 		NodeMetadataLoaders\ISchemaLoader $schemaLoader,
-		Log\LoggerInterface $logger
+		Log\LoggerInterface $logger,
+		Common\Persistence\ManagerRegistry $managerRegistry
 	) {
 		$this->deviceRepository = $deviceRepository;
 		$this->channelRepository = $channelRepository;
@@ -80,11 +87,13 @@ final class ChannelMessageHandler implements NodeExchangeConsumers\IMessageHandl
 
 		$this->schemaLoader = $schemaLoader;
 		$this->logger = $logger;
+		$this->managerRegistry = $managerRegistry;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 *
+	 * @throws DBAL\ConnectionException
 	 * @throws NodeExchangeExceptions\TerminateException
 	 */
 	public function process(
@@ -119,16 +128,17 @@ final class ChannelMessageHandler implements NodeExchangeConsumers\IMessageHandl
 		}
 
 		if ($channel === null) {
-			$this->logger->error(sprintf('[CONSUMER] Device channel "%s" is not registered', $message->offsetGet('device')));
+			$this->logger->error(sprintf('[CONSUMER] Device channel "%s" is not registered', $message->offsetGet('channel')));
 
 			return true;
 		}
 
-		$result = true;
-
 		try {
 			switch ($routingKey) {
 				case DevicesNode\Constants::RABBIT_MQ_CHANNELS_DATA_ROUTING_KEY:
+					// Start transaction connection to the database
+					$this->getOrmConnection()->beginTransaction();
+
 					$toUpdate = [];
 
 					if ($message->offsetExists('name')) {
@@ -136,24 +146,19 @@ final class ChannelMessageHandler implements NodeExchangeConsumers\IMessageHandl
 					}
 
 					if ($message->offsetExists('properties')) {
-						$subResult = $this->setChannelProperties($channel, $message->offsetGet('properties'));
-
-						if (!$subResult) {
-							$result = false;
-						}
+						$this->setChannelProperties($channel, $message->offsetGet('properties'));
 					}
 
 					if ($message->offsetExists('control')) {
-						$subResult = $this->setChannelControl($channel, $message->offsetGet('control'));
-
-						if (!$subResult) {
-							$result = false;
-						}
+						$this->setChannelControl($channel, $message->offsetGet('control'));
 					}
 
 					if ($toUpdate !== []) {
 						$this->channelsManager->update($channel, Utils\ArrayHash::from($toUpdate));
 					}
+
+					// Commit all changes into database
+					$this->getOrmConnection()->commit();
 					break;
 
 				default:
@@ -165,11 +170,15 @@ final class ChannelMessageHandler implements NodeExchangeConsumers\IMessageHandl
 
 		} catch (Throwable $ex) {
 			throw new NodeExchangeExceptions\TerminateException('An error occurred: ' . $ex->getMessage(), $ex->getCode(), $ex);
+
+		} finally {
+			// Revert all changes when error occur
+			if ($this->getOrmConnection()->isTransactionActive()) {
+				$this->getOrmConnection()->rollBack();
+			}
 		}
 
-		if ($result) {
-			$this->logger->info('[CONSUMER] Successfully consumed entity message');
-		}
+		$this->logger->info('[CONSUMER] Successfully consumed entity message');
 
 		return true;
 	}
@@ -193,51 +202,18 @@ final class ChannelMessageHandler implements NodeExchangeConsumers\IMessageHandl
 	 * @param Entities\Channels\IChannel $channel
 	 * @param Utils\ArrayHash<string> $properties
 	 *
-	 * @return bool
+	 * @return void
 	 */
 	private function setChannelProperties(
 		Entities\Channels\IChannel $channel,
 		Utils\ArrayHash $properties
-	): bool {
+	): void {
 		foreach ($properties as $propertyName) {
 			if (!$channel->hasProperty($propertyName)) {
-				if (in_array($propertyName, [
-					Entities\Devices\Properties\IProperty::PROPERTY_IP_ADDRESS,
-					Entities\Devices\Properties\IProperty::PROPERTY_STATUS_LED,
-					Entities\Devices\Properties\IProperty::PROPERTY_SSID,
-				], true)) {
-					$this->channelPropertiesManager->create(Utils\ArrayHash::from([
-						'channel'   => $channel,
-						'name'      => $propertyName,
-						'property'  => $propertyName,
-						'settable'  => false,
-						'queryable' => false,
-						'datatype'  => DevicesNode\Types\DatatypeType::DATA_TYPE_STRING,
-					]));
-
-				} elseif (in_array($propertyName, [
-					Entities\Devices\Properties\IProperty::PROPERTY_INTERVAL,
-					Entities\Devices\Properties\IProperty::PROPERTY_UPTIME,
-					Entities\Devices\Properties\IProperty::PROPERTY_FREE_HEAP,
-					Entities\Devices\Properties\IProperty::PROPERTY_CPU_LOAD,
-					Entities\Devices\Properties\IProperty::PROPERTY_VCC,
-					Entities\Devices\Properties\IProperty::PROPERTY_RSSI,
-				], true)) {
-					$this->channelPropertiesManager->create(Utils\ArrayHash::from([
-						'channel'   => $channel,
-						'name'      => $propertyName,
-						'property'  => $propertyName,
-						'settable'  => false,
-						'queryable' => false,
-						'datatype'  => DevicesNode\Types\DatatypeType::DATA_TYPE_INTEGER,
-					]));
-
-				} else {
-					$this->channelPropertiesManager->create(Utils\ArrayHash::from([
-						'channel'  => $channel,
-						'property' => $propertyName,
-					]));
-				}
+				$this->channelPropertiesManager->create(Utils\ArrayHash::from([
+					'channel'  => $channel,
+					'property' => $propertyName,
+				]));
 			}
 		}
 
@@ -247,44 +223,29 @@ final class ChannelMessageHandler implements NodeExchangeConsumers\IMessageHandl
 				$this->channelPropertiesManager->delete($property);
 			}
 		}
-
-		return true;
 	}
 
 	/**
 	 * @param Entities\Channels\IChannel $channel
 	 * @param Utils\ArrayHash<string> $controls
 	 *
-	 * @return bool
+	 * @return void
 	 */
 	private function setChannelControl(
 		Entities\Channels\IChannel $channel,
 		Utils\ArrayHash $controls
-	): bool {
+	): void {
 		$availableControls = [
 			DevicesNode\Constants::CONTROL_CONFIG,
 		];
 
-		foreach ($availableControls as $availableControl) {
-			if (array_search($availableControl, (array) $controls, true) !== false) {
-				if (!$channel->hasControl($availableControl)) {
+		foreach ($controls as $controlName) {
+			if (in_array($controlName, $availableControls, true)) {
+				if (!$channel->hasControl($controlName)) {
 					$this->channelControlManager->create(Utils\ArrayHash::from([
 						'channel' => $channel,
-						'name'    => $availableControl,
+						'name'    => $controlName,
 					]));
-				}
-
-			} else {
-				if ($availableControl === DevicesNode\Constants::CONTROL_CONFIG) {
-					$this->channelsManager->update($channel, Utils\ArrayHash::from([
-						'configuration' => [],
-					]));
-				}
-
-				$control = $channel->getControl($availableControl);
-
-				if ($control !== null) {
-					$this->channelControlManager->delete($control);
 				}
 			}
 		}
@@ -295,8 +256,20 @@ final class ChannelMessageHandler implements NodeExchangeConsumers\IMessageHandl
 				$this->channelControlManager->delete($control);
 			}
 		}
+	}
 
-		return true;
+	/**
+	 * @return Connection
+	 */
+	protected function getOrmConnection(): Connection
+	{
+		$connection = $this->managerRegistry->getConnection();
+
+		if ($connection instanceof Connection) {
+			return $connection;
+		}
+
+		throw new Exceptions\RuntimeException('Entity manager could not be loaded');
 	}
 
 }

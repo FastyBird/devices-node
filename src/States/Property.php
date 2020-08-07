@@ -153,7 +153,7 @@ abstract class Property extends State implements IProperty
 	 *
 	 * @return int|float|string|bool|null
 	 */
-	protected function normalizeValue(
+	public function normalizeValue(
 		?string $value
 	) {
 		if ($value === null) {

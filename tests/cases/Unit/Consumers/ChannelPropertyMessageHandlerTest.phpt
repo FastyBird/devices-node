@@ -2,14 +2,12 @@
 
 namespace Tests\Cases;
 
-use FastyBird\DevicesNode\Connections;
 use FastyBird\DevicesNode\Consumers;
+use FastyBird\DevicesNode\Models;
+use FastyBird\DevicesNode\States;
 use FastyBird\NodeExchange\Publishers as NodeExchangePublishers;
 use Mockery;
 use Nette\Utils;
-use PHPOnCouch;
-use Ramsey\Uuid;
-use stdClass;
 use Tester\Assert;
 
 require_once __DIR__ . '/../../../bootstrap.php';
@@ -25,30 +23,60 @@ final class ChannelPropertyMessageHandlerTest extends DbTestCase
 	{
 		parent::setUp();
 
-		$doc = new stdClass();
-		$doc->id = Uuid\Uuid::uuid4();
-
-		$docs = [];
-		$docs[] = $doc;
-
-		$storageClient = Mockery::mock(PHPOnCouch\CouchClient::class);
-		$storageClient
-			->shouldReceive('asCouchDocuments')
-			->andReturn($storageClient)
+		$channelStateMock = Mockery::mock(States\Channels\IProperty::class);
+		$channelStateMock
+			->shouldReceive('getValue')
+			->andReturn(null)
 			->getMock()
-			->shouldReceive('find')
-			->andReturn($docs)
+			->shouldReceive('getExpected')
+			->andReturn(null)
+			->getMock()
+			->shouldReceive('isPending')
+			->andReturn(false)
+			->getMock()
+			->shouldReceive('toArray')
+			->andReturn([
+				'value'    => null,
+				'expected' => null,
+				'pending'  => false,
+			])
 			->getMock();
 
-		$storageConnection = Mockery::mock(Connections\CouchDbConnection::class);
-		$storageConnection
-			->shouldReceive('getClient')
-			->andReturn($storageClient)
+		$channelStatePropertyRepositoryMock = Mockery::mock(Models\States\Channels\PropertyRepository::class);
+		$channelStatePropertyRepositoryMock
+			->shouldReceive('findOne')
+			->andReturn($channelStateMock)
+			->getMock()
+			->shouldReceive('findValue')
+			->andReturn(null)
+			->getMock()
+			->shouldReceive('findExpected')
+			->andReturn(null)
 			->getMock();
 
 		$this->mockContainerService(
-			Connections\CouchDbConnection::class,
-			$storageConnection
+			Models\States\Channels\PropertyRepository::class,
+			$channelStatePropertyRepositoryMock
+		);
+
+		$channelStatePropertiesManagerMock = Mockery::mock(Models\States\Channels\PropertiesManager::class);
+		$channelStatePropertiesManagerMock
+			->shouldReceive('create')
+			->andReturn($channelStateMock)
+			->getMock()
+			->shouldReceive('update')
+			->andReturn($channelStateMock)
+			->getMock()
+			->shouldReceive('updateState')
+			->andReturn($channelStateMock)
+			->getMock()
+			->shouldReceive('delete')
+			->andReturn(true)
+			->getMock();
+
+		$this->mockContainerService(
+			Models\States\Channels\PropertiesManager::class,
+			$channelStatePropertiesManagerMock
 		);
 	}
 
