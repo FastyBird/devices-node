@@ -168,15 +168,19 @@ final class ChannelPropertyMessageHandler implements NodeExchangeConsumers\IMess
 						if ($property->isSettable()) {
 							$propertyState = $this->propertyStateRepository->findOne($property->getId());
 
-							if ($propertyState !== null) {
-								$toUpdate = $this->handlePropertyState($propertyState, $message);
-
-								$this->propertiesStatesManager->updateState(
-									$propertyState,
-									$property,
-									Utils\ArrayHash::from($toUpdate)
-								);
+							// In case synchronization failed...
+							if ($propertyState === null) {
+								// ...create state in storage
+								$propertyState = $this->propertiesStatesManager->create($property);
 							}
+
+							$toUpdate = $this->handlePropertyState($propertyState, $message);
+
+							$this->propertiesStatesManager->updateState(
+								$propertyState,
+								$property,
+								Utils\ArrayHash::from($toUpdate)
+							);
 						}
 					}
 
