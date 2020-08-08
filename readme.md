@@ -65,7 +65,7 @@ $ docker run -d -it --name devices-node devices-node
 
 ## Configuration
 
-This microservices is preconfigured for default connections, but your infrastructure could be different.
+This microservice is preconfigured for default connections, but your infrastructure could be different.
 
 Configuration could be made via environment variables:
 
@@ -98,11 +98,13 @@ Configuration could be made via environment variables:
 
 ## Initialization
 
-This microservice is using database, so database have to be initialise with basic database schema. It could be done via shell command:
+This microservice is using database, and need some initial data to be inserted into it. This could be done via shell command:
 
 ```sh
-$ php vendor/bin/doctrine orm:schema-tool:create
+$ vendor/bin/fb-console fb:initialize
 ```
+
+This console command is interactive and will ask for all required information.
 
 After this steps, microservice could be started with [server command](#http-server)
 

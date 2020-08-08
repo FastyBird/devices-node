@@ -15,20 +15,11 @@
 
 namespace FastyBird\DevicesNode\Commands;
 
-use Doctrine\Common;
-use Doctrine\DBAL\Connection;
-use FastyBird\DevicesNode\Exceptions;
-use FastyBird\DevicesNode\Models;
-use FastyBird\DevicesNode\Queries;
-use FastyBird\NodeAuth;
-use Nette\Utils;
-use Psr\Log\LoggerInterface;
 use RuntimeException;
 use Symfony\Component\Console;
 use Symfony\Component\Console\Input;
 use Symfony\Component\Console\Output;
 use Symfony\Component\Console\Style;
-use Throwable;
 
 /**
  * Node initialize command
