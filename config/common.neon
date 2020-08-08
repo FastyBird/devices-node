@@ -198,6 +198,8 @@ services:
 
 	- {factory: FastyBird\DevicesNode\Commands\Devices\CreateCommand}
 
+	- {factory: FastyBird\DevicesNode\Commands\InitializeCommand}
+
 	# Message bus messages handlers
 	###############################
 

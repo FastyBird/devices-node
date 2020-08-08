@@ -35,6 +35,7 @@ final class ServicesTest extends BaseTestCase
 		$container = $configurator->createContainer();
 
 		Assert::notNull($container->getByType(Commands\Devices\CreateCommand::class));
+		Assert::notNull($container->getByType(Commands\InitializeCommand::class));
 
 		Assert::notNull($container->getByType(Consumers\DeviceMessageHandler::class));
 		Assert::notNull($container->getByType(Consumers\DeviceFirmwareMessageHandler::class));
