@@ -160,6 +160,10 @@ decorator:
 		setup:
 			- '$onBeforeServerStart[]' = @FastyBird\DevicesNode\Events\ServerBeforeStartHandler
 
+	FastyBird\NodeExchange\Exchange:
+		setup:
+			- '$onAfterConsumeMessage[]' = @FastyBird\NodeDatabase\Events\AfterConsumeHandler
+
 services:
 	# Http router
 	#############
