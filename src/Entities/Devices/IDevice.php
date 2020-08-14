@@ -34,13 +34,6 @@ interface IDevice extends NodeDatabaseEntities\IEntity,
 {
 
 	/**
-	 * @param string $identifier
-	 *
-	 * @return void
-	 */
-	public function setIdentifier(string $identifier): void;
-
-	/**
 	 * @return string
 	 */
 	public function getIdentifier(): string;

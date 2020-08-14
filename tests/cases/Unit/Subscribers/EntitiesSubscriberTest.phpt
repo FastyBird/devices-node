@@ -84,7 +84,7 @@ final class EntitiesSubscriberTest extends BaseMockeryTestCase
 			$entityManager
 		);
 
-		$entity = new Entities\Devices\PhysicalDevice('device-name');
+		$entity = new Entities\Devices\PhysicalDevice('device-name', 'device-name');
 		$entity->setName('Device custom name');
 
 		$eventArgs = Mockery::mock(ORM\Event\LifecycleEventArgs::class);
@@ -139,7 +139,7 @@ final class EntitiesSubscriberTest extends BaseMockeryTestCase
 			$entityManager
 		);
 
-		$entity = new Entities\Devices\PhysicalDevice('device-name');
+		$entity = new Entities\Devices\PhysicalDevice('device-name', 'device-name');
 		$entity->setName('Device custom name');
 
 		$eventArgs = Mockery::mock(ORM\Event\LifecycleEventArgs::class);
@@ -177,7 +177,7 @@ final class EntitiesSubscriberTest extends BaseMockeryTestCase
 			})
 			->times(1);
 
-		$entity = new Entities\Devices\PhysicalDevice('device-name');
+		$entity = new Entities\Devices\PhysicalDevice('device-name', 'device-name');
 		$entity->setName('Device custom name');
 
 		$uow = Mockery::mock(ORM\UnitOfWork::class);

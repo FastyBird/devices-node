@@ -54,7 +54,7 @@ class PhysicalDevice extends Device implements IPhysicalDevice
 	 */
 	public function getName(): string
 	{
-		return $this->name ?? $this->identifier;
+		return $this->name;
 	}
 
 	/**

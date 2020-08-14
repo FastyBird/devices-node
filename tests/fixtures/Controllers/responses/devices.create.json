@@ -1,84 +1,7 @@
 {
-  "data": {
-    "attributes": {
-      "comment": null,
-      "control": [],
-      "identifier": "new-device",
-      "state": "unknown",
-      "is_enabled": true,
-      "name": "new-device",
-      "params": [],
-      "title": null
-    },
-    "id": "bbbf5caa-b30e-4558-b83a-699617958cea",
-    "links": {
-      "self": "/v1/devices/bbbf5caa-b30e-4558-b83a-699617958cea"
-    },
-    "relationships": {
-      "channels": {
-        "data": [],
-        "links": {
-          "related": {
-            "href": "/v1/devices/bbbf5caa-b30e-4558-b83a-699617958cea/channels",
-            "meta": {
-              "count": 0
-            }
-          },
-          "self": "/v1/devices/bbbf5caa-b30e-4558-b83a-699617958cea/relationships/channels"
-        }
-      },
-      "children": {
-        "data": [],
-        "links": {
-          "related": {
-            "href": "/v1/devices/bbbf5caa-b30e-4558-b83a-699617958cea/children",
-            "meta": {
-              "count": 0
-            }
-          },
-          "self": "/v1/devices/bbbf5caa-b30e-4558-b83a-699617958cea/relationships/children"
-        }
-      },
-      "configuration": {
-        "data": [],
-        "links": {
-          "related": {
-            "href": "/v1/devices/bbbf5caa-b30e-4558-b83a-699617958cea/configuration",
-            "meta": {
-              "count": 0
-            }
-          },
-          "self": "/v1/devices/bbbf5caa-b30e-4558-b83a-699617958cea/relationships/configuration"
-        }
-      },
-      "firmware": {
-        "data": null,
-        "links": {
-          "related": "/v1/devices/bbbf5caa-b30e-4558-b83a-699617958cea/firmware",
-          "self": "/v1/devices/bbbf5caa-b30e-4558-b83a-699617958cea/relationships/firmware"
-        }
-      },
-      "hardware": {
-        "data": null,
-        "links": {
-          "related": "/v1/devices/bbbf5caa-b30e-4558-b83a-699617958cea/hardware",
-          "self": "/v1/devices/bbbf5caa-b30e-4558-b83a-699617958cea/relationships/hardware"
-        }
-      },
-      "properties": {
-        "data": [],
-        "links": {
-          "related": {
-            "href": "/v1/devices/bbbf5caa-b30e-4558-b83a-699617958cea/properties",
-            "meta": {
-              "count": 0
-            }
-          },
-          "self": "/v1/devices/bbbf5caa-b30e-4558-b83a-699617958cea/relationships/properties"
-        }
-      }
-    },
-    "type": "devices-node/physical-device"
+  "meta": {
+    "author": "FastyBird dev team",
+    "copyright": "FastyBird s.r.o"
   },
   "jsonapi": {
     "version": "1.1"
@@ -86,8 +9,85 @@
   "links": {
     "self": "/v1/devices"
   },
-  "meta": {
-    "author": "FastyBird dev team",
-    "copyright": "FastyBird s.r.o"
+  "data": {
+    "type": "devices-node/physical-device",
+    "id": "bbbf5caa-b30e-4558-b83a-699617958cea",
+    "attributes": {
+      "name": "Newly created device",
+      "title": null,
+      "comment": null,
+      "state": "unknown",
+      "is_enabled": true,
+      "control": [],
+      "params": [],
+      "identifier": "new-device"
+    },
+    "relationships": {
+      "hardware": {
+        "links": {
+          "self": "/v1/devices/bbbf5caa-b30e-4558-b83a-699617958cea/relationships/hardware",
+          "related": "/v1/devices/bbbf5caa-b30e-4558-b83a-699617958cea/hardware"
+        },
+        "data": null
+      },
+      "firmware": {
+        "links": {
+          "self": "/v1/devices/bbbf5caa-b30e-4558-b83a-699617958cea/relationships/firmware",
+          "related": "/v1/devices/bbbf5caa-b30e-4558-b83a-699617958cea/firmware"
+        },
+        "data": null
+      },
+      "properties": {
+        "links": {
+          "self": "/v1/devices/bbbf5caa-b30e-4558-b83a-699617958cea/relationships/properties",
+          "related": {
+            "href": "/v1/devices/bbbf5caa-b30e-4558-b83a-699617958cea/properties",
+            "meta": {
+              "count": 0
+            }
+          }
+        },
+        "data": []
+      },
+      "configuration": {
+        "links": {
+          "self": "/v1/devices/bbbf5caa-b30e-4558-b83a-699617958cea/relationships/configuration",
+          "related": {
+            "href": "/v1/devices/bbbf5caa-b30e-4558-b83a-699617958cea/configuration",
+            "meta": {
+              "count": 0
+            }
+          }
+        },
+        "data": []
+      },
+      "channels": {
+        "links": {
+          "self": "/v1/devices/bbbf5caa-b30e-4558-b83a-699617958cea/relationships/channels",
+          "related": {
+            "href": "/v1/devices/bbbf5caa-b30e-4558-b83a-699617958cea/channels",
+            "meta": {
+              "count": 0
+            }
+          }
+        },
+        "data": []
+      },
+      "children": {
+        "links": {
+          "self": "/v1/devices/bbbf5caa-b30e-4558-b83a-699617958cea/relationships/children",
+          "related": {
+            "href": "/v1/devices/bbbf5caa-b30e-4558-b83a-699617958cea/children",
+            "meta": {
+              "count": 0
+            }
+          }
+        },
+        "data": []
+      }
+    },
+    "links": {
+      "self": "/v1/devices/bbbf5caa-b30e-4558-b83a-699617958cea"
+    }
   }
 }

@@ -28,17 +28,6 @@ use FastyBird\DevicesNode\Entities;
 class PhysicalDeviceHydrator extends DeviceHydrator
 {
 
-	/** @var string[] */
-	protected $attributes = [
-		'identifier',
-		'title',
-		'comment',
-		'enabled',
-	];
-
-	/** @var string */
-	protected $translationDomain = 'node.devices';
-
 	/**
 	 * {@inheritDoc}
 	 */

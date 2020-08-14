@@ -96,12 +96,12 @@ abstract class Device implements IDevice
 	protected $children;
 
 	/**
-	 * @var string|null
+	 * @var string
 	 *
-	 * @IPubDoctrine\Crud(is="writable")
-	 * @ORM\Column(type="string", name="device_name", nullable=true, options={"default": null})
+	 * @IPubDoctrine\Crud(is={"required", "writable"})
+	 * @ORM\Column(type="string", name="device_name", nullable=true)
 	 */
-	protected $name = null;
+	protected $name;
 
 	/**
 	 * @var string|null
@@ -170,15 +170,20 @@ abstract class Device implements IDevice
 
 	/**
 	 * @param string $identifier
+	 * @param string $name
 	 * @param Uuid\UuidInterface|null $id
 	 *
 	 * @throws Throwable
 	 */
-	public function __construct(string $identifier, ?Uuid\UuidInterface $id = null)
-	{
+	public function __construct(
+		string $identifier,
+		string $name,
+		?Uuid\UuidInterface $id = null
+	) {
 		$this->id = $id ?? Uuid\Uuid::uuid4();
 
 		$this->identifier = $identifier;
+		$this->name = $name;
 
 		$this->state = Types\DeviceConnectionState::get(Types\DeviceConnectionState::STATE_UNKNOWN);
 
@@ -187,14 +192,6 @@ abstract class Device implements IDevice
 		$this->controls = new Common\Collections\ArrayCollection();
 		$this->properties = new Common\Collections\ArrayCollection();
 		$this->configuration = new Common\Collections\ArrayCollection();
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function setIdentifier(string $identifier): void
-	{
-		$this->identifier = $identifier;
 	}
 
 	/**
@@ -291,7 +288,7 @@ abstract class Device implements IDevice
 	 */
 	public function getName(): string
 	{
-		return $this->name ?? 'Unknown';
+		return $this->name;
 	}
 
 	/**

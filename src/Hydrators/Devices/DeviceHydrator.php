@@ -34,10 +34,15 @@ abstract class DeviceHydrator extends NodeJsonApiHydrators\Hydrator
 
 	/** @var string[] */
 	protected $attributes = [
+		'identifier',
+		'name',
 		'title',
 		'comment',
 		'enabled',
 	];
+
+	/** @var string */
+	protected $translationDomain = 'node.devices';
 
 	/**
 	 * @param JsonAPIDocument\Objects\IStandardObject<mixed> $attributes
