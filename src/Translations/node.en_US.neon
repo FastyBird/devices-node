@@ -45,7 +45,10 @@ base:
 		channelNotFound:
 			heading	: "Channel not found"
 			message	: "Requested channel was not found"
-		uniqueConstraint:
+		uniqueIdConstraint:
+			heading	: "Identifier not unique"
+			message	: "Provided identifier is not unique"
+		uniqueAttributeConstraint:
 			heading	: "Attribute not unique"
 			message	: "Provided attribute is not unique"
 		notAuthorized:

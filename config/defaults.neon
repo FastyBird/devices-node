@@ -9,8 +9,8 @@ parameters:
 		driver: pdo_mysql
 		memory: false
 		dbname: devices_node
-		username: root
-		password:
+		username: io_server
+		password: superSecretAndHiddenPassword
 
 	storage:
 		host: 127.0.0.1
