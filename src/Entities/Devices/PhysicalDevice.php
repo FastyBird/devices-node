@@ -95,7 +95,7 @@ class PhysicalDevice extends Device implements IPhysicalDevice
 	public function toArray(): array
 	{
 		return array_merge(parent::toArray(), [
-			'type' => 'physical'
+			'type' => 'physical',
 		]);
 	}
 
