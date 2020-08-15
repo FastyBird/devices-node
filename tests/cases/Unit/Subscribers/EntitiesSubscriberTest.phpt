@@ -53,6 +53,7 @@ final class EntitiesSubscriberTest extends BaseMockeryTestCase
 				Assert::same('fb.bus.node.entity.created.device', $key);
 				Assert::equal([
 					'identifier' => 'device-name',
+					'type'       => 'physical',
 					'parent'     => null,
 					'device'     => 'device-name',
 					'name'       => 'Device custom name',
@@ -108,6 +109,7 @@ final class EntitiesSubscriberTest extends BaseMockeryTestCase
 				Assert::same('fb.bus.node.entity.updated.device', $key);
 				Assert::equal([
 					'identifier' => 'device-name',
+					'type'       => 'physical',
 					'parent'     => null,
 					'device'     => 'device-name',
 					'name'       => 'Device custom name',
@@ -162,6 +164,7 @@ final class EntitiesSubscriberTest extends BaseMockeryTestCase
 				Assert::same('fb.bus.node.entity.deleted.device', $key);
 				Assert::equal([
 					'identifier' => 'device-name',
+					'type'       => 'physical',
 					'parent'     => null,
 					'device'     => 'device-name',
 					'name'       => 'Device custom name',

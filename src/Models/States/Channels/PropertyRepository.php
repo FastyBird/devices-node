@@ -131,7 +131,7 @@ class PropertyRepository implements IPropertyRepository
 
 			/** @var stdClass[]|mixed $docs */
 			$docs = $this->dbClient->getClient()->find([
-				'id'   => [
+				'id' => [
 					'$eq' => $id->toString(),
 				],
 			]);

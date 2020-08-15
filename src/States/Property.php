@@ -142,9 +142,9 @@ abstract class Property extends State implements IProperty
 	public function toArray(): array
 	{
 		return array_merge([
-			'value'     => $this->getValue(),
-			'expected'  => $this->getExpected(),
-			'pending'   => $this->isPending(),
+			'value'    => $this->getValue(),
+			'expected' => $this->getExpected(),
+			'pending'  => $this->isPending(),
 		], parent::toArray());
 	}
 

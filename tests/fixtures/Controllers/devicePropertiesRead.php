@@ -55,55 +55,55 @@ return [
 		StatusCodeInterface::STATUS_NOT_FOUND,
 		__DIR__ . '/responses/relation.unknown.json',
 	],
-	'readRelationshipsUnknownDevice' => [
+	'readRelationshipsUnknownDevice'         => [
 		'/v1/devices/28bc0d38-2f7c-4a71-aa74-27b102f8dfc4/properties/28bc0d38-2f7c-4a71-aa74-27b102f8df4c/relationships/device',
 		'Bearer ' . VALID_TOKEN,
 		StatusCodeInterface::STATUS_NOT_FOUND,
 		__DIR__ . '/responses/devices.notFound.json',
 	],
-	'readAllMissingToken'            => [
+	'readAllMissingToken'                    => [
 		'/v1/devices/69786d15-fd0c-4d9f-9378-33287c2009fa/properties',
 		null,
 		StatusCodeInterface::STATUS_FORBIDDEN,
 		__DIR__ . '/responses/forbidden.json',
 	],
-	'readOneMissingToken'            => [
+	'readOneMissingToken'                    => [
 		'/v1/devices/69786d15-fd0c-4d9f-9378-33287c2009fa/properties/28bc0d38-2f7c-4a71-aa74-27b102f8df4c',
 		null,
 		StatusCodeInterface::STATUS_FORBIDDEN,
 		__DIR__ . '/responses/forbidden.json',
 	],
-	'readAllEmptyToken'              => [
+	'readAllEmptyToken'                      => [
 		'/v1/devices/69786d15-fd0c-4d9f-9378-33287c2009fa/properties',
 		'',
 		StatusCodeInterface::STATUS_FORBIDDEN,
 		__DIR__ . '/responses/forbidden.json',
 	],
-	'readOneEmptyToken'              => [
+	'readOneEmptyToken'                      => [
 		'/v1/devices/69786d15-fd0c-4d9f-9378-33287c2009fa/properties/28bc0d38-2f7c-4a71-aa74-27b102f8df4c',
 		'',
 		StatusCodeInterface::STATUS_FORBIDDEN,
 		__DIR__ . '/responses/forbidden.json',
 	],
-	'readAllInvalidToken'            => [
+	'readAllInvalidToken'                    => [
 		'/v1/devices/69786d15-fd0c-4d9f-9378-33287c2009fa/properties',
 		'Bearer ' . INVALID_TOKEN,
 		StatusCodeInterface::STATUS_UNAUTHORIZED,
 		__DIR__ . '/responses/unauthorized.json',
 	],
-	'readOneInvalidToken'            => [
+	'readOneInvalidToken'                    => [
 		'/v1/devices/69786d15-fd0c-4d9f-9378-33287c2009fa/properties/28bc0d38-2f7c-4a71-aa74-27b102f8df4c',
 		'Bearer ' . INVALID_TOKEN,
 		StatusCodeInterface::STATUS_UNAUTHORIZED,
 		__DIR__ . '/responses/unauthorized.json',
 	],
-	'readAllExpiredToken'            => [
+	'readAllExpiredToken'                    => [
 		'/v1/devices/69786d15-fd0c-4d9f-9378-33287c2009fa/properties',
 		'Bearer ' . EXPIRED_TOKEN,
 		StatusCodeInterface::STATUS_UNAUTHORIZED,
 		__DIR__ . '/responses/unauthorized.json',
 	],
-	'readOneExpiredToken'            => [
+	'readOneExpiredToken'                    => [
 		'/v1/devices/69786d15-fd0c-4d9f-9378-33287c2009fa/properties/28bc0d38-2f7c-4a71-aa74-27b102f8df4c',
 		'Bearer ' . EXPIRED_TOKEN,
 		StatusCodeInterface::STATUS_UNAUTHORIZED,

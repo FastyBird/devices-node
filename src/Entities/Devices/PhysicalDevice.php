@@ -89,4 +89,14 @@ class PhysicalDevice extends Device implements IPhysicalDevice
 		return $this->firmware;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	public function toArray(): array
+	{
+		return array_merge(parent::toArray(), [
+			'type' => 'physical'
+		]);
+	}
+
 }

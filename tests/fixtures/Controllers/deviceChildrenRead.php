@@ -10,13 +10,13 @@ const VALID_TOKEN_USER = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI3YzVkN
 return [
 	// Valid responses
 	//////////////////
-	'readAll'       => [
+	'readAll'                        => [
 		'/v1/devices/69786d15-fd0c-4d9f-9378-33287c2009fa/children',
 		'Bearer ' . VALID_TOKEN,
 		StatusCodeInterface::STATUS_OK,
 		__DIR__ . '/responses/device.children.index.json',
 	],
-	'readAllPaging' => [
+	'readAllPaging'                  => [
 		'/v1/devices/69786d15-fd0c-4d9f-9378-33287c2009fa/children?page[offset]=1&page[limit]=1',
 		'Bearer ' . VALID_TOKEN,
 		StatusCodeInterface::STATUS_OK,

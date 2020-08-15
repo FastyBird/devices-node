@@ -27,6 +27,7 @@ return [
 			'fb.bus.node.entity.updated.device' => [
 				'id'         => '69786d15-fd0c-4d9f-9378-33287c2009fa',
 				'identifier' => 'first-device',
+				'type'       => 'physical',
 				'name'       => 'Name from message bus',
 				'title'      => null,
 				'comment'    => null,
@@ -54,6 +55,7 @@ return [
 			'fb.bus.node.entity.updated.device' => [
 				'id'         => '69786d15-fd0c-4d9f-9378-33287c2009fa',
 				'identifier' => 'first-device',
+				'type'       => 'physical',
 				'name'       => 'Name from message bus',
 				'title'      => null,
 				'comment'    => null,
@@ -80,6 +82,7 @@ return [
 			'fb.bus.node.entity.updated.device'          => [
 				'id'         => '69786d15-fd0c-4d9f-9378-33287c2009fa',
 				'identifier' => 'first-device',
+				'type'       => 'physical',
 				'name'       => 'Name from message bus',
 				'title'      => null,
 				'comment'    => null,
@@ -171,6 +174,7 @@ return [
 			'fb.bus.node.entity.updated.device'  => [
 				'id'         => '69786d15-fd0c-4d9f-9378-33287c2009fa',
 				'identifier' => 'first-device',
+				'type'       => 'physical',
 				'name'       => 'Name from message bus',
 				'title'      => null,
 				'comment'    => null,
@@ -338,6 +342,7 @@ return [
 			'fb.bus.node.entity.updated.device' => [
 				'id'         => '69786d15-fd0c-4d9f-9378-33287c2009fa',
 				'identifier' => 'first-device',
+				'type'       => 'physical',
 				'name'       => 'First device',
 				'title'      => null,
 				'comment'    => null,
@@ -362,6 +367,7 @@ return [
 			'fb.bus.node.entity.updated.device'               => [
 				'id'         => '69786d15-fd0c-4d9f-9378-33287c2009fa',
 				'identifier' => 'first-device',
+				'type'       => 'physical',
 				'name'       => 'First device',
 				'title'      => null,
 				'comment'    => null,

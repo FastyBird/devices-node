@@ -180,10 +180,10 @@ class PropertiesManager extends Models\States\PropertiesManager implements IProp
 	protected function getCreateFields(): array
 	{
 		return [
-			0           => 'id',
-			'value'     => null,
-			'expected'  => null,
-			'pending'   => false,
+			0          => 'id',
+			'value'    => null,
+			'expected' => null,
+			'pending'  => false,
 		];
 	}
 
