@@ -17,6 +17,7 @@ namespace FastyBird\DevicesNode\Entities\Devices;
 
 use FastyBird\DevicesNode\Entities;
 use FastyBird\DevicesNode\Types;
+use FastyBird\NodeAuth\Entities as NodeAuthEntities;
 use FastyBird\NodeDatabase\Entities as NodeDatabaseEntities;
 use IPub\DoctrineTimestampable;
 
@@ -30,6 +31,7 @@ use IPub\DoctrineTimestampable;
  */
 interface IDevice extends NodeDatabaseEntities\IEntity,
 	NodeDatabaseEntities\IEntityParams,
+	NodeAuthEntities\IEntityOwner,
 	DoctrineTimestampable\Entities\IEntityCreated, DoctrineTimestampable\Entities\IEntityUpdated
 {
 

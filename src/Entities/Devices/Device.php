@@ -21,6 +21,7 @@ use Doctrine\ORM\Mapping as ORM;
 use FastyBird\DevicesNode\Entities;
 use FastyBird\DevicesNode\Exceptions;
 use FastyBird\DevicesNode\Types;
+use FastyBird\NodeAuth\Entities as NodeAuthEntities;
 use FastyBird\NodeDatabase\Entities as NodeDatabaseEntities;
 use IPub\DoctrineCrud\Mapping\Annotation as IPubDoctrine;
 use IPub\DoctrineTimestampable;
@@ -59,6 +60,7 @@ abstract class Device implements IDevice
 
 	use NodeDatabaseEntities\TEntity;
 	use NodeDatabaseEntities\TEntityParams;
+	use NodeAuthEntities\TEntityOwner;
 	use DoctrineTimestampable\Entities\TEntityCreated;
 	use DoctrineTimestampable\Entities\TEntityUpdated;
 
