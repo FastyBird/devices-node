@@ -144,70 +144,48 @@ class DevicesV1Controller extends BaseV1Controller
 				$this->getOrmConnection()->commit();
 
 			} catch (NodeJsonApiExceptions\IJsonApiException $ex) {
-				// Revert all changes when error occur
-				if ($this->getOrmConnection()->isTransactionActive()) {
-					$this->getOrmConnection()->rollBack();
-				}
-
 				throw $ex;
 
 			} catch (DoctrineCrudExceptions\MissingRequiredFieldException $ex) {
-				// Revert all changes when error occur
-				if ($this->getOrmConnection()->isTransactionActive()) {
-					$this->getOrmConnection()->rollBack();
-				}
-
-				$pointer = 'data/attributes/' . $ex->getField();
-
 				throw new NodeJsonApiExceptions\JsonApiErrorException(
 					StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-					$this->translator->translate('//node.base.messages.missingRequired.heading'),
-					$this->translator->translate('//node.base.messages.missingRequired.message'),
+					$this->translator->translate('//node.base.messages.missingAttribute.heading'),
+					$this->translator->translate('//node.base.messages.missingAttribute.message'),
 					[
-						'pointer' => $pointer,
+						'pointer' => 'data/attributes/' . $ex->getField(),
 					]
 				);
 
 			} catch (DoctrineCrudExceptions\EntityCreationException $ex) {
-				// Revert all changes when error occur
-				if ($this->getOrmConnection()->isTransactionActive()) {
-					$this->getOrmConnection()->rollBack();
-				}
-
 				throw new NodeJsonApiExceptions\JsonApiErrorException(
 					StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-					$this->translator->translate('//node.base.messages.missingRequired.heading'),
-					$this->translator->translate('//node.base.messages.missingRequired.message'),
+					$this->translator->translate('//node.base.messages.missingAttribute.heading'),
+					$this->translator->translate('//node.base.messages.missingAttribute.message'),
 					[
 						'pointer' => 'data/attributes/' . $ex->getField(),
 					]
 				);
 
 			} catch (Doctrine\DBAL\Exception\UniqueConstraintViolationException $ex) {
-				// Revert all changes when error occur
-				if ($this->getOrmConnection()->isTransactionActive()) {
-					$this->getOrmConnection()->rollBack();
-				}
-
-				if (preg_match("%'PRIMARY'%", $ex->getMessage(), $match) !== false) {
+				if (preg_match("%PRIMARY'%", $ex->getMessage(), $match) === 1) {
 					throw new NodeJsonApiExceptions\JsonApiErrorException(
 						StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-						$this->translator->translate('//node.base.messages.uniqueIdConstraint.heading'),
-						$this->translator->translate('//node.base.messages.uniqueIdConstraint.message'),
+						$this->translator->translate('//node.base.messages.uniqueIdentifier.heading'),
+						$this->translator->translate('//node.base.messages.uniqueIdentifier.message'),
 						[
 							'pointer' => '/data/id',
 						]
 					);
 
-				} elseif (preg_match("%key '(?P<key>.+)_unique'%", $ex->getMessage(), $match) !== false) {
+				} elseif (preg_match("%key '(?P<key>.+)_unique'%", $ex->getMessage(), $match) === 1) {
 					$columnParts = explode('.', $match['key']);
 					$columnKey = end($columnParts);
 
 					if (is_string($columnKey) && Utils\Strings::startsWith($columnKey, 'device_')) {
 						throw new NodeJsonApiExceptions\JsonApiErrorException(
 							StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-							$this->translator->translate('//node.base.messages.uniqueAttributeConstraint.heading'),
-							$this->translator->translate('//node.base.messages.uniqueAttributeConstraint.message'),
+							$this->translator->translate('//node.base.messages.uniqueAttribute.heading'),
+							$this->translator->translate('//node.base.messages.uniqueAttribute.message'),
 							[
 								'pointer' => '/data/attributes/' . Utils\Strings::substring($columnKey, 7),
 							]
@@ -217,16 +195,11 @@ class DevicesV1Controller extends BaseV1Controller
 
 				throw new NodeJsonApiExceptions\JsonApiErrorException(
 					StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-					$this->translator->translate('//node.base.messages.uniqueAttributeConstraint.heading'),
-					$this->translator->translate('//node.base.messages.uniqueAttributeConstraint.message')
+					$this->translator->translate('//node.base.messages.uniqueAttribute.heading'),
+					$this->translator->translate('//node.base.messages.uniqueAttribute.message')
 				);
 
 			} catch (Throwable $ex) {
-				// Revert all changes when error occur
-				if ($this->getOrmConnection()->isTransactionActive()) {
-					$this->getOrmConnection()->rollBack();
-				}
-
 				// Log catched exception
 				$this->logger->error('[CONTROLLER] ' . $ex->getMessage(), [
 					'exception' => [
@@ -237,9 +210,15 @@ class DevicesV1Controller extends BaseV1Controller
 
 				throw new NodeJsonApiExceptions\JsonApiErrorException(
 					StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-					$this->translator->translate('messages.notCreated.heading'),
-					$this->translator->translate('messages.notCreated.message')
+					$this->translator->translate('//node.base.messages.notCreated.heading'),
+					$this->translator->translate('//node.base.messages.notCreated.message')
 				);
+
+			} finally {
+				// Revert all changes when error occur
+				if ($this->getOrmConnection()->isTransactionActive()) {
+					$this->getOrmConnection()->rollBack();
+				}
 			}
 
 			/** @var NodeWebServerHttp\Response $response */
@@ -252,8 +231,8 @@ class DevicesV1Controller extends BaseV1Controller
 
 		throw new NodeJsonApiExceptions\JsonApiErrorException(
 			StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-			$this->translator->translate('messages.invalidType.heading'),
-			$this->translator->translate('messages.invalidType.message'),
+			$this->translator->translate('//node.base.messages.invalidType.heading'),
+			$this->translator->translate('//node.base.messages.invalidType.message'),
 			[
 				'pointer' => '/data/type',
 			]
@@ -295,8 +274,8 @@ class DevicesV1Controller extends BaseV1Controller
 			} else {
 				throw new NodeJsonApiExceptions\JsonApiErrorException(
 					StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-					$this->translator->translate('messages.invalidType.heading'),
-					$this->translator->translate('messages.invalidType.message'),
+					$this->translator->translate('//node.base.messages.invalidType.heading'),
+					$this->translator->translate('//node.base.messages.invalidType.message'),
 					[
 						'pointer' => '/data/type',
 					]
@@ -309,19 +288,9 @@ class DevicesV1Controller extends BaseV1Controller
 			$this->getOrmConnection()->commit();
 
 		} catch (NodeJsonApiExceptions\IJsonApiException $ex) {
-			// Revert all changes when error occur
-			if ($this->getOrmConnection()->isTransactionActive()) {
-				$this->getOrmConnection()->rollBack();
-			}
-
 			throw $ex;
 
 		} catch (Doctrine\DBAL\Exception\UniqueConstraintViolationException $ex) {
-			// Revert all changes when error occur
-			if ($this->getOrmConnection()->isTransactionActive()) {
-				$this->getOrmConnection()->rollBack();
-			}
-
 			if (preg_match("%key '(?P<key>.+)_unique'%", $ex->getMessage(), $match) !== false) {
 				$columnParts = explode('.', $match['key']);
 				$columnKey = end($columnParts);
@@ -329,8 +298,8 @@ class DevicesV1Controller extends BaseV1Controller
 				if (is_string($columnKey) && Utils\Strings::startsWith($columnKey, 'device_')) {
 					throw new NodeJsonApiExceptions\JsonApiErrorException(
 						StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-						$this->translator->translate('//node.base.messages.uniqueAttributeConstraint.heading'),
-						$this->translator->translate('//node.base.messages.uniqueAttributeConstraint.message'),
+						$this->translator->translate('//node.base.messages.uniqueAttribute.heading'),
+						$this->translator->translate('//node.base.messages.uniqueAttribute.message'),
 						[
 							'pointer' => '/data/attributes/' . Utils\Strings::substring($columnKey, 7),
 						]
@@ -340,16 +309,11 @@ class DevicesV1Controller extends BaseV1Controller
 
 			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-				$this->translator->translate('//node.base.messages.uniqueAttributeConstraint.heading'),
-				$this->translator->translate('//node.base.messages.uniqueAttributeConstraint.message')
+				$this->translator->translate('//node.base.messages.uniqueAttribute.heading'),
+				$this->translator->translate('//node.base.messages.uniqueAttribute.message')
 			);
 
 		} catch (Throwable $ex) {
-			// Revert all changes when error occur
-			if ($this->getOrmConnection()->isTransactionActive()) {
-				$this->getOrmConnection()->rollBack();
-			}
-
 			// Log catched exception
 			$this->logger->error('[CONTROLLER] ' . $ex->getMessage(), [
 				'exception' => [
@@ -360,9 +324,15 @@ class DevicesV1Controller extends BaseV1Controller
 
 			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-				$this->translator->translate('messages.notUpdated.heading'),
-				$this->translator->translate('messages.notUpdated.message')
+				$this->translator->translate('//node.base.messages.notUpdated.heading'),
+				$this->translator->translate('//node.base.messages.notUpdated.message')
 			);
+
+		} finally {
+			// Revert all changes when error occur
+			if ($this->getOrmConnection()->isTransactionActive()) {
+				$this->getOrmConnection()->rollBack();
+			}
 		}
 
 		return $response
@@ -411,16 +381,17 @@ class DevicesV1Controller extends BaseV1Controller
 				],
 			]);
 
+			throw new NodeJsonApiExceptions\JsonApiErrorException(
+				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
+				$this->translator->translate('//node.base.messages.notDeleted.heading'),
+				$this->translator->translate('//node.base.messages.notDeleted.message')
+			);
+
+		} finally {
 			// Revert all changes when error occur
 			if ($this->getOrmConnection()->isTransactionActive()) {
 				$this->getOrmConnection()->rollBack();
 			}
-
-			throw new NodeJsonApiExceptions\JsonApiErrorException(
-				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-				$this->translator->translate('messages.notDeleted.heading'),
-				$this->translator->translate('messages.notDeleted.message')
-			);
 		}
 
 		/** @var NodeWebServerHttp\Response $response */

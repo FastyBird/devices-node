@@ -1,50 +1,50 @@
 {
-  "data": {
-    "attributes": {
-      "comment": null,
-      "default": "0",
-      "name": "pulse_mode",
-      "title": null,
-      "values": [
+  "data" : {
+    "attributes" : {
+      "comment" : null,
+      "default" : "0",
+      "name" : "pulse_mode",
+      "title" : null,
+      "values" : [
         {
-          "name": "disabled",
-          "value": "0"
+          "name" : "disabled",
+          "value" : "0"
         },
         {
-          "name": "normally_off",
-          "value": "1"
+          "name" : "normally_off",
+          "value" : "1"
         },
         {
-          "name": "normally_on",
-          "value": "2"
+          "name" : "normally_on",
+          "value" : "2"
         }
       ]
     },
-    "id": "008d911f-e6d4-4b17-aa28-939839581cde",
-    "links": {
-      "self": "/v1/devices/69786d15-fd0c-4d9f-9378-33287c2009fa/channels/17c59dfa-2edd-438e-8c49-faa4e38e5a5e/configuration/008d911f-e6d4-4b17-aa28-939839581cde"
+    "id" : "008d911f-e6d4-4b17-aa28-939839581cde",
+    "links" : {
+      "self" : "/v1/devices/69786d15-fd0c-4d9f-9378-33287c2009fa/channels/17c59dfa-2edd-438e-8c49-faa4e38e5a5e/configuration/008d911f-e6d4-4b17-aa28-939839581cde"
     },
-    "relationships": {
-      "channel": {
-        "data": {
-          "id": "17c59dfa-2edd-438e-8c49-faa4e38e5a5e",
-          "type": "devices-node/channel"
+    "relationships" : {
+      "channel" : {
+        "data" : {
+          "id" : "17c59dfa-2edd-438e-8c49-faa4e38e5a5e",
+          "type" : "devices-node/channel"
         },
-        "links": {
-          "related": "/v1/devices/69786d15-fd0c-4d9f-9378-33287c2009fa/channels/17c59dfa-2edd-438e-8c49-faa4e38e5a5e"
+        "links" : {
+          "related" : "/v1/devices/69786d15-fd0c-4d9f-9378-33287c2009fa/channels/17c59dfa-2edd-438e-8c49-faa4e38e5a5e"
         }
       }
     },
-    "type": "devices-node/channel-configuration-select"
+    "type" : "devices-node/channel-configuration-select"
   },
-  "jsonapi": {
-    "version": "1.1"
+  "jsonapi" : {
+    "version" : "1.1"
   },
-  "links": {
-    "self": "/v1/devices/69786d15-fd0c-4d9f-9378-33287c2009fa/channels/17c59dfa-2edd-438e-8c49-faa4e38e5a5e/configuration/008d911f-e6d4-4b17-aa28-939839581cde"
+  "links" : {
+    "self" : "/v1/devices/69786d15-fd0c-4d9f-9378-33287c2009fa/channels/17c59dfa-2edd-438e-8c49-faa4e38e5a5e/configuration/008d911f-e6d4-4b17-aa28-939839581cde"
   },
-  "meta": {
-    "author": "FastyBird dev team",
-    "copyright": "FastyBird s.r.o"
+  "meta" : {
+    "author" : "FastyBird dev team",
+    "copyright" : "FastyBird s.r.o"
   }
 }

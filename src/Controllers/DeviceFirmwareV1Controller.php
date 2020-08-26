@@ -67,9 +67,9 @@ final class DeviceFirmwareV1Controller extends BaseV1Controller
 
 		if (!$device instanceof Entities\Devices\IPhysicalDevice) {
 			throw new NodeJsonApiExceptions\JsonApiErrorException(
-				StatusCodeInterface::STATUS_BAD_REQUEST,
-				$this->translator->translate('//node.base.messages.invalidDeviceType.heading'),
-				$this->translator->translate('//node.base.messages.invalidDeviceType.message')
+				StatusCodeInterface::STATUS_NOT_FOUND,
+				$this->translator->translate('//node.base.messages.notFound.heading'),
+				$this->translator->translate('//node.base.messages.notFound.message')
 			);
 		}
 
@@ -94,9 +94,9 @@ final class DeviceFirmwareV1Controller extends BaseV1Controller
 
 		if (!$device instanceof Entities\Devices\IPhysicalDevice) {
 			throw new NodeJsonApiExceptions\JsonApiErrorException(
-				StatusCodeInterface::STATUS_BAD_REQUEST,
-				$this->translator->translate('//node.base.messages.invalidDeviceType.heading'),
-				$this->translator->translate('//node.base.messages.invalidDeviceType.message')
+				StatusCodeInterface::STATUS_NOT_FOUND,
+				$this->translator->translate('//node.base.messages.notFound.heading'),
+				$this->translator->translate('//node.base.messages.notFound.message')
 			);
 		}
 

@@ -86,9 +86,9 @@ final class ChannelConfigurationV1Controller extends BaseV1Controller
 
 		if (!$channel->hasControl(DevicesNode\Constants::CONTROL_CONFIG)) {
 			throw new NodeJsonApiExceptions\JsonApiErrorException(
-				StatusCodeInterface::STATUS_BAD_REQUEST,
-				$this->translator->translate('//node.base.messages.invalidChannelType.heading'),
-				$this->translator->translate('//node.base.messages.invalidChannelType.message')
+				StatusCodeInterface::STATUS_NOT_FOUND,
+				$this->translator->translate('//node.base.messages.notFound.heading'),
+				$this->translator->translate('//node.base.messages.notFound.message')
 			);
 		}
 
@@ -121,9 +121,9 @@ final class ChannelConfigurationV1Controller extends BaseV1Controller
 
 		if (!$channel->hasControl(DevicesNode\Constants::CONTROL_CONFIG)) {
 			throw new NodeJsonApiExceptions\JsonApiErrorException(
-				StatusCodeInterface::STATUS_BAD_REQUEST,
-				$this->translator->translate('//node.base.messages.invalidChannelType.heading'),
-				$this->translator->translate('//node.base.messages.invalidChannelType.message')
+				StatusCodeInterface::STATUS_NOT_FOUND,
+				$this->translator->translate('//node.base.messages.notFound.heading'),
+				$this->translator->translate('//node.base.messages.notFound.message')
 			);
 		}
 
@@ -143,8 +143,8 @@ final class ChannelConfigurationV1Controller extends BaseV1Controller
 
 		throw new NodeJsonApiExceptions\JsonApiErrorException(
 			StatusCodeInterface::STATUS_NOT_FOUND,
-			$this->translator->translate('messages.notFound.heading'),
-			$this->translator->translate('messages.notFound.message')
+			$this->translator->translate('//node.base.messages.notFound.heading'),
+			$this->translator->translate('//node.base.messages.notFound.message')
 		);
 	}
 
@@ -168,9 +168,9 @@ final class ChannelConfigurationV1Controller extends BaseV1Controller
 
 		if (!$channel->hasControl(DevicesNode\Constants::CONTROL_CONFIG)) {
 			throw new NodeJsonApiExceptions\JsonApiErrorException(
-				StatusCodeInterface::STATUS_BAD_REQUEST,
-				$this->translator->translate('//node.base.messages.invalidChannelType.heading'),
-				$this->translator->translate('//node.base.messages.invalidChannelType.message')
+				StatusCodeInterface::STATUS_NOT_FOUND,
+				$this->translator->translate('//node.base.messages.notFound.heading'),
+				$this->translator->translate('//node.base.messages.notFound.message')
 			);
 		}
 
@@ -194,8 +194,8 @@ final class ChannelConfigurationV1Controller extends BaseV1Controller
 			} else {
 				throw new NodeJsonApiExceptions\JsonApiErrorException(
 					StatusCodeInterface::STATUS_NOT_FOUND,
-					$this->translator->translate('messages.notFound.heading'),
-					$this->translator->translate('messages.notFound.message')
+					$this->translator->translate('//node.base.messages.notFound.heading'),
+					$this->translator->translate('//node.base.messages.notFound.message')
 				);
 			}
 		}

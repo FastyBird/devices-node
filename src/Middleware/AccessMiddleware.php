@@ -61,8 +61,8 @@ final class AccessMiddleware implements MiddlewareInterface
 		} catch (NodeAuthExceptions\UnauthorizedAccessException $ex) {
 			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_UNAUTHORIZED,
-				$this->translator->translate('//node.base.messages.notAuthorized.heading'),
-				$this->translator->translate('//node.base.messages.notAuthorized.message')
+				$this->translator->translate('//node.base.messages.unauthorized.heading'),
+				$this->translator->translate('//node.base.messages.unauthorized.message')
 			);
 
 		} catch (NodeAuthExceptions\ForbiddenAccessException $ex) {

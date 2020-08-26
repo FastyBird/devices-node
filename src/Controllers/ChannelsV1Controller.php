@@ -150,8 +150,8 @@ final class ChannelsV1Controller extends BaseV1Controller
 			} else {
 				throw new NodeJsonApiExceptions\JsonApiErrorException(
 					StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-					$this->translator->translate('messages.invalidType.heading'),
-					$this->translator->translate('messages.invalidType.message'),
+					$this->translator->translate('//node.base.messages.invalidType.heading'),
+					$this->translator->translate('//node.base.messages.invalidType.message'),
 					[
 						'pointer' => '/data/type',
 					]
@@ -164,19 +164,9 @@ final class ChannelsV1Controller extends BaseV1Controller
 			$this->getOrmConnection()->commit();
 
 		} catch (NodeJsonApiExceptions\IJsonApiException $ex) {
-			// Revert all changes when error occur
-			if ($this->getOrmConnection()->isTransactionActive()) {
-				$this->getOrmConnection()->rollBack();
-			}
-
 			throw $ex;
 
 		} catch (Throwable $ex) {
-			// Revert all changes when error occur
-			if ($this->getOrmConnection()->isTransactionActive()) {
-				$this->getOrmConnection()->rollBack();
-			}
-
 			// Log catched exception
 			$this->logger->error('[CONTROLLER] ' . $ex->getMessage(), [
 				'exception' => [
@@ -187,9 +177,15 @@ final class ChannelsV1Controller extends BaseV1Controller
 
 			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-				$this->translator->translate('messages.notUpdated.heading'),
-				$this->translator->translate('messages.notUpdated.message')
+				$this->translator->translate('//node.base.messages.notUpdated.heading'),
+				$this->translator->translate('//node.base.messages.notUpdated.message')
 			);
+
+		} finally {
+			// Revert all changes when error occur
+			if ($this->getOrmConnection()->isTransactionActive()) {
+				$this->getOrmConnection()->rollBack();
+			}
 		}
 
 		return $response

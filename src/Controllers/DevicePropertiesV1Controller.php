@@ -114,8 +114,8 @@ final class DevicePropertiesV1Controller extends BaseV1Controller
 
 		throw new NodeJsonApiExceptions\JsonApiErrorException(
 			StatusCodeInterface::STATUS_NOT_FOUND,
-			$this->translator->translate('messages.notFound.heading'),
-			$this->translator->translate('messages.notFound.message')
+			$this->translator->translate('//node.base.messages.notFound.heading'),
+			$this->translator->translate('//node.base.messages.notFound.message')
 		);
 	}
 
@@ -154,8 +154,8 @@ final class DevicePropertiesV1Controller extends BaseV1Controller
 			} else {
 				throw new NodeJsonApiExceptions\JsonApiErrorException(
 					StatusCodeInterface::STATUS_NOT_FOUND,
-					$this->translator->translate('messages.notFound.heading'),
-					$this->translator->translate('messages.notFound.message')
+					$this->translator->translate('//node.base.messages.notFound.heading'),
+					$this->translator->translate('//node.base.messages.notFound.message')
 				);
 			}
 		}

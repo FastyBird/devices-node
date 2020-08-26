@@ -1,11 +1,11 @@
 {
-  "data": {
-    "id": "6821f8e9-ae69-4d5c-9b7c-d2b213f1ae0a",
-    "type": "devices-node/channel",
-    "attributes": {
-      "name": "Channel one",
-      "title": "Updated title",
-      "comment": "With comment"
+  "data" : {
+    "id" : "6821f8e9-ae69-4d5c-9b7c-d2b213f1ae0a",
+    "type" : "devices-node/channel",
+    "attributes" : {
+      "name" : "Channel one",
+      "title" : "Updated title",
+      "comment" : "With comment"
     }
   }
 }

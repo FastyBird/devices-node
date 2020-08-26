@@ -48,16 +48,16 @@ trait TDeviceFinder
 			if ($device === null) {
 				throw new NodeJsonApiExceptions\JsonApiErrorException(
 					StatusCodeInterface::STATUS_NOT_FOUND,
-					$this->translator->translate('//node.base.messages.deviceNotFound.heading'),
-					$this->translator->translate('//node.base.messages.deviceNotFound.message')
+					$this->translator->translate('//node.base.messages.notFound.heading'),
+					$this->translator->translate('//node.base.messages.notFound.message')
 				);
 			}
 
 		} catch (Uuid\Exception\InvalidUuidStringException $ex) {
 			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_NOT_FOUND,
-				$this->translator->translate('//node.base.messages.deviceNotFound.heading'),
-				$this->translator->translate('//node.base.messages.deviceNotFound.message')
+				$this->translator->translate('//node.base.messages.notFound.heading'),
+				$this->translator->translate('//node.base.messages.notFound.message')
 			);
 		}
 

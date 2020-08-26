@@ -21,99 +21,54 @@ base:
 		notValidJsonApi:
 			heading	: "Not valid content"
 			message	: "Provided request content is not valid {JSON:API} content"
+		failed:
+			heading	: "Request failed"
+			message	: "Provided request failed and can't be finished"
+		forbidden:
+			heading	: "Not allowed"
+			message	: "You are not allowed to perform this action"
+		unauthorized:
+			heading	: "Not authorized"
+			message	: "You are not authorized to perform this action"
+		notFound:
+			heading	: "Not found"
+			message	: "Requested entity was not found"
+		notCreated:
+			heading	: "System error"
+			message	: "Something went wrong, entity could not be created"
+		notUpdated:
+			heading	: "System error"
+			message	: "Something went wrong, entity could not be updated"
+		notDeleted:
+			heading	: "System error"
+			message	: "Something went wrong, entity could not be deleted"
+		invalidIdentifier:
+			heading	: "Invalid identifier"
+			message	: "Provided entity identifier is not valid"
+		invalidType:
+			heading	: "Invalid type"
+			message	: "Provided entity type is not valid"
+		invalidAttribute:
+			heading	: "Invalid attribute"
+			message	: "Provided entity attribute is not valid"
+		invalidRelation:
+			heading	: "Invalid relation"
+			message	: "Provided relation is not valid"
 		unknownRelation:
 			heading	: "Relation not found"
 			message	: "Requested unknown relation"
 		relationNotFound:
 			heading	: "Relation not found"
 			message	: "Requested relation %relation% was not found"
-		missingRequired:
-			heading	: "Missing required attribute"
-			message	: "Provided request is missing required attribute or relation"
-		identifierInvalid:
-			heading	: "Entity identifier invalid"
-			message	: "Provided entity identifier is not valid"
-		invalidDeviceType:
-			heading	: "Invalid device type"
-			message	: "Data for given device id could not be loaded"
-		invalidChannelType:
-			heading	: "Invalid device channel type"
-			message	: "Data for given channel id could not be loaded"
-		deviceNotFound:
-			heading	: "Device not found"
-			message	: "Requested device was not found"
-		channelNotFound:
-			heading	: "Channel not found"
-			message	: "Requested channel was not found"
-		uniqueIdConstraint:
+		missingAttribute:
+			heading	: "Missing attribute"
+			message	: "Provided request is missing required attribute"
+		missingRelation:
+			heading	: "Missing required relation"
+			message	: "Provided request is missing required relation"
+		uniqueIdentifier:
 			heading	: "Identifier not unique"
 			message	: "Provided identifier is not unique"
-		uniqueAttributeConstraint:
+		uniqueAttribute:
 			heading	: "Attribute not unique"
 			message	: "Provided attribute is not unique"
-		notAuthorized:
-			heading	: "Not authorized"
-			message	: "You are not authorized to perform this action"
-		forbidden:
-			heading	: "Not allowed"
-			message	: "You are not allowed to perform this action"
-
-devices:
-	messages:
-		invalidType:
-			heading	: "Invalid type"
-			message	: "Provided device entity type is not valid"
-		notCreated:
-			heading	: "System error"
-			message	: "Something went wrong, device could not be created"
-		notUpdated:
-			heading	: "System error"
-			message	: "Something went wrong, device could not be updated"
-		notDeleted:
-			heading	: "System error"
-			message	: "Something went wrong, device could not be deleted"
-
-deviceConfiguration:
-	messages:
-		notFound:
-			heading	: "Not found"
-			message	: "Requested configuration could not be found"
-
-deviceProperties:
-	messages:
-		notFound:
-			heading	: "Not found"
-			message	: "Requested property could not be found"
-
-deviceCredentials:
-	messages:
-		invalidType:
-			heading	: "Invalid type"
-			message	: "Provided device credentials entity type is not valid"
-		notCreated:
-			heading	: "System error"
-			message	: "Something went wrong, device credentials could not be created"
-		notUpdated:
-			heading	: "System error"
-			message	: "Something went wrong, device credentials could not be updated"
-
-channels:
-	messages:
-		invalidType:
-			heading	: "Invalid type"
-			message	: "Provided channel entity type is not valid"
-		notUpdated:
-			heading	: "System error"
-			message	: "Something went wrong, channel could not be updated"
-
-channelConfiguration:
-	messages:
-		notFound:
-			heading	: "Not found"
-			message	: "Requested configuration could not be found"
-
-channelProperties:
-	messages:
-		notFound:
-			heading	: "Not found"
-			message	: "Requested property could not be found"

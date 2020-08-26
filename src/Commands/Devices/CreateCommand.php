@@ -99,20 +99,6 @@ class CreateCommand extends Console\Command\Command
 			$identifier = $io->ask($this->translator->translate('identifier.title'));
 		}
 
-		if ($input->hasOption('username') && $input->getOption('username') !== '') {
-			$username = $input->getOption('username');
-
-		} else {
-			$username = $io->ask($this->translator->translate('username.title'));
-		}
-
-		if ($input->hasOption('password') && $input->getOption('password') !== '') {
-			$password = $input->getOption('password');
-
-		} else {
-			$password = $io->ask($this->translator->translate('password.title'));
-		}
-
 		try {
 			$create = new Utils\ArrayHash();
 
@@ -121,10 +107,6 @@ class CreateCommand extends Console\Command\Command
 			}
 
 			$create->identifier = $identifier;
-
-			$create->credentials = new Utils\ArrayHash();
-			$create->credentials->username = $username;
-			$create->credentials->password = $password;
 
 			$device = $this->devicesManager->create($create);
 
