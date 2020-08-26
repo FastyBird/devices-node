@@ -253,25 +253,55 @@ services:
 	# Database managers
 	###################
 
-	- {factory: FastyBird\DevicesNode\Models\Devices\DevicesManager(@ipubDoctrineCrud.crud::create(FastyBird\DevicesNode\Entities\Devices\Device))}
+	-
+		factory: FastyBird\DevicesNode\Models\Devices\DevicesManager
+		arguments:
+			entityCrud: @ipubDoctrineCrud.crud::create(FastyBird\DevicesNode\Entities\Devices\Device)
 
-	- {factory: FastyBird\DevicesNode\Models\Devices\Controls\ControlsManager(@ipubDoctrineCrud.crud::create(FastyBird\DevicesNode\Entities\Devices\Controls\Control))}
+	-
+		factory: FastyBird\DevicesNode\Models\Devices\Controls\ControlsManager
+		arguments:
+			entityCrud: @ipubDoctrineCrud.crud::create(FastyBird\DevicesNode\Entities\Devices\Controls\Control)
 
-	- {factory: FastyBird\DevicesNode\Models\Devices\Properties\PropertiesManager(@ipubDoctrineCrud.crud::create(FastyBird\DevicesNode\Entities\Devices\Properties\Property))}
+	-
+		factory: FastyBird\DevicesNode\Models\Devices\Properties\PropertiesManager
+		arguments:
+			entityCrud: @ipubDoctrineCrud.crud::create(FastyBird\DevicesNode\Entities\Devices\Properties\Property)
 
-	- {factory: FastyBird\DevicesNode\Models\Devices\Configuration\RowsManager(@ipubDoctrineCrud.crud::create(FastyBird\DevicesNode\Entities\Devices\Configuration\Row))}
+	-
+		factory: FastyBird\DevicesNode\Models\Devices\Configuration\RowsManager
+		arguments:
+			entityCrud: @ipubDoctrineCrud.crud::create(FastyBird\DevicesNode\Entities\Devices\Configuration\Row)
 
-	- {factory: FastyBird\DevicesNode\Models\Devices\PhysicalDevice\HardwareManager(@ipubDoctrineCrud.crud::create(FastyBird\DevicesNode\Entities\Devices\PhysicalDevice\Hardware))}
+	-
+		factory: FastyBird\DevicesNode\Models\Devices\PhysicalDevice\HardwareManager
+		arguments:
+			entityCrud: @ipubDoctrineCrud.crud::create(FastyBird\DevicesNode\Entities\Devices\PhysicalDevice\Hardware)
 
-	- {factory: FastyBird\DevicesNode\Models\Devices\PhysicalDevice\FirmwareManager(@ipubDoctrineCrud.crud::create(FastyBird\DevicesNode\Entities\Devices\PhysicalDevice\Firmware))}
+	-
+		factory: FastyBird\DevicesNode\Models\Devices\PhysicalDevice\FirmwareManager
+		arguments:
+			entityCrud: @ipubDoctrineCrud.crud::create(FastyBird\DevicesNode\Entities\Devices\PhysicalDevice\Firmware)
 
-	- {factory: FastyBird\DevicesNode\Models\Channels\ChannelsManager(@ipubDoctrineCrud.crud::create(FastyBird\DevicesNode\Entities\Channels\Channel))}
+	-
+		factory: FastyBird\DevicesNode\Models\Channels\ChannelsManager
+		arguments:
+			entityCrud: @ipubDoctrineCrud.crud::create(FastyBird\DevicesNode\Entities\Channels\Channel)
 
-	- {factory: FastyBird\DevicesNode\Models\Channels\Controls\ControlsManager(@ipubDoctrineCrud.crud::create(FastyBird\DevicesNode\Entities\Channels\Controls\Control))}
+	-
+		factory: FastyBird\DevicesNode\Models\Channels\Controls\ControlsManager
+		arguments:
+			entityCrud: @ipubDoctrineCrud.crud::create(FastyBird\DevicesNode\Entities\Channels\Controls\Control)
 
-	- {factory: FastyBird\DevicesNode\Models\Channels\Properties\PropertiesManager(@ipubDoctrineCrud.crud::create(FastyBird\DevicesNode\Entities\Channels\Properties\Property))}
+	-
+		factory: FastyBird\DevicesNode\Models\Channels\Properties\PropertiesManager
+		arguments:
+			entityCrud: @ipubDoctrineCrud.crud::create(FastyBird\DevicesNode\Entities\Channels\Properties\Property)
 
-	- {factory: FastyBird\DevicesNode\Models\Channels\Configuration\RowsManager(@ipubDoctrineCrud.crud::create(FastyBird\DevicesNode\Entities\Channels\Configuration\Row))}
+	-
+		factory: FastyBird\DevicesNode\Models\Channels\Configuration\RowsManager
+		arguments:
+			entityCrud: @ipubDoctrineCrud.crud::create(FastyBird\DevicesNode\Entities\Channels\Configuration\Row)
 
 	-
 		factory: FastyBird\DevicesNode\Models\States\Devices\PropertiesManager
