@@ -8,7 +8,7 @@
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  * @package        FastyBird:DevicesNode!
  * @subpackage     Middleware
- * @since          0.1.0
+ * @since          0.1.w0
  *
  * @date           24.07.20
  */

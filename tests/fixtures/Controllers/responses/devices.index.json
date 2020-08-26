@@ -14,6 +14,7 @@
       "type": "devices-node/physical-device",
       "id": "69786d15-fd0c-4d9f-9378-33287c2009fa",
       "attributes": {
+        "identifier": "first-device",
         "name": "First device",
         "title": null,
         "comment": null,
@@ -22,8 +23,7 @@
         "control": [
           "configure"
         ],
-        "params": [],
-        "identifier": "first-device"
+        "owner": "455354e8-96bd-4c29-84e7-9f10e1d4db4b"
       },
       "relationships": {
         "hardware": {
@@ -163,14 +163,14 @@
       "type": "devices-node/physical-device",
       "id": "a1036ff8-6ee8-4405-aaed-58bae0814596",
       "attributes": {
+        "identifier": "child-device",
         "name": "Child device",
         "title": null,
         "comment": "This is child",
         "state": "init",
         "is_enabled": true,
         "control": [],
-        "params": [],
-        "identifier": "child-device"
+        "owner": "455354e8-96bd-4c29-84e7-9f10e1d4db4b"
       },
       "relationships": {
         "hardware": {
@@ -254,14 +254,14 @@
       "type": "devices-node/physical-device",
       "id": "bf4cd870-2aac-45f0-a85e-e1cefd2d6d9a",
       "attributes": {
+        "identifier": "second-device",
         "name": "Second device",
         "title": "Custom title",
         "comment": null,
         "state": "init",
         "is_enabled": true,
         "control": [],
-        "params": [],
-        "identifier": "second-device"
+        "owner": "455354e8-96bd-4c29-84e7-9f10e1d4db4b"
       },
       "relationships": {
         "hardware": {
@@ -340,14 +340,14 @@
       "type": "devices-node/physical-device",
       "id": "e36a2788-1ef8-4cdf-ab09-4735f191a509",
       "attributes": {
+        "identifier": "third-device",
         "name": "Third device",
         "title": null,
         "comment": "Custom comment",
         "state": "unknown",
         "is_enabled": true,
         "control": [],
-        "params": [],
-        "identifier": "third-device"
+        "owner": "455354e8-96bd-4c29-84e7-9f10e1d4db4b"
       },
       "relationships": {
         "hardware": {

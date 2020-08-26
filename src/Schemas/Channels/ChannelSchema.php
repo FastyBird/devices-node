@@ -89,8 +89,6 @@ final class ChannelSchema extends NodeJsonApiSchemas\JsonApiSchema
 			'channel' => $channel->getChannel(),
 
 			'control' => $this->formatControls($channel->getControls()),
-
-			'params' => (array) $channel->getParams(),
 		];
 	}
 

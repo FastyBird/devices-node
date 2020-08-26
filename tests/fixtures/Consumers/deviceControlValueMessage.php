@@ -39,6 +39,7 @@ return [
 				'step'    => 1.0,
 				'type'    => 'number',
 				'device'  => 'first-device',
+				'owner'   => '455354e8-96bd-4c29-84e7-9f10e1d4db4b',
 				'parent'  => null,
 			],
 		],

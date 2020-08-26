@@ -507,6 +507,7 @@ class Channel implements IChannel
 			'params' => (array) $this->getParams(),
 
 			'device' => $this->getDevice()->getIdentifier(),
+			'owner'  => $this->getDevice()->getOwnerId(),
 			'parent' => $this->getDevice()->getParent() !== null ? $this->getDevice()->getParent()->getIdentifier() : null,
 		];
 	}

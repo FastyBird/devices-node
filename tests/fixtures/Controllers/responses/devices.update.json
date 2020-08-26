@@ -13,6 +13,7 @@
     "type": "devices-node/physical-device",
     "id": "69786d15-fd0c-4d9f-9378-33287c2009fa",
     "attributes": {
+      "identifier": "updated-device",
       "name": "Updated device",
       "title": "With title",
       "comment": null,
@@ -21,8 +22,7 @@
       "control": [
         "configure"
       ],
-      "params": [],
-      "identifier": "updated-device"
+      "owner": "455354e8-96bd-4c29-84e7-9f10e1d4db4b"
     },
     "relationships": {
       "hardware": {

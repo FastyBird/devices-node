@@ -1,8 +1,8 @@
-INSERT IGNORE INTO `fb_devices` (`device_id`, `parent_id`, `device_identifier`, `device_name`, `device_title`, `device_comment`, `device_state`, `device_enabled`, `params`, `created_at`, `updated_at`, `device_type`) VALUES
-(_binary 0x69786D15FD0C4D9F937833287C2009FA, NULL, 'first-device', 'First device', NULL, NULL, 'init', 1, '[]', '2020-03-19 14:03:48', '2020-03-22 20:12:07', 'physical'),
-(_binary 0xBF4CD8702AAC45F0A85EE1CEFD2D6D9A, NULL, 'second-device', 'Second device', 'Custom title', NULL, 'init', 1, '[]', '2020-03-20 21:54:32', '2020-03-20 21:54:32', 'physical'),
-(_binary 0xE36A27881EF84CDFAB094735F191A509, NULL, 'third-device', 'Third device', NULL, 'Custom comment', 'unknown', 1, '[]', '2020-03-20 21:56:41', '2020-03-20 21:56:41', 'physical'),
-(_binary 0xA1036FF86EE84405AAED58BAE0814596, _binary 0x69786D15FD0C4D9F937833287C2009FA, 'child-device', 'Child device', NULL, 'This is child', 'init', 1, '[]', '2020-03-20 21:56:41', '2020-03-20 21:56:41', 'physical');
+INSERT IGNORE INTO `fb_devices` (`device_id`, `parent_id`, `device_identifier`, `device_name`, `device_title`, `device_comment`, `device_state`, `device_enabled`, `params`, `created_at`, `updated_at`, `device_type`, `owner`) VALUES
+(_binary 0x69786D15FD0C4D9F937833287C2009FA, NULL, 'first-device', 'First device', NULL, NULL, 'init', 1, '[]', '2020-03-19 14:03:48', '2020-03-22 20:12:07', 'physical', '455354e8-96bd-4c29-84e7-9f10e1d4db4b'),
+(_binary 0xBF4CD8702AAC45F0A85EE1CEFD2D6D9A, NULL, 'second-device', 'Second device', 'Custom title', NULL, 'init', 1, '[]', '2020-03-20 21:54:32', '2020-03-20 21:54:32', 'physical', '455354e8-96bd-4c29-84e7-9f10e1d4db4b'),
+(_binary 0xE36A27881EF84CDFAB094735F191A509, NULL, 'third-device', 'Third device', NULL, 'Custom comment', 'unknown', 1, '[]', '2020-03-20 21:56:41', '2020-03-20 21:56:41', 'physical', '455354e8-96bd-4c29-84e7-9f10e1d4db4b'),
+(_binary 0xA1036FF86EE84405AAED58BAE0814596, _binary 0x69786D15FD0C4D9F937833287C2009FA, 'child-device', 'Child device', NULL, 'This is child', 'init', 1, '[]', '2020-03-20 21:56:41', '2020-03-20 21:56:41', 'physical', null);
 
 INSERT IGNORE INTO `fb_physicals_devices` (`device_id`) VALUES
 (_binary 0x69786D15FD0C4D9F937833287C2009FA),

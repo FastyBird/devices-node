@@ -43,6 +43,7 @@ return [
 				],
 				'type'    => DevicesNode\Constants::DATA_TYPE_SELECT,
 				'device'  => 'first-device',
+				'owner'   => '455354e8-96bd-4c29-84e7-9f10e1d4db4b',
 				'parent'  => null,
 				'channel' => 'channel-one',
 			],

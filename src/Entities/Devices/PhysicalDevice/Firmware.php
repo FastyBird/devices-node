@@ -174,6 +174,7 @@ class Firmware implements IFirmware
 			'manufacturer' => $this->getManufacturer()->getValue(),
 			'version'      => $this->getVersion(),
 			'device'       => $this->getDevice()->getIdentifier(),
+			'owner'        => $this->getDevice()->getOwnerId(),
 			'parent'       => $this->getDevice()->getParent() !== null ? $this->getDevice()->getParent()->getIdentifier() : null,
 		];
 	}

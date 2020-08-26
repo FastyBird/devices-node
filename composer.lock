@@ -1986,12 +1986,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/FastyBird/node-json-api.git",
-                "reference": "a025661e0931daf5b0b05bef478d545061cae2fe"
+                "reference": "a581f8edb1176a3bc403315ea4112e9c96a1e5fe"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FastyBird/node-json-api/zipball/a025661e0931daf5b0b05bef478d545061cae2fe",
-                "reference": "a025661e0931daf5b0b05bef478d545061cae2fe",
+                "url": "https://api.github.com/repos/FastyBird/node-json-api/zipball/a581f8edb1176a3bc403315ea4112e9c96a1e5fe",
+                "reference": "a581f8edb1176a3bc403315ea4112e9c96a1e5fe",
                 "shasum": ""
             },
             "require": {
@@ -2053,7 +2053,7 @@
                 "library",
                 "libs"
             ],
-            "time": "2020-07-20T21:47:45+00:00"
+            "time": "2020-08-22T09:12:20+00:00"
         },
         {
             "name": "fastybird/node-metadata",
@@ -2061,12 +2061,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/FastyBird/node-metadata.git",
-                "reference": "c7ca6f9bfed25f8840dcc1634e0423cb1d9676ef"
+                "reference": "5e5d3079b437bfd51917e663ef18ac3f958b25da"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FastyBird/node-metadata/zipball/c7ca6f9bfed25f8840dcc1634e0423cb1d9676ef",
-                "reference": "c7ca6f9bfed25f8840dcc1634e0423cb1d9676ef",
+                "url": "https://api.github.com/repos/FastyBird/node-metadata/zipball/5e5d3079b437bfd51917e663ef18ac3f958b25da",
+                "reference": "5e5d3079b437bfd51917e663ef18ac3f958b25da",
                 "shasum": ""
             },
             "require": {
@@ -2119,7 +2119,7 @@
                 "metadata",
                 "node"
             ],
-            "time": "2020-08-16T10:44:16+00:00"
+            "time": "2020-08-24T19:15:08+00:00"
         },
         {
             "name": "fastybird/node-web-server",
@@ -3067,16 +3067,16 @@
         },
         {
             "name": "lcobucci/jwt",
-            "version": "3.3.2",
+            "version": "3.3.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/lcobucci/jwt.git",
-                "reference": "56f10808089e38623345e28af2f2d5e4eb579455"
+                "reference": "c1123697f6a2ec29162b82f170dd4a491f524773"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lcobucci/jwt/zipball/56f10808089e38623345e28af2f2d5e4eb579455",
-                "reference": "56f10808089e38623345e28af2f2d5e4eb579455",
+                "url": "https://api.github.com/repos/lcobucci/jwt/zipball/c1123697f6a2ec29162b82f170dd4a491f524773",
+                "reference": "c1123697f6a2ec29162b82f170dd4a491f524773",
                 "shasum": ""
             },
             "require": {
@@ -3128,7 +3128,7 @@
                     "type": "patreon"
                 }
             ],
-            "time": "2020-05-22T08:21:12+00:00"
+            "time": "2020-08-20T13:22:28+00:00"
         },
         {
             "name": "mangoweb/clock",
@@ -4821,20 +4821,20 @@
         },
         {
             "name": "php-http/message",
-            "version": "1.8.0",
+            "version": "1.9.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-http/message.git",
-                "reference": "ce8f43ac1e294b54aabf5808515c3554a19c1e1c"
+                "reference": "2c7256e3c1aba0bfca70f099810f1c7712e00945"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-http/message/zipball/ce8f43ac1e294b54aabf5808515c3554a19c1e1c",
-                "reference": "ce8f43ac1e294b54aabf5808515c3554a19c1e1c",
+                "url": "https://api.github.com/repos/php-http/message/zipball/2c7256e3c1aba0bfca70f099810f1c7712e00945",
+                "reference": "2c7256e3c1aba0bfca70f099810f1c7712e00945",
                 "shasum": ""
             },
             "require": {
-                "clue/stream-filter": "^1.4",
+                "clue/stream-filter": "^1.4.1",
                 "php": "^7.1",
                 "php-http/message-factory": "^1.0.2",
                 "psr/http-message": "^1.0"
@@ -4845,6 +4845,7 @@
             "require-dev": {
                 "akeneo/phpspec-skip-example-extension": "^1.0",
                 "coduo/phpspec-data-provider-extension": "^1.0",
+                "ergebnis/composer-normalize": "^2.1",
                 "ext-zlib": "*",
                 "guzzlehttp/psr7": "^1.0",
                 "henrikbjorn/phpspec-code-coverage": "^1.0",
@@ -4889,7 +4890,7 @@
                 "message",
                 "psr-7"
             ],
-            "time": "2019-08-05T06:55:08+00:00"
+            "time": "2020-08-17T06:33:14+00:00"
         },
         {
             "name": "php-http/message-factory",
@@ -8701,16 +8702,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "0.12.37",
+            "version": "0.12.39",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "5e16d83e6eb2dd784fbdaeaece5e2bca72e4f68a"
+                "reference": "f970cab80f0a681019dc669bf8c72905845dadaa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/5e16d83e6eb2dd784fbdaeaece5e2bca72e4f68a",
-                "reference": "5e16d83e6eb2dd784fbdaeaece5e2bca72e4f68a",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/f970cab80f0a681019dc669bf8c72905845dadaa",
+                "reference": "f970cab80f0a681019dc669bf8c72905845dadaa",
                 "shasum": ""
             },
             "require": {
@@ -8753,7 +8754,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-08-09T14:32:41+00:00"
+            "time": "2020-08-24T21:34:53+00:00"
         },
         {
             "name": "phpstan/phpstan-deprecation-rules",

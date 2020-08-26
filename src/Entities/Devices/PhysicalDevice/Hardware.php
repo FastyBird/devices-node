@@ -215,6 +215,7 @@ class Hardware implements IHardware
 			'model'        => $this->getModel()->getValue(),
 			'mac_address'  => $this->getMacAddress(),
 			'device'       => $this->getDevice()->getIdentifier(),
+			'owner'        => $this->getDevice()->getOwnerId(),
 			'parent'       => $this->getDevice()->getParent() !== null ? $this->getDevice()->getParent()->getIdentifier() : null,
 		];
 	}

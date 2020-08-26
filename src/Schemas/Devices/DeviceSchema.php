@@ -73,7 +73,7 @@ abstract class DeviceSchema extends NodeJsonApiSchemas\JsonApiSchema
 	 * @param Entities\Devices\IDevice $device
 	 * @param JsonApi\Contracts\Schema\ContextInterface $context
 	 *
-	 * @return iterable<string, string|bool|string[]|null>
+	 * @return iterable<string, string>
 	 *
 	 * @phpstan-param T $device
 	 *
@@ -82,16 +82,17 @@ abstract class DeviceSchema extends NodeJsonApiSchemas\JsonApiSchema
 	public function getAttributes($device, JsonApi\Contracts\Schema\ContextInterface $context): iterable
 	{
 		return [
-			'name'    => $device->getName(),
-			'title'   => $device->getTitle(),
-			'comment' => $device->getComment(),
+			'identifier' => $device->getIdentifier(),
+			'name'       => $device->getName(),
+			'title'      => $device->getTitle(),
+			'comment'    => $device->getComment(),
 
 			'state'      => $device->getState()->getValue(),
 			'is_enabled' => $device->isEnabled(),
 
 			'control' => $this->formatControls($device->getControls()),
 
-			'params' => (array) $device->getParams(),
+			'owner' => $device->getOwnerId(),
 		];
 	}
 

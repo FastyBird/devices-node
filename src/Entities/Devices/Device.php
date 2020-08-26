@@ -672,6 +672,18 @@ abstract class Device implements IDevice
 	/**
 	 * {@inheritDoc}
 	 */
+	public function getOwnerId()
+	{
+		if ($this->parent !== null) {
+			return $this->parent->getOwnerId();
+		}
+
+		return $this->owner;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
 	public function toArray(): array
 	{
 		return [
@@ -689,6 +701,7 @@ abstract class Device implements IDevice
 			'params' => (array) $this->getParams(),
 
 			'device' => $this->getIdentifier(),
+			'owner'  => $this->getOwnerId(),
 		];
 	}
 

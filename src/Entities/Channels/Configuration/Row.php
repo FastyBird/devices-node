@@ -95,6 +95,7 @@ abstract class Row extends Entities\Row implements IRow
 	{
 		return array_merge(parent::toArray(), [
 			'device'  => $this->getChannel()->getDevice()->getIdentifier(),
+			'owner'   => $this->getChannel()->getDevice()->getOwnerId(),
 			'parent'  => $this->getChannel()->getDevice()->getParent() !== null ? $this->getChannel()->getDevice()->getParent()->getIdentifier() : null,
 			'channel' => $this->getChannel()->getChannel(),
 		]);

@@ -86,6 +86,7 @@ class Property extends Entities\Property implements IProperty
 	{
 		return array_merge(parent::toArray(), [
 			'device'  => $this->getChannel()->getDevice()->getIdentifier(),
+			'owner'   => $this->getChannel()->getDevice()->getOwnerId(),
 			'parent'  => $this->getChannel()->getDevice()->getParent() !== null ? $this->getChannel()->getDevice()->getParent()->getIdentifier() : null,
 			'channel' => $this->getChannel()->getChannel(),
 		]);
