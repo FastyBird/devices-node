@@ -108,9 +108,7 @@ final class DeviceHardwareV1Controller extends BaseV1Controller
 				->withEntity(NodeWebServerHttp\ScalarEntity::from($device));
 		}
 
-		$this->throwUnknownRelation($relationEntity);
-
-		return $response;
+		return parent::readRelationship($request, $response);
 	}
 
 }

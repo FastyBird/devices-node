@@ -175,9 +175,7 @@ final class ChannelPropertiesV1Controller extends BaseV1Controller
 			}
 		}
 
-		$this->throwUnknownRelation($relationEntity);
-
-		return $response;
+		return parent::readRelationship($request, $response);
 	}
 
 }
