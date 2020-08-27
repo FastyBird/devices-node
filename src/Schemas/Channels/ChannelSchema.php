@@ -15,6 +15,7 @@
 
 namespace FastyBird\DevicesNode\Schemas\Channels;
 
+use FastyBird\DevicesNode;
 use FastyBird\DevicesNode\Entities;
 use FastyBird\DevicesNode\Router;
 use FastyBird\DevicesNode\Schemas;
@@ -104,7 +105,7 @@ final class ChannelSchema extends NodeJsonApiSchemas\JsonApiSchema
 		return new JsonApi\Schema\Link(
 			false,
 			$this->router->urlFor(
-				'channel',
+				DevicesNode\Constants::ROUTE_NAME_CHANNEL,
 				[
 					Router\Router::URL_DEVICE_ID => $channel->getDevice()->getPlainId(),
 					Router\Router::URL_ITEM_ID   => $channel->getPlainId(),
@@ -157,7 +158,7 @@ final class ChannelSchema extends NodeJsonApiSchemas\JsonApiSchema
 			return new JsonApi\Schema\Link(
 				false,
 				$this->router->urlFor(
-					'channel.properties',
+					DevicesNode\Constants::ROUTE_NAME_CHANNEL_PROPERTIES,
 					[
 						Router\Router::URL_DEVICE_ID  => $channel->getDevice()->getPlainId(),
 						Router\Router::URL_CHANNEL_ID => $channel->getPlainId(),
@@ -173,7 +174,7 @@ final class ChannelSchema extends NodeJsonApiSchemas\JsonApiSchema
 			return new JsonApi\Schema\Link(
 				false,
 				$this->router->urlFor(
-					'channel.configuration.rows',
+					DevicesNode\Constants::ROUTE_NAME_CHANNEL_CONFIGURATION_ROWS,
 					[
 						Router\Router::URL_DEVICE_ID  => $channel->getDevice()->getPlainId(),
 						Router\Router::URL_CHANNEL_ID => $channel->getPlainId(),
@@ -189,7 +190,7 @@ final class ChannelSchema extends NodeJsonApiSchemas\JsonApiSchema
 			return new JsonApi\Schema\Link(
 				false,
 				$this->router->urlFor(
-					'device',
+					DevicesNode\Constants::ROUTE_NAME_DEVICE,
 					[
 						Router\Router::URL_ITEM_ID => $channel->getDevice()->getPlainId(),
 					]
@@ -218,7 +219,7 @@ final class ChannelSchema extends NodeJsonApiSchemas\JsonApiSchema
 			return new JsonApi\Schema\Link(
 				false,
 				$this->router->urlFor(
-					'channel.relationship',
+					DevicesNode\Constants::ROUTE_NAME_CHANNEL_RELATIONSHIP,
 					[
 						Router\Router::URL_DEVICE_ID   => $channel->getDevice()->getPlainId(),
 						Router\Router::URL_ITEM_ID     => $channel->getPlainId(),

@@ -30,6 +30,34 @@ final class Constants
 {
 
 	/**
+	 * Node routing
+	 */
+
+	public const ROUTE_NAME_DEVICES = 'devices';
+	public const ROUTE_NAME_DEVICE = 'device';
+	public const ROUTE_NAME_DEVICE_RELATIONSHIP = 'device.relationship';
+	public const ROUTE_NAME_DEVICE_CHILDREN = 'device.children';
+	public const ROUTE_NAME_DEVICE_PROPERTIES = 'device.properties';
+	public const ROUTE_NAME_DEVICE_PROPERTY = 'device.property';
+	public const ROUTE_NAME_DEVICE_PROPERTY_RELATIONSHIP = 'device.property.relationship';
+	public const ROUTE_NAME_DEVICE_CONFIGURATION_ROWS = 'device.configuration.rows';
+	public const ROUTE_NAME_DEVICE_CONFIGURATION_ROW = 'device.configuration.row';
+	public const ROUTE_NAME_DEVICE_CONFIGURATION_ROW_RELATIONSHIP = 'device.configuration.row.relationship';
+	public const ROUTE_NAME_DEVICE_HARDWARE = 'device.hardware';
+	public const ROUTE_NAME_DEVICE_HARDWARE_RELATIONSHIP = 'device.hardware.relationship';
+	public const ROUTE_NAME_DEVICE_FIRMWARE = 'device.firmware';
+	public const ROUTE_NAME_DEVICE_FIRMWARE_RELATIONSHIP = 'device.firmware.relationship';
+	public const ROUTE_NAME_CHANNELS = 'channels';
+	public const ROUTE_NAME_CHANNEL = 'channel';
+	public const ROUTE_NAME_CHANNEL_RELATIONSHIP = 'channel.relationship';
+	public const ROUTE_NAME_CHANNEL_PROPERTIES = 'channel.properties';
+	public const ROUTE_NAME_CHANNEL_PROPERTY = 'channel.property';
+	public const ROUTE_NAME_CHANNEL_PROPERTY_RELATIONSHIP = 'channel.property.relationship';
+	public const ROUTE_NAME_CHANNEL_CONFIGURATION_ROWS = 'channel.configuration.rows';
+	public const ROUTE_NAME_CHANNEL_CONFIGURATION_ROW = 'channel.configuration.row';
+	public const ROUTE_NAME_CHANNEL_CONFIGURATION_ROW_RELATIONSHIP = 'channel.configuration.row.relationship';
+
+	/**
 	 * Message bus routing keys mapping
 	 */
 	public const RABBIT_MQ_ENTITIES_ROUTING_KEYS_MAPPING = [
@@ -65,7 +93,7 @@ final class Constants
 	public const RABBIT_MQ_CHANNELS_CONTROLS_DATA_ROUTING_KEY = 'fb.bus.node.data.channel.control';
 
 	/**
-	 * Microservices origins
+	 * Message bus origins
 	 */
 
 	public const NODE_MQTT_ORIGIN = 'com.fastybird.mqtt-node';

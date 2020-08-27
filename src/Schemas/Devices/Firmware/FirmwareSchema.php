@@ -15,6 +15,7 @@
 
 namespace FastyBird\DevicesNode\Schemas\Devices\Firmware;
 
+use FastyBird\DevicesNode;
 use FastyBird\DevicesNode\Entities;
 use FastyBird\DevicesNode\Router;
 use FastyBird\DevicesNode\Schemas;
@@ -98,7 +99,7 @@ final class FirmwareSchema extends NodeJsonApiSchemas\JsonApiSchema
 		return new JsonApi\Schema\Link(
 			false,
 			$this->router->urlFor(
-				'device.firmware',
+				DevicesNode\Constants::ROUTE_NAME_DEVICE_FIRMWARE,
 				[
 					Router\Router::URL_DEVICE_ID => $firmware->getDevice()->getPlainId(),
 				]
@@ -140,7 +141,7 @@ final class FirmwareSchema extends NodeJsonApiSchemas\JsonApiSchema
 			return new JsonApi\Schema\Link(
 				false,
 				$this->router->urlFor(
-					'device',
+					DevicesNode\Constants::ROUTE_NAME_DEVICE,
 					[
 						Router\Router::URL_ITEM_ID => $firmware->getDevice()->getPlainId(),
 					]

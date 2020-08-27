@@ -15,6 +15,7 @@
 
 namespace FastyBird\DevicesNode\Schemas\Devices;
 
+use FastyBird\DevicesNode;
 use FastyBird\DevicesNode\Entities;
 use FastyBird\DevicesNode\Router;
 use Neomerx\JsonApi;
@@ -97,7 +98,7 @@ final class PhysicalDeviceSchema extends DeviceSchema
 			return new JsonApi\Schema\Link(
 				false,
 				$this->router->urlFor(
-					'device.hardware',
+					DevicesNode\Constants::ROUTE_NAME_DEVICE_HARDWARE,
 					[
 						Router\Router::URL_DEVICE_ID => $device->getPlainId(),
 					]
@@ -109,7 +110,7 @@ final class PhysicalDeviceSchema extends DeviceSchema
 			return new JsonApi\Schema\Link(
 				false,
 				$this->router->urlFor(
-					'device.firmware',
+					DevicesNode\Constants::ROUTE_NAME_DEVICE_FIRMWARE,
 					[
 						Router\Router::URL_DEVICE_ID => $device->getPlainId(),
 					]
@@ -138,7 +139,7 @@ final class PhysicalDeviceSchema extends DeviceSchema
 			return new JsonApi\Schema\Link(
 				false,
 				$this->router->urlFor(
-					'device.relationship',
+					DevicesNode\Constants::ROUTE_NAME_DEVICE_RELATIONSHIP,
 					[
 						Router\Router::URL_ITEM_ID     => $device->getPlainId(),
 						Router\Router::RELATION_ENTITY => $name,

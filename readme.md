@@ -22,7 +22,7 @@ FastyBird devices node is tested against PHP 7.4 and [ReactPHP http](https://git
 
 > **NOTE:** If you don't want to install it manually, try [docker image](#install-with-docker)
 
-The best way to install **fastybird/devices-node** is using [Composer](http://getcomposer.org/). If you don't have Composer yet, [download it](https://getcomposer.org/download/) following the instructions.
+The best way to install **fastybird/devices-node** is using [Composer](https://getcomposer.org/). If you don't have Composer yet, [download it](https://getcomposer.org/download/) following the instructions.
 Then use command:
 
 ```sh
@@ -135,4 +135,4 @@ For release info check [release page](https://github.com/FastyBird/auth-node/rel
 </table>
 
 ***
-Homepage [http://fastybird.com](http://fastybird.com) and repository [http://github.com/fastybird/devices-node](http://github.com/fastybird/devices-node).
+Homepage [https://fastybird.com](https://fastybird.com) and repository [https://github.com/fastybird/devices-node](https://github.com/fastybird/devices-node).

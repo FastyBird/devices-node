@@ -15,6 +15,7 @@
 
 namespace FastyBird\DevicesNode\Schemas\Devices;
 
+use FastyBird\DevicesNode;
 use FastyBird\DevicesNode\Entities;
 use FastyBird\DevicesNode\Models;
 use FastyBird\DevicesNode\Queries;
@@ -110,7 +111,7 @@ abstract class DeviceSchema extends NodeJsonApiSchemas\JsonApiSchema
 		return new JsonApi\Schema\Link(
 			false,
 			$this->router->urlFor(
-				'device',
+				DevicesNode\Constants::ROUTE_NAME_DEVICE,
 				[
 					Router\Router::URL_ITEM_ID => $device->getPlainId(),
 				]
@@ -181,7 +182,7 @@ abstract class DeviceSchema extends NodeJsonApiSchemas\JsonApiSchema
 			return new JsonApi\Schema\Link(
 				false,
 				$this->router->urlFor(
-					'device.properties',
+					DevicesNode\Constants::ROUTE_NAME_DEVICE_PROPERTIES,
 					[
 						Router\Router::URL_DEVICE_ID => $device->getPlainId(),
 					]
@@ -196,7 +197,7 @@ abstract class DeviceSchema extends NodeJsonApiSchemas\JsonApiSchema
 			return new JsonApi\Schema\Link(
 				false,
 				$this->router->urlFor(
-					'device.configuration.rows',
+					DevicesNode\Constants::ROUTE_NAME_DEVICE_CONFIGURATION_ROWS,
 					[
 						Router\Router::URL_DEVICE_ID => $device->getPlainId(),
 					]
@@ -211,7 +212,7 @@ abstract class DeviceSchema extends NodeJsonApiSchemas\JsonApiSchema
 			return new JsonApi\Schema\Link(
 				false,
 				$this->router->urlFor(
-					'channels',
+					DevicesNode\Constants::ROUTE_NAME_CHANNELS,
 					[
 						Router\Router::URL_DEVICE_ID => $device->getPlainId(),
 					]
@@ -226,7 +227,7 @@ abstract class DeviceSchema extends NodeJsonApiSchemas\JsonApiSchema
 			return new JsonApi\Schema\Link(
 				false,
 				$this->router->urlFor(
-					'device',
+					DevicesNode\Constants::ROUTE_NAME_DEVICE,
 					[
 						Router\Router::URL_ITEM_ID => $device->getPlainId(),
 					]
@@ -238,7 +239,7 @@ abstract class DeviceSchema extends NodeJsonApiSchemas\JsonApiSchema
 			return new JsonApi\Schema\Link(
 				false,
 				$this->router->urlFor(
-					'device.children',
+					DevicesNode\Constants::ROUTE_NAME_DEVICE_CHILDREN,
 					[
 						Router\Router::URL_DEVICE_ID => $device->getPlainId(),
 					]
@@ -275,7 +276,7 @@ abstract class DeviceSchema extends NodeJsonApiSchemas\JsonApiSchema
 			return new JsonApi\Schema\Link(
 				false,
 				$this->router->urlFor(
-					'device.relationship',
+					DevicesNode\Constants::ROUTE_NAME_DEVICE_RELATIONSHIP,
 					[
 						Router\Router::URL_ITEM_ID     => $device->getPlainId(),
 						Router\Router::RELATION_ENTITY => $name,

@@ -15,6 +15,7 @@
 
 namespace FastyBird\DevicesNode\Schemas\Devices\Properties;
 
+use FastyBird\DevicesNode;
 use FastyBird\DevicesNode\Entities;
 use FastyBird\DevicesNode\Models;
 use FastyBird\DevicesNode\Router;
@@ -114,7 +115,7 @@ final class PropertySchema extends NodeJsonApiSchemas\JsonApiSchema
 		return new JsonApi\Schema\Link(
 			false,
 			$this->router->urlFor(
-				'device.property',
+				DevicesNode\Constants::ROUTE_NAME_DEVICE_PROPERTY,
 				[
 					Router\Router::URL_DEVICE_ID => $property->getDevice()->getPlainId(),
 					Router\Router::URL_ITEM_ID   => $property->getPlainId(),
@@ -157,7 +158,7 @@ final class PropertySchema extends NodeJsonApiSchemas\JsonApiSchema
 			return new JsonApi\Schema\Link(
 				false,
 				$this->router->urlFor(
-					'device',
+					DevicesNode\Constants::ROUTE_NAME_DEVICE,
 					[
 						Router\Router::URL_ITEM_ID => $property->getDevice()->getPlainId(),
 					]

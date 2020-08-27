@@ -15,6 +15,7 @@
 
 namespace FastyBird\DevicesNode\Schemas\Channels\Properties;
 
+use FastyBird\DevicesNode;
 use FastyBird\DevicesNode\Entities;
 use FastyBird\DevicesNode\Models;
 use FastyBird\DevicesNode\Router;
@@ -114,7 +115,7 @@ final class PropertySchema extends NodeJsonApiSchemas\JsonApiSchema
 		return new JsonApi\Schema\Link(
 			false,
 			$this->router->urlFor(
-				'channel.property',
+				DevicesNode\Constants::ROUTE_NAME_CHANNEL_PROPERTY,
 				[
 					Router\Router::URL_DEVICE_ID  => $property->getChannel()->getDevice()->getPlainId(),
 					Router\Router::URL_CHANNEL_ID => $property->getChannel()->getPlainId(),
@@ -158,7 +159,7 @@ final class PropertySchema extends NodeJsonApiSchemas\JsonApiSchema
 			return new JsonApi\Schema\Link(
 				false,
 				$this->router->urlFor(
-					'channel',
+					DevicesNode\Constants::ROUTE_NAME_CHANNEL,
 					[
 						Router\Router::URL_DEVICE_ID => $property->getChannel()->getDevice()->getPlainId(),
 						Router\Router::URL_ITEM_ID   => $property->getChannel()->getPlainId(),

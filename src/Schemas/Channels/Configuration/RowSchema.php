@@ -15,6 +15,7 @@
 
 namespace FastyBird\DevicesNode\Schemas\Channels\Configuration;
 
+use FastyBird\DevicesNode;
 use FastyBird\DevicesNode\Entities;
 use FastyBird\DevicesNode\Router;
 use FastyBird\DevicesNode\Schemas;
@@ -83,7 +84,7 @@ abstract class RowSchema extends NodeJsonApiSchemas\JsonApiSchema
 		return new JsonApi\Schema\Link(
 			false,
 			$this->router->urlFor(
-				'channel.configuration.row',
+				DevicesNode\Constants::ROUTE_NAME_CHANNEL_CONFIGURATION_ROW,
 				[
 					Router\Router::URL_DEVICE_ID  => $row->getChannel()->getDevice()->getPlainId(),
 					Router\Router::URL_CHANNEL_ID => $row->getChannel()->getPlainId(),
@@ -131,7 +132,7 @@ abstract class RowSchema extends NodeJsonApiSchemas\JsonApiSchema
 			return new JsonApi\Schema\Link(
 				false,
 				$this->router->urlFor(
-					'channel',
+					DevicesNode\Constants::ROUTE_NAME_CHANNEL,
 					[
 						Router\Router::URL_DEVICE_ID => $row->getChannel()->getDevice()->getPlainId(),
 						Router\Router::URL_ITEM_ID   => $row->getChannel()->getPlainId(),

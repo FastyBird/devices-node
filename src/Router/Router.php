@@ -15,6 +15,7 @@
 
 namespace FastyBird\DevicesNode\Router;
 
+use FastyBird\DevicesNode;
 use FastyBird\DevicesNode\Controllers;
 use FastyBird\NodeAuth\Middleware as NodeAuthMiddleware;
 use IPub\SlimRouter\Routing;
@@ -107,10 +108,10 @@ class Router extends Routing\Router
 				 * DEVICES
 				 */
 				$route = $group->get('', [$this->devicesV1Controller, 'index']);
-				$route->setName('devices');
+				$route->setName(DevicesNode\Constants::ROUTE_NAME_DEVICES);
 
 				$route = $group->get('/{' . self::URL_ITEM_ID . '}', [$this->devicesV1Controller, 'read']);
-				$route->setName('device');
+				$route->setName(DevicesNode\Constants::ROUTE_NAME_DEVICE);
 
 				$group->post('', [$this->devicesV1Controller, 'create']);
 
@@ -119,7 +120,7 @@ class Router extends Routing\Router
 				$group->delete('/{' . self::URL_ITEM_ID . '}', [$this->devicesV1Controller, 'delete']);
 
 				$route = $group->get('/{' . self::URL_ITEM_ID . '}/relationships/{' . self::RELATION_ENTITY . '}', [$this->devicesV1Controller, 'readRelationship']);
-				$route->setName('device.relationship');
+				$route->setName(DevicesNode\Constants::ROUTE_NAME_DEVICE_RELATIONSHIP);
 			});
 
 			$group->group('/devices/{' . self::URL_DEVICE_ID . '}', function (Routing\RouteCollector $group): void {
@@ -127,89 +128,89 @@ class Router extends Routing\Router
 				 * CHILDREN
 				 */
 				$route = $group->get('/children', [$this->deviceChildrenV1Controller, 'index']);
-				$route->setName('device.children');
+				$route->setName(DevicesNode\Constants::ROUTE_NAME_DEVICE_CHILDREN);
 
 				/**
 				 * DEVICE PROPERTIES
 				 */
 				$route = $group->get('/properties', [$this->devicePropertiesV1Controller, 'index']);
-				$route->setName('device.properties');
+				$route->setName(DevicesNode\Constants::ROUTE_NAME_DEVICE_PROPERTIES);
 
 				$route = $group->get('/properties/{' . self::URL_ITEM_ID . '}', [$this->devicePropertiesV1Controller, 'read']);
-				$route->setName('device.property');
+				$route->setName(DevicesNode\Constants::ROUTE_NAME_DEVICE_PROPERTY);
 
 				$route = $group->get('/properties/{' . self::URL_ITEM_ID . '}/relationships/{' . self::RELATION_ENTITY . '}', [$this->devicePropertiesV1Controller, 'readRelationship']);
-				$route->setName('device.property.relationship');
+				$route->setName(DevicesNode\Constants::ROUTE_NAME_DEVICE_PROPERTY_RELATIONSHIP);
 
 				/**
 				 * DEVICE CONFIGURATION
 				 */
 				$route = $group->get('/configuration', [$this->deviceConfigurationV1Controller, 'index']);
-				$route->setName('device.configuration.rows');
+				$route->setName(DevicesNode\Constants::ROUTE_NAME_DEVICE_CONFIGURATION_ROWS);
 
 				$route = $group->get('/configuration/{' . self::URL_ITEM_ID . '}', [$this->deviceConfigurationV1Controller, 'read']);
-				$route->setName('device.configuration.row');
+				$route->setName(DevicesNode\Constants::ROUTE_NAME_DEVICE_CONFIGURATION_ROW);
 
 				$route = $group->get('/configuration/{' . self::URL_ITEM_ID . '}/relationships/{' . self::RELATION_ENTITY . '}', [$this->deviceConfigurationV1Controller, 'readRelationship']);
-				$route->setName('device.configuration.row.relationship');
+				$route->setName(DevicesNode\Constants::ROUTE_NAME_DEVICE_CONFIGURATION_ROW_RELATIONSHIP);
 
 				/**
 				 * DEVICE HARDWARE
 				 */
 				$route = $group->get('/hardware', [$this->deviceHardwareV1Controller, 'read']);
-				$route->setName('device.hardware');
+				$route->setName(DevicesNode\Constants::ROUTE_NAME_DEVICE_HARDWARE);
 
 				$route = $group->get('/hardware/relationships/{' . self::RELATION_ENTITY . '}', [$this->deviceHardwareV1Controller, 'readRelationship']);
-				$route->setName('device.hardware.relationship');
+				$route->setName(DevicesNode\Constants::ROUTE_NAME_DEVICE_HARDWARE_RELATIONSHIP);
 
 				/**
 				 * DEVICE FIRMWARE
 				 */
 				$route = $group->get('/firmware', [$this->deviceFirmwareV1Controller, 'read']);
-				$route->setName('device.firmware');
+				$route->setName(DevicesNode\Constants::ROUTE_NAME_DEVICE_FIRMWARE);
 
 				$route = $group->get('/firmware/relationships/{' . self::RELATION_ENTITY . '}', [$this->deviceFirmwareV1Controller, 'readRelationship']);
-				$route->setName('device.firmware.relationship');
+				$route->setName(DevicesNode\Constants::ROUTE_NAME_DEVICE_FIRMWARE_RELATIONSHIP);
 
 				$group->group('/channels', function (Routing\RouteCollector $group): void {
 					/**
 					 * CHANNELS
 					 */
 					$route = $group->get('', [$this->channelsV1Controller, 'index']);
-					$route->setName('channels');
+					$route->setName(DevicesNode\Constants::ROUTE_NAME_CHANNELS);
 
 					$route = $group->get('/{' . self::URL_ITEM_ID . '}', [$this->channelsV1Controller, 'read']);
-					$route->setName('channel');
+					$route->setName(DevicesNode\Constants::ROUTE_NAME_CHANNEL);
 
 					$group->patch('/{' . self::URL_ITEM_ID . '}', [$this->channelsV1Controller, 'update']);
 
 					$route = $group->get('/{' . self::URL_ITEM_ID . '}/relationships/{' . self::RELATION_ENTITY . '}', [$this->channelsV1Controller, 'readRelationship']);
-					$route->setName('channel.relationship');
+					$route->setName(DevicesNode\Constants::ROUTE_NAME_CHANNEL_RELATIONSHIP);
 
 					$group->group('/{' . self::URL_CHANNEL_ID . '}', function (Routing\RouteCollector $group): void {
 						/**
 						 * CHANNEL PROPERTIES
 						 */
 						$route = $group->get('/properties', [$this->channelPropertiesV1Controller, 'index']);
-						$route->setName('channel.properties');
+						$route->setName(DevicesNode\Constants::ROUTE_NAME_CHANNEL_PROPERTIES);
 
 						$route = $group->get('/properties/{' . self::URL_ITEM_ID . '}', [$this->channelPropertiesV1Controller, 'read']);
-						$route->setName('channel.property');
+						$route->setName(DevicesNode\Constants::ROUTE_NAME_CHANNEL_PROPERTY);
 
 						$route = $group->get('/properties/{' . self::URL_ITEM_ID . '}/relationships/{' . self::RELATION_ENTITY . '}', [$this->channelPropertiesV1Controller, 'readRelationship']);
-						$route->setName('channel.property.relationship');
+						$route->setName(DevicesNode\Constants::ROUTE_NAME_CHANNEL_PROPERTY_RELATIONSHIP);
 
 						/**
 						 * CHANNEL CONFIGURATION
 						 */
 						$route = $group->get('/configuration', [$this->channelConfigurationV1Controller, 'index']);
-						$route->setName('channel.configuration.rows');
+						$route->setName(DevicesNode\Constants::ROUTE_NAME_CHANNEL_CONFIGURATION_ROWS);
 
 						$route = $group->get('/configuration/{' . self::URL_ITEM_ID . '}', [$this->channelConfigurationV1Controller, 'read']);
-						$route->setName('channel.configuration.row');
+						$route->setName(DevicesNode\Constants::ROUTE_NAME_CHANNEL_CONFIGURATION_ROW);
 
 						$route = $group->get('/configuration/{' . self::URL_ITEM_ID . '}/relationships/{' . self::RELATION_ENTITY . '}', [$this->channelConfigurationV1Controller, 'readRelationship']);
-						$route->setName('channel.configuration.row.relationship');
+						$route->setName(DevicesNode\Constants::ROUTE_NAME_CHANNEL_CONFIGURATION_ROW_RELATIONSHIP);
 					});
 				});
 			});
