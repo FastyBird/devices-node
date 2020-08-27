@@ -26,13 +26,13 @@ return [
 		'/v1/devices/69786d15-fd0c-4d9f-9378-33287c2009fa/hardware/relationships/device',
 		'Bearer ' . VALID_TOKEN,
 		StatusCodeInterface::STATUS_OK,
-		__DIR__ . '/responses/device.hardware.readRelationships.device.json',
+		__DIR__ . '/responses/device.hardware.relationships.device.json',
 	],
 	'readRelationshipsDeviceUser'    => [
 		'/v1/devices/69786d15-fd0c-4d9f-9378-33287c2009fa/hardware/relationships/device',
 		'Bearer ' . VALID_TOKEN_USER,
 		StatusCodeInterface::STATUS_OK,
-		__DIR__ . '/responses/device.hardware.readRelationships.device.json',
+		__DIR__ . '/responses/device.hardware.relationships.device.json',
 	],
 
 	// Invalid responses
@@ -41,36 +41,36 @@ return [
 		'/v1/devices/69786d15-fd0c-4d9f-9378-33287c2009fa/hardware/relationships/unknown',
 		'Bearer ' . VALID_TOKEN,
 		StatusCodeInterface::STATUS_NOT_FOUND,
-		__DIR__ . '/responses/relation.unknown.json',
+		__DIR__ . '/responses/generic/relation.unknown.json',
 	],
 	'readRelationshipsUnknownDevice' => [
 		'/v1/devices/28bc0d38-2f7c-4a71-aa74-27b102f8dfc4/hardware/relationships/device',
 		'Bearer ' . VALID_TOKEN,
 		StatusCodeInterface::STATUS_NOT_FOUND,
-		__DIR__ . '/responses/devices.notFound.json',
+		__DIR__ . '/responses/generic/notFound.json',
 	],
 	'readMissingToken'               => [
 		'/v1/devices/69786d15-fd0c-4d9f-9378-33287c2009fa/hardware',
 		null,
 		StatusCodeInterface::STATUS_FORBIDDEN,
-		__DIR__ . '/responses/forbidden.json',
+		__DIR__ . '/responses/generic/forbidden.json',
 	],
 	'readEmptyToken'                 => [
 		'/v1/devices/69786d15-fd0c-4d9f-9378-33287c2009fa/hardware',
 		'',
 		StatusCodeInterface::STATUS_FORBIDDEN,
-		__DIR__ . '/responses/forbidden.json',
+		__DIR__ . '/responses/generic/forbidden.json',
 	],
 	'readInvalidToken'               => [
 		'/v1/devices/69786d15-fd0c-4d9f-9378-33287c2009fa/hardware',
 		'Bearer ' . INVALID_TOKEN,
 		StatusCodeInterface::STATUS_UNAUTHORIZED,
-		__DIR__ . '/responses/unauthorized.json',
+		__DIR__ . '/responses/generic/unauthorized.json',
 	],
 	'readExpiredToken'               => [
 		'/v1/devices/69786d15-fd0c-4d9f-9378-33287c2009fa/hardware',
 		'Bearer ' . EXPIRED_TOKEN,
 		StatusCodeInterface::STATUS_UNAUTHORIZED,
-		__DIR__ . '/responses/unauthorized.json',
+		__DIR__ . '/responses/generic/unauthorized.json',
 	],
 ];
