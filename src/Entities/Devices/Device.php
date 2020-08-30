@@ -672,7 +672,7 @@ abstract class Device implements IDevice
 	/**
 	 * {@inheritDoc}
 	 */
-	public function getOwnerId()
+	public function getOwnerId(): ?string
 	{
 		if ($this->parent !== null) {
 			return $this->parent->getOwnerId();

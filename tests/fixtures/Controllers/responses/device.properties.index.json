@@ -4,8 +4,8 @@
       "attributes" : {
         "datatype" : "integer",
         "format" : null,
-        "is_queryable" : true,
-        "is_settable" : false,
+        "queryable" : true,
+        "settable" : false,
         "name" : "rssi",
         "property" : "rssi",
         "unit" : null,
@@ -34,8 +34,8 @@
       "attributes" : {
         "datatype" : "integer",
         "format" : null,
-        "is_queryable" : true,
-        "is_settable" : false,
+        "queryable" : true,
+        "settable" : false,
         "name" : "uptime",
         "property" : "uptime",
         "unit" : null,

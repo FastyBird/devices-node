@@ -19,7 +19,7 @@
         "title" : null,
         "comment" : null,
         "state" : "init",
-        "is_enabled" : true,
+        "enabled" : true,
         "control" : [
           "configure"
         ],
@@ -168,7 +168,7 @@
         "title" : null,
         "comment" : "This is child",
         "state" : "init",
-        "is_enabled" : true,
+        "enabled" : true,
         "control" : [],
         "owner" : "455354e8-96bd-4c29-84e7-9f10e1d4db4b"
       },
@@ -259,7 +259,7 @@
         "title" : "Custom title",
         "comment" : null,
         "state" : "init",
-        "is_enabled" : true,
+        "enabled" : true,
         "control" : [],
         "owner" : "455354e8-96bd-4c29-84e7-9f10e1d4db4b"
       },
@@ -345,7 +345,7 @@
         "title" : null,
         "comment" : "Custom comment",
         "state" : "unknown",
-        "is_enabled" : true,
+        "enabled" : true,
         "control" : [],
         "owner" : "455354e8-96bd-4c29-84e7-9f10e1d4db4b"
       },

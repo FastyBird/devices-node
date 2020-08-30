@@ -90,16 +90,16 @@ final class PropertySchema extends NodeJsonApiSchemas\JsonApiSchema
 		$state = $this->propertyRepository->findOne($property->getId());
 
 		return [
-			'property'     => $property->getProperty(),
-			'name'         => $property->getName(),
-			'is_settable'  => $property->isSettable(),
-			'is_queryable' => $property->isQueryable(),
-			'datatype'     => $property->getDatatype() !== null ? $property->getDatatype()->getValue() : null,
-			'unit'         => $property->getUnit(),
-			'format'       => is_array($property->getFormat()) ? implode(',', $property->getFormat()) : $property->getFormat(),
-			'value'        => $state !== null ? $state->getValue() : null,
-			'expected'     => $state !== null ? $state->getExpected() : null,
-			'pending'      => $state !== null ? $state->isPending() : false,
+			'property'  => $property->getProperty(),
+			'name'      => $property->getName(),
+			'settable'  => $property->isSettable(),
+			'queryable' => $property->isQueryable(),
+			'datatype'  => $property->getDatatype() !== null ? $property->getDatatype()->getValue() : null,
+			'unit'      => $property->getUnit(),
+			'format'    => is_array($property->getFormat()) ? implode(',', $property->getFormat()) : $property->getFormat(),
+			'value'     => $state !== null ? $state->getValue() : null,
+			'expected'  => $state !== null ? $state->getExpected() : null,
+			'pending'   => $state !== null ? $state->isPending() : false,
 		];
 	}
 

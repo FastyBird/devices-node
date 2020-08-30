@@ -3,8 +3,8 @@
     "attributes" : {
       "datatype" : "integer",
       "format" : null,
-      "is_queryable" : true,
-      "is_settable" : false,
+      "queryable" : true,
+      "settable" : false,
       "name" : "rssi",
       "property" : "rssi",
       "unit" : null,

@@ -18,7 +18,7 @@
       "title" : null,
       "comment" : null,
       "state" : "init",
-      "is_enabled" : true,
+      "enabled" : true,
       "control" : [
         "configure"
       ],

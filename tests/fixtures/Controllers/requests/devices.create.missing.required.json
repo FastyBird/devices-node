@@ -7,7 +7,7 @@
       "control" : [
         "configure"
       ],
-      "is_enabled" : true,
+      "enabled" : true,
       "name" : "Newly created device",
       "title" : null
     }

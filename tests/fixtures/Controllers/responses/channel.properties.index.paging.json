@@ -4,8 +4,8 @@
       "attributes" : {
         "datatype" : "enum",
         "format" : "on,off,toggle",
-        "is_queryable" : true,
-        "is_settable" : true,
+        "queryable" : true,
+        "settable" : true,
         "name" : "switch",
         "property" : "switch",
         "unit" : null,

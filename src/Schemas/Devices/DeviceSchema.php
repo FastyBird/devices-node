@@ -88,8 +88,8 @@ abstract class DeviceSchema extends NodeJsonApiSchemas\JsonApiSchema
 			'title'      => $device->getTitle(),
 			'comment'    => $device->getComment(),
 
-			'state'      => $device->getState()->getValue(),
-			'is_enabled' => $device->isEnabled(),
+			'state'   => $device->getState()->getValue(),
+			'enabled' => $device->isEnabled(),
 
 			'control' => $this->formatControls($device->getControls()),
 
