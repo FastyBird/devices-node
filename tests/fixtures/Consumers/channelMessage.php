@@ -213,7 +213,7 @@ return [
 				'parent'  => null,
 			],
 			'fb.bus.node.entity.deleted.channel.configuration' => [
-				'primaryKey'    => 'name',
+				'primaryKey'    => 'configuration',
 				'pulse_mode'    => [
 					'id'            => '008d911f-e6d4-4b17-aa28-939839581cde',
 					'type'          => 'select',

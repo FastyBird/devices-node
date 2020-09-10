@@ -279,7 +279,7 @@ return [
 				],
 			],
 			'fb.bus.node.entity.deleted.channel.configuration' => [
-				'primaryKey'    => 'name',
+				'primaryKey'    => 'configuration',
 				'pulse_mode'    => [
 					'id'            => '1fa8e5ac-d2fb-4531-ba64-3c69863aeea3',
 					'type'          => 'select',
@@ -387,7 +387,7 @@ return [
 				'parent'     => null,
 			],
 			'fb.bus.node.entity.deleted.device.configuration' => [
-				'primaryKey'              => 'name',
+				'primaryKey'              => 'configuration',
 				'sensor_expected_power'   => [
 					'id'            => '138c6cfc-ed49-476b-9f1e-6ee1dcb24f0b',
 					'type'          => 'number',
