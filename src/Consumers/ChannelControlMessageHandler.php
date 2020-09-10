@@ -204,11 +204,11 @@ final class ChannelControlMessageHandler implements NodeExchangeConsumers\IMessa
 		$configurationRows = $this->handleControlConfigurationSchema($schema, false);
 
 		foreach ($configurationRows as $configurationRow) {
-			$configuration = $channel->findConfiguration($configurationRow['name']);
+			$configuration = $channel->findConfiguration($configurationRow['configuration']);
 
 			$configurationRow['channel'] = $channel;
 
-			$elements[] = $configurationRow['name'];
+			$elements[] = $configurationRow['configuration'];
 
 			if ($configuration === null) {
 				$this->rowsManager->create(Utils\ArrayHash::from($configurationRow));
@@ -220,7 +220,7 @@ final class ChannelControlMessageHandler implements NodeExchangeConsumers\IMessa
 
 		// Process cleanup of unused config rows
 		foreach ($channel->getConfiguration() as $row) {
-			if (!in_array($row->getName(), $elements, true)) {
+			if (!in_array($row->getConfiguration(), $elements, true)) {
 				$this->rowsManager->delete($row);
 			}
 		}

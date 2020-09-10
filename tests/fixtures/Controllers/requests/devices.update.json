@@ -4,8 +4,7 @@
     "type" : "devices-node/physical-device",
     "attributes" : {
       "identifier" : "updated-device",
-      "name" : "Updated device",
-      "title" : "With title"
+      "name" : "With name"
     }
   }
 }

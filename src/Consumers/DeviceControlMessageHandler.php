@@ -182,11 +182,11 @@ final class DeviceControlMessageHandler implements NodeExchangeConsumers\IMessag
 		$configurationRows = $this->handleControlConfigurationSchema($schema, true);
 
 		foreach ($configurationRows as $configurationRow) {
-			$configuration = $device->findConfiguration($configurationRow['name']);
+			$configuration = $device->findConfiguration($configurationRow['configuration']);
 
 			$configurationRow['device'] = $device;
 
-			$elements[] = $configurationRow['name'];
+			$elements[] = $configurationRow['configuration'];
 
 			if ($configuration === null) {
 				$this->rowsManager->create(Utils\ArrayHash::from($configurationRow));
@@ -198,7 +198,7 @@ final class DeviceControlMessageHandler implements NodeExchangeConsumers\IMessag
 
 		// Process cleanup of unused config rows
 		foreach ($device->getConfiguration() as $row) {
-			if (!in_array($row->getName(), $elements, true)) {
+			if (!in_array($row->getConfiguration(), $elements, true)) {
 				$this->rowsManager->delete($row);
 			}
 		}

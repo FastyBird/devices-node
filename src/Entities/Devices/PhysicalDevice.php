@@ -52,14 +52,6 @@ class PhysicalDevice extends Device implements IPhysicalDevice
 	/**
 	 * {@inheritDoc}
 	 */
-	public function getName(): string
-	{
-		return $this->name;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
 	public function setHardware(?Entities\Devices\PhysicalDevice\IHardware $hardware): void
 	{
 		$this->hardware = $hardware;

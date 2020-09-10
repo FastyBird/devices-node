@@ -63,17 +63,17 @@ abstract class Row extends Entities\Row implements IRow
 
 	/**
 	 * @param Entities\Channels\IChannel $channel
-	 * @param string $name
+	 * @param string $configuration
 	 * @param Uuid\UuidInterface|null $id
 	 *
 	 * @throws Throwable
 	 */
 	public function __construct(
 		Entities\Channels\IChannel $channel,
-		string $name,
+		string $configuration,
 		?Uuid\UuidInterface $id = null
 	) {
-		parent::__construct($name, $id);
+		parent::__construct($configuration, $id);
 
 		$this->channel = $channel;
 

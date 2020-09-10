@@ -98,20 +98,12 @@ abstract class Device implements IDevice
 	protected $children;
 
 	/**
-	 * @var string
-	 *
-	 * @IPubDoctrine\Crud(is={"required", "writable"})
-	 * @ORM\Column(type="string", name="device_name", nullable=true)
-	 */
-	protected $name;
-
-	/**
 	 * @var string|null
 	 *
 	 * @IPubDoctrine\Crud(is="writable")
-	 * @ORM\Column(type="string", name="device_title", nullable=true, options={"default": null})
+	 * @ORM\Column(type="string", name="device_name", nullable=true, options={"default": null})
 	 */
-	protected $title = null;
+	protected $name = null;
 
 	/**
 	 * @var string|null
@@ -172,14 +164,14 @@ abstract class Device implements IDevice
 
 	/**
 	 * @param string $identifier
-	 * @param string $name
+	 * @param string|null $name
 	 * @param Uuid\UuidInterface|null $id
 	 *
 	 * @throws Throwable
 	 */
 	public function __construct(
 		string $identifier,
-		string $name,
+		?string $name,
 		?Uuid\UuidInterface $id = null
 	) {
 		$this->id = $id ?? Uuid\Uuid::uuid4();
@@ -280,7 +272,7 @@ abstract class Device implements IDevice
 	/**
 	 * {@inheritDoc}
 	 */
-	public function setName(string $name): void
+	public function setName(?string $name): void
 	{
 		$this->name = $name;
 	}
@@ -288,25 +280,9 @@ abstract class Device implements IDevice
 	/**
 	 * {@inheritDoc}
 	 */
-	public function getName(): string
+	public function getName(): ?string
 	{
 		return $this->name;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function setTitle(?string $title): void
-	{
-		$this->title = $title;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function getTitle(): ?string
-	{
-		return $this->title;
 	}
 
 	/**
@@ -639,11 +615,11 @@ abstract class Device implements IDevice
 	/**
 	 * {@inheritDoc}
 	 */
-	public function findConfiguration(?string $name): ?Entities\Devices\Configuration\IRow
+	public function findConfiguration(?string $configuration): ?Entities\Devices\Configuration\IRow
 	{
 		$found = $this->configuration
-			->filter(function (Entities\Devices\Configuration\IRow $row) use ($name): bool {
-				return $name === $row->getName();
+			->filter(function (Entities\Devices\Configuration\IRow $row) use ($configuration): bool {
+				return $configuration === $row->getConfiguration();
 			});
 
 		return $found->isEmpty() || $found->first() === false ? null : $found->first();
@@ -691,7 +667,6 @@ abstract class Device implements IDevice
 			'identifier' => $this->getIdentifier(),
 			'parent'     => $this->getParent() !== null ? $this->getParent()->getIdentifier() : null,
 			'name'       => $this->getName(),
-			'title'      => $this->getTitle(),
 			'comment'    => $this->getComment(),
 			'state'      => $this->getState()->getValue(),
 			'enabled'    => $this->isEnabled(),

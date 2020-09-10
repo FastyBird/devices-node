@@ -45,21 +45,16 @@ trait TControlMessageHandler
 
 		/** @var Utils\ArrayHash $row */
 		foreach ($schema as $row) {
-			if ($row->offsetExists('type')) {
+			if ($row->offsetExists('type') && $row->offsetExists('configuration')) {
 				$toUpdateRow = [];
+
+				$toUpdateRow['configuration'] = $row->offsetGet('configuration');
 
 				if ($row->offsetExists('name')) {
 					$toUpdateRow['name'] = $row->offsetGet('name');
 
 				} else {
 					throw new Exceptions\InvalidStateException('Field name have to be set');
-				}
-
-				if ($row->offsetExists('title')) {
-					$toUpdateRow['title'] = $row->offsetGet('title');
-
-				} else {
-					$toUpdateRow['title'] = null;
 				}
 
 				if ($row->offsetExists('comment')) {

@@ -15,7 +15,6 @@
     "attributes" : {
       "identifier" : "first-device",
       "name" : "First device",
-      "title" : null,
       "comment" : null,
       "state" : "init",
       "enabled" : true,

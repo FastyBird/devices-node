@@ -15,7 +15,6 @@
     "attributes" : {
       "identifier" : "new-device",
       "name" : "Newly created device",
-      "title" : null,
       "comment" : null,
       "state" : "unknown",
       "enabled" : true,

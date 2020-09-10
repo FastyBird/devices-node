@@ -72,15 +72,7 @@ class Channel implements IChannel
 	 * @IPubDoctrine\Crud(is="writable")
 	 * @ORM\Column(type="string", name="channel_name", nullable=true, options={"default": null})
 	 */
-	private $name = null;
-
-	/**
-	 * @var string|null
-	 *
-	 * @IPubDoctrine\Crud(is="writable")
-	 * @ORM\Column(type="string", name="channel_title", nullable=true, options={"default": null})
-	 */
-	private $title = null;
+	private $name;
 
 	/**
 	 * @var string|null
@@ -126,6 +118,7 @@ class Channel implements IChannel
 	/**
 	 * @param Entities\Devices\IDevice $device
 	 * @param string $channel
+	 * @param string|null $name
 	 * @param Uuid\UuidInterface|null $id
 	 *
 	 * @throws Throwable
@@ -133,12 +126,15 @@ class Channel implements IChannel
 	public function __construct(
 		Entities\Devices\IDevice $device,
 		string $channel,
+		?string $name = null,
 		?Uuid\UuidInterface $id = null
 	) {
 		$this->id = $id ?? Uuid\Uuid::uuid4();
 
 		$this->device = $device;
 		$this->channel = $channel;
+
+		$this->name = $name;
 
 		$this->properties = new Common\Collections\ArrayCollection();
 		$this->configuration = new Common\Collections\ArrayCollection();
@@ -156,7 +152,7 @@ class Channel implements IChannel
 	/**
 	 * {@inheritDoc}
 	 */
-	public function setName(?string $name = null): void
+	public function setName(?string $name): void
 	{
 		$this->name = $name;
 	}
@@ -164,31 +160,9 @@ class Channel implements IChannel
 	/**
 	 * {@inheritDoc}
 	 */
-	public function getName(): string
+	public function getName(): ?string
 	{
-		$name = $this->name;
-
-		if ($name === null) {
-			$name = $this->getChannel();
-		}
-
-		return $name;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function setTitle(?string $title): void
-	{
-		$this->title = $title;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function getTitle(): ?string
-	{
-		return $this->title;
+		return $this->name;
 	}
 
 	/**
@@ -374,11 +348,11 @@ class Channel implements IChannel
 	/**
 	 * {@inheritDoc}
 	 */
-	public function findConfiguration(?string $name): ?Entities\Channels\Configuration\IRow
+	public function findConfiguration(?string $configuration): ?Entities\Channels\Configuration\IRow
 	{
 		$found = $this->configuration
-			->filter(function (Entities\Channels\Configuration\IRow $row) use ($name): bool {
-				return $name === $row->getName();
+			->filter(function (Entities\Channels\Configuration\IRow $row) use ($configuration): bool {
+				return $configuration === $row->getConfiguration();
 			});
 
 		return $found->isEmpty() || $found->first() === false ? null : $found->first();
@@ -498,7 +472,6 @@ class Channel implements IChannel
 		return [
 			'id'      => $this->getPlainId(),
 			'name'    => $this->getName(),
-			'title'   => $this->getTitle(),
 			'comment' => $this->getComment(),
 			'channel' => $this->getChannel(),
 

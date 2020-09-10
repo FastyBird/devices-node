@@ -48,7 +48,7 @@ class Property implements IProperty
 	 * @var string
 	 *
 	 * @IPubDoctrine\Crud(is="required")
-	 * @ORM\Column(type="string", name="property_property", length=20, nullable=false)
+	 * @ORM\Column(type="string", name="property_property", length=50, nullable=false)
 	 */
 	protected $property;
 
@@ -56,7 +56,7 @@ class Property implements IProperty
 	 * @var string|null
 	 *
 	 * @IPubDoctrine\Crud(is="writable")
-	 * @ORM\Column(type="string", name="property_name", length=20, nullable=true, options={"default": null})
+	 * @ORM\Column(type="string", name="property_name", nullable=true, options={"default": null})
 	 */
 	protected $name = null;
 

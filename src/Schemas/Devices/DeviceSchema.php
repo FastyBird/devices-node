@@ -85,7 +85,6 @@ abstract class DeviceSchema extends NodeJsonApiSchemas\JsonApiSchema
 		return [
 			'identifier' => $device->getIdentifier(),
 			'name'       => $device->getName(),
-			'title'      => $device->getTitle(),
 			'comment'    => $device->getComment(),
 
 			'state'   => $device->getState()->getValue(),

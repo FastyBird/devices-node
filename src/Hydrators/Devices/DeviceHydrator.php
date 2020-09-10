@@ -36,7 +36,6 @@ abstract class DeviceHydrator extends NodeJsonApiHydrators\Hydrator
 	protected $attributes = [
 		'identifier',
 		'name',
-		'title',
 		'comment',
 		'enabled',
 	];
@@ -49,13 +48,13 @@ abstract class DeviceHydrator extends NodeJsonApiHydrators\Hydrator
 	 *
 	 * @return string|null
 	 */
-	protected function hydrateTitleAttribute(JsonAPIDocument\Objects\IStandardObject $attributes): ?string
+	protected function hydrateNameAttribute(JsonAPIDocument\Objects\IStandardObject $attributes): ?string
 	{
-		if ($attributes->get('title') === null || (string) $attributes->get('title') === '') {
+		if ($attributes->get('name') === null || (string) $attributes->get('name') === '') {
 			return null;
 		}
 
-		return (string) $attributes->get('title');
+		return (string) $attributes->get('name');
 	}
 
 	/**

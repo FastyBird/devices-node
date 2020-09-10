@@ -16,7 +16,6 @@
       "attributes" : {
         "identifier" : "first-device",
         "name" : "First device",
-        "title" : null,
         "comment" : null,
         "state" : "init",
         "enabled" : true,
@@ -165,7 +164,6 @@
       "attributes" : {
         "identifier" : "child-device",
         "name" : "Child device",
-        "title" : null,
         "comment" : "This is child",
         "state" : "init",
         "enabled" : true,
@@ -255,8 +253,7 @@
       "id" : "bf4cd870-2aac-45f0-a85e-e1cefd2d6d9a",
       "attributes" : {
         "identifier" : "second-device",
-        "name" : "Second device",
-        "title" : "Custom title",
+        "name" : null,
         "comment" : null,
         "state" : "init",
         "enabled" : true,
@@ -342,7 +339,6 @@
       "attributes" : {
         "identifier" : "third-device",
         "name" : "Third device",
-        "title" : null,
         "comment" : "Custom comment",
         "state" : "unknown",
         "enabled" : true,

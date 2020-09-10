@@ -58,7 +58,6 @@ final class EntitiesSubscriberTest extends BaseMockeryTestCase
 					'device'     => 'device-name',
 					'owner'      => null,
 					'name'       => 'Device custom name',
-					'title'      => null,
 					'comment'    => null,
 					'state'      => 'unknown',
 					'enabled'    => true,
@@ -115,7 +114,6 @@ final class EntitiesSubscriberTest extends BaseMockeryTestCase
 					'device'     => 'device-name',
 					'owner'      => null,
 					'name'       => 'Device custom name',
-					'title'      => null,
 					'comment'    => null,
 					'state'      => 'unknown',
 					'enabled'    => true,
@@ -171,7 +169,6 @@ final class EntitiesSubscriberTest extends BaseMockeryTestCase
 					'device'     => 'device-name',
 					'owner'      => null,
 					'name'       => 'Device custom name',
-					'title'      => null,
 					'comment'    => null,
 					'state'      => 'unknown',
 					'enabled'    => true,
@@ -237,9 +234,6 @@ final class EntitiesSubscriberTest extends BaseMockeryTestCase
 			],
 			[
 				'fieldName' => 'name',
-			],
-			[
-				'fieldName' => 'title',
 			],
 		];
 

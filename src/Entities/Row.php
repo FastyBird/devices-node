@@ -48,17 +48,17 @@ abstract class Row implements IRow
 	 * @var string
 	 *
 	 * @IPubDoctrine\Crud(is="required")
-	 * @ORM\Column(type="string", name="configuration_name", length=40, nullable=false)
+	 * @ORM\Column(type="string", name="configuration_configuration", length=50, nullable=false)
 	 */
-	protected $name;
+	protected $configuration;
 
 	/**
 	 * @var string|null
 	 *
 	 * @IPubDoctrine\Crud(is="writable")
-	 * @ORM\Column(type="string", name="configuration_title", nullable=true, options={"default": null})
+	 * @ORM\Column(type="string", name="configuration_name", nullable=true, options={"default": null})
 	 */
-	protected $title = null;
+	protected $name = null;
 
 	/**
 	 * @var string|null
@@ -85,42 +85,42 @@ abstract class Row implements IRow
 	protected $value = null;
 
 	/**
-	 * @param string $name
+	 * @param string $configuration
 	 * @param Uuid\UuidInterface|null $id
 	 *
 	 * @throws Throwable
 	 */
 	public function __construct(
-		string $name,
+		string $configuration,
 		?Uuid\UuidInterface $id = null
 	) {
 		$this->id = $id ?? Uuid\Uuid::uuid4();
 
+		$this->configuration = $configuration;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function getConfiguration(): string
+	{
+		return $this->configuration;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function setName(?string $name): void
+	{
 		$this->name = $name;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public function getName(): string
+	public function getName(): ?string
 	{
 		return $this->name;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function setTitle(?string $title): void
-	{
-		$this->title = $title;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function getTitle(): ?string
-	{
-		return $this->title;
 	}
 
 	/**
@@ -185,13 +185,13 @@ abstract class Row implements IRow
 	public function toArray(): array
 	{
 		return [
-			'id'      => $this->getPlainId(),
-			'type'    => $this->getType(),
-			'name'    => $this->getName(),
-			'title'   => $this->getTitle(),
-			'comment' => $this->getComment(),
-			'default' => $this->getDefault(),
-			'value'   => $this->getValue(),
+			'id'            => $this->getPlainId(),
+			'type'          => $this->getType(),
+			'configuration' => $this->getConfiguration(),
+			'name'          => $this->getName(),
+			'comment'       => $this->getComment(),
+			'default'       => $this->getDefault(),
+			'value'         => $this->getValue(),
 		];
 	}
 

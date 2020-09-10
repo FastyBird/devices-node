@@ -84,28 +84,16 @@ interface IDevice extends NodeDatabaseEntities\IEntity,
 	public function removeChild(IDevice $child): void;
 
 	/**
-	 * @param string $name
+	 * @param string|null $name
 	 *
 	 * @return void
 	 */
-	public function setName(string $name): void;
-
-	/**
-	 * @return string
-	 */
-	public function getName(): string;
-
-	/**
-	 * @param string|null $title
-	 *
-	 * @return void
-	 */
-	public function setTitle(?string $title): void;
+	public function setName(?string $name): void;
 
 	/**
 	 * @return string|null
 	 */
-	public function getTitle(): ?string;
+	public function getName(): ?string;
 
 	/**
 	 * @param string|null $comment
@@ -295,11 +283,11 @@ interface IDevice extends NodeDatabaseEntities\IEntity,
 	public function getConfigurationRow(string $id): ?Entities\Devices\Configuration\IRow;
 
 	/**
-	 * @param string|null $name
+	 * @param string|null $configuration
 	 *
 	 * @return Entities\Devices\Configuration\IRow|null
 	 */
-	public function findConfiguration(?string $name): ?Entities\Devices\Configuration\IRow;
+	public function findConfiguration(?string $configuration): ?Entities\Devices\Configuration\IRow;
 
 	/**
 	 * @return bool

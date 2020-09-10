@@ -16,7 +16,6 @@
       "attributes" : {
         "identifier" : "child-device",
         "name" : "Child device",
-        "title" : null,
         "comment" : "This is child",
         "state" : "init",
         "enabled" : true,

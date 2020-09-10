@@ -34,19 +34,19 @@ interface IRow extends NodeDatabaseEntities\IEntity,
 	/**
 	 * @return string
 	 */
-	public function getName(): string;
+	public function getConfiguration(): string;
 
 	/**
-	 * @param string|null $title
+	 * @param string|null $name
 	 *
 	 * @return void
 	 */
-	public function setTitle(?string $title): void;
+	public function setName(?string $name): void;
 
 	/**
 	 * @return string|null
 	 */
-	public function getTitle(): ?string;
+	public function getName(): ?string;
 
 	/**
 	 * @param string|null $comment

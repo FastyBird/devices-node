@@ -42,27 +42,15 @@ interface IChannel extends NodeDatabaseEntities\IEntity,
 	 *
 	 * @return void
 	 */
-	public function setName(?string $name = null): void;
-
-	/**
-	 * @return string
-	 */
-	public function getName(): string;
-
-	/**
-	 * @param string|null $title
-	 *
-	 * @return void
-	 */
-	public function setTitle(?string $title): void;
+	public function setName(?string $name): void;
 
 	/**
 	 * @return string|null
 	 */
-	public function getTitle(): ?string;
+	public function getName(): ?string;
 
 	/**
-	 * @param string $comment
+	 * @param string|null $comment
 	 *
 	 * @return void
 	 */
@@ -164,11 +152,11 @@ interface IChannel extends NodeDatabaseEntities\IEntity,
 	public function getConfigurationRow(string $id): ?Entities\Channels\Configuration\IRow;
 
 	/**
-	 * @param string|null $name
+	 * @param string|null $configuration
 	 *
 	 * @return Entities\Channels\Configuration\IRow|null
 	 */
-	public function findConfiguration(?string $name): ?Entities\Channels\Configuration\IRow;
+	public function findConfiguration(?string $configuration): ?Entities\Channels\Configuration\IRow;
 
 	/**
 	 * @return bool

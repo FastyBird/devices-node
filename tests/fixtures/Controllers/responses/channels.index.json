@@ -1,160 +1,158 @@
 {
-  "data" : [
-    {
-      "attributes" : {
-        "channel" : "channel-one",
-        "comment" : null,
-        "control" : [
-          "configure"
-        ],
-        "name" : "Channel one",
-        "title" : null
-      },
-      "id" : "17c59dfa-2edd-438e-8c49-faa4e38e5a5e",
-      "links" : {
-        "self" : "/v1/devices/69786d15-fd0c-4d9f-9378-33287c2009fa/channels/17c59dfa-2edd-438e-8c49-faa4e38e5a5e"
-      },
-      "relationships" : {
-        "configuration" : {
-          "data" : [
-            {
-              "id" : "008d911f-e6d4-4b17-aa28-939839581cde",
-              "type" : "devices-node/channel-configuration-select"
-            },
-            {
-              "id" : "31669d32-8cfa-4a71-bd06-d536a2f94c2c",
-              "type" : "devices-node/channel-configuration-select"
-            },
-            {
-              "id" : "3f83999e-c790-4f42-9e8e-4db749d0e6d4",
-              "type" : "devices-node/channel-configuration-number"
-            },
-            {
-              "id" : "c747cfdd-654c-4e50-9715-6d14dbf20552",
-              "type" : "devices-node/channel-configuration-select"
-            }
-          ],
-          "links" : {
-            "related" : {
-              "href" : "/v1/devices/69786d15-fd0c-4d9f-9378-33287c2009fa/channels/17c59dfa-2edd-438e-8c49-faa4e38e5a5e/configuration",
-              "meta" : {
-                "count" : 4
-              }
-            },
-            "self" : "/v1/devices/69786d15-fd0c-4d9f-9378-33287c2009fa/channels/17c59dfa-2edd-438e-8c49-faa4e38e5a5e/relationships/configuration"
-          }
-        },
-        "device" : {
-          "data" : {
-            "id" : "69786d15-fd0c-4d9f-9378-33287c2009fa",
-            "type" : "devices-node/physical-device"
-          },
-          "links" : {
-            "related" : "/v1/devices/69786d15-fd0c-4d9f-9378-33287c2009fa"
-          }
-        },
-        "properties" : {
-          "data" : [
-            {
-              "id" : "bbcccf8c-33ab-431b-a795-d7bb38b6b6db",
-              "type" : "devices-node/channel-property"
-            }
-          ],
-          "links" : {
-            "related" : {
-              "href" : "/v1/devices/69786d15-fd0c-4d9f-9378-33287c2009fa/channels/17c59dfa-2edd-438e-8c49-faa4e38e5a5e/properties",
-              "meta" : {
-                "count" : 1
-              }
-            },
-            "self" : "/v1/devices/69786d15-fd0c-4d9f-9378-33287c2009fa/channels/17c59dfa-2edd-438e-8c49-faa4e38e5a5e/relationships/properties"
-          }
-        }
-      },
-      "type" : "devices-node/channel"
-    },
-    {
-      "attributes" : {
-        "channel" : "channel-two",
-        "comment" : null,
-        "control" : [
-          "configure"
-        ],
-        "name" : "Channel two",
-        "title" : null
-      },
-      "id" : "6821f8e9-ae69-4d5c-9b7c-d2b213f1ae0a",
-      "links" : {
-        "self" : "/v1/devices/69786d15-fd0c-4d9f-9378-33287c2009fa/channels/6821f8e9-ae69-4d5c-9b7c-d2b213f1ae0a"
-      },
-      "relationships" : {
-        "configuration" : {
-          "data" : [
-            {
-              "id" : "1fa8e5ac-d2fb-4531-ba64-3c69863aeea3",
-              "type" : "devices-node/channel-configuration-select"
-            },
-            {
-              "id" : "3134ba8e-f134-4bf2-9c80-c977c4deb0fb",
-              "type" : "devices-node/channel-configuration-select"
-            },
-            {
-              "id" : "d8b0d2b4-a47a-4750-a225-ddfa973675d3",
-              "type" : "devices-node/channel-configuration-select"
-            }
-          ],
-          "links" : {
-            "related" : {
-              "href" : "/v1/devices/69786d15-fd0c-4d9f-9378-33287c2009fa/channels/6821f8e9-ae69-4d5c-9b7c-d2b213f1ae0a/configuration",
-              "meta" : {
-                "count" : 3
-              }
-            },
-            "self" : "/v1/devices/69786d15-fd0c-4d9f-9378-33287c2009fa/channels/6821f8e9-ae69-4d5c-9b7c-d2b213f1ae0a/relationships/configuration"
-          }
-        },
-        "device" : {
-          "data" : {
-            "id" : "69786d15-fd0c-4d9f-9378-33287c2009fa",
-            "type" : "devices-node/physical-device"
-          },
-          "links" : {
-            "related" : "/v1/devices/69786d15-fd0c-4d9f-9378-33287c2009fa"
-          }
-        },
-        "properties" : {
-          "data" : [
-            {
-              "id" : "24c436f4-a2e4-4d2b-b910-1a3ff785b784",
-              "type" : "devices-node/channel-property"
-            },
-            {
-              "id" : "28bc0d38-2f7c-4a71-aa74-27b102f8df4c",
-              "type" : "devices-node/channel-property"
-            }
-          ],
-          "links" : {
-            "related" : {
-              "href" : "/v1/devices/69786d15-fd0c-4d9f-9378-33287c2009fa/channels/6821f8e9-ae69-4d5c-9b7c-d2b213f1ae0a/properties",
-              "meta" : {
-                "count" : 2
-              }
-            },
-            "self" : "/v1/devices/69786d15-fd0c-4d9f-9378-33287c2009fa/channels/6821f8e9-ae69-4d5c-9b7c-d2b213f1ae0a/relationships/properties"
-          }
-        }
-      },
-      "type" : "devices-node/channel"
-    }
-  ],
+  "meta" : {
+    "author" : "FastyBird dev team",
+    "copyright" : "FastyBird s.r.o"
+  },
   "jsonapi" : {
     "version" : "1.1"
   },
   "links" : {
     "self" : "/v1/devices/69786d15-fd0c-4d9f-9378-33287c2009fa/channels"
   },
-  "meta" : {
-    "author" : "FastyBird dev team",
-    "copyright" : "FastyBird s.r.o"
-  }
+  "data" : [
+    {
+      "type" : "devices-node/channel",
+      "id" : "17c59dfa-2edd-438e-8c49-faa4e38e5a5e",
+      "attributes" : {
+        "name" : "Channel one",
+        "comment" : null,
+        "channel" : "channel-one",
+        "control" : [
+          "configure"
+        ]
+      },
+      "relationships" : {
+        "device" : {
+          "links" : {
+            "related" : "/v1/devices/69786d15-fd0c-4d9f-9378-33287c2009fa"
+          },
+          "data" : {
+            "type" : "devices-node/physical-device",
+            "id" : "69786d15-fd0c-4d9f-9378-33287c2009fa"
+          }
+        },
+        "properties" : {
+          "links" : {
+            "self" : "/v1/devices/69786d15-fd0c-4d9f-9378-33287c2009fa/channels/17c59dfa-2edd-438e-8c49-faa4e38e5a5e/relationships/properties",
+            "related" : {
+              "href" : "/v1/devices/69786d15-fd0c-4d9f-9378-33287c2009fa/channels/17c59dfa-2edd-438e-8c49-faa4e38e5a5e/properties",
+              "meta" : {
+                "count" : 1
+              }
+            }
+          },
+          "data" : [
+            {
+              "type" : "devices-node/channel-property",
+              "id" : "bbcccf8c-33ab-431b-a795-d7bb38b6b6db"
+            }
+          ]
+        },
+        "configuration" : {
+          "links" : {
+            "self" : "/v1/devices/69786d15-fd0c-4d9f-9378-33287c2009fa/channels/17c59dfa-2edd-438e-8c49-faa4e38e5a5e/relationships/configuration",
+            "related" : {
+              "href" : "/v1/devices/69786d15-fd0c-4d9f-9378-33287c2009fa/channels/17c59dfa-2edd-438e-8c49-faa4e38e5a5e/configuration",
+              "meta" : {
+                "count" : 4
+              }
+            }
+          },
+          "data" : [
+            {
+              "type" : "devices-node/channel-configuration-select",
+              "id" : "008d911f-e6d4-4b17-aa28-939839581cde"
+            },
+            {
+              "type" : "devices-node/channel-configuration-select",
+              "id" : "31669d32-8cfa-4a71-bd06-d536a2f94c2c"
+            },
+            {
+              "type" : "devices-node/channel-configuration-number",
+              "id" : "3f83999e-c790-4f42-9e8e-4db749d0e6d4"
+            },
+            {
+              "type" : "devices-node/channel-configuration-select",
+              "id" : "c747cfdd-654c-4e50-9715-6d14dbf20552"
+            }
+          ]
+        }
+      },
+      "links" : {
+        "self" : "/v1/devices/69786d15-fd0c-4d9f-9378-33287c2009fa/channels/17c59dfa-2edd-438e-8c49-faa4e38e5a5e"
+      }
+    },
+    {
+      "type" : "devices-node/channel",
+      "id" : "6821f8e9-ae69-4d5c-9b7c-d2b213f1ae0a",
+      "attributes" : {
+        "name" : "Channel two",
+        "comment" : null,
+        "channel" : "channel-two",
+        "control" : [
+          "configure"
+        ]
+      },
+      "relationships" : {
+        "device" : {
+          "links" : {
+            "related" : "/v1/devices/69786d15-fd0c-4d9f-9378-33287c2009fa"
+          },
+          "data" : {
+            "type" : "devices-node/physical-device",
+            "id" : "69786d15-fd0c-4d9f-9378-33287c2009fa"
+          }
+        },
+        "properties" : {
+          "links" : {
+            "self" : "/v1/devices/69786d15-fd0c-4d9f-9378-33287c2009fa/channels/6821f8e9-ae69-4d5c-9b7c-d2b213f1ae0a/relationships/properties",
+            "related" : {
+              "href" : "/v1/devices/69786d15-fd0c-4d9f-9378-33287c2009fa/channels/6821f8e9-ae69-4d5c-9b7c-d2b213f1ae0a/properties",
+              "meta" : {
+                "count" : 2
+              }
+            }
+          },
+          "data" : [
+            {
+              "type" : "devices-node/channel-property",
+              "id" : "24c436f4-a2e4-4d2b-b910-1a3ff785b784"
+            },
+            {
+              "type" : "devices-node/channel-property",
+              "id" : "28bc0d38-2f7c-4a71-aa74-27b102f8df4c"
+            }
+          ]
+        },
+        "configuration" : {
+          "links" : {
+            "self" : "/v1/devices/69786d15-fd0c-4d9f-9378-33287c2009fa/channels/6821f8e9-ae69-4d5c-9b7c-d2b213f1ae0a/relationships/configuration",
+            "related" : {
+              "href" : "/v1/devices/69786d15-fd0c-4d9f-9378-33287c2009fa/channels/6821f8e9-ae69-4d5c-9b7c-d2b213f1ae0a/configuration",
+              "meta" : {
+                "count" : 3
+              }
+            }
+          },
+          "data" : [
+            {
+              "type" : "devices-node/channel-configuration-select",
+              "id" : "1fa8e5ac-d2fb-4531-ba64-3c69863aeea3"
+            },
+            {
+              "type" : "devices-node/channel-configuration-select",
+              "id" : "3134ba8e-f134-4bf2-9c80-c977c4deb0fb"
+            },
+            {
+              "type" : "devices-node/channel-configuration-select",
+              "id" : "d8b0d2b4-a47a-4750-a225-ddfa973675d3"
+            }
+          ]
+        }
+      },
+      "links" : {
+        "self" : "/v1/devices/69786d15-fd0c-4d9f-9378-33287c2009fa/channels/6821f8e9-ae69-4d5c-9b7c-d2b213f1ae0a"
+      }
+    }
+  ]
 }

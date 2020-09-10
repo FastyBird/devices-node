@@ -9,8 +9,7 @@
         "configure"
       ],
       "enabled" : true,
-      "name" : "Newly created device",
-      "title" : null
+      "name" : "Newly created device"
     }
   }
 }
