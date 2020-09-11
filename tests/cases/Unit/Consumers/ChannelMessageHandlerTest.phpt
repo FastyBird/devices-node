@@ -6,6 +6,7 @@ use FastyBird\DevicesNode\Consumers;
 use FastyBird\DevicesNode\Models;
 use FastyBird\DevicesNode\States;
 use FastyBird\NodeExchange\Publishers as NodeExchangePublishers;
+use InvalidArgumentException;
 use Mockery;
 use Nette\Utils;
 use Tester\Assert;
@@ -102,6 +103,10 @@ final class ChannelMessageHandlerTest extends DbTestCase
 				Assert::true(isset($fixture[$routingKey]));
 
 				if (isset($fixture[$routingKey]['primaryKey'])) {
+					if (!isset($fixture[$routingKey][$data[$fixture[$routingKey]['primaryKey']]])) {
+						throw new InvalidArgumentException(sprintf('Invalid test data, primary ke %s is missing', $fixture[$routingKey]['primaryKey']));
+					}
+
 					Assert::equal($fixture[$routingKey][$data[$fixture[$routingKey]['primaryKey']]], $data);
 
 				} else {
