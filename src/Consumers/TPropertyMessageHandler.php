@@ -115,7 +115,7 @@ trait TPropertyMessageHandler
 					$message->offsetSet('pending', false);
 					$message->offsetSet('expected', null);
 
-				} else {
+				} elseif ($property->getExpected() !== null) {
 					$message->offsetSet('pending', true);
 				}
 
