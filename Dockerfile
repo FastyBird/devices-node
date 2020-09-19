@@ -67,8 +67,8 @@ COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
 
 # Checkout & install server app
 RUN cd ${APP_CODE_PATH} \
- && composer install --no-dev \
  && composer clearcache \
+ && composer install --no-dev \
 ;
 
 #####################################
