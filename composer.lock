@@ -1748,22 +1748,22 @@
         },
         {
             "name": "fastybird/node-auth",
-            "version": "v0.1.0",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/FastyBird/node-auth.git",
-                "reference": "255e967ff33c61b404160d1b303ea275d010dcfb"
+                "reference": "0dc90eb9331e3f86d5e8c23ed76cf7c2bddc94e1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FastyBird/node-auth/zipball/255e967ff33c61b404160d1b303ea275d010dcfb",
-                "reference": "255e967ff33c61b404160d1b303ea275d010dcfb",
+                "url": "https://api.github.com/repos/FastyBird/node-auth/zipball/0dc90eb9331e3f86d5e8c23ed76cf7c2bddc94e1",
+                "reference": "0dc90eb9331e3f86d5e8c23ed76cf7c2bddc94e1",
                 "shasum": ""
             },
             "require": {
                 "ext-openssl": "*",
-                "fastybird/datetime-factory": "^0.1",
-                "fastybird/node-web-server": "^0.1",
+                "fastybird/datetime-factory": "@dev",
+                "fastybird/node-web-server": "@dev",
                 "ipub/doctrine-consistence": "^0.3",
                 "ipub/doctrine-crud": "^2.3",
                 "ipub/doctrine-dynamic-discriminator-map": "^1.3",
@@ -1824,7 +1824,7 @@
                 "library",
                 "libs"
             ],
-            "time": "2020-08-30T10:22:45+00:00"
+            "time": "2020-09-19T18:45:10+00:00"
         },
         {
             "name": "fastybird/node-bootstrap",
@@ -1902,21 +1902,21 @@
         },
         {
             "name": "fastybird/node-database",
-            "version": "v0.1.0",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/FastyBird/node-database.git",
-                "reference": "f69f444e86c5b273b040144cf1b6d56a25d3f12f"
+                "reference": "ad48f8a03a1f74e74269fe14c96ddefce0483a9b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FastyBird/node-database/zipball/f69f444e86c5b273b040144cf1b6d56a25d3f12f",
-                "reference": "f69f444e86c5b273b040144cf1b6d56a25d3f12f",
+                "url": "https://api.github.com/repos/FastyBird/node-database/zipball/ad48f8a03a1f74e74269fe14c96ddefce0483a9b",
+                "reference": "ad48f8a03a1f74e74269fe14c96ddefce0483a9b",
                 "shasum": ""
             },
             "require": {
                 "doctrine/orm": "2.7.2",
-                "fastybird/node-web-server": "^0.1",
+                "fastybird/node-web-server": "@dev",
                 "ipub/doctrine-crud": "^2.3",
                 "ipub/doctrine-orm-query": "^0.0.6",
                 "nette/bootstrap": "^3.0",
@@ -1974,27 +1974,27 @@
                 "mysql",
                 "rabbit"
             ],
-            "time": "2020-08-14T21:34:29+00:00"
+            "time": "2020-09-19T18:44:21+00:00"
         },
         {
             "name": "fastybird/node-exchange",
-            "version": "v0.1.0",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/FastyBird/node-exchange.git",
-                "reference": "4b39c62539d4860c2b77f2674ca398c054670585"
+                "reference": "42a983d2fb175bfd7f44203fb86e92f292c1e6b7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FastyBird/node-exchange/zipball/4b39c62539d4860c2b77f2674ca398c054670585",
-                "reference": "4b39c62539d4860c2b77f2674ca398c054670585",
+                "url": "https://api.github.com/repos/FastyBird/node-exchange/zipball/42a983d2fb175bfd7f44203fb86e92f292c1e6b7",
+                "reference": "42a983d2fb175bfd7f44203fb86e92f292c1e6b7",
                 "shasum": ""
             },
             "require": {
                 "bunny/bunny": "^0.4",
                 "contributte/console": "^0.8",
-                "fastybird/datetime-factory": "^0.1",
-                "fastybird/node-metadata": "^0.1.0",
+                "fastybird/datetime-factory": "@dev",
+                "fastybird/node-metadata": "@dev",
                 "nette/bootstrap": "^3.0",
                 "nette/di": "^3.0",
                 "nette/utils": "^3.0",
@@ -2046,27 +2046,27 @@
                 "queue",
                 "rabbit"
             ],
-            "time": "2020-09-18T20:15:56+00:00"
+            "time": "2020-09-19T18:42:33+00:00"
         },
         {
             "name": "fastybird/node-json-api",
-            "version": "v0.1.0",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/FastyBird/node-json-api.git",
-                "reference": "a581f8edb1176a3bc403315ea4112e9c96a1e5fe"
+                "reference": "f916774e4c8980e383539b079a24d9d127243e57"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FastyBird/node-json-api/zipball/a581f8edb1176a3bc403315ea4112e9c96a1e5fe",
-                "reference": "a581f8edb1176a3bc403315ea4112e9c96a1e5fe",
+                "url": "https://api.github.com/repos/FastyBird/node-json-api/zipball/f916774e4c8980e383539b079a24d9d127243e57",
+                "reference": "f916774e4c8980e383539b079a24d9d127243e57",
                 "shasum": ""
             },
             "require": {
                 "consistence/consistence": "~1.0 || ~2.0",
                 "contributte/translation": "^0.6",
                 "ext-json": "*",
-                "fastybird/node-web-server": "^0.1",
+                "fastybird/node-web-server": "@dev",
                 "ipub/doctrine-crud": "^2.3",
                 "ipub/json-api-document": "^0.1",
                 "nette/bootstrap": "^3.0",
@@ -2121,20 +2121,20 @@
                 "library",
                 "libs"
             ],
-            "time": "2020-08-22T09:12:20+00:00"
+            "time": "2020-09-19T18:43:36+00:00"
         },
         {
             "name": "fastybird/node-metadata",
-            "version": "v0.1.0",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/FastyBird/node-metadata.git",
-                "reference": "5d1d1b315993627014382e31580ce4de49376fd7"
+                "reference": "e4966ef53e05a5f8061b892bacec5f9349bfd14b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FastyBird/node-metadata/zipball/5d1d1b315993627014382e31580ce4de49376fd7",
-                "reference": "5d1d1b315993627014382e31580ce4de49376fd7",
+                "url": "https://api.github.com/repos/FastyBird/node-metadata/zipball/e4966ef53e05a5f8061b892bacec5f9349bfd14b",
+                "reference": "e4966ef53e05a5f8061b892bacec5f9349bfd14b",
                 "shasum": ""
             },
             "require": {
@@ -2187,11 +2187,11 @@
                 "metadata",
                 "node"
             ],
-            "time": "2020-09-10T21:25:12+00:00"
+            "time": "2020-09-19T18:38:03+00:00"
         },
         {
             "name": "fastybird/node-web-server",
-            "version": "v0.1.0",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/FastyBird/node-web-server.git",
