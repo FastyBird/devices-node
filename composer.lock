@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4bc8d12bf02c99fba20f394d2a96abf1",
+    "content-hash": "3d5a99587d6c61a4e88286840d7a593e",
     "packages": [
         {
             "name": "bunny/bunny",
@@ -1982,12 +1982,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/FastyBird/node-exchange.git",
-                "reference": "6c10b680038cdba79ee1d089499eb7c7e7563ecc"
+                "reference": "4b39c62539d4860c2b77f2674ca398c054670585"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FastyBird/node-exchange/zipball/6c10b680038cdba79ee1d089499eb7c7e7563ecc",
-                "reference": "6c10b680038cdba79ee1d089499eb7c7e7563ecc",
+                "url": "https://api.github.com/repos/FastyBird/node-exchange/zipball/4b39c62539d4860c2b77f2674ca398c054670585",
+                "reference": "4b39c62539d4860c2b77f2674ca398c054670585",
                 "shasum": ""
             },
             "require": {
@@ -8886,7 +8886,15 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": [],
+    "stability-flags": {
+        "fastybird/node-auth": 20,
+        "fastybird/node-bootstrap": 20,
+        "fastybird/node-database": 20,
+        "fastybird/node-exchange": 20,
+        "fastybird/node-json-api": 20,
+        "fastybird/node-metadata": 20,
+        "fastybird/node-web-server": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
