@@ -98,6 +98,7 @@ final class ChannelMessageHandler implements NodeExchangeConsumers\IMessageHandl
 	 */
 	public function process(
 		string $routingKey,
+		string $origin,
 		Utils\ArrayHash $message
 	): bool {
 		try {
@@ -178,7 +179,12 @@ final class ChannelMessageHandler implements NodeExchangeConsumers\IMessageHandl
 			}
 		}
 
-		$this->logger->info('[CONSUMER] Successfully consumed entity message');
+		$this->logger->info('[CONSUMER] Successfully consumed entity message', [
+			'message' => [
+				'routingKey' => $routingKey,
+				'origin'     => $origin,
+			],
+		]);
 
 		return true;
 	}

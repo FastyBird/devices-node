@@ -98,6 +98,7 @@ final class ChannelPropertyMessageHandler implements NodeExchangeConsumers\IMess
 	 */
 	public function process(
 		string $routingKey,
+		string $origin,
 		Utils\ArrayHash $message
 	): bool {
 		try {
@@ -165,7 +166,10 @@ final class ChannelPropertyMessageHandler implements NodeExchangeConsumers\IMess
 						|| $message->offsetExists('value')
 					) {
 						// Property have to be configured & have to be settable
-						if ($property->isSettable()) {
+						if (
+							$property->isSettable()
+							|| $origin === DevicesNode\Constants::NODE_MQTT_ORIGIN
+						) {
 							$propertyState = $this->propertyStateRepository->findOne($property->getId());
 
 							// In case synchronization failed...
@@ -205,7 +209,12 @@ final class ChannelPropertyMessageHandler implements NodeExchangeConsumers\IMess
 			}
 		}
 
-		$this->logger->info('[CONSUMER] Successfully consumed entity message');
+		$this->logger->info('[CONSUMER] Successfully consumed entity message', [
+			'message' => [
+				'routingKey' => $routingKey,
+				'origin'     => $origin,
+			],
+		]);
 
 		return true;
 	}

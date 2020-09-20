@@ -113,7 +113,7 @@ final class ChannelPropertyMessageHandlerTest extends DbTestCase
 		/** @var Consumers\ChannelPropertyMessageHandler $handler */
 		$handler = $this->getContainer()->getByType(Consumers\ChannelPropertyMessageHandler::class);
 
-		$handler->process($routingKey, $message);
+		$handler->process($routingKey, '', $message);
 	}
 
 }

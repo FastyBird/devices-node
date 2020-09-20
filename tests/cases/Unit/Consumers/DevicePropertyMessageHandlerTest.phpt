@@ -169,7 +169,7 @@ final class DevicePropertyMessageHandlerTest extends DbTestCase
 		/** @var Consumers\DevicePropertyMessageHandler $handler */
 		$handler = $this->getContainer()->getByType(Consumers\DevicePropertyMessageHandler::class);
 
-		$handler->process($routingKey, $message);
+		$handler->process($routingKey, '', $message);
 	}
 
 }

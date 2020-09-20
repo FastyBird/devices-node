@@ -50,7 +50,7 @@ final class DeviceHardwareMessageHandlerTest extends DbTestCase
 		/** @var Consumers\DeviceHardwareMessageHandler $handler */
 		$handler = $this->getContainer()->getByType(Consumers\DeviceHardwareMessageHandler::class);
 
-		$handler->process($routingKey, $message);
+		$handler->process($routingKey, '', $message);
 	}
 
 }
