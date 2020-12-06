@@ -15,6 +15,7 @@ require_once __DIR__ . '/../DbTestCase.php';
 
 /**
  * @testCase
+ * @skip
  */
 final class ChannelMessageHandlerTest extends DbTestCase
 {
@@ -24,8 +25,9 @@ final class ChannelMessageHandlerTest extends DbTestCase
 	 * @param Utils\ArrayHash $fixture
 	 *
 	 * @dataProvider ./../../../fixtures/Handlers/channelMessage.php
+	 * @skip
 	 */
-	public function XtestProcessMessage(MqttPluginEntities\ChannelAttribute $entity, Utils\ArrayHash $fixture): void
+	public function testProcessMessage(MqttPluginEntities\ChannelAttribute $entity, Utils\ArrayHash $fixture): void
 	{
 		$channelsManager = Mockery::mock(DevicesModuleModels\Channels\ChannelsManager::class);
 		$channelsManager

@@ -15,6 +15,7 @@ require_once __DIR__ . '/../DbTestCase.php';
 
 /**
  * @testCase
+ * @skip
  */
 final class DeviceFirmwareMessageHandlerTest extends DbTestCase
 {
@@ -24,8 +25,9 @@ final class DeviceFirmwareMessageHandlerTest extends DbTestCase
 	 * @param Utils\ArrayHash $fixture
 	 *
 	 * @dataProvider ./../../../fixtures/Handlers/deviceFirmwareMessage.php
+	 * @skip
 	 */
-	public function XtestProcessMessage(MqttPluginEntities\Firmware $entity, Utils\ArrayHash $fixture): void
+	public function testProcessMessage(MqttPluginEntities\Firmware $entity, Utils\ArrayHash $fixture): void
 	{
 		$firmwareManager = Mockery::mock(DevicesModuleModels\Devices\PhysicalDevice\FirmwareManager::class);
 		$firmwareManager

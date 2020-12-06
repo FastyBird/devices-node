@@ -34,13 +34,13 @@ final class ChannelPropertyMessageHandlerTest extends DbTestCase
 		$stateMock = Mockery::mock(CouchDbStoragePluginStates\IProperty::class);
 		$stateMock
 			->shouldReceive('getValue')
-			->andReturn(isset($state['value']) ? $state['value'] : null)
+			->andReturn($state['value'] ?? null)
 			->getMock()
 			->shouldReceive('getExpected')
-			->andReturn(isset($state['expected']) ? $state['expected'] : null)
+			->andReturn($state['expected'] ?? null)
 			->getMock()
 			->shouldReceive('isPending')
-			->andReturn(isset($state['pending']) ? $state['pending'] : false)
+			->andReturn($state['pending'] ?? false)
 			->getMock()
 			->shouldReceive('toArray')
 			->andReturn($state)
@@ -51,7 +51,7 @@ final class ChannelPropertyMessageHandlerTest extends DbTestCase
 		$sender = Mockery::mock(MqttPluginSenders\MqttV1Sender::class);
 		$sender
 			->shouldReceive('sendChannelProperty')
-			->withArgs(function ($device, $channel, $property, $payload, $parent) use ($deferred): bool {
+			->withArgs(function (): bool {
 				return true;
 			})
 			->andReturn($deferred->promise());
