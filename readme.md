@@ -37,7 +37,7 @@ This microservice has several console command.
 ##### HTTP server
 
 ```sh
-$ vendor/bin/fb-console fb:node:server:start
+$ vendor/bin/fb-console fb:web-server:start
 ```
 
 This command is to start build in web server which is listening for incoming http api request messages from clients and is listening for new data from exchange bus from other microservices. 
