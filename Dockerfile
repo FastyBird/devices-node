@@ -1,5 +1,5 @@
 # Define PHP version
-ARG TARGET_PHP_VERSION=7.3
+ARG TARGET_PHP_VERSION=7.4
 
 # Define PHP docker image
 FROM php:${TARGET_PHP_VERSION}-cli
