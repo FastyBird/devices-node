@@ -7,7 +7,7 @@ use Doctrine\DBAL;
 use Doctrine\ORM;
 use FastyBird\Bootstrap\Boot;
 use FastyBird\DateTimeFactory;
-use FastyBird\DevicesNode\Exceptions;
+use InvalidArgumentException;
 use Mockery;
 use Nette\DI;
 use Nettrine\DBAL as NettrineDBAL;
@@ -207,7 +207,7 @@ abstract class DbTestCase extends BaseMockeryTestCase
 		$handle = @fopen($file, 'r'); // intentionally @
 
 		if ($handle === false) {
-			throw new Exceptions\InvalidArgumentException(sprintf('Cannot open file "%s".', $file));
+			throw new InvalidArgumentException(sprintf('Cannot open file "%s".', $file));
 		}
 
 		$count = 0;

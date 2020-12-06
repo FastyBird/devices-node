@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f3f6d1d49f0ff605ce4634469234bf78",
+    "content-hash": "c00033c543fba989c816e9a07502e1df",
     "packages": [
         {
             "name": "binsoul/net-mqtt",
@@ -2533,12 +2533,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/FastyBird/simple-auth.git",
-                "reference": "79b4c840de78bb6f6fda01e0c386d2f8c0e5f91d"
+                "reference": "042f4b0121440dfcc31b94b4ad8dbac707c89623"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FastyBird/simple-auth/zipball/79b4c840de78bb6f6fda01e0c386d2f8c0e5f91d",
-                "reference": "79b4c840de78bb6f6fda01e0c386d2f8c0e5f91d",
+                "url": "https://api.github.com/repos/FastyBird/simple-auth/zipball/042f4b0121440dfcc31b94b4ad8dbac707c89623",
+                "reference": "042f4b0121440dfcc31b94b4ad8dbac707c89623",
                 "shasum": ""
             },
             "require": {
@@ -2609,7 +2609,7 @@
                 "issues": "https://github.com/FastyBird/simple-auth/issues",
                 "source": "https://github.com/FastyBird/simple-auth/tree/master"
             },
-            "time": "2020-12-03T19:12:13+00:00"
+            "time": "2020-12-06T18:05:50+00:00"
         },
         {
             "name": "fastybird/web-server",
@@ -9947,7 +9947,7 @@
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=7.3.0"
+        "php": ">=7.4.0"
     },
     "platform-dev": [],
     "plugin-api-version": "2.0.0"
