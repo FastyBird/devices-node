@@ -31,7 +31,7 @@
   "minimum-stability": "dev",
 
   "require": {
-    "php": ">=7.3.0",
+    "php": ">=7.4.0",
     "cweagans/composer-patches": "^1.6",
     "fastybird/bootstrap": "@dev",
     "fastybird/couchdb-storage-plugin": "@dev",
@@ -39,7 +39,7 @@
     "fastybird/devices-module": "@dev",
     "fastybird/json-api": "@dev",
     "fastybird/modules-metadata": "@dev",
-    "fastybird/mqtt-plugin": "9999999-dev",
+    "fastybird/mqtt-plugin": "@dev",
     "fastybird/rabbitmq-plugin": "@dev",
     "fastybird/simple-auth": "@dev",
     "fastybird/web-server": "@dev"

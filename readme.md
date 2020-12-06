@@ -1,8 +1,8 @@
 # FastyBird devices node
 
-[![Build Status](https://img.shields.io/travis/FastyBird/devices-node.svg?style=flat-square)](https://travis-ci.org/FastyBird/devices-node)
+[![Build Status](https://img.shields.io/travis/com/FastyBird/devices-node.svg?style=flat-square)](https://travis-ci.com/FastyBird/devices-node)
 [![Code coverage](https://img.shields.io/coveralls/FastyBird/devices-node.svg?style=flat-square)](https://coveralls.io/r/FastyBird/devices-node)
-![PHP from Travis config](https://img.shields.io/travis/php-v/fastybird/devices-node?style=flat-square)
+![PHP](https://img.shields.io/packagist/php-v/fastybird/devices-node?style=flat-square)
 [![Licence](https://img.shields.io/packagist/l/FastyBird/devices-node.svg?style=flat-square)](https://packagist.org/packages/FastyBird/devices-node)
 [![Downloads total](https://img.shields.io/packagist/dt/FastyBird/devices-node.svg?style=flat-square)](https://packagist.org/packages/FastyBird/devices-node)
 [![Latest stable](https://img.shields.io/packagist/v/FastyBird/devices-node.svg?style=flat-square)](https://packagist.org/packages/FastyBird/devices-node)
@@ -89,6 +89,12 @@ Configuration could be made via environment variables:
 | `FB_APP_PARAMETER__STORAGE_USERNAME=null` | Username |
 | `FB_APP_PARAMETER__STORAGE_PASSWORD=null` | Password |
 | | |
+| `FB_APP_PARAMETER__MQTT_HOST=127.0.0.1` | VerneMQ host address |
+| `FB_APP_PARAMETER__MQTT_PORT=1883` | VerneMQ access port |
+| `FB_APP_PARAMETER__MQTT_USERNAME=guest` | Username |
+| `FB_APP_PARAMETER__MQTT_PASSWORD=guest` | Password |
+| `FB_APP_PARAMETER__MQTT_CLIENTID=guest` | MQTT client ID |
+| | |
 | `FB_APP_PARAMETER__SERVER_ADDRESS=0.0.0.0` | HTTP server host address |
 | `FB_APP_PARAMETER__SERVER_PORT=8000` | HTTP server access port |
 | | |
@@ -110,13 +116,13 @@ After this steps, microservice could be started with [server command](#http-serv
 
 ## Feedback
 
-Use the [issue tracker](https://github.com/FastyBird/auth-node/issues) for bugs or [mail](mailto:code@fastybird.com) or [Tweet](https://twitter.com/fastybird) us for any idea that can improve the project.
+Use the [issue tracker](https://github.com/FastyBird/devices-node/issues) for bugs or [mail](mailto:code@fastybird.com) or [Tweet](https://twitter.com/fastybird) us for any idea that can improve the project.
 
 Thank you for testing, reporting and contributing.
 
 ## Changelog
 
-For release info check [release page](https://github.com/FastyBird/auth-node/releases)
+For release info check [release page](https://github.com/FastyBird/devices-node/releases)
 
 ## Maintainers
 
