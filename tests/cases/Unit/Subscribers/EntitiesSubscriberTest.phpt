@@ -3,10 +3,10 @@
 namespace Tests\Cases;
 
 use Doctrine\ORM;
-use FastyBird\DevicesNode\Entities;
-use FastyBird\DevicesNode\Models;
+use FastyBird\CouchDbStoragePlugin\Models as CouchDbStoragePluginModels;
+use FastyBird\DevicesModule\Entities as DevicesModuleEntities;
 use FastyBird\DevicesNode\Subscribers;
-use FastyBird\NodeExchange\Publishers as NodeExchangePublishers;
+use FastyBird\RabbitMqPlugin\Publishers as RabbitMqPluginPublishers;
 use Mockery;
 use Ninjify\Nunjuck\TestCase\BaseMockeryTestCase;
 use stdClass;
@@ -22,19 +22,15 @@ final class EntitiesSubscriberTest extends BaseMockeryTestCase
 
 	public function testSubscriberEvents(): void
 	{
-		$publisher = Mockery::mock(NodeExchangePublishers\IRabbitMqPublisher::class);
+		$publisher = Mockery::mock(RabbitMqPluginPublishers\IRabbitMqPublisher::class);
 		$entityManager = Mockery::mock(ORM\EntityManagerInterface::class);
 
-		$devicesPropertiesStatesManager = Mockery::mock(Models\States\Devices\PropertiesManager::class);
-		$devicesPropertyStateRepository = Mockery::mock(Models\States\Devices\PropertyRepository::class);
-		$channelsPropertiesStatesManager = Mockery::mock(Models\States\Channels\PropertiesManager::class);
-		$channelPropertyStateRepository = Mockery::mock(Models\States\Channels\PropertyRepository::class);
+		$propertiesStatesManager = Mockery::mock(CouchDbStoragePluginModels\PropertiesManager::class);
+		$propertyStateRepository = Mockery::mock(CouchDbStoragePluginModels\PropertyRepository::class);
 
 		$subscriber = new Subscribers\EntitiesSubscriber(
-			$devicesPropertiesStatesManager,
-			$devicesPropertyStateRepository,
-			$channelsPropertiesStatesManager,
-			$channelPropertyStateRepository,
+			$propertiesStatesManager,
+			$propertyStateRepository,
 			$publisher,
 			$entityManager
 		);
@@ -44,7 +40,7 @@ final class EntitiesSubscriberTest extends BaseMockeryTestCase
 
 	public function testPublishCreatedEntity(): void
 	{
-		$publisher = Mockery::mock(NodeExchangePublishers\IRabbitMqPublisher::class);
+		$publisher = Mockery::mock(RabbitMqPluginPublishers\IRabbitMqPublisher::class);
 		$publisher
 			->shouldReceive('publish')
 			->withArgs(function (string $key, array $data): bool {
@@ -53,7 +49,7 @@ final class EntitiesSubscriberTest extends BaseMockeryTestCase
 				Assert::same('fb.bus.node.entity.created.device', $key);
 				Assert::equal([
 					'identifier' => 'device-name',
-					'type'       => 'physical',
+					'type'       => 'local',
 					'parent'     => null,
 					'device'     => 'device-name',
 					'owner'      => null,
@@ -71,21 +67,17 @@ final class EntitiesSubscriberTest extends BaseMockeryTestCase
 
 		$entityManager = $this->getEntityManager();
 
-		$devicesPropertiesStatesManager = Mockery::mock(Models\States\Devices\PropertiesManager::class);
-		$devicesPropertyStateRepository = Mockery::mock(Models\States\Devices\PropertyRepository::class);
-		$channelsPropertiesStatesManager = Mockery::mock(Models\States\Channels\PropertiesManager::class);
-		$channelPropertyStateRepository = Mockery::mock(Models\States\Channels\PropertyRepository::class);
+		$propertiesStatesManager = Mockery::mock(CouchDbStoragePluginModels\PropertiesManager::class);
+		$propertyStateRepository = Mockery::mock(CouchDbStoragePluginModels\PropertyRepository::class);
 
 		$subscriber = new Subscribers\EntitiesSubscriber(
-			$devicesPropertiesStatesManager,
-			$devicesPropertyStateRepository,
-			$channelsPropertiesStatesManager,
-			$channelPropertyStateRepository,
+			$propertiesStatesManager,
+			$propertyStateRepository,
 			$publisher,
 			$entityManager
 		);
 
-		$entity = new Entities\Devices\PhysicalDevice('device-name', 'device-name');
+		$entity = new DevicesModuleEntities\Devices\LocalDevice('device-name', 'device-name');
 		$entity->setName('Device custom name');
 
 		$eventArgs = Mockery::mock(ORM\Event\LifecycleEventArgs::class);
@@ -100,7 +92,7 @@ final class EntitiesSubscriberTest extends BaseMockeryTestCase
 
 	public function testPublishUpdatedEntity(): void
 	{
-		$publisher = Mockery::mock(NodeExchangePublishers\IRabbitMqPublisher::class);
+		$publisher = Mockery::mock(RabbitMqPluginPublishers\IRabbitMqPublisher::class);
 		$publisher
 			->shouldReceive('publish')
 			->withArgs(function (string $key, array $data): bool {
@@ -109,7 +101,7 @@ final class EntitiesSubscriberTest extends BaseMockeryTestCase
 				Assert::same('fb.bus.node.entity.updated.device', $key);
 				Assert::equal([
 					'identifier' => 'device-name',
-					'type'       => 'physical',
+					'type'       => 'local',
 					'parent'     => null,
 					'device'     => 'device-name',
 					'owner'      => null,
@@ -127,21 +119,17 @@ final class EntitiesSubscriberTest extends BaseMockeryTestCase
 
 		$entityManager = $this->getEntityManager(true);
 
-		$devicesPropertiesStatesManager = Mockery::mock(Models\States\Devices\PropertiesManager::class);
-		$devicesPropertyStateRepository = Mockery::mock(Models\States\Devices\PropertyRepository::class);
-		$channelsPropertiesStatesManager = Mockery::mock(Models\States\Channels\PropertiesManager::class);
-		$channelPropertyStateRepository = Mockery::mock(Models\States\Channels\PropertyRepository::class);
+		$propertiesStatesManager = Mockery::mock(CouchDbStoragePluginModels\PropertiesManager::class);
+		$propertyStateRepository = Mockery::mock(CouchDbStoragePluginModels\PropertyRepository::class);
 
 		$subscriber = new Subscribers\EntitiesSubscriber(
-			$devicesPropertiesStatesManager,
-			$devicesPropertyStateRepository,
-			$channelsPropertiesStatesManager,
-			$channelPropertyStateRepository,
+			$propertiesStatesManager,
+			$propertyStateRepository,
 			$publisher,
 			$entityManager
 		);
 
-		$entity = new Entities\Devices\PhysicalDevice('device-name', 'device-name');
+		$entity = new DevicesModuleEntities\Devices\LocalDevice('device-name', 'device-name');
 		$entity->setName('Device custom name');
 
 		$eventArgs = Mockery::mock(ORM\Event\LifecycleEventArgs::class);
@@ -155,7 +143,7 @@ final class EntitiesSubscriberTest extends BaseMockeryTestCase
 
 	public function testPublishDeletedEntity(): void
 	{
-		$publisher = Mockery::mock(NodeExchangePublishers\IRabbitMqPublisher::class);
+		$publisher = Mockery::mock(RabbitMqPluginPublishers\IRabbitMqPublisher::class);
 		$publisher
 			->shouldReceive('publish')
 			->withArgs(function (string $key, array $data): bool {
@@ -164,7 +152,7 @@ final class EntitiesSubscriberTest extends BaseMockeryTestCase
 				Assert::same('fb.bus.node.entity.deleted.device', $key);
 				Assert::equal([
 					'identifier' => 'device-name',
-					'type'       => 'physical',
+					'type'       => 'local',
 					'parent'     => null,
 					'device'     => 'device-name',
 					'owner'      => null,
@@ -180,7 +168,7 @@ final class EntitiesSubscriberTest extends BaseMockeryTestCase
 			})
 			->times(1);
 
-		$entity = new Entities\Devices\PhysicalDevice('device-name', 'device-name');
+		$entity = new DevicesModuleEntities\Devices\LocalDevice('device-name', 'device-name');
 		$entity->setName('Device custom name');
 
 		$uow = Mockery::mock(ORM\UnitOfWork::class);
@@ -203,16 +191,12 @@ final class EntitiesSubscriberTest extends BaseMockeryTestCase
 			->andReturn($uow)
 			->times(1);
 
-		$devicesPropertiesStatesManager = Mockery::mock(Models\States\Devices\PropertiesManager::class);
-		$devicesPropertyStateRepository = Mockery::mock(Models\States\Devices\PropertyRepository::class);
-		$channelsPropertiesStatesManager = Mockery::mock(Models\States\Channels\PropertiesManager::class);
-		$channelPropertyStateRepository = Mockery::mock(Models\States\Channels\PropertyRepository::class);
+		$propertiesStatesManager = Mockery::mock(CouchDbStoragePluginModels\PropertiesManager::class);
+		$propertyStateRepository = Mockery::mock(CouchDbStoragePluginModels\PropertyRepository::class);
 
 		$subscriber = new Subscribers\EntitiesSubscriber(
-			$devicesPropertiesStatesManager,
-			$devicesPropertyStateRepository,
-			$channelsPropertiesStatesManager,
-			$channelPropertyStateRepository,
+			$propertiesStatesManager,
+			$propertyStateRepository,
 			$publisher,
 			$entityManager
 		);
@@ -223,9 +207,9 @@ final class EntitiesSubscriberTest extends BaseMockeryTestCase
 	/**
 	 * @param bool $withUow
 	 *
-	 * @return ORM\EntityManagerInterface
+	 * @return ORM\EntityManagerInterface|Mockery\MockInterface
 	 */
-	private function getEntityManager(bool $withUow = false): ORM\EntityManagerInterface
+	private function getEntityManager(bool $withUow = false): Mockery\MockInterface
 	{
 		$metadata = new stdClass();
 		$metadata->fieldMappings = [
@@ -240,7 +224,7 @@ final class EntitiesSubscriberTest extends BaseMockeryTestCase
 		$entityManager = Mockery::mock(ORM\EntityManagerInterface::class);
 		$entityManager
 			->shouldReceive('getClassMetadata')
-			->withArgs([Entities\Devices\PhysicalDevice::class])
+			->withArgs([DevicesModuleEntities\Devices\LocalDevice::class])
 			->andReturn($metadata);
 
 		if ($withUow) {

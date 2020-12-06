@@ -15,18 +15,16 @@
 
 namespace FastyBird\DevicesNode\Consumers;
 
-use Doctrine\Common;
-use Doctrine\DBAL;
-use Doctrine\DBAL\Connection;
+use FastyBird\CouchDbStoragePlugin\Models as CouchDbStoragePluginModels;
+use FastyBird\DevicesModule\Helpers as DevicesModuleHelpers;
+use FastyBird\DevicesModule\Models as DevicesModuleModels;
+use FastyBird\DevicesModule\Queries as DevicesModuleQueries;
 use FastyBird\DevicesNode;
 use FastyBird\DevicesNode\Exceptions;
-use FastyBird\DevicesNode\Models;
-use FastyBird\DevicesNode\Queries;
-use FastyBird\NodeExchange\Consumers as NodeExchangeConsumers;
-use FastyBird\NodeExchange\Exceptions as NodeExchangeExceptions;
-use FastyBird\NodeMetadata;
-use FastyBird\NodeMetadata\Loaders as NodeMetadataLoaders;
-use Nette;
+use FastyBird\ModulesMetadata;
+use FastyBird\ModulesMetadata\Loaders as ModulesMetadataLoaders;
+use FastyBird\MqttPlugin\Senders as MqttPluginSenders;
+use FastyBird\RabbitMqPlugin\Exceptions as RabbitMqPluginExceptions;
 use Nette\Utils;
 use Psr\Log;
 use Throwable;
@@ -39,75 +37,74 @@ use Throwable;
  *
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  */
-final class DevicePropertyMessageHandler implements NodeExchangeConsumers\IMessageHandler
+final class DevicePropertyMessageHandler extends MessageHandler
 {
 
-	use Nette\SmartObject;
 	use TPropertyMessageHandler;
 
-	/** @var Models\Devices\IDeviceRepository */
+	/** @var DevicesModuleHelpers\PropertyHelper */
+	protected $propertyHelper;
+
+	/** @var DevicesModuleModels\Devices\IDeviceRepository */
 	private $deviceRepository;
 
-	/** @var Models\Devices\Properties\IPropertiesManager */
-	private $propertiesManager;
-
-	/** @var Models\States\Devices\IPropertiesManager */
+	/** @var CouchDbStoragePluginModels\IPropertiesManager */
 	private $propertiesStatesManager;
 
-	/** @var Models\States\Devices\IPropertyRepository */
+	/** @var CouchDbStoragePluginModels\IPropertyRepository */
 	private $propertyStateRepository;
 
-	/** @var NodeMetadataLoaders\ISchemaLoader */
-	private $schemaLoader;
-
-	/** @var Log\LoggerInterface */
-	private $logger;
-
-	/** @var Common\Persistence\ManagerRegistry */
-	private $managerRegistry;
+	/** @var MqttPluginSenders\ISender */
+	private $mqttV1sender;
 
 	public function __construct(
-		Models\Devices\IDeviceRepository $deviceRepository,
-		Models\Devices\Properties\IPropertiesManager $propertiesManager,
-		Models\States\Devices\IPropertiesManager $propertiesStatesManager,
-		Models\States\Devices\IPropertyRepository $propertyStateRepository,
-		NodeMetadataLoaders\ISchemaLoader $schemaLoader,
-		Log\LoggerInterface $logger,
-		Common\Persistence\ManagerRegistry $managerRegistry
+		DevicesModuleModels\Devices\IDeviceRepository $deviceRepository,
+		DevicesModuleHelpers\PropertyHelper $propertyHelper,
+		CouchDbStoragePluginModels\IPropertiesManager $propertiesStatesManager,
+		CouchDbStoragePluginModels\IPropertyRepository $propertyStateRepository,
+		MqttPluginSenders\ISender $mqttV1sender,
+		ModulesMetadataLoaders\ISchemaLoader $schemaLoader,
+		ModulesMetadata\Schemas\IValidator $validator,
+		?Log\LoggerInterface $logger = null
 	) {
+		parent::__construct($schemaLoader, $validator, $logger);
+
 		$this->deviceRepository = $deviceRepository;
-		$this->propertiesManager = $propertiesManager;
+		$this->propertyHelper = $propertyHelper;
 		$this->propertiesStatesManager = $propertiesStatesManager;
 		$this->propertyStateRepository = $propertyStateRepository;
 
-		$this->schemaLoader = $schemaLoader;
-		$this->logger = $logger;
-		$this->managerRegistry = $managerRegistry;
+		$this->mqttV1sender = $mqttV1sender;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 *
-	 * @throws DBAL\ConnectionException
-	 * @throws NodeExchangeExceptions\TerminateException
+	 * @throws RabbitMqPluginExceptions\TerminateException
 	 */
 	public function process(
 		string $routingKey,
 		string $origin,
-		Utils\ArrayHash $message
+		string $payload
 	): bool {
+		$message = $this->parseMessage($routingKey, $origin, $payload);
+
+		if ($message === null) {
+			return true;
+		}
+
 		try {
-			$findQuery = new Queries\FindDevicesQuery();
+			$findQuery = new DevicesModuleQueries\FindDevicesQuery();
 			$findQuery->byIdentifier($message->offsetGet('device'));
 
 			$device = $this->deviceRepository->findOneBy($findQuery);
 
 		} catch (Throwable $ex) {
-			throw new NodeExchangeExceptions\TerminateException('An error occurred: ' . $ex->getMessage(), $ex->getCode(), $ex);
+			throw new RabbitMqPluginExceptions\TerminateException('An error occurred: ' . $ex->getMessage(), $ex->getCode(), $ex);
 		}
 
 		if ($device === null) {
-			$this->logger->error(sprintf('[CONSUMER] Device "%s" is not registered', $message->offsetGet('device')));
+			$this->logger->error(sprintf('[FB:NODE:CONSUMER] Device "%s" is not registered', $message->offsetGet('device')));
 
 			return true;
 		}
@@ -115,16 +112,7 @@ final class DevicePropertyMessageHandler implements NodeExchangeConsumers\IMessa
 		$property = $device->findProperty($message->offsetGet('property'));
 
 		if ($property === null) {
-			$this->logger->error(sprintf('[CONSUMER] Property "%s" is not registered', $message->offsetGet('property')));
-
-			return true;
-		}
-
-		if (
-			$message->offsetExists('expected')
-			&& $message->offsetExists('value')
-		) {
-			$this->logger->error('[CONSUMER] Message format is invalid. Message can\'t contain both expected value & current value');
+			$this->logger->error(sprintf('[FB:NODE:CONSUMER] Property "%s" is not registered', $message->offsetGet('property')));
 
 			return true;
 		}
@@ -132,44 +120,36 @@ final class DevicePropertyMessageHandler implements NodeExchangeConsumers\IMessa
 		try {
 			switch ($routingKey) {
 				case DevicesNode\Constants::RABBIT_MQ_DEVICES_PROPERTIES_DATA_ROUTING_KEY:
-					// Start transaction connection to the database
-					$this->getOrmConnection()->beginTransaction();
+					// Property have to be configured & have to be settable
+					if ($property->isSettable()) {
+						$state = $this->propertyStateRepository->findOne($property->getId());
 
-					$toUpdate = $this->handlePropertyConfiguration($message);
-
-					if ($toUpdate !== []) {
-						$this->propertiesManager->update($property, Utils\ArrayHash::from($toUpdate));
-					}
-
-					if (
-						$message->offsetExists('expected')
-						|| $message->offsetExists('value')
-					) {
-						// Property have to be configured & have to be settable
-						if (
-							$property->isSettable()
-							|| $origin === DevicesNode\Constants::NODE_MQTT_ORIGIN
-						) {
-							$propertyState = $this->propertyStateRepository->findOne($property->getId());
-
-							// In case synchronization failed...
-							if ($propertyState === null) {
-								// ...create state in storage
-								$propertyState = $this->propertiesStatesManager->create($property);
-							}
-
-							$toUpdate = $this->handlePropertyState($propertyState, $message);
-
-							$this->propertiesStatesManager->updateState(
-								$propertyState,
-								$property,
-								Utils\ArrayHash::from($toUpdate)
+						// In case synchronization failed...
+						if ($state === null) {
+							// ...create state in storage
+							$state = $this->propertiesStatesManager->create(
+								$property->getId(),
+								Utils\ArrayHash::from($property->toArray())
 							);
 						}
-					}
 
-					// Commit all changes into database
-					$this->getOrmConnection()->commit();
+						$toUpdate = $this->handlePropertyState($property, $state, $message);
+
+						$state = $this->propertiesStatesManager->updateState(
+							$state,
+							Utils\ArrayHash::from($toUpdate)
+						);
+
+						if ($state->getExpected() !== null && $state->isPending()) {
+							$this->mqttV1sender->sendDeviceProperty(
+								$property->getDevice()->getIdentifier(),
+								$property->getProperty(),
+								(string) $state->getExpected(),
+								$property->getDevice()->getParent() !== null ? $property->getDevice()->getParent()->getIdentifier() : null
+							)
+								->done();
+						}
+					}
 					break;
 
 				default:
@@ -180,16 +160,10 @@ final class DevicePropertyMessageHandler implements NodeExchangeConsumers\IMessa
 			return false;
 
 		} catch (Throwable $ex) {
-			throw new NodeExchangeExceptions\TerminateException('An error occurred: ' . $ex->getMessage(), $ex->getCode(), $ex);
-
-		} finally {
-			// Revert all changes when error occur
-			if ($this->getOrmConnection()->isTransactionActive()) {
-				$this->getOrmConnection()->rollBack();
-			}
+			throw new RabbitMqPluginExceptions\TerminateException('An error occurred: ' . $ex->getMessage(), $ex->getCode(), $ex);
 		}
 
-		$this->logger->info('[CONSUMER] Successfully consumed entity message', [
+		$this->logger->info('[FB:NODE:CONSUMER] Successfully consumed entity message', [
 			'message' => [
 				'routingKey' => $routingKey,
 				'origin'     => $origin,
@@ -202,36 +176,19 @@ final class DevicePropertyMessageHandler implements NodeExchangeConsumers\IMessa
 	/**
 	 * {@inheritDoc}
 	 */
-	public function getSchema(string $routingKey, string $origin): ?string
+	protected function getSchemaFile(string $routingKey, string $origin): ?string
 	{
 		switch ($routingKey) {
 			case DevicesNode\Constants::RABBIT_MQ_DEVICES_PROPERTIES_DATA_ROUTING_KEY:
-				if ($origin === DevicesNode\Constants::NODE_MQTT_ORIGIN) {
-					return $this->schemaLoader->load(NodeMetadata\Constants::RESOURCES_FOLDER . '/schemas/mqtt-node/data.device.property.json');
-
-				} elseif (
+				if (
 					$origin === DevicesNode\Constants::NODE_TRIGGERS_ORIGIN
-					|| $origin === DevicesNode\Constants::NODE_WEBSOCKETS_ORIGIN
+					|| $origin === DevicesNode\Constants::NODE_UI_ORIGIN
 				) {
-					return $this->schemaLoader->load(NodeMetadata\Constants::RESOURCES_FOLDER . '/schemas/data/data.device.property.json');
+					return ModulesMetadata\Constants::RESOURCES_FOLDER . '/schemas/data/data.device.property.json';
 				}
 		}
 
 		return null;
-	}
-
-	/**
-	 * @return Connection
-	 */
-	protected function getOrmConnection(): Connection
-	{
-		$connection = $this->managerRegistry->getConnection();
-
-		if ($connection instanceof Connection) {
-			return $connection;
-		}
-
-		throw new Exceptions\RuntimeException('Entity manager could not be loaded');
 	}
 
 }

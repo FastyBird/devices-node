@@ -1,140 +1,39 @@
 <?php declare(strict_types = 1);
 
 use FastyBird\DevicesNode;
-use FastyBird\DevicesNode\Types;
 use Nette\Utils;
 
 return [
-	'messageWithoutUpdate'       => [
+	'messageWithUpdate' => [
 		DevicesNode\Constants::RABBIT_MQ_CHANNELS_PROPERTIES_DATA_ROUTING_KEY,
-		Utils\ArrayHash::from([
+		DevicesNode\Constants::NODE_UI_ORIGIN,
+		Utils\Json::encode([
 			'device'   => 'first-device',
 			'parent'   => null,
 			'channel'  => 'channel-one',
 			'property' => 'switch',
-			'name'     => 'switch',
-		]),
-		[],
-	],
-	'messageWithUpdate'          => [
-		DevicesNode\Constants::RABBIT_MQ_CHANNELS_PROPERTIES_DATA_ROUTING_KEY,
-		Utils\ArrayHash::from([
-			'device'   => 'first-device',
-			'parent'   => null,
-			'channel'  => 'channel-one',
-			'property' => 'switch',
-			'name'     => 'Relay switch',
+			'expected' => 'off',
 		]),
 		[
-			'fb.bus.node.entity.updated.channel.property' => [
-				'id'        => 'bbcccf8c-33ab-431b-a795-d7bb38b6b6db',
-				'property'  => 'switch',
-				'name'      => 'Relay switch',
-				'settable'  => true,
-				'queryable' => true,
-				'datatype'  => 'enum',
-				'unit'      => null,
-				'format'    => ['on', 'off', 'toggle'],
-				'device'    => 'first-device',
-				'owner'     => '455354e8-96bd-4c29-84e7-9f10e1d4db4b',
-				'parent'    => null,
-				'channel'   => 'channel-one',
-				'value'     => null,
-				'expected'  => null,
-				'pending'   => false,
-			],
+			'value'    => 'on',
+			'expected' => 'off',
+			'pending'  => true,
 		],
 	],
-	'messageWithMultiRowUpdate'  => [
+	'messageWithoutUpdate' => [
 		DevicesNode\Constants::RABBIT_MQ_CHANNELS_PROPERTIES_DATA_ROUTING_KEY,
-		Utils\ArrayHash::from([
+		DevicesNode\Constants::NODE_UI_ORIGIN,
+		Utils\Json::encode([
 			'device'   => 'first-device',
 			'parent'   => null,
 			'channel'  => 'channel-one',
 			'property' => 'switch',
-			'name'     => 'Relay switch',
-			'datatype' => Types\DatatypeType::DATA_TYPE_STRING,
+			'expected' => 'on',
 		]),
 		[
-			'fb.bus.node.entity.updated.channel.property' => [
-				'id'        => 'bbcccf8c-33ab-431b-a795-d7bb38b6b6db',
-				'property'  => 'switch',
-				'name'      => 'Relay switch',
-				'settable'  => true,
-				'queryable' => true,
-				'datatype'  => 'string',
-				'unit'      => null,
-				'format'    => null,
-				'device'    => 'first-device',
-				'owner'     => '455354e8-96bd-4c29-84e7-9f10e1d4db4b',
-				'parent'    => null,
-				'channel'   => 'channel-one',
-				'value'     => null,
-				'expected'  => null,
-				'pending'   => false,
-			],
-		],
-	],
-	'messageWithFormatUpdate'    => [
-		DevicesNode\Constants::RABBIT_MQ_CHANNELS_PROPERTIES_DATA_ROUTING_KEY,
-		Utils\ArrayHash::from([
-			'device'   => 'first-device',
-			'parent'   => null,
-			'channel'  => 'channel-one',
-			'property' => 'switch',
-			'name'     => 'Relay switch',
-			'datatype' => Types\DatatypeType::DATA_TYPE_INTEGER,
-			'format'   => '10:50',
-		]),
-		[
-			'fb.bus.node.entity.updated.channel.property' => [
-				'id'        => 'bbcccf8c-33ab-431b-a795-d7bb38b6b6db',
-				'property'  => 'switch',
-				'name'      => 'Relay switch',
-				'settable'  => true,
-				'queryable' => true,
-				'datatype'  => 'integer',
-				'unit'      => null,
-				'format'    => [10, 50],
-				'device'    => 'first-device',
-				'owner'     => '455354e8-96bd-4c29-84e7-9f10e1d4db4b',
-				'parent'    => null,
-				'channel'   => 'channel-one',
-				'value'     => null,
-				'expected'  => null,
-				'pending'   => false,
-			],
-		],
-	],
-	'messageWithBadFormatUpdate' => [
-		DevicesNode\Constants::RABBIT_MQ_CHANNELS_PROPERTIES_DATA_ROUTING_KEY,
-		Utils\ArrayHash::from([
-			'device'   => 'first-device',
-			'parent'   => null,
-			'channel'  => 'channel-one',
-			'property' => 'switch',
-			'name'     => 'Relay switch',
-			'datatype' => Types\DatatypeType::DATA_TYPE_INTEGER,
-			'format'   => 'on,off',
-		]),
-		[
-			'fb.bus.node.entity.updated.channel.property' => [
-				'id'        => 'bbcccf8c-33ab-431b-a795-d7bb38b6b6db',
-				'property'  => 'switch',
-				'name'      => 'Relay switch',
-				'settable'  => true,
-				'queryable' => true,
-				'datatype'  => 'integer',
-				'unit'      => null,
-				'format'    => null,
-				'device'    => 'first-device',
-				'owner'     => '455354e8-96bd-4c29-84e7-9f10e1d4db4b',
-				'parent'    => null,
-				'channel'   => 'channel-one',
-				'value'     => null,
-				'expected'  => null,
-				'pending'   => false,
-			],
+			'value'    => 'on',
+			'expected' => null,
+			'pending'  => false,
 		],
 	],
 ];

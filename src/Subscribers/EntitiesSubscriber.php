@@ -19,12 +19,13 @@ use Consistence;
 use Doctrine\Common;
 use Doctrine\ORM;
 use Doctrine\Persistence;
+use FastyBird\CouchDbStoragePlugin\Models as CouchDbStoragePluginModels;
+use FastyBird\Database\Entities as DatabaseEntities;
+use FastyBird\DevicesModule;
+use FastyBird\DevicesModule\Entities as DevicesModuleEntities;
 use FastyBird\DevicesNode;
-use FastyBird\DevicesNode\Entities;
 use FastyBird\DevicesNode\Exceptions;
-use FastyBird\DevicesNode\Models;
-use FastyBird\NodeDatabase\Entities as NodeDatabaseEntities;
-use FastyBird\NodeExchange\Publishers as NodeExchangePublishers;
+use FastyBird\RabbitMqPlugin\Publishers as RabbitMqPluginPublishers;
 use Nette;
 use Ramsey\Uuid;
 use ReflectionClass;
@@ -47,36 +48,26 @@ final class EntitiesSubscriber implements Common\EventSubscriber
 
 	use Nette\SmartObject;
 
-	/** @var Models\States\Devices\IPropertiesManager */
-	private $devicesPropertiesStatesManager;
+	/** @var CouchDbStoragePluginModels\IPropertiesManager */
+	private $propertiesStatesManager;
 
-	/** @var Models\States\Devices\IPropertyRepository */
-	private $devicesPropertyStateRepository;
+	/** @var CouchDbStoragePluginModels\IPropertyRepository */
+	private $propertyStateRepository;
 
-	/** @var Models\States\Channels\IPropertiesManager */
-	private $channelsPropertiesStatesManager;
-
-	/** @var Models\States\Channels\IPropertyRepository */
-	private $channelPropertyStateRepository;
-
-	/** @var NodeExchangePublishers\IRabbitMqPublisher */
+	/** @var RabbitMqPluginPublishers\IRabbitMqPublisher */
 	private $publisher;
 
 	/** @var ORM\EntityManagerInterface */
 	private $entityManager;
 
 	public function __construct(
-		Models\States\Devices\IPropertiesManager $devicesPropertiesStatesManager,
-		Models\States\Devices\IPropertyRepository $devicesPropertyStateRepository,
-		Models\States\Channels\IPropertiesManager $channelsPropertiesStatesManager,
-		Models\States\Channels\IPropertyRepository $channelPropertyStateRepository,
-		NodeExchangePublishers\IRabbitMqPublisher $publisher,
+		CouchDbStoragePluginModels\IPropertiesManager $propertiesStatesManager,
+		CouchDbStoragePluginModels\IPropertyRepository $propertyStateRepository,
+		RabbitMqPluginPublishers\IRabbitMqPublisher $publisher,
 		ORM\EntityManagerInterface $entityManager
 	) {
-		$this->devicesPropertiesStatesManager = $devicesPropertiesStatesManager;
-		$this->devicesPropertyStateRepository = $devicesPropertyStateRepository;
-		$this->channelsPropertiesStatesManager = $channelsPropertiesStatesManager;
-		$this->channelPropertyStateRepository = $channelPropertyStateRepository;
+		$this->propertiesStatesManager = $propertiesStatesManager;
+		$this->propertyStateRepository = $propertyStateRepository;
 
 		$this->publisher = $publisher;
 		$this->entityManager = $entityManager;
@@ -108,7 +99,7 @@ final class EntitiesSubscriber implements Common\EventSubscriber
 		$entity = $eventArgs->getObject();
 
 		// Check for valid entity
-		if (!$entity instanceof NodeDatabaseEntities\IEntity) {
+		if (!$entity instanceof DatabaseEntities\IEntity) {
 			return;
 		}
 
@@ -137,21 +128,21 @@ final class EntitiesSubscriber implements Common\EventSubscriber
 
 		// Check for valid entity
 		if (
-			!$entity instanceof NodeDatabaseEntities\IEntity
+			!$entity instanceof DatabaseEntities\IEntity
 			|| $uow->isScheduledForDelete($entity)
 		) {
 			return;
 		}
 
 		if (
-			$entity instanceof Entities\Channels\Controls\IControl
+			$entity instanceof DevicesModuleEntities\Channels\Controls\IControl
 			&& $uow->isScheduledForUpdate($entity->getChannel())
 		) {
 			return;
 		}
 
 		if (
-			$entity instanceof Entities\Devices\Controls\IControl
+			$entity instanceof DevicesModuleEntities\Devices\Controls\IControl
 			&& $uow->isScheduledForUpdate($entity->getDevice())
 		) {
 			return;
@@ -170,18 +161,18 @@ final class EntitiesSubscriber implements Common\EventSubscriber
 		foreach ($uow->getScheduledEntityDeletions() as $entity) {
 			if (
 				(
-					$entity instanceof Entities\Devices\Controls\IControl
-					|| $entity instanceof Entities\Channels\Controls\IControl
+					$entity instanceof DevicesModuleEntities\Devices\Controls\IControl
+					|| $entity instanceof DevicesModuleEntities\Channels\Controls\IControl
 				)
-				&& $entity->getName() === DevicesNode\Constants::CONTROL_CONFIG
+				&& $entity->getName() === DevicesModule\Constants::CONTROL_CONFIG
 			) {
-				if ($entity instanceof Entities\Devices\Controls\IControl) {
+				if ($entity instanceof DevicesModuleEntities\Devices\Controls\IControl) {
 					foreach ($entity->getDevice()->getConfiguration() as $row) {
 						$uow->scheduleForDelete($row);
 					}
 				}
 
-				if ($entity instanceof Entities\Channels\Controls\IControl) {
+				if ($entity instanceof DevicesModuleEntities\Channels\Controls\IControl) {
 					foreach ($entity->getChannel()->getConfiguration() as $row) {
 						$uow->scheduleForDelete($row);
 					}
@@ -212,19 +203,19 @@ final class EntitiesSubscriber implements Common\EventSubscriber
 			$processedEntities[] = $hash;
 
 			// Check for valid entity
-			if (!$entity instanceof NodeDatabaseEntities\IEntity) {
+			if (!$entity instanceof DatabaseEntities\IEntity) {
 				continue;
 			}
 
 			if (
-				$entity instanceof Entities\Devices\Controls\IControl
+				$entity instanceof DevicesModuleEntities\Devices\Controls\IControl
 				&& $uow->isScheduledForDelete($entity->getDevice())
 			) {
 				continue;
 			}
 
 			if (
-				$entity instanceof Entities\Channels\Controls\IControl
+				$entity instanceof DevicesModuleEntities\Channels\Controls\IControl
 				&& $uow->isScheduledForDelete($entity->getChannel())
 			) {
 				continue;
@@ -239,12 +230,12 @@ final class EntitiesSubscriber implements Common\EventSubscriber
 	}
 
 	/**
-	 * @param NodeDatabaseEntities\IEntity $entity
+	 * @param DatabaseEntities\IEntity $entity
 	 * @param mixed[] $identifier
 	 *
 	 * @return string
 	 */
-	private function getHash(NodeDatabaseEntities\IEntity $entity, array $identifier): string
+	private function getHash(DatabaseEntities\IEntity $entity, array $identifier): string
 	{
 		return implode(
 			' ',
@@ -272,55 +263,40 @@ final class EntitiesSubscriber implements Common\EventSubscriber
 	}
 
 	/**
-	 * @param NodeDatabaseEntities\IEntity $entity
+	 * @param DatabaseEntities\IEntity $entity
 	 * @param string $action
 	 *
 	 * @return void
 	 */
-	private function processEntityAction(NodeDatabaseEntities\IEntity $entity, string $action): void
+	private function processEntityAction(DatabaseEntities\IEntity $entity, string $action): void
 	{
-		if ($entity instanceof Entities\Devices\Controls\IControl) {
+		if ($entity instanceof DevicesModuleEntities\Devices\Controls\IControl) {
 			$entity = $entity->getDevice();
 			$action = self::ACTION_UPDATED;
 		}
 
-		if ($entity instanceof Entities\Channels\Controls\IControl) {
+		if ($entity instanceof DevicesModuleEntities\Channels\Controls\IControl) {
 			$entity = $entity->getChannel();
 			$action = self::ACTION_UPDATED;
 		}
 
-		if ($entity instanceof Entities\Devices\Properties\IProperty) {
-			$state = $this->devicesPropertyStateRepository->findOne($entity->getId());
+		if (
+			$entity instanceof DevicesModuleEntities\Devices\Properties\IProperty ||
+			$entity instanceof DevicesModuleEntities\Channels\Properties\IProperty
+		) {
+			$state = $this->propertyStateRepository->findOne($entity->getId());
 
 			switch ($action) {
 				case self::ACTION_CREATED:
 				case self::ACTION_UPDATED:
 					if ($state === null) {
-						$this->devicesPropertiesStatesManager->create($entity);
+						$this->propertiesStatesManager->create($entity->getId(), Nette\Utils\ArrayHash::from($entity->toArray()));
 					}
 					break;
 
 				case self::ACTION_DELETED:
 					if ($state !== null) {
-						$this->devicesPropertiesStatesManager->delete($state);
-					}
-					break;
-			}
-
-		} elseif ($entity instanceof Entities\Channels\Properties\IProperty) {
-			$state = $this->channelPropertyStateRepository->findOne($entity->getId());
-
-			switch ($action) {
-				case self::ACTION_CREATED:
-				case self::ACTION_UPDATED:
-					if ($state === null) {
-						$this->channelsPropertiesStatesManager->create($entity);
-					}
-					break;
-
-				case self::ACTION_DELETED:
-					if ($state !== null) {
-						$this->channelsPropertiesStatesManager->delete($state);
+						$this->propertiesStatesManager->delete($state);
 					}
 					break;
 			}
@@ -333,17 +309,10 @@ final class EntitiesSubscriber implements Common\EventSubscriber
 				$routingKey = str_replace(DevicesNode\Constants::RABBIT_MQ_ENTITIES_ROUTING_KEY_ACTION_REPLACE_STRING, $action, $routingKey);
 
 				if (
-					$entity instanceof Entities\Devices\Properties\IProperty
-					|| $entity instanceof Entities\Channels\Properties\IProperty
+					$entity instanceof DevicesModuleEntities\Devices\Properties\IProperty
+					|| $entity instanceof DevicesModuleEntities\Channels\Properties\IProperty
 				) {
-					$state = null;
-
-					if ($entity instanceof Entities\Devices\Properties\IProperty) {
-						$state = $this->devicesPropertyStateRepository->findOne($entity->getId());
-
-					} elseif ($entity instanceof Entities\Channels\Properties\IProperty) {
-						$state = $this->channelPropertyStateRepository->findOne($entity->getId());
-					}
+					$state = $this->propertyStateRepository->findOne($entity->getId());
 
 					$this->publisher->publish($routingKey, array_merge($state !== null ? $state->toArray() : [], $this->toArray($entity)));
 
@@ -357,12 +326,12 @@ final class EntitiesSubscriber implements Common\EventSubscriber
 	}
 
 	/**
-	 * @param NodeDatabaseEntities\IEntity $entity
+	 * @param DatabaseEntities\IEntity $entity
 	 * @param string $class
 	 *
 	 * @return bool
 	 */
-	private function validateEntity(NodeDatabaseEntities\IEntity $entity, string $class): bool
+	private function validateEntity(DatabaseEntities\IEntity $entity, string $class): bool
 	{
 		$result = false;
 
@@ -378,11 +347,11 @@ final class EntitiesSubscriber implements Common\EventSubscriber
 	}
 
 	/**
-	 * @param NodeDatabaseEntities\IEntity $entity
+	 * @param DatabaseEntities\IEntity $entity
 	 *
 	 * @return mixed[]
 	 */
-	private function toArray(NodeDatabaseEntities\IEntity $entity): array
+	private function toArray(DatabaseEntities\IEntity $entity): array
 	{
 		if (method_exists($entity, 'toArray')) {
 			return $entity->toArray();
@@ -428,7 +397,11 @@ final class EntitiesSubscriber implements Common\EventSubscriber
 					continue;
 				}
 
-				$values[strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $field))] = $value;
+				$key = preg_replace('/(?<!^)[A-Z]/', '_$0', $field);
+
+				if ($key !== null) {
+					$values[strtolower($key)] = $value;
+				}
 
 			} catch (Exceptions\PropertyNotExistsException $ex) {
 				// No need to do anything
@@ -439,14 +412,14 @@ final class EntitiesSubscriber implements Common\EventSubscriber
 	}
 
 	/**
-	 * @param NodeDatabaseEntities\IEntity $entity
+	 * @param DatabaseEntities\IEntity $entity
 	 * @param string $property
 	 *
 	 * @return mixed
 	 *
 	 * @throws Exceptions\PropertyNotExistsException
 	 */
-	private function getPropertyValue(NodeDatabaseEntities\IEntity $entity, string $property)
+	private function getPropertyValue(DatabaseEntities\IEntity $entity, string $property)
 	{
 		$ucFirst = ucfirst($property);
 

@@ -38,8 +38,8 @@ jobs:
             script:
                 - make coverage
             after_script:
-                - composer global require php-coveralls/php-coveralls ^2.1.0
-                - ~/.composer/vendor/bin/php-coveralls --verbose --config tests/.coveralls.yml
+              - composer require php-coveralls/php-coveralls ^2.1.0
+              - vendor/bin/php-coveralls --verbose --config tests/.coveralls.yml
 
         -   stage: Outdated Dependencies
             if: branch = master AND type = cron

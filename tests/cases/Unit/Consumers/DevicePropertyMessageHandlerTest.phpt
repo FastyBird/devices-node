@@ -2,12 +2,12 @@
 
 namespace Tests\Cases;
 
+use FastyBird\CouchDbStoragePlugin\Models as CouchDbStoragePluginModels;
+use FastyBird\CouchDbStoragePlugin\States as CouchDbStoragePluginStates;
 use FastyBird\DevicesNode\Consumers;
-use FastyBird\DevicesNode\Models;
-use FastyBird\DevicesNode\States;
-use FastyBird\NodeExchange\Publishers as NodeExchangePublishers;
+use FastyBird\MqttPlugin\Senders as MqttPluginSenders;
 use Mockery;
-use Nette\Utils;
+use React;
 use Tester\Assert;
 
 require_once __DIR__ . '/../../../bootstrap.php';
@@ -19,157 +19,84 @@ require_once __DIR__ . '/../DbTestCase.php';
 final class DevicePropertyMessageHandlerTest extends DbTestCase
 {
 
-	public function setUp(): void
-	{
-		parent::setUp();
-
-		$deviceStateMock = Mockery::mock(States\Devices\IProperty::class);
-		$deviceStateMock
-			->shouldReceive('getValue')
-			->andReturn(null)
-			->getMock()
-			->shouldReceive('getExpected')
-			->andReturn(null)
-			->getMock()
-			->shouldReceive('isPending')
-			->andReturn(false)
-			->getMock()
-			->shouldReceive('toArray')
-			->andReturn([
-				'value'    => null,
-				'expected' => null,
-				'pending'  => false,
-			])
-			->getMock();
-
-		$deviceStatePropertyRepositoryMock = Mockery::mock(Models\States\Devices\PropertyRepository::class);
-		$deviceStatePropertyRepositoryMock
-			->shouldReceive('findOne')
-			->andReturn($deviceStateMock)
-			->getMock()
-			->shouldReceive('findValue')
-			->andReturn(null)
-			->getMock()
-			->shouldReceive('findExpected')
-			->andReturn(null)
-			->getMock();
-
-		$this->mockContainerService(
-			Models\States\Devices\PropertyRepository::class,
-			$deviceStatePropertyRepositoryMock
-		);
-
-		$deviceStatePropertiesManagerMock = Mockery::mock(Models\States\Devices\PropertiesManager::class);
-		$deviceStatePropertiesManagerMock
-			->shouldReceive('create')
-			->andReturn($deviceStateMock)
-			->getMock()
-			->shouldReceive('update')
-			->andReturn($deviceStateMock)
-			->getMock()
-			->shouldReceive('updateState')
-			->andReturn($deviceStateMock)
-			->getMock()
-			->shouldReceive('delete')
-			->andReturn(true)
-			->getMock();
-
-		$this->mockContainerService(
-			Models\States\Devices\PropertiesManager::class,
-			$deviceStatePropertiesManagerMock
-		);
-
-		$channelStateMock = Mockery::mock(States\Channels\IProperty::class);
-		$channelStateMock
-			->shouldReceive('getValue')
-			->andReturn(null)
-			->getMock()
-			->shouldReceive('getExpected')
-			->andReturn(null)
-			->getMock()
-			->shouldReceive('isPending')
-			->andReturn(false)
-			->getMock()
-			->shouldReceive('toArray')
-			->andReturn([
-				'value'    => null,
-				'expected' => null,
-				'pending'  => false,
-			])
-			->getMock();
-
-		$channelStatePropertyRepositoryMock = Mockery::mock(Models\States\Channels\PropertyRepository::class);
-		$channelStatePropertyRepositoryMock
-			->shouldReceive('findOne')
-			->andReturn($channelStateMock)
-			->getMock()
-			->shouldReceive('findValue')
-			->andReturn(null)
-			->getMock()
-			->shouldReceive('findExpected')
-			->andReturn(null)
-			->getMock();
-
-		$this->mockContainerService(
-			Models\States\Channels\PropertyRepository::class,
-			$channelStatePropertyRepositoryMock
-		);
-
-		$channelStatePropertiesManagerMock = Mockery::mock(Models\States\Channels\PropertiesManager::class);
-		$channelStatePropertiesManagerMock
-			->shouldReceive('create')
-			->andReturn($channelStateMock)
-			->getMock()
-			->shouldReceive('update')
-			->andReturn($channelStateMock)
-			->getMock()
-			->shouldReceive('updateState')
-			->andReturn($channelStateMock)
-			->getMock()
-			->shouldReceive('delete')
-			->andReturn(true)
-			->getMock();
-
-		$this->mockContainerService(
-			Models\States\Channels\PropertiesManager::class,
-			$channelStatePropertiesManagerMock
-		);
-	}
-
 	/**
 	 * @param string $routingKey
-	 * @param Utils\ArrayHash $message
-	 * @param mixed[] $fixture
+	 * @param string $origin
+	 * @param string $payload
+	 * @param mixed[] $state
 	 *
 	 * @dataProvider ./../../../fixtures/Consumers/devicePropertyMessage.php
 	 */
-	public function testProcessMessage(string $routingKey, Utils\ArrayHash $message, array $fixture): void
+	public function testProcessMessage(string $routingKey, string $origin, string $payload, array $state): void
 	{
-		$rabbitPublisher = Mockery::mock(NodeExchangePublishers\RabbitMqPublisher::class);
-		$rabbitPublisher
-			->shouldReceive('publish')
-			->withArgs(function (string $routingKey, array $data) use ($fixture): bool {
-				if (Utils\Strings::contains($routingKey, 'created')) {
-					unset($data['id']);
-				}
+		$deferred = new React\Promise\Deferred();
 
-				Assert::false($data === []);
-				Assert::true(isset($fixture[$routingKey]));
-				Assert::equal($fixture[$routingKey], $data);
+		$stateMock = Mockery::mock(CouchDbStoragePluginStates\IProperty::class);
+		$stateMock
+			->shouldReceive('getValue')
+			->andReturn(isset($state['value']) ? $state['value'] : null)
+			->getMock()
+			->shouldReceive('getExpected')
+			->andReturn(isset($state['expected']) ? $state['expected'] : null)
+			->getMock()
+			->shouldReceive('isPending')
+			->andReturn(isset($state['pending']) ? $state['pending'] : false)
+			->getMock()
+			->shouldReceive('toArray')
+			->andReturn($state)
+			->getMock();
 
+		$this->mockStateManagement($stateMock);
+
+		$sender = Mockery::mock(MqttPluginSenders\MqttV1Sender::class);
+		$sender
+			->shouldReceive('sendDeviceProperty')
+			->withArgs(function ($device, $property, $payload, $parent) use ($deferred): bool {
 				return true;
 			})
-			->times(count($fixture));
+			->andReturn($deferred->promise());
 
 		$this->mockContainerService(
-			NodeExchangePublishers\IRabbitMqPublisher::class,
-			$rabbitPublisher
+			MqttPluginSenders\MqttV1Sender::class,
+			$sender
 		);
 
 		/** @var Consumers\DevicePropertyMessageHandler $handler */
 		$handler = $this->getContainer()->getByType(Consumers\DevicePropertyMessageHandler::class);
 
-		$handler->process($routingKey, '', $message);
+		Assert::true($handler->process($routingKey, $origin, $payload));
+	}
+
+	private function mockStateManagement(CouchDbStoragePluginStates\IProperty $stateMock): void
+	{
+		$statePropertyRepositoryMock = Mockery::mock(CouchDbStoragePluginModels\PropertyRepository::class);
+		$statePropertyRepositoryMock
+			->shouldReceive('findOne')
+			->andReturn($stateMock)
+			->getMock()
+			->shouldReceive('findValue')
+			->andReturn(null)
+			->getMock()
+			->shouldReceive('findExpected')
+			->andReturn(null)
+			->getMock();
+
+		$this->mockContainerService(
+			CouchDbStoragePluginModels\PropertyRepository::class,
+			$statePropertyRepositoryMock
+		);
+
+		$statePropertiesManagerMock = Mockery::mock(CouchDbStoragePluginModels\PropertiesManager::class);
+		$statePropertiesManagerMock
+			->shouldReceive('updateState')
+			->andReturn($stateMock)
+			->times(1)
+			->getMock();
+
+		$this->mockContainerService(
+			CouchDbStoragePluginModels\PropertiesManager::class,
+			$statePropertiesManagerMock
+		);
 	}
 
 }

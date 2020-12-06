@@ -1,7 +1,7 @@
 <?php declare(strict_types = 1);
 
 /**
- * ServerBeforeStartHandler.php
+ * ServerStartHandler.php
  *
  * @license        More in license.md
  * @copyright      https://fastybird.com
@@ -15,31 +15,30 @@
 
 namespace FastyBird\DevicesNode\Events;
 
-use FastyBird\RabbitMqPlugin;
-use FastyBird\WebServer;
+use IPub\MQTTClient;
 use Nette;
 use Throwable;
 
 /**
- * Http server before start handler
+ * Http server start handler
  *
  * @package         FastyBird:DevicesNode!
  * @subpackage      Events
  *
  * @author          Adam Kadlec <adam.kadlec@fastybird.com>
  */
-class ServerBeforeStartHandler
+class ServerStartHandler
 {
 
 	use Nette\SmartObject;
 
-	/** @var RabbitMqPlugin\Exchange */
-	private $exchange;
+	/** @var MQTTClient\Client\IClient */
+	private $mqttClient;
 
 	public function __construct(
-		RabbitMqPlugin\Exchange $exchange
+		MQTTClient\Client\IClient $mqttClient
 	) {
-		$this->exchange = $exchange;
+		$this->mqttClient = $mqttClient;
 	}
 
 	/**
@@ -49,12 +48,7 @@ class ServerBeforeStartHandler
 	 */
 	public function __invoke(): void
 	{
-		try {
-			$this->exchange->initializeAsync();
-
-		} catch (RabbitMqPlugin\Exceptions\TerminateException $ex) {
-			throw new WebServer\Exceptions\TerminateException($ex->getMessage(), $ex->getCode(), $ex);
-		}
+		$this->mqttClient->connect();
 	}
 
 }

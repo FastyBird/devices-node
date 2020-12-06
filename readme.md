@@ -71,28 +71,28 @@ Configuration could be made via environment variables:
 
 | Environment Variable | Description |
 | ---------------------- | ---------------------------- |
-| `FB_NODE_PARAMETER__EXCHANGE_HOST=127.0.0.1` | RabbitMQ host address |
-| `FB_NODE_PARAMETER__EXCHANGE_PORT=5672` | RabbitMQ access port |
-| `FB_NODE_PARAMETER__EXCHANGE_VHOST=/` | RabbitMQ vhost |
-| `FB_NODE_PARAMETER__EXCHANGE_USERNAME=guest` | Username |
-| `FB_NODE_PARAMETER__EXCHANGE_PASSWORD=guest` | Password |
+| `FB_APP_PARAMETER__EXCHANGE_HOST=127.0.0.1` | RabbitMQ host address |
+| `FB_APP_PARAMETER__EXCHANGE_PORT=5672` | RabbitMQ access port |
+| `FB_APP_PARAMETER__EXCHANGE_VHOST=/` | RabbitMQ vhost |
+| `FB_APP_PARAMETER__EXCHANGE_USERNAME=guest` | Username |
+| `FB_APP_PARAMETER__EXCHANGE_PASSWORD=guest` | Password |
 | | |
-| `FB_NODE_PARAMETER__DATABASE_VERSION=5.7` | MySQL server version |
-| `FB_NODE_PARAMETER__DATABASE_HOST=127.0.0.1` | MySQL host address |
-| `FB_NODE_PARAMETER__DATABASE_PORT=3306` | MySQL access port |
-| `FB_NODE_PARAMETER__DATABASE_DBNAME=devices_node` | MySQL database name |
-| `FB_NODE_PARAMETER__DATABASE_USERNAME=root` | Username |
-| `FB_NODE_PARAMETER__DATABASE_PASSWORD=` | Password |
+| `FB_APP_PARAMETER__DATABASE_VERSION=5.7` | MySQL server version |
+| `FB_APP_PARAMETER__DATABASE_HOST=127.0.0.1` | MySQL host address |
+| `FB_APP_PARAMETER__DATABASE_PORT=3306` | MySQL access port |
+| `FB_APP_PARAMETER__DATABASE_DBNAME=devices_node` | MySQL database name |
+| `FB_APP_PARAMETER__DATABASE_USERNAME=root` | Username |
+| `FB_APP_PARAMETER__DATABASE_PASSWORD=` | Password |
 | | |
-| `FB_NODE_PARAMETER__STORAGE_HOST=127.0.0.1` | CouchDB host address |
-| `FB_NODE_PARAMETER__STORAGE_PORT=1883` | CouchDB access port |
-| `FB_NODE_PARAMETER__STORAGE_USERNAME=null` | Username |
-| `FB_NODE_PARAMETER__STORAGE_PASSWORD=null` | Password |
+| `FB_APP_PARAMETER__STORAGE_HOST=127.0.0.1` | CouchDB host address |
+| `FB_APP_PARAMETER__STORAGE_PORT=1883` | CouchDB access port |
+| `FB_APP_PARAMETER__STORAGE_USERNAME=null` | Username |
+| `FB_APP_PARAMETER__STORAGE_PASSWORD=null` | Password |
 | | |
-| `FB_NODE_PARAMETER__SERVER_ADDRESS=0.0.0.0` | HTTP server host address |
-| `FB_NODE_PARAMETER__SERVER_PORT=8000` | HTTP server access port |
+| `FB_APP_PARAMETER__SERVER_ADDRESS=0.0.0.0` | HTTP server host address |
+| `FB_APP_PARAMETER__SERVER_PORT=8000` | HTTP server access port |
 | | |
-| `FB_NODE_PARAMETER__SECURITY_SIGNATURE=` | Security token signature string |
+| `FB_APP_PARAMETER__SECURITY_SIGNATURE=` | Security token signature string |
 
 > **NOTE:** In case you are not using docker image or you are not able to configure environment variables, you could edit configuration file `./config/default.neon`
 

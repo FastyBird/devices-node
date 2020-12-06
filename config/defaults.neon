@@ -25,9 +25,19 @@ parameters:
 		username: guest
 		password: guest
 
+	mqtt:
+		host: 127.0.0.1
+		port: 1883
+		username: guest
+		password: guest
+		clientid: guest
+		secured:
+			enabled: false
+
 	server:
 		address: 0.0.0.0
 		port: 8000
 
 	security:
+		issuer: com.fastybird.auth-node
 		signature: 'g3xHbkELpMD9LRqW4WmJkHL7kz2bdNYAQJyEuFVzR3k='

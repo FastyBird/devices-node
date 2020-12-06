@@ -32,18 +32,17 @@
 
   "require": {
     "php": ">=7.3.0",
-    "contributte/translation": "^0.6",
     "cweagans/composer-patches": "^1.6",
-    "fastybird/node-auth": "@dev",
-    "fastybird/node-bootstrap": "@dev",
-    "fastybird/node-database": "@dev",
-    "fastybird/node-exchange": "@dev",
-    "fastybird/node-json-api": "@dev",
-    "fastybird/node-metadata": "@dev",
-    "fastybird/node-web-server": "@dev",
-    "ipub/doctrine-consistence": "^0.3",
-    "ipub/doctrine-timestampable": "^1.4",
-    "php-on-couch/php-on-couch" : "^3.0"
+    "fastybird/bootstrap": "@dev",
+    "fastybird/couchdb-storage-plugin": "@dev",
+    "fastybird/database": "@dev",
+    "fastybird/devices-module": "@dev",
+    "fastybird/json-api": "@dev",
+    "fastybird/modules-metadata": "@dev",
+    "fastybird/mqtt-plugin": "9999999-dev",
+    "fastybird/rabbitmq-plugin": "@dev",
+    "fastybird/simple-auth": "@dev",
+    "fastybird/web-server": "@dev"
   },
 
   "require-dev": {

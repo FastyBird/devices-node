@@ -30,34 +30,39 @@ parameters:
 #########################
 
 extensions:
-	contributteTranslation		: Contributte\Translation\DI\TranslationExtension
-	nettrineAnnotations			: Nettrine\Annotations\DI\AnnotationsExtension
-	nettrineCache				: Nettrine\Cache\DI\CacheExtension
-	nettrineDbal				: Nettrine\DBAL\DI\DbalExtension
-	nettrineOrm					: Nettrine\ORM\DI\OrmExtension
-	nettrineOrmAnnotations		: Nettrine\ORM\DI\OrmAnnotationsExtension
-	nettrineOrmConsole			: Nettrine\ORM\DI\OrmConsoleExtension
-	nettrineOrmCache			: Nettrine\ORM\DI\OrmCacheExtension
-	ipubDoctrineConsistence		: IPub\DoctrineConsistence\DI\DoctrineConsistenceExtension
-	ipubDoctrineCrud			: IPub\DoctrineCrud\DI\DoctrineCrudExtension
-	ipubDoctrineTimestampable	: IPub\DoctrineTimestampable\DI\DoctrineTimestampableExtension
-	fbDateTimeFactory			: FastyBird\DateTimeFactory\DI\DateTimeFactoryExtension
-	nodeAuth					: FastyBird\NodeAuth\DI\NodeAuthExtension
-	nodeDatabase				: FastyBird\NodeDatabase\DI\NodeDatabaseExtension
-	nodeExchange				: FastyBird\NodeExchange\DI\NodeExchangeExtension
-	nodeJsonApi					: FastyBird\NodeJsonApi\DI\NodeJsonApiExtension
-	nodeMetadata				: FastyBird\NodeMetadata\DI\NodeMetadataExtension
-	nodeWebServer				: FastyBird\NodeWebServer\DI\NodeWebServerExtension
+	contributteTranslation				: Contributte\Translation\DI\TranslationExtension
+	nettrineAnnotations					: Nettrine\Annotations\DI\AnnotationsExtension
+	nettrineCache						: Nettrine\Cache\DI\CacheExtension
+	nettrineDbal						: Nettrine\DBAL\DI\DbalExtension
+	nettrineOrm							: Nettrine\ORM\DI\OrmExtension
+	nettrineOrmAnnotations				: Nettrine\ORM\DI\OrmAnnotationsExtension
+	nettrineOrmConsole					: Nettrine\ORM\DI\OrmConsoleExtension
+	nettrineOrmCache					: Nettrine\ORM\DI\OrmCacheExtension
+	fbDateTimeFactory					: FastyBird\DateTimeFactory\DI\DateTimeFactoryExtension
+	fbSimpleAuth						: FastyBird\SimpleAuth\DI\SimpleAuthExtension
+	fbDatabase							: FastyBird\Database\DI\DatabaseExtension
+	fbJsonApi							: FastyBird\JsonApi\DI\JsonApiExtension
+	fbModulesMetadata					: FastyBird\ModulesMetadata\DI\ModulesMetadataExtension
+	fbWebServer							: FastyBird\WebServer\DI\WebServerExtension
+	fbDevicesModule						: FastyBird\DevicesModule\DI\DevicesModuleExtension
+	fbRabbitMqPlugin					: FastyBird\RabbitMqPlugin\DI\RabbitMqPluginExtension
+	fbCouchDbStoragePlugin				: FastyBird\CouchDbStoragePlugin\DI\CouchDbStoragePluginExtension
+	fbMqttPlugin						: FastyBird\MqttPlugin\DI\MqttPluginExtension
+	ipubDoctrineConsistence				: IPub\DoctrineConsistence\DI\DoctrineConsistenceExtension
+	ipubDoctrineCrud					: IPub\DoctrineCrud\DI\DoctrineCrudExtension
+	ipubDoctrineTimestampable			: IPub\DoctrineTimestampable\DI\DoctrineTimestampableExtension
+	ipubDoctrineDynamicDiscriminatorMap	: IPub\DoctrineDynamicDiscriminatorMap\DI\DoctrineDynamicDiscriminatorMapExtension
+	ipubMqttClient						: IPub\MQTTClient\DI\MQTTClientExtension
 
 ##################################
 # Nette extensions configuration #
 ##################################
 
-# Node authentication
+# Simple authentication
 #####################
-nodeAuth:
+fbSimpleAuth:
 	token:
-		issuer: %origin%
+		issuer: %security.issuer%
 		signature: %security.signature%
 	enable:
 		middleware: true
@@ -66,9 +71,9 @@ nodeAuth:
 	services:
 		identity: true
 
-# Node data exchange
+# RabbitMQ exchange
 ####################
-nodeExchange:
+fbRabbitMqPlugin:
 	origin: %origin%
 	rabbitMQ:
 		connection:
@@ -82,12 +87,36 @@ nodeExchange:
 		routing:
 			keys: %rabbitmq.routing%
 
-# Node web server
+# CouchDB storage
 #################
-nodeWebServer:
+fbCouchDbStoragePlugin:
+	connection:
+		database: properties
+		host: %storage.host%
+		port: %storage.port%
+		username: %storage.username%
+		password: %storage.password%
+
+# Web server
+#################
+fbWebServer:
 	server:
 		address: %server.address%
 		port: %server.port%
+
+# MQTT async client extension
+#############################
+ipubMqttClient:
+	broker:
+		httpHost: %mqtt.host%
+		port: %mqtt.port%
+		secured:
+			enable: %mqtt.secured.enabled%
+	connection:
+		username: %mqtt.username%
+		password: %mqtt.password%
+		clientID: %mqtt.clientid%
+	loop: null
 
 # Node translations
 ###################
@@ -96,8 +125,6 @@ contributteTranslation:
 		default: en_US
 		fallback: [en_US, en]
 	localeResolvers: []
-	dirs:
-		- %appDir%/src/Translations
 
 # Doctrine DBAL
 ###############
@@ -144,244 +171,76 @@ nettrineOrm:
 		proxyDir	: %tempDir%/cache/doctrine.proxies
 
 nettrineOrmAnnotations:
-	namespaces:
-		- FastyBird\DevicesNode\Entities
-		- FastyBird\NodeAuth\Entities
-	paths:
-		- %appDir%/src/Entities
-		- %appDir%/vendor/fastybird/node-auth/src/Entities
+	mapping: []
 
 #############################
 # Node services definitions #
 #############################
 
 decorator:
-	FastyBird\NodeWebServer\Commands\HttpServerCommand:
+	FastyBird\WebServer\Commands\HttpServerCommand:
 		setup:
 			- '$onBeforeServerStart[]' = @FastyBird\DevicesNode\Events\ServerBeforeStartHandler
+			- '$onServerStart[]' = @FastyBird\DevicesNode\Events\ServerStartHandler
 
-	FastyBird\NodeExchange\Exchange:
+	FastyBird\RabbitMqPlugin\Exchange:
 		setup:
-			- '$onAfterConsumeMessage[]' = @FastyBird\NodeDatabase\Events\AfterConsumeHandler
+			- '$onAfterConsumeMessage[]' = @FastyBird\DevicesNode\Events\AfterConsumeHandler
+
+	FastyBird\MqttPlugin\Handler:
+		setup:
+			- '$onMessage[]' = @FastyBird\DevicesNode\Events\MqttMessageHandler
+
+	FastyBird\CouchDbStoragePlugin\Models\PropertiesManager:
+		setup:
+			- '$onAfterUpdate[]' = @FastyBird\DevicesNode\Events\PropertyStateUpdatedHandler
 
 services:
-	# Http router
-	#############
-
-	- {factory: FastyBird\DevicesNode\Middleware\AccessMiddleware, tags: [middleware: {priority: 50}]}
-
-	-
-		factory: FastyBird\DevicesNode\Router\Router
-		setup:
-			- registerRoutes
-
-	# CouchDB clients
-	#################
-	devicesPropertiesDatabaseConnection:
-		factory: FastyBird\DevicesNode\Connections\CouchDbConnection
-		arguments:
-			database: devices/properties
-			host: %storage.host%
-			port: %storage.port%
-			username: %storage.username%
-			password: %storage.password%
-		autowired: false
-
-	channelsPropertiesDatabaseConnection:
-		factory: FastyBird\DevicesNode\Connections\CouchDbConnection
-		arguments:
-			database: channels/properties
-			host: %storage.host%
-			port: %storage.port%
-			username: %storage.username%
-			password: %storage.password%
-		autowired: false
-
 	# Console commands
 	##################
-
-	- {factory: FastyBird\DevicesNode\Commands\Devices\CreateCommand}
 
 	- {factory: FastyBird\DevicesNode\Commands\InitializeCommand}
 
 	# Message bus messages handlers
 	###############################
 
-	- {factory: FastyBird\DevicesNode\Consumers\DeviceMessageHandler}
-
-	- {factory: FastyBird\DevicesNode\Consumers\DeviceFirmwareMessageHandler}
-
-	- {factory: FastyBird\DevicesNode\Consumers\DeviceHardwareMessageHandler}
-
 	- {factory: FastyBird\DevicesNode\Consumers\DevicePropertyMessageHandler}
 
-	- {factory: FastyBird\DevicesNode\Consumers\DeviceControlMessageHandler}
-
-	- {factory: FastyBird\DevicesNode\Consumers\ChannelMessageHandler}
-
 	- {factory: FastyBird\DevicesNode\Consumers\ChannelPropertyMessageHandler}
-
-	- {factory: FastyBird\DevicesNode\Consumers\ChannelControlMessageHandler}
 
 	# Node events
 	#############
 
+	- {factory: FastyBird\DevicesNode\Events\AfterConsumeHandler}
+
 	- {factory: FastyBird\DevicesNode\Events\ServerBeforeStartHandler}
 
+	- {factory: FastyBird\DevicesNode\Events\ServerStartHandler}
+
 	- {factory: FastyBird\DevicesNode\Events\PropertyStateUpdatedHandler}
+
+	- {factory: FastyBird\DevicesNode\Events\MqttMessageHandler}
 
 	# Events subscribers
 	####################
 
 	- {factory: FastyBird\DevicesNode\Subscribers\EntitiesSubscriber}
 
-	# Database repositories
-	#######################
+	# Events handlers
+	####################
 
-	- {factory: FastyBird\DevicesNode\Models\Devices\DeviceRepository}
+	- {factory: FastyBird\DevicesNode\Handlers\MQTT\DeviceMessageHandler}
 
-	- {factory: FastyBird\DevicesNode\Models\Devices\Properties\PropertyRepository}
+	- {factory: FastyBird\DevicesNode\Handlers\MQTT\DeviceHardwareMessageHandler}
 
-	- {factory: FastyBird\DevicesNode\Models\Devices\Configuration\RowRepository}
+	- {factory: FastyBird\DevicesNode\Handlers\MQTT\DeviceFirmwareMessageHandler}
 
-	- {factory: FastyBird\DevicesNode\Models\Channels\ChannelRepository}
+	- {factory: FastyBird\DevicesNode\Handlers\MQTT\DevicePropertyMessageHandler}
 
-	- {factory: FastyBird\DevicesNode\Models\Channels\Properties\PropertyRepository}
+	- {factory: FastyBird\DevicesNode\Handlers\MQTT\DeviceControlMessageHandler}
 
-	- {factory: FastyBird\DevicesNode\Models\Channels\Configuration\RowRepository}
+	- {factory: FastyBird\DevicesNode\Handlers\MQTT\ChannelMessageHandler}
 
-	# Database managers
-	###################
+	- {factory: FastyBird\DevicesNode\Handlers\MQTT\ChannelPropertyMessageHandler}
 
-	-
-		factory: FastyBird\DevicesNode\Models\Devices\DevicesManager
-		arguments:
-			entityCrud: @ipubDoctrineCrud.crud::create(FastyBird\DevicesNode\Entities\Devices\Device)
-
-	-
-		factory: FastyBird\DevicesNode\Models\Devices\Controls\ControlsManager
-		arguments:
-			entityCrud: @ipubDoctrineCrud.crud::create(FastyBird\DevicesNode\Entities\Devices\Controls\Control)
-
-	-
-		factory: FastyBird\DevicesNode\Models\Devices\Properties\PropertiesManager
-		arguments:
-			entityCrud: @ipubDoctrineCrud.crud::create(FastyBird\DevicesNode\Entities\Devices\Properties\Property)
-
-	-
-		factory: FastyBird\DevicesNode\Models\Devices\Configuration\RowsManager
-		arguments:
-			entityCrud: @ipubDoctrineCrud.crud::create(FastyBird\DevicesNode\Entities\Devices\Configuration\Row)
-
-	-
-		factory: FastyBird\DevicesNode\Models\Devices\PhysicalDevice\HardwareManager
-		arguments:
-			entityCrud: @ipubDoctrineCrud.crud::create(FastyBird\DevicesNode\Entities\Devices\PhysicalDevice\Hardware)
-
-	-
-		factory: FastyBird\DevicesNode\Models\Devices\PhysicalDevice\FirmwareManager
-		arguments:
-			entityCrud: @ipubDoctrineCrud.crud::create(FastyBird\DevicesNode\Entities\Devices\PhysicalDevice\Firmware)
-
-	-
-		factory: FastyBird\DevicesNode\Models\Channels\ChannelsManager
-		arguments:
-			entityCrud: @ipubDoctrineCrud.crud::create(FastyBird\DevicesNode\Entities\Channels\Channel)
-
-	-
-		factory: FastyBird\DevicesNode\Models\Channels\Controls\ControlsManager
-		arguments:
-			entityCrud: @ipubDoctrineCrud.crud::create(FastyBird\DevicesNode\Entities\Channels\Controls\Control)
-
-	-
-		factory: FastyBird\DevicesNode\Models\Channels\Properties\PropertiesManager
-		arguments:
-			entityCrud: @ipubDoctrineCrud.crud::create(FastyBird\DevicesNode\Entities\Channels\Properties\Property)
-
-	-
-		factory: FastyBird\DevicesNode\Models\Channels\Configuration\RowsManager
-		arguments:
-			entityCrud: @ipubDoctrineCrud.crud::create(FastyBird\DevicesNode\Entities\Channels\Configuration\Row)
-
-	-
-		factory: FastyBird\DevicesNode\Models\States\Devices\PropertiesManager
-		arguments:
-			dbClient: @devicesPropertiesDatabaseConnection
-		setup:
-			- '$onAfterUpdate[]' = @FastyBird\DevicesNode\Events\PropertyStateUpdatedHandler
-
-	-
-		factory: FastyBird\DevicesNode\Models\States\Devices\PropertyRepository
-		arguments:
-			dbClient: @devicesPropertiesDatabaseConnection
-
-	-
-		factory: FastyBird\DevicesNode\Models\States\Channels\PropertiesManager
-		arguments:
-			dbClient: @channelsPropertiesDatabaseConnection
-		setup:
-			- '$onAfterUpdate[]' = @FastyBird\DevicesNode\Events\PropertyStateUpdatedHandler
-
-	-
-		factory: FastyBird\DevicesNode\Models\States\Channels\PropertyRepository
-		arguments:
-			dbClient: @channelsPropertiesDatabaseConnection
-
-	# API controllers
-	#################
-
-	- {factory: FastyBird\DevicesNode\Controllers\DevicesV1Controller, tags: [nette.inject]}
-
-	- {factory: FastyBird\DevicesNode\Controllers\DeviceChildrenV1Controller, tags: [nette.inject]}
-
-	- {factory: FastyBird\DevicesNode\Controllers\DevicePropertiesV1Controller, tags: [nette.inject]}
-
-	- {factory: FastyBird\DevicesNode\Controllers\DeviceConfigurationV1Controller, tags: [nette.inject]}
-
-	- {factory: FastyBird\DevicesNode\Controllers\DeviceHardwareV1Controller, tags: [nette.inject]}
-
-	- {factory: FastyBird\DevicesNode\Controllers\DeviceFirmwareV1Controller, tags: [nette.inject]}
-
-	- {factory: FastyBird\DevicesNode\Controllers\ChannelsV1Controller, tags: [nette.inject]}
-
-	- {factory: FastyBird\DevicesNode\Controllers\ChannelPropertiesV1Controller, tags: [nette.inject]}
-
-	- {factory: FastyBird\DevicesNode\Controllers\ChannelConfigurationV1Controller, tags: [nette.inject]}
-
-	# API schemas
-	#############
-
-	- {factory: FastyBird\DevicesNode\Schemas\Devices\PhysicalDeviceSchema}
-
-	- {factory: FastyBird\DevicesNode\Schemas\Devices\Properties\PropertySchema}
-
-	- {factory: FastyBird\DevicesNode\Schemas\Devices\Hardware\HardwareSchema}
-
-	- {factory: FastyBird\DevicesNode\Schemas\Devices\Firmware\FirmwareSchema}
-
-	- {factory: FastyBird\DevicesNode\Schemas\Devices\Configuration\BooleanRowSchema}
-
-	- {factory: FastyBird\DevicesNode\Schemas\Devices\Configuration\NumberRowSchema}
-
-	- {factory: FastyBird\DevicesNode\Schemas\Devices\Configuration\SelectRowSchema}
-
-	- {factory: FastyBird\DevicesNode\Schemas\Devices\Configuration\TextRowSchema}
-
-	- {factory: FastyBird\DevicesNode\Schemas\Channels\ChannelSchema}
-
-	- {factory: FastyBird\DevicesNode\Schemas\Channels\Properties\PropertySchema}
-
-	- {factory: FastyBird\DevicesNode\Schemas\Channels\Configuration\BooleanRowSchema}
-
-	- {factory: FastyBird\DevicesNode\Schemas\Channels\Configuration\NumberRowSchema}
-
-	- {factory: FastyBird\DevicesNode\Schemas\Channels\Configuration\SelectRowSchema}
-
-	- {factory: FastyBird\DevicesNode\Schemas\Channels\Configuration\TextRowSchema}
-
-	# API hydrators
-	###############
-
-	- {factory: FastyBird\DevicesNode\Hydrators\Devices\PhysicalDeviceHydrator}
-
-	- {factory: FastyBird\DevicesNode\Hydrators\Channels\ChannelHydrator}
+	- {factory: FastyBird\DevicesNode\Handlers\MQTT\ChannelControlMessageHandler}
