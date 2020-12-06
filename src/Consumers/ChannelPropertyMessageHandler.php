@@ -23,6 +23,7 @@ use FastyBird\DevicesNode;
 use FastyBird\DevicesNode\Exceptions;
 use FastyBird\ModulesMetadata;
 use FastyBird\ModulesMetadata\Loaders as ModulesMetadataLoaders;
+use FastyBird\ModulesMetadata\Schemas as ModulesMetadataSchemas;
 use FastyBird\MqttPlugin\Senders as MqttPluginSenders;
 use FastyBird\RabbitMqPlugin\Exceptions as RabbitMqPluginExceptions;
 use Nette\Utils;
@@ -68,7 +69,7 @@ final class ChannelPropertyMessageHandler extends MessageHandler
 		CouchDbStoragePluginModels\IPropertyRepository $propertyStateRepository,
 		MqttPluginSenders\ISender $mqttV1sender,
 		ModulesMetadataLoaders\ISchemaLoader $schemaLoader,
-		ModulesMetadata\Schemas\IValidator $validator,
+		ModulesMetadataSchemas\IValidator $validator,
 		?Log\LoggerInterface $logger = null
 	) {
 		parent::__construct($schemaLoader, $validator, $logger);

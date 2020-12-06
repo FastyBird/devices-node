@@ -15,8 +15,8 @@
 
 namespace FastyBird\DevicesNode\Consumers;
 
-use FastyBird\ModulesMetadata;
 use FastyBird\ModulesMetadata\Loaders as ModulesMetadataLoaders;
+use FastyBird\ModulesMetadata\Schemas as ModulesMetadataSchemas;
 use FastyBird\RabbitMqPlugin\Consumers as RabbitMqPluginConsumers;
 use Nette;
 use Nette\Utils;
@@ -42,12 +42,12 @@ abstract class MessageHandler implements RabbitMqPluginConsumers\IMessageHandler
 	/** @var ModulesMetadataLoaders\ISchemaLoader */
 	private $schemaLoader;
 
-	/** @var ModulesMetadata\Schemas\IValidator */
+	/** @var ModulesMetadataSchemas\IValidator */
 	private $validator;
 
 	public function __construct(
 		ModulesMetadataLoaders\ISchemaLoader $schemaLoader,
-		ModulesMetadata\Schemas\IValidator $validator,
+		ModulesMetadataSchemas\IValidator $validator,
 		?Log\LoggerInterface $logger = null
 	) {
 		$this->schemaLoader = $schemaLoader;

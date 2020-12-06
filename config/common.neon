@@ -59,7 +59,7 @@ extensions:
 ##################################
 
 # Simple authentication
-#####################
+#######################
 fbSimpleAuth:
 	token:
 		issuer: %security.issuer%
