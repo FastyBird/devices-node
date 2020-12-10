@@ -33,8 +33,7 @@ final class ChannelPropertyMessageHandlerTest extends DbTestCase
 		$channelsPropertiesManager = Mockery::mock(DevicesModuleModels\Channels\Properties\PropertiesManager::class);
 		$channelsPropertiesManager
 			->shouldReceive('update')
-			->withArgs(function (DevicesModuleEntities\IProperty $property, Utils\ArrayHash $toUpdate) use ($fixture
-			): bool {
+			->withArgs(function (DevicesModuleEntities\IProperty $property, Utils\ArrayHash $toUpdate) use ($fixture): bool {
 				Assert::false($toUpdate === []);
 				Assert::equal($fixture, $toUpdate);
 
