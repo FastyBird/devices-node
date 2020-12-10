@@ -1,5 +1,5 @@
 diff --git a/lib/Doctrine/ORM/Persisters/Entity/BasicEntityPersister.php b/lib/Doctrine/ORM/Persisters/Entity/BasicEntityPersister.php
-index ea1f2efee..b09f58605 100644
+index da809358d..260610f27 100644
 --- a/lib/Doctrine/ORM/Persisters/Entity/BasicEntityPersister.php
 +++ b/lib/Doctrine/ORM/Persisters/Entity/BasicEntityPersister.php
 @@ -37,6 +37,7 @@ use Doctrine\ORM\Query;
@@ -10,7 +10,7 @@ index ea1f2efee..b09f58605 100644
  use function array_map;
  use function array_merge;
  use function assert;
-@@ -573,6 +574,15 @@ class BasicEntityPersister implements EntityPersister
+@@ -577,6 +578,15 @@ class BasicEntityPersister implements EntityPersister
      {
          $class      = $this->class;
          $identifier = $this->em->getUnitOfWork()->getEntityIdentifier($entity);
@@ -26,11 +26,8 @@ index ea1f2efee..b09f58605 100644
          $tableName  = $this->quoteStrategy->getTableName($class, $this->platform);
          $idColumns  = $this->quoteStrategy->getIdentifierColumnNames($class, $this->platform);
          $id         = array_combine($idColumns, $identifier);
-
-warning: LF will be replaced by CRLF in lib/Doctrine/ORM/Persisters/Entity/BasicEntityPersister.php.
-The file will have its original line endings in your working directory.
 diff --git a/lib/Doctrine/ORM/Persisters/Entity/JoinedSubclassPersister.php b/lib/Doctrine/ORM/Persisters/Entity/JoinedSubclassPersister.php
-index 1f6d40133..0a3d080a8 100644
+index 65e1b4efb..fabe49bb0 100644
 --- a/lib/Doctrine/ORM/Persisters/Entity/JoinedSubclassPersister.php
 +++ b/lib/Doctrine/ORM/Persisters/Entity/JoinedSubclassPersister.php
 @@ -26,6 +26,7 @@ use Doctrine\DBAL\Types\Type;
@@ -39,13 +36,12 @@ index 1f6d40133..0a3d080a8 100644
  use Doctrine\ORM\Utility\PersisterHelper;
 +use Ramsey\Uuid\Uuid;
 
- /**
-  * The joined subclass persister maps a single entity instance to several tables in the
-@@ -271,7 +272,16 @@ class JoinedSubclassPersister extends AbstractEntityInheritancePersister
+ use function array_combine;
+
+@@ -273,6 +274,15 @@ class JoinedSubclassPersister extends AbstractEntityInheritancePersister
      public function delete($entity)
      {
          $identifier = $this->em->getUnitOfWork()->getEntityIdentifier($entity);
--        $id         = array_combine($this->class->getIdentifierColumnNames(), $identifier);
 +
 +        foreach ($identifier as $key=>$value) {
 +            if ($value instanceof Uuid) {
@@ -55,10 +51,6 @@ index 1f6d40133..0a3d080a8 100644
 +            }
 +        }
 +
-+        $id = array_combine($this->class->getIdentifierColumnNames(), $identifier);
+         $id         = array_combine($this->class->getIdentifierColumnNames(), $identifier);
 
          $this->deleteJoinTableRecords($identifier);
-
-
-warning: LF will be replaced by CRLF in lib/Doctrine/ORM/Persisters/Entity/JoinedSubclassPersister.php.
-The file will have its original line endings in your working directory.
