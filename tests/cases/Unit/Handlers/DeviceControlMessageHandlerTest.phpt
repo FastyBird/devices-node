@@ -32,7 +32,9 @@ final class DeviceControlMessageHandlerTest extends DbTestCase
 		$rowsManager = Mockery::mock(DevicesModuleModels\Devices\Configuration\RowsManager::class);
 		$rowsManager
 			->shouldReceive('update')
-			->withArgs(function (DevicesModuleEntities\Devices\Configuration\IRow $row, Utils\ArrayHash $toUpdate) use ($fixture): bool {
+			->withArgs(function (DevicesModuleEntities\Devices\Configuration\IRow $row, Utils\ArrayHash $toUpdate) use (
+				$fixture
+			): bool {
 				Assert::false($toUpdate === []);
 				Assert::equal($fixture, $toUpdate);
 
@@ -63,7 +65,9 @@ final class DeviceControlMessageHandlerTest extends DbTestCase
 		$rowsManager = Mockery::mock(DevicesModuleModels\Devices\Configuration\RowsManager::class);
 		$rowsManager
 			->shouldReceive('update')
-			->withArgs(function (DevicesModuleEntities\Devices\Configuration\IRow $row, Utils\ArrayHash $toUpdate) use ($fixture): bool {
+			->withArgs(function (DevicesModuleEntities\Devices\Configuration\IRow $row, Utils\ArrayHash $toUpdate) use (
+				$fixture
+			): bool {
 				Assert::false($toUpdate === []);
 				Assert::equal($fixture, $toUpdate);
 

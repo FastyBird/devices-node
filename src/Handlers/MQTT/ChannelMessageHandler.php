@@ -161,6 +161,20 @@ final class ChannelMessageHandler
 	}
 
 	/**
+	 * @return Connection
+	 */
+	protected function getOrmConnection(): Connection
+	{
+		$connection = $this->managerRegistry->getConnection();
+
+		if ($connection instanceof Connection) {
+			return $connection;
+		}
+
+		throw new Exceptions\RuntimeException('Entity manager could not be loaded');
+	}
+
+	/**
 	 * @param DevicesModuleEntities\Channels\IChannel $channel
 	 * @param Utils\ArrayHash<string> $properties
 	 *
@@ -218,20 +232,6 @@ final class ChannelMessageHandler
 				$this->channelControlManager->delete($control);
 			}
 		}
-	}
-
-	/**
-	 * @return Connection
-	 */
-	protected function getOrmConnection(): Connection
-	{
-		$connection = $this->managerRegistry->getConnection();
-
-		if ($connection instanceof Connection) {
-			return $connection;
-		}
-
-		throw new Exceptions\RuntimeException('Entity manager could not be loaded');
 	}
 
 }

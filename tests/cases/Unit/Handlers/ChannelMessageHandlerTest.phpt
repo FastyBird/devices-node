@@ -32,7 +32,9 @@ final class ChannelMessageHandlerTest extends DbTestCase
 		$channelsManager = Mockery::mock(DevicesModuleModels\Channels\ChannelsManager::class);
 		$channelsManager
 			->shouldReceive('update')
-			->withArgs(function (DevicesModuleEntities\Channels\IChannel $channel, Utils\ArrayHash $toUpdate) use ($fixture): bool {
+			->withArgs(function (DevicesModuleEntities\Channels\IChannel $channel, Utils\ArrayHash $toUpdate) use (
+				$fixture
+			): bool {
 				Assert::false($toUpdate === []);
 				Assert::equal($fixture, $toUpdate);
 

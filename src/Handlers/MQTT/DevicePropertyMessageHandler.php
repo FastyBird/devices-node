@@ -146,7 +146,7 @@ final class DevicePropertyMessageHandler
 					$this->propertiesStatesManager->updateState(
 						$propertyState,
 						Utils\ArrayHash::from([
-							'value' => $entity->getValue(),
+							'value'    => $entity->getValue(),
 							'expected' => null,
 							'pending'  => false,
 						])

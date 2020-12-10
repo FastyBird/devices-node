@@ -172,6 +172,20 @@ final class DeviceMessageHandler
 	}
 
 	/**
+	 * @return Connection
+	 */
+	protected function getOrmConnection(): Connection
+	{
+		$connection = $this->managerRegistry->getConnection();
+
+		if ($connection instanceof Connection) {
+			return $connection;
+		}
+
+		throw new Exceptions\RuntimeException('Entity manager could not be loaded');
+	}
+
+	/**
 	 * @param DevicesModuleEntities\Devices\IDevice $device
 	 * @param Utils\ArrayHash<string> $properties
 	 *
@@ -301,20 +315,6 @@ final class DeviceMessageHandler
 				$this->deviceControlManager->delete($control);
 			}
 		}
-	}
-
-	/**
-	 * @return Connection
-	 */
-	protected function getOrmConnection(): Connection
-	{
-		$connection = $this->managerRegistry->getConnection();
-
-		if ($connection instanceof Connection) {
-			return $connection;
-		}
-
-		throw new Exceptions\RuntimeException('Entity manager could not be loaded');
 	}
 
 }

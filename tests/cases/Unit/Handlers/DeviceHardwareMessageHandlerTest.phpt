@@ -32,7 +32,10 @@ final class DeviceHardwareMessageHandlerTest extends DbTestCase
 		$hardwareManager = Mockery::mock(DevicesModuleModels\Devices\PhysicalDevice\HardwareManager::class);
 		$hardwareManager
 			->shouldReceive('update')
-			->withArgs(function (DevicesModuleEntities\Devices\PhysicalDevice\IHardware $hardware, Utils\ArrayHash $toUpdate) use ($fixture): bool {
+			->withArgs(function (
+				DevicesModuleEntities\Devices\PhysicalDevice\IHardware $hardware,
+				Utils\ArrayHash $toUpdate
+			) use ($fixture): bool {
 				Assert::false($toUpdate === []);
 				Assert::equal($fixture, $toUpdate);
 

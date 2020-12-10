@@ -32,7 +32,10 @@ final class DeviceFirmwareMessageHandlerTest extends DbTestCase
 		$firmwareManager = Mockery::mock(DevicesModuleModels\Devices\PhysicalDevice\FirmwareManager::class);
 		$firmwareManager
 			->shouldReceive('update')
-			->withArgs(function (DevicesModuleEntities\Devices\PhysicalDevice\IFirmware $firmware, Utils\ArrayHash $toUpdate) use ($fixture): bool {
+			->withArgs(function (
+				DevicesModuleEntities\Devices\PhysicalDevice\IFirmware $firmware,
+				Utils\ArrayHash $toUpdate
+			) use ($fixture): bool {
 				Assert::false($toUpdate === []);
 				Assert::equal($fixture, $toUpdate);
 

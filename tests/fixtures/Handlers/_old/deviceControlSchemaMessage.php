@@ -36,7 +36,7 @@ return [
 					'configuration' => 'sensor_energy_units',
 					'name'          => null,
 					'comment'       => null,
-						'type'          => DevicesModule\Constants::DATA_TYPE_SELECT,
+					'type'          => DevicesModule\Constants::DATA_TYPE_SELECT,
 					'default'       => 0,
 					'values'        => [
 						[

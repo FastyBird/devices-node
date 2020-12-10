@@ -4,7 +4,7 @@ use FastyBird\DevicesNode;
 use Nette\Utils;
 
 return [
-	'messageWithUpdate' => [
+	'messageWithUpdate'    => [
 		DevicesNode\Constants::RABBIT_MQ_DEVICES_PROPERTIES_DATA_ROUTING_KEY,
 		DevicesNode\Constants::NODE_UI_ORIGIN,
 		Utils\Json::encode([

@@ -107,162 +107,6 @@ final class EntitiesSubscriber implements Common\EventSubscriber
 	}
 
 	/**
-	 * @param ORM\Event\LifecycleEventArgs $eventArgs
-	 *
-	 * @return void
-	 */
-	public function postUpdate(ORM\Event\LifecycleEventArgs $eventArgs): void
-	{
-		$uow = $this->entityManager->getUnitOfWork();
-
-		// onFlush was executed before, everything already initialized
-		$entity = $eventArgs->getObject();
-
-		// Get changes => should be already computed here (is a listener)
-		$changeset = $uow->getEntityChangeSet($entity);
-
-		// If we have no changes left => don't create revision log
-		if (count($changeset) === 0) {
-			return;
-		}
-
-		// Check for valid entity
-		if (
-			!$entity instanceof DatabaseEntities\IEntity
-			|| $uow->isScheduledForDelete($entity)
-		) {
-			return;
-		}
-
-		if (
-			$entity instanceof DevicesModuleEntities\Channels\Controls\IControl
-			&& $uow->isScheduledForUpdate($entity->getChannel())
-		) {
-			return;
-		}
-
-		if (
-			$entity instanceof DevicesModuleEntities\Devices\Controls\IControl
-			&& $uow->isScheduledForUpdate($entity->getDevice())
-		) {
-			return;
-		}
-
-		$this->processEntityAction($entity, self::ACTION_UPDATED);
-	}
-
-	/**
-	 * @return void
-	 */
-	public function preFlush(): void
-	{
-		$uow = $this->entityManager->getUnitOfWork();
-
-		foreach ($uow->getScheduledEntityDeletions() as $entity) {
-			if (
-				(
-					$entity instanceof DevicesModuleEntities\Devices\Controls\IControl
-					|| $entity instanceof DevicesModuleEntities\Channels\Controls\IControl
-				)
-				&& $entity->getName() === DevicesModule\Constants::CONTROL_CONFIG
-			) {
-				if ($entity instanceof DevicesModuleEntities\Devices\Controls\IControl) {
-					foreach ($entity->getDevice()->getConfiguration() as $row) {
-						$uow->scheduleForDelete($row);
-					}
-				}
-
-				if ($entity instanceof DevicesModuleEntities\Channels\Controls\IControl) {
-					foreach ($entity->getChannel()->getConfiguration() as $row) {
-						$uow->scheduleForDelete($row);
-					}
-				}
-			}
-		}
-	}
-
-	/**
-	 * @return void
-	 */
-	public function onFlush(): void
-	{
-		$uow = $this->entityManager->getUnitOfWork();
-
-		$processedEntities = [];
-
-		$processEntities = [];
-
-		foreach ($uow->getScheduledEntityDeletions() as $entity) {
-			// Doctrine is fine deleting elements multiple times. We are not.
-			$hash = $this->getHash($entity, $uow->getEntityIdentifier($entity));
-
-			if (in_array($hash, $processedEntities, true)) {
-				continue;
-			}
-
-			$processedEntities[] = $hash;
-
-			// Check for valid entity
-			if (!$entity instanceof DatabaseEntities\IEntity) {
-				continue;
-			}
-
-			if (
-				$entity instanceof DevicesModuleEntities\Devices\Controls\IControl
-				&& $uow->isScheduledForDelete($entity->getDevice())
-			) {
-				continue;
-			}
-
-			if (
-				$entity instanceof DevicesModuleEntities\Channels\Controls\IControl
-				&& $uow->isScheduledForDelete($entity->getChannel())
-			) {
-				continue;
-			}
-
-			$processEntities[] = $entity;
-		}
-
-		foreach ($processEntities as $entity) {
-			$this->processEntityAction($entity, self::ACTION_DELETED);
-		}
-	}
-
-	/**
-	 * @param DatabaseEntities\IEntity $entity
-	 * @param mixed[] $identifier
-	 *
-	 * @return string
-	 */
-	private function getHash(DatabaseEntities\IEntity $entity, array $identifier): string
-	{
-		return implode(
-			' ',
-			array_merge(
-				[$this->getRealClass(get_class($entity))],
-				$identifier
-			)
-		);
-	}
-
-	/**
-	 * @param string $class
-	 *
-	 * @return string
-	 */
-	private function getRealClass(string $class): string
-	{
-		$pos = strrpos($class, '\\' . Persistence\Proxy::MARKER . '\\');
-
-		if ($pos === false) {
-			return $class;
-		}
-
-		return substr($class, $pos + Persistence\Proxy::MARKER_LENGTH + 2);
-	}
-
-	/**
 	 * @param DatabaseEntities\IEntity $entity
 	 * @param string $action
 	 *
@@ -442,6 +286,162 @@ final class EntitiesSubscriber implements Common\EventSubscriber
 		}
 
 		return $entity->{$property};
+	}
+
+	/**
+	 * @param ORM\Event\LifecycleEventArgs $eventArgs
+	 *
+	 * @return void
+	 */
+	public function postUpdate(ORM\Event\LifecycleEventArgs $eventArgs): void
+	{
+		$uow = $this->entityManager->getUnitOfWork();
+
+		// onFlush was executed before, everything already initialized
+		$entity = $eventArgs->getObject();
+
+		// Get changes => should be already computed here (is a listener)
+		$changeset = $uow->getEntityChangeSet($entity);
+
+		// If we have no changes left => don't create revision log
+		if (count($changeset) === 0) {
+			return;
+		}
+
+		// Check for valid entity
+		if (
+			!$entity instanceof DatabaseEntities\IEntity
+			|| $uow->isScheduledForDelete($entity)
+		) {
+			return;
+		}
+
+		if (
+			$entity instanceof DevicesModuleEntities\Channels\Controls\IControl
+			&& $uow->isScheduledForUpdate($entity->getChannel())
+		) {
+			return;
+		}
+
+		if (
+			$entity instanceof DevicesModuleEntities\Devices\Controls\IControl
+			&& $uow->isScheduledForUpdate($entity->getDevice())
+		) {
+			return;
+		}
+
+		$this->processEntityAction($entity, self::ACTION_UPDATED);
+	}
+
+	/**
+	 * @return void
+	 */
+	public function preFlush(): void
+	{
+		$uow = $this->entityManager->getUnitOfWork();
+
+		foreach ($uow->getScheduledEntityDeletions() as $entity) {
+			if (
+				(
+					$entity instanceof DevicesModuleEntities\Devices\Controls\IControl
+					|| $entity instanceof DevicesModuleEntities\Channels\Controls\IControl
+				)
+				&& $entity->getName() === DevicesModule\Constants::CONTROL_CONFIG
+			) {
+				if ($entity instanceof DevicesModuleEntities\Devices\Controls\IControl) {
+					foreach ($entity->getDevice()->getConfiguration() as $row) {
+						$uow->scheduleForDelete($row);
+					}
+				}
+
+				if ($entity instanceof DevicesModuleEntities\Channels\Controls\IControl) {
+					foreach ($entity->getChannel()->getConfiguration() as $row) {
+						$uow->scheduleForDelete($row);
+					}
+				}
+			}
+		}
+	}
+
+	/**
+	 * @return void
+	 */
+	public function onFlush(): void
+	{
+		$uow = $this->entityManager->getUnitOfWork();
+
+		$processedEntities = [];
+
+		$processEntities = [];
+
+		foreach ($uow->getScheduledEntityDeletions() as $entity) {
+			// Doctrine is fine deleting elements multiple times. We are not.
+			$hash = $this->getHash($entity, $uow->getEntityIdentifier($entity));
+
+			if (in_array($hash, $processedEntities, true)) {
+				continue;
+			}
+
+			$processedEntities[] = $hash;
+
+			// Check for valid entity
+			if (!$entity instanceof DatabaseEntities\IEntity) {
+				continue;
+			}
+
+			if (
+				$entity instanceof DevicesModuleEntities\Devices\Controls\IControl
+				&& $uow->isScheduledForDelete($entity->getDevice())
+			) {
+				continue;
+			}
+
+			if (
+				$entity instanceof DevicesModuleEntities\Channels\Controls\IControl
+				&& $uow->isScheduledForDelete($entity->getChannel())
+			) {
+				continue;
+			}
+
+			$processEntities[] = $entity;
+		}
+
+		foreach ($processEntities as $entity) {
+			$this->processEntityAction($entity, self::ACTION_DELETED);
+		}
+	}
+
+	/**
+	 * @param DatabaseEntities\IEntity $entity
+	 * @param mixed[] $identifier
+	 *
+	 * @return string
+	 */
+	private function getHash(DatabaseEntities\IEntity $entity, array $identifier): string
+	{
+		return implode(
+			' ',
+			array_merge(
+				[$this->getRealClass(get_class($entity))],
+				$identifier
+			)
+		);
+	}
+
+	/**
+	 * @param string $class
+	 *
+	 * @return string
+	 */
+	private function getRealClass(string $class): string
+	{
+		$pos = strrpos($class, '\\' . Persistence\Proxy::MARKER . '\\');
+
+		if ($pos === false) {
+			return $class;
+		}
+
+		return substr($class, $pos + Persistence\Proxy::MARKER_LENGTH + 2);
 	}
 
 }

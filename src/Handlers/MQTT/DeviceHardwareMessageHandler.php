@@ -142,6 +142,20 @@ final class DeviceHardwareMessageHandler
 	}
 
 	/**
+	 * @return Connection
+	 */
+	protected function getOrmConnection(): Connection
+	{
+		$connection = $this->managerRegistry->getConnection();
+
+		if ($connection instanceof Connection) {
+			return $connection;
+		}
+
+		throw new Exceptions\RuntimeException('Entity manager could not be loaded');
+	}
+
+	/**
 	 * @param string $parameter
 	 * @param string $value
 	 *
@@ -167,20 +181,6 @@ final class DeviceHardwareMessageHandler
 		}
 
 		return [];
-	}
-
-	/**
-	 * @return Connection
-	 */
-	protected function getOrmConnection(): Connection
-	{
-		$connection = $this->managerRegistry->getConnection();
-
-		if ($connection instanceof Connection) {
-			return $connection;
-		}
-
-		throw new Exceptions\RuntimeException('Entity manager could not be loaded');
 	}
 
 }
