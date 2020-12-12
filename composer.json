@@ -42,6 +42,7 @@
     "fastybird/mqtt-plugin": "@dev",
     "fastybird/rabbitmq-plugin": "@dev",
     "fastybird/simple-auth": "@dev",
+    "fastybird/vernemq-auth-plugin": "9999999-dev",
     "fastybird/web-server": "@dev"
   },
 

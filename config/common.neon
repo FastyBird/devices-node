@@ -48,6 +48,7 @@ extensions:
 	fbRabbitMqPlugin					: FastyBird\RabbitMqPlugin\DI\RabbitMqPluginExtension
 	fbCouchDbStoragePlugin				: FastyBird\CouchDbStoragePlugin\DI\CouchDbStoragePluginExtension
 	fbMqttPlugin						: FastyBird\MqttPlugin\DI\MqttPluginExtension
+	fbVerneMqAuthPlugin					: FastyBird\VerneMqAuthPlugin\DI\VerneMqAuthPluginExtension
 	ipubDoctrineConsistence				: IPub\DoctrineConsistence\DI\DoctrineConsistenceExtension
 	ipubDoctrineCrud					: IPub\DoctrineCrud\DI\DoctrineCrudExtension
 	ipubDoctrineTimestampable			: IPub\DoctrineTimestampable\DI\DoctrineTimestampableExtension
