@@ -15,7 +15,7 @@
 ##############################
 
 parameters:
-	origin: com.fastybird.devices-node
+	origin: com.fastybird.devices-module
 
 	rabbitmq:
 		queueName: fb.devices.node.exchange

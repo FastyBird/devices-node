@@ -60,7 +60,7 @@ final class Constants
 	 * Message bus origins
 	 */
 
-	public const NODE_UI_ORIGIN = 'com.fastybird.ui-node';
-	public const NODE_TRIGGERS_ORIGIN = 'com.fastybird.triggers-node';
+	public const NODE_UI_ORIGIN = 'com.fastybird.ui-module';
+	public const NODE_TRIGGERS_ORIGIN = 'com.fastybird.triggers-module';
 
 }
