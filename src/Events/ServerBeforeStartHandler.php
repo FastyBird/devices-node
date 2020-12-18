@@ -4,7 +4,7 @@
  * ServerBeforeStartHandler.php
  *
  * @license        More in license.md
- * @copyright      https://fastybird.com
+ * @copyright      https://www.fastybird.com
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  * @package        FastyBird:DevicesNode!
  * @subpackage     Events
@@ -34,7 +34,7 @@ class ServerBeforeStartHandler
 	use Nette\SmartObject;
 
 	/** @var RabbitMqPlugin\Exchange */
-	private $exchange;
+	private RabbitMqPlugin\Exchange $exchange;
 
 	public function __construct(
 		RabbitMqPlugin\Exchange $exchange

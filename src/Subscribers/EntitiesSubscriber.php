@@ -4,7 +4,7 @@
  * EntitiesSubscriber.php
  *
  * @license        More in license.md
- * @copyright      https://fastybird.com
+ * @copyright      https://www.fastybird.com
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  * @package        FastyBird:DevicesNode!
  * @subpackage     Subscribers
@@ -49,16 +49,16 @@ final class EntitiesSubscriber implements Common\EventSubscriber
 	use Nette\SmartObject;
 
 	/** @var CouchDbStoragePluginModels\IPropertiesManager */
-	private $propertiesStatesManager;
+	private CouchDbStoragePluginModels\IPropertiesManager $propertiesStatesManager;
 
 	/** @var CouchDbStoragePluginModels\IPropertyRepository */
-	private $propertyStateRepository;
+	private CouchDbStoragePluginModels\IPropertyRepository $propertyStateRepository;
 
 	/** @var RabbitMqPluginPublishers\IRabbitMqPublisher */
-	private $publisher;
+	private RabbitMqPluginPublishers\IRabbitMqPublisher $publisher;
 
 	/** @var ORM\EntityManagerInterface */
-	private $entityManager;
+	private ORM\EntityManagerInterface $entityManager;
 
 	public function __construct(
 		CouchDbStoragePluginModels\IPropertiesManager $propertiesStatesManager,

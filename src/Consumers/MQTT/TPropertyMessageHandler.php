@@ -4,7 +4,7 @@
  * TPropertyMessageHandler.php
  *
  * @license        More in license.md
- * @copyright      https://fastybird.com
+ * @copyright      https://www.fastybird.com
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  * @package        FastyBird:DevicesNode!
  * @subpackage     Handlers
@@ -13,7 +13,7 @@
  * @date           07.08.20
  */
 
-namespace FastyBird\DevicesNode\Handlers\MQTT;
+namespace FastyBird\DevicesNode\Consumers\MQTT;
 
 use FastyBird\MqttPlugin\Entities as MqttPluginEntities;
 

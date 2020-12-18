@@ -4,7 +4,7 @@
  * DeviceMessageHandler.php
  *
  * @license        More in license.md
- * @copyright      https://fastybird.com
+ * @copyright      https://www.fastybird.com
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  * @package        FastyBird:DevicesNode!
  * @subpackage     Handlers
@@ -13,7 +13,7 @@
  * @date           04.12.20
  */
 
-namespace FastyBird\DevicesNode\Handlers\MQTT;
+namespace FastyBird\DevicesNode\Consumers\MQTT;
 
 use Doctrine\Common;
 use Doctrine\DBAL;
@@ -24,7 +24,7 @@ use FastyBird\DevicesModule\Models as DevicesModuleModels;
 use FastyBird\DevicesModule\Queries as DevicesModuleQueries;
 use FastyBird\DevicesModule\Types as DevicesModuleTypes;
 use FastyBird\DevicesNode\Exceptions;
-use FastyBird\MqttPlugin\Entities as MqttPluginEntities;
+use FastyBird\MqttPlugin;
 use Nette;
 use Nette\Utils;
 use Psr\Log;
@@ -38,34 +38,34 @@ use Throwable;
  *
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  */
-final class DeviceMessageHandler
+final class DeviceMessageHandler implements MqttPlugin\Consumers\IMessageHandler
 {
 
 	use Nette\SmartObject;
 
 	/** @var DevicesModuleModels\Devices\IDeviceRepository */
-	private $deviceRepository;
+	private DevicesModuleModels\Devices\IDeviceRepository $deviceRepository;
 
 	/** @var DevicesModuleModels\Devices\IDevicesManager */
-	private $devicesManager;
+	private DevicesModuleModels\Devices\IDevicesManager $devicesManager;
 
 	/** @var DevicesModuleModels\Devices\Properties\IPropertiesManager */
-	private $devicePropertiesManager;
+	private DevicesModuleModels\Devices\Properties\IPropertiesManager $devicePropertiesManager;
 
 	/** @var DevicesModuleModels\Devices\Controls\IControlsManager */
-	private $deviceControlManager;
+	private DevicesModuleModels\Devices\Controls\IControlsManager $deviceControlManager;
 
 	/** @var DevicesModuleModels\Channels\IChannelRepository */
-	private $channelRepository;
+	private DevicesModuleModels\Channels\IChannelRepository $channelRepository;
 
 	/** @var DevicesModuleModels\Channels\IChannelsManager */
-	private $channelsManager;
+	private DevicesModuleModels\Channels\IChannelsManager $channelsManager;
 
 	/** @var Common\Persistence\ManagerRegistry */
-	private $managerRegistry;
+	private Common\Persistence\ManagerRegistry $managerRegistry;
 
 	/** @var Log\LoggerInterface */
-	private $logger;
+	private Log\LoggerInterface $logger;
 
 	public function __construct(
 		DevicesModuleModels\Devices\IDeviceRepository $deviceRepository,
@@ -96,8 +96,12 @@ final class DeviceMessageHandler
 	 * @throws Exceptions\InvalidStateException
 	 */
 	public function process(
-		MqttPluginEntities\DeviceAttribute $entity
-	): void {
+		MqttPlugin\Entities\IEntity $entity
+	): bool {
+		if (!$entity instanceof MqttPlugin\Entities\DeviceAttribute) {
+			return false;
+		}
+
 		try {
 			$findQuery = new DevicesModuleQueries\FindDevicesQuery();
 			$findQuery->byIdentifier($entity->getDevice());
@@ -111,7 +115,7 @@ final class DeviceMessageHandler
 		if ($device === null) {
 			$this->logger->error(sprintf('[FB:NODE:MQTT] Device "%s" is not registered', $entity->getDevice()));
 
-			return;
+			return false;
 		}
 
 		try {
@@ -131,26 +135,26 @@ final class DeviceMessageHandler
 				}
 			}
 
-			if ($entity->getAttribute() === MqttPluginEntities\Attribute::NAME) {
+			if ($entity->getAttribute() === MqttPlugin\Entities\Attribute::NAME) {
 				$toUpdate['name'] = $entity->getValue();
 			}
 
 			if (
-				$entity->getAttribute() === MqttPluginEntities\Attribute::STATE &&
+				$entity->getAttribute() === MqttPlugin\Entities\Attribute::STATE &&
 				DevicesModuleTypes\DeviceConnectionState::isValidValue($entity->getValue())
 			) {
 				$toUpdate['state'] = $entity->getValue();
 			}
 
-			if ($entity->getAttribute() === MqttPluginEntities\Attribute::PROPERTIES && is_array($entity->getValue())) {
+			if ($entity->getAttribute() === MqttPlugin\Entities\Attribute::PROPERTIES && is_array($entity->getValue())) {
 				$this->setDeviceProperties($device, Utils\ArrayHash::from($entity->getValue()));
 			}
 
-			if ($entity->getAttribute() === MqttPluginEntities\Attribute::CHANNELS && is_array($entity->getValue())) {
+			if ($entity->getAttribute() === MqttPlugin\Entities\Attribute::CHANNELS && is_array($entity->getValue())) {
 				$this->setDeviceChannels($device, Utils\ArrayHash::from($entity->getValue()));
 			}
 
-			if ($entity->getAttribute() === MqttPluginEntities\Attribute::CONTROL && is_array($entity->getValue())) {
+			if ($entity->getAttribute() === MqttPlugin\Entities\Attribute::CONTROL && is_array($entity->getValue())) {
 				$this->setDeviceControl($device, Utils\ArrayHash::from($entity->getValue()));
 			}
 
@@ -169,6 +173,8 @@ final class DeviceMessageHandler
 
 			throw new Exceptions\InvalidStateException('An error occurred: ' . $ex->getMessage(), $ex->getCode(), $ex);
 		}
+
+		return true;
 	}
 
 	/**

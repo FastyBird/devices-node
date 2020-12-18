@@ -141,4 +141,4 @@ For release info check [release page](https://github.com/FastyBird/devices-node/
 </table>
 
 ***
-Homepage [https://fastybird.com](https://fastybird.com) and repository [https://github.com/fastybird/devices-node](https://github.com/fastybird/devices-node).
+Homepage [https://www.fastybird.com](https://www.fastybird.com) and repository [https://github.com/fastybird/devices-node](https://github.com/fastybird/devices-node).

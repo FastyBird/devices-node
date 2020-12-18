@@ -4,7 +4,7 @@
  * DeviceControlMessageHandler.php
  *
  * @license        More in license.md
- * @copyright      https://fastybird.com
+ * @copyright      https://www.fastybird.com
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  * @package        FastyBird:DevicesNode!
  * @subpackage     Handlers
@@ -13,7 +13,7 @@
  * @date           04.12.20
  */
 
-namespace FastyBird\DevicesNode\Handlers\MQTT;
+namespace FastyBird\DevicesNode\Consumers\MQTT;
 
 use Doctrine\Common;
 use Doctrine\DBAL;
@@ -23,7 +23,7 @@ use FastyBird\DevicesModule\Entities as DevicesModuleEntities;
 use FastyBird\DevicesModule\Models as DevicesModuleModels;
 use FastyBird\DevicesModule\Queries as DevicesModuleQueries;
 use FastyBird\DevicesNode\Exceptions;
-use FastyBird\MqttPlugin\Entities as MqttPluginEntities;
+use FastyBird\MqttPlugin;
 use Nette;
 use Nette\Utils;
 use Psr\Log;
@@ -37,23 +37,23 @@ use Throwable;
  *
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  */
-final class DeviceControlMessageHandler
+final class DeviceControlMessageHandler implements MqttPlugin\Consumers\IMessageHandler
 {
 
 	use Nette\SmartObject;
 	use TControlMessageHandler;
 
 	/** @var DevicesModuleModels\Devices\IDeviceRepository */
-	private $deviceRepository;
+	private DevicesModuleModels\Devices\IDeviceRepository $deviceRepository;
 
 	/** @var DevicesModuleModels\Devices\Configuration\IRowsManager */
-	private $rowsManager;
+	private DevicesModuleModels\Devices\Configuration\IRowsManager $rowsManager;
 
 	/** @var Log\LoggerInterface */
-	private $logger;
+	private Log\LoggerInterface $logger;
 
 	/** @var Common\Persistence\ManagerRegistry */
-	private $managerRegistry;
+	private Common\Persistence\ManagerRegistry $managerRegistry;
 
 	public function __construct(
 		DevicesModuleModels\Devices\IDeviceRepository $deviceRepository,
@@ -76,8 +76,12 @@ final class DeviceControlMessageHandler
 	 * @throws Exceptions\InvalidStateException
 	 */
 	public function process(
-		MqttPluginEntities\DeviceControl $entity
-	): void {
+		MqttPlugin\Entities\IEntity $entity
+	): bool {
+		if (!$entity instanceof MqttPlugin\Entities\DeviceControl) {
+			return false;
+		}
+
 		try {
 			$findQuery = new DevicesModuleQueries\FindDevicesQuery();
 			$findQuery->byIdentifier($entity->getDevice());
@@ -91,7 +95,7 @@ final class DeviceControlMessageHandler
 		if ($device === null) {
 			$this->logger->error(sprintf('[FB:NODE:MQTT] Device "%s" is not registered', $entity->getDevice()));
 
-			return;
+			return false;
 		}
 
 		$control = $device->getControl($entity->getControl());
@@ -99,7 +103,7 @@ final class DeviceControlMessageHandler
 		if ($control === null) {
 			$this->logger->error(sprintf('[FB:NODE:MQTT] Channel control "%s" could not be loaded', $entity->getControl()));
 
-			return;
+			return false;
 		}
 
 		try {
@@ -127,6 +131,8 @@ final class DeviceControlMessageHandler
 
 			throw new Exceptions\InvalidStateException('An error occurred: ' . $ex->getMessage(), $ex->getCode(), $ex);
 		}
+
+		return true;
 	}
 
 	/**

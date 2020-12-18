@@ -10,15 +10,15 @@
     "service"
   ],
 
-  "homepage": "https://fastybird.com",
+  "homepage": "https://www.fastybird.com",
 
   "license": "Apache-2.0",
 
   "authors": [
     {
       "name": "FastyBird s.r.o.",
-      "email": "info@fastybird.com",
-      "homepage": "https://fastybird.com/"
+      "email": "code@fastybird.com",
+      "homepage": "https://www.fastybird.com/"
     },
     {
       "name": "Adam Kadlec",

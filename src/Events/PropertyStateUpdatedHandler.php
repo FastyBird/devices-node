@@ -4,7 +4,7 @@
  * PropertyUpdatedHandler.php
  *
  * @license        More in license.md
- * @copyright      https://fastybird.com
+ * @copyright      https://www.fastybird.com
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  * @package        FastyBird:DevicesNode!
  * @subpackage     Events
@@ -39,13 +39,13 @@ final class PropertyStateUpdatedHandler
 	private const ACTION = 'updated';
 
 	/** @var DevicesModuleModels\Devices\Properties\IPropertyRepository */
-	private $devicePropertyRepository;
+	private DevicesModuleModels\Devices\Properties\IPropertyRepository $devicePropertyRepository;
 
 	/** @var DevicesModuleModels\Channels\Properties\IPropertyRepository */
-	private $channelPropertyRepository;
+	private DevicesModuleModels\Channels\Properties\IPropertyRepository $channelPropertyRepository;
 
 	/** @var RabbitMqPluginPublishers\IRabbitMqPublisher */
-	private $publisher;
+	private RabbitMqPluginPublishers\IRabbitMqPublisher $publisher;
 
 	public function __construct(
 		DevicesModuleModels\Devices\Properties\IPropertyRepository $devicePropertyRepository,

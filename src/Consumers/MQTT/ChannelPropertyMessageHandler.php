@@ -1,10 +1,10 @@
 <?php declare(strict_types = 1);
 
 /**
- * DevicePropertyMessageHandler.php
+ * ChannelPropertyMessageHandler.php
  *
  * @license        More in license.md
- * @copyright      https://fastybird.com
+ * @copyright      https://www.fastybird.com
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  * @package        FastyBird:DevicesNode!
  * @subpackage     Handlers
@@ -13,7 +13,7 @@
  * @date           04.12.20
  */
 
-namespace FastyBird\DevicesNode\Handlers\MQTT;
+namespace FastyBird\DevicesNode\Consumers\MQTT;
 
 use Doctrine\Common;
 use Doctrine\DBAL;
@@ -22,53 +22,58 @@ use FastyBird\CouchDbStoragePlugin\Models as CouchDbStoragePluginModels;
 use FastyBird\DevicesModule\Models as DevicesModuleModels;
 use FastyBird\DevicesModule\Queries as DevicesModuleQueries;
 use FastyBird\DevicesNode\Exceptions;
-use FastyBird\MqttPlugin\Entities as MqttPluginEntities;
+use FastyBird\MqttPlugin;
 use Nette;
 use Nette\Utils;
 use Psr\Log;
 use Throwable;
 
 /**
- * Device property MQTT message handler
+ * Device channel property MQTT message handler
  *
  * @package        FastyBird:DevicesNode!
  * @subpackage     Handlers
  *
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  */
-final class DevicePropertyMessageHandler
+final class ChannelPropertyMessageHandler implements MqttPlugin\Consumers\IMessageHandler
 {
 
 	use Nette\SmartObject;
 	use TPropertyMessageHandler;
 
 	/** @var DevicesModuleModels\Devices\IDeviceRepository */
-	private $deviceRepository;
+	private DevicesModuleModels\Devices\IDeviceRepository $deviceRepository;
 
-	/** @var DevicesModuleModels\Devices\Properties\IPropertiesManager */
-	private $propertiesManager;
+	/** @var DevicesModuleModels\Channels\IChannelRepository */
+	private DevicesModuleModels\Channels\IChannelRepository $channelRepository;
+
+	/** @var DevicesModuleModels\Channels\Properties\IPropertiesManager */
+	private DevicesModuleModels\Channels\Properties\IPropertiesManager $propertiesManager;
 
 	/** @var CouchDbStoragePluginModels\IPropertiesManager */
-	private $propertiesStatesManager;
+	private CouchDbStoragePluginModels\IPropertiesManager $propertiesStatesManager;
 
 	/** @var CouchDbStoragePluginModels\IPropertyRepository */
-	private $propertyStateRepository;
+	private CouchDbStoragePluginModels\IPropertyRepository $propertyStateRepository;
 
 	/** @var Common\Persistence\ManagerRegistry */
-	private $managerRegistry;
+	private Common\Persistence\ManagerRegistry $managerRegistry;
 
 	/** @var Log\LoggerInterface */
-	private $logger;
+	private Log\LoggerInterface $logger;
 
 	public function __construct(
 		DevicesModuleModels\Devices\IDeviceRepository $deviceRepository,
-		DevicesModuleModels\Devices\Properties\IPropertiesManager $propertiesManager,
+		DevicesModuleModels\Channels\IChannelRepository $channelRepository,
+		DevicesModuleModels\Channels\Properties\IPropertiesManager $propertiesManager,
 		CouchDbStoragePluginModels\IPropertiesManager $propertiesStatesManager,
 		CouchDbStoragePluginModels\IPropertyRepository $propertyStateRepository,
 		Common\Persistence\ManagerRegistry $managerRegistry,
 		?Log\LoggerInterface $logger = null
 	) {
 		$this->deviceRepository = $deviceRepository;
+		$this->channelRepository = $channelRepository;
 		$this->propertiesManager = $propertiesManager;
 		$this->propertiesStatesManager = $propertiesStatesManager;
 		$this->propertyStateRepository = $propertyStateRepository;
@@ -85,8 +90,12 @@ final class DevicePropertyMessageHandler
 	 * @throws Exceptions\InvalidStateException
 	 */
 	public function process(
-		MqttPluginEntities\DeviceProperty $entity
-	): void {
+		MqttPlugin\Entities\IEntity $entity
+	): bool {
+		if (!$entity instanceof MqttPlugin\Entities\ChannelProperty) {
+			return false;
+		}
+
 		try {
 			$findQuery = new DevicesModuleQueries\FindDevicesQuery();
 			$findQuery->byIdentifier($entity->getDevice());
@@ -100,15 +109,32 @@ final class DevicePropertyMessageHandler
 		if ($device === null) {
 			$this->logger->error(sprintf('[FB:NODE:MQTT] Device "%s" is not registered', $entity->getDevice()));
 
-			return;
+			return false;
 		}
 
-		$property = $device->findProperty($entity->getProperty());
+		try {
+			$findQuery = new DevicesModuleQueries\FindChannelsQuery();
+			$findQuery->forDevice($device);
+			$findQuery->byChannel($entity->getChannel());
+
+			$channel = $this->channelRepository->findOneBy($findQuery);
+
+		} catch (Throwable $ex) {
+			throw new Exceptions\InvalidStateException('An error occurred: ' . $ex->getMessage(), $ex->getCode(), $ex);
+		}
+
+		if ($channel === null) {
+			$this->logger->error(sprintf('[FB:NODE:MQTT] Device channel "%s" is not registered', $entity->getChannel()));
+
+			return false;
+		}
+
+		$property = $channel->findProperty($entity->getProperty());
 
 		if ($property === null) {
 			$this->logger->error(sprintf('[FB:NODE:MQTT] Property "%s" is not registered', $entity->getProperty()));
 
-			return;
+			return false;
 		}
 
 		try {
@@ -117,9 +143,7 @@ final class DevicePropertyMessageHandler
 
 			$toUpdate = $this->handlePropertyConfiguration($entity);
 
-			if ($toUpdate !== []) {
-				$this->propertiesManager->update($property, Utils\ArrayHash::from($toUpdate));
-			}
+			$this->propertiesManager->update($property, Utils\ArrayHash::from($toUpdate));
 
 			// Commit all changes into database
 			$this->getOrmConnection()->commit();
@@ -162,6 +186,8 @@ final class DevicePropertyMessageHandler
 
 			throw new Exceptions\InvalidStateException('An error occurred: ' . $ex->getMessage(), $ex->getCode(), $ex);
 		}
+
+		return true;
 	}
 
 	/**

@@ -4,7 +4,7 @@
  * MessageHandler.php
  *
  * @license        More in license.md
- * @copyright      https://fastybird.com
+ * @copyright      https://www.fastybird.com
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  * @package        FastyBird:DevicesNode!
  * @subpackage     Consumers
@@ -13,7 +13,7 @@
  * @date           06.12.20
  */
 
-namespace FastyBird\DevicesNode\Consumers;
+namespace FastyBird\DevicesNode\Consumers\Bus;
 
 use FastyBird\ModulesMetadata\Loaders as ModulesMetadataLoaders;
 use FastyBird\ModulesMetadata\Schemas as ModulesMetadataSchemas;
@@ -37,13 +37,13 @@ abstract class MessageHandler implements RabbitMqPluginConsumers\IMessageHandler
 	use Nette\SmartObject;
 
 	/** @var Log\LoggerInterface */
-	protected $logger;
+	protected Log\LoggerInterface $logger;
 
 	/** @var ModulesMetadataLoaders\ISchemaLoader */
-	private $schemaLoader;
+	private ModulesMetadataLoaders\ISchemaLoader $schemaLoader;
 
 	/** @var ModulesMetadataSchemas\IValidator */
-	private $validator;
+	private ModulesMetadataSchemas\IValidator $validator;
 
 	public function __construct(
 		ModulesMetadataLoaders\ISchemaLoader $schemaLoader,

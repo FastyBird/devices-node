@@ -1,10 +1,10 @@
 <?php declare(strict_types = 1);
 
 /**
- * ServerStartHandler.php
+ * ServerAfterStartHandler.php
  *
  * @license        More in license.md
- * @copyright      https://fastybird.com
+ * @copyright      https://www.fastybird.com
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  * @package        FastyBird:DevicesNode!
  * @subpackage     Events
@@ -15,7 +15,7 @@
 
 namespace FastyBird\DevicesNode\Events;
 
-use IPub\MQTTClient;
+use FastyBird\MqttPlugin;
 use Nette;
 use Throwable;
 
@@ -27,16 +27,16 @@ use Throwable;
  *
  * @author          Adam Kadlec <adam.kadlec@fastybird.com>
  */
-class ServerStartHandler
+class ServerAfterStartHandler
 {
 
 	use Nette\SmartObject;
 
-	/** @var MQTTClient\Client\IClient */
-	private $mqttClient;
+	/** @var MqttPlugin\Client */
+	private MqttPlugin\Client $mqttClient;
 
 	public function __construct(
-		MQTTClient\Client\IClient $mqttClient
+		MqttPlugin\Client $mqttClient
 	) {
 		$this->mqttClient = $mqttClient;
 	}

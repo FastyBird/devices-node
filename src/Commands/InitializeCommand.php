@@ -4,7 +4,7 @@
  * InitializeCommand.php
  *
  * @license        More in license.md
- * @copyright      https://fastybird.com
+ * @copyright      https://www.fastybird.com
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  * @package        FastyBird:DevicesNode!
  * @subpackage     Commands
@@ -35,7 +35,7 @@ class InitializeCommand extends Console\Command\Command
 {
 
 	/** @var Database\Helpers\Database */
-	private $database;
+	private Database\Helpers\Database $database;
 
 	public function __construct(
 		Database\Helpers\Database $database,

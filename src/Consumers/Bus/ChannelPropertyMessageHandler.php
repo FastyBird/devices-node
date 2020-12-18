@@ -1,10 +1,10 @@
 <?php declare(strict_types = 1);
 
 /**
- * DevicePropertyMessageHandler.php
+ * ChannelPropertyMessageHandler.php
  *
  * @license        More in license.md
- * @copyright      https://fastybird.com
+ * @copyright      https://www.fastybird.com
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  * @package        FastyBird:DevicesNode!
  * @subpackage     Consumers
@@ -13,7 +13,7 @@
  * @date           19.03.20
  */
 
-namespace FastyBird\DevicesNode\Consumers;
+namespace FastyBird\DevicesNode\Consumers\Bus;
 
 use FastyBird\CouchDbStoragePlugin\Models as CouchDbStoragePluginModels;
 use FastyBird\DevicesModule\Helpers as DevicesModuleHelpers;
@@ -31,35 +31,39 @@ use Psr\Log;
 use Throwable;
 
 /**
- * Device message consumer
+ * Channel property message consumer
  *
  * @package        FastyBird:DevicesNode!
  * @subpackage     Consumers
  *
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  */
-final class DevicePropertyMessageHandler extends MessageHandler
+final class ChannelPropertyMessageHandler extends MessageHandler
 {
 
 	use TPropertyMessageHandler;
 
 	/** @var DevicesModuleHelpers\PropertyHelper */
-	protected $propertyHelper;
+	protected DevicesModuleHelpers\PropertyHelper $propertyHelper;
 
 	/** @var DevicesModuleModels\Devices\IDeviceRepository */
-	private $deviceRepository;
+	private DevicesModuleModels\Devices\IDeviceRepository $deviceRepository;
+
+	/** @var DevicesModuleModels\Channels\IChannelRepository */
+	private DevicesModuleModels\Channels\IChannelRepository $channelRepository;
 
 	/** @var CouchDbStoragePluginModels\IPropertiesManager */
-	private $propertiesStatesManager;
+	private CouchDbStoragePluginModels\IPropertiesManager $propertiesStatesManager;
 
 	/** @var CouchDbStoragePluginModels\IPropertyRepository */
-	private $propertyStateRepository;
+	private CouchDbStoragePluginModels\IPropertyRepository $propertyStateRepository;
 
 	/** @var MqttPluginSenders\ISender */
-	private $mqttV1sender;
+	private MqttPluginSenders\ISender $mqttV1sender;
 
 	public function __construct(
 		DevicesModuleModels\Devices\IDeviceRepository $deviceRepository,
+		DevicesModuleModels\Channels\IChannelRepository $channelRepository,
 		DevicesModuleHelpers\PropertyHelper $propertyHelper,
 		CouchDbStoragePluginModels\IPropertiesManager $propertiesStatesManager,
 		CouchDbStoragePluginModels\IPropertyRepository $propertyStateRepository,
@@ -71,6 +75,7 @@ final class DevicePropertyMessageHandler extends MessageHandler
 		parent::__construct($schemaLoader, $validator, $logger);
 
 		$this->deviceRepository = $deviceRepository;
+		$this->channelRepository = $channelRepository;
 		$this->propertyHelper = $propertyHelper;
 		$this->propertiesStatesManager = $propertiesStatesManager;
 		$this->propertyStateRepository = $propertyStateRepository;
@@ -110,7 +115,24 @@ final class DevicePropertyMessageHandler extends MessageHandler
 			return true;
 		}
 
-		$property = $device->findProperty($message->offsetGet('property'));
+		try {
+			$findQuery = new DevicesModuleQueries\FindChannelsQuery();
+			$findQuery->forDevice($device);
+			$findQuery->byChannel($message->offsetGet('channel'));
+
+			$channel = $this->channelRepository->findOneBy($findQuery);
+
+		} catch (Throwable $ex) {
+			throw new RabbitMqPluginExceptions\TerminateException('An error occurred: ' . $ex->getMessage(), $ex->getCode(), $ex);
+		}
+
+		if ($channel === null) {
+			$this->logger->error(sprintf('[FB:NODE:CONSUMER] Device channel "%s" is not registered', $message->offsetGet('device')));
+
+			return true;
+		}
+
+		$property = $channel->findProperty($message->offsetGet('property'));
 
 		if ($property === null) {
 			$this->logger->error(sprintf('[FB:NODE:CONSUMER] Property "%s" is not registered', $message->offsetGet('property')));
@@ -120,7 +142,7 @@ final class DevicePropertyMessageHandler extends MessageHandler
 
 		try {
 			switch ($routingKey) {
-				case DevicesNode\Constants::RABBIT_MQ_DEVICES_PROPERTIES_DATA_ROUTING_KEY:
+				case DevicesNode\Constants::RABBIT_MQ_CHANNELS_PROPERTIES_DATA_ROUTING_KEY:
 					// Property have to be configured & have to be settable
 					if ($property->isSettable()) {
 						$state = $this->propertyStateRepository->findOne($property->getId());
@@ -142,11 +164,12 @@ final class DevicePropertyMessageHandler extends MessageHandler
 						);
 
 						if ($state->getExpected() !== null && $state->isPending()) {
-							$this->mqttV1sender->sendDeviceProperty(
-								$property->getDevice()->getIdentifier(),
+							$this->mqttV1sender->sendChannelProperty(
+								$property->getChannel()->getDevice()->getIdentifier(),
+								$property->getChannel()->getChannel(),
 								$property->getProperty(),
 								(string) $state->getExpected(),
-								$property->getDevice()->getParent() !== null ? $property->getDevice()->getParent()->getIdentifier() : null
+								$property->getChannel()->getDevice()->getParent() !== null ? $property->getChannel()->getDevice()->getParent()->getIdentifier() : null
 							)
 								->done();
 						}
@@ -180,12 +203,12 @@ final class DevicePropertyMessageHandler extends MessageHandler
 	protected function getSchemaFile(string $routingKey, string $origin): ?string
 	{
 		switch ($routingKey) {
-			case DevicesNode\Constants::RABBIT_MQ_DEVICES_PROPERTIES_DATA_ROUTING_KEY:
+			case DevicesNode\Constants::RABBIT_MQ_CHANNELS_PROPERTIES_DATA_ROUTING_KEY:
 				if (
 					$origin === DevicesNode\Constants::NODE_TRIGGERS_ORIGIN
 					|| $origin === DevicesNode\Constants::NODE_UI_ORIGIN
 				) {
-					return ModulesMetadata\Constants::RESOURCES_FOLDER . '/schemas/data/data.device.property.json';
+					return ModulesMetadata\Constants::RESOURCES_FOLDER . '/schemas/data/data.channel.property.json';
 				}
 		}
 

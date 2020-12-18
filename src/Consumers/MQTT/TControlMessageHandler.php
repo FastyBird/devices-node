@@ -4,7 +4,7 @@
  * TControlMessageHandler.php
  *
  * @license        More in license.md
- * @copyright      https://fastybird.com
+ * @copyright      https://www.fastybird.com
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  * @package        FastyBird:DevicesNode!
  * @subpackage     Consumers
@@ -13,7 +13,7 @@
  * @date           25.03.20
  */
 
-namespace FastyBird\DevicesNode\Handlers\MQTT;
+namespace FastyBird\DevicesNode\Consumers\MQTT;
 
 use FastyBird\DevicesModule;
 use FastyBird\DevicesModule\Entities as DevicesModuleEntities;

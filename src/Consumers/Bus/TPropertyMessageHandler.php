@@ -4,7 +4,7 @@
  * TPropertyMessageHandler.php
  *
  * @license        More in license.md
- * @copyright      https://fastybird.com
+ * @copyright      https://www.fastybird.com
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  * @package        FastyBird:DevicesNode!
  * @subpackage     Consumers
@@ -13,7 +13,7 @@
  * @date           07.08.20
  */
 
-namespace FastyBird\DevicesNode\Consumers;
+namespace FastyBird\DevicesNode\Consumers\Bus;
 
 use FastyBird\CouchDbStoragePlugin\States as CouchDbStoragePluginStates;
 use FastyBird\DevicesModule\Entities as DevicesModuleEntities;

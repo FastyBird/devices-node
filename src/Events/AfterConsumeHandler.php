@@ -4,7 +4,7 @@
  * AfterConsumeHandler.php
  *
  * @license        More in license.md
- * @copyright      https://fastybird.com
+ * @copyright      https://www.fastybird.com
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  * @package        FastyBird:DevicesNode!
  * @subpackage     Events
@@ -32,7 +32,7 @@ class AfterConsumeHandler
 	use Nette\SmartObject;
 
 	/** @var Persistence\ManagerRegistry */
-	private $managerRegistry;
+	private Persistence\ManagerRegistry $managerRegistry;
 
 	public function __construct(
 		Persistence\ManagerRegistry $managerRegistry

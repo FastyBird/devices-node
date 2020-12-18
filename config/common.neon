@@ -2,7 +2,7 @@
 # Service DI configuration
 #
 # @license		More in license.md
-# @copyright	https://fastybird.com
+# @copyright	https://www.fastybird.com
 # @author		Adam Kadlec <adam.kadlec@fastybird.com>
 # @package		FastyBird:DevicesNode!
 # @subpackage	config
@@ -182,15 +182,11 @@ decorator:
 	FastyBird\WebServer\Commands\HttpServerCommand:
 		setup:
 			- '$onBeforeServerStart[]' = @FastyBird\DevicesNode\Events\ServerBeforeStartHandler
-			- '$onServerStart[]' = @FastyBird\DevicesNode\Events\ServerStartHandler
+			- '$onAdterServerStart[]' = @FastyBird\DevicesNode\Events\ServerAfterStartHandler
 
 	FastyBird\RabbitMqPlugin\Exchange:
 		setup:
 			- '$onAfterConsumeMessage[]' = @FastyBird\DevicesNode\Events\AfterConsumeHandler
-
-	FastyBird\MqttPlugin\Handler:
-		setup:
-			- '$onMessage[]' = @FastyBird\DevicesNode\Events\MqttMessageHandler
 
 	FastyBird\CouchDbStoragePlugin\Models\PropertiesManager:
 		setup:
@@ -205,9 +201,28 @@ services:
 	# Message bus messages handlers
 	###############################
 
-	- {factory: FastyBird\DevicesNode\Consumers\DevicePropertyMessageHandler}
+	- {factory: FastyBird\DevicesNode\Consumers\Bus\DevicePropertyMessageHandler}
 
-	- {factory: FastyBird\DevicesNode\Consumers\ChannelPropertyMessageHandler}
+	- {factory: FastyBird\DevicesNode\Consumers\Bus\ChannelPropertyMessageHandler}
+
+	# MQTT bus messages handlers
+	############################
+
+	- {factory: FastyBird\DevicesNode\Consumers\MQTT\DeviceMessageHandler}
+
+	- {factory: FastyBird\DevicesNode\Consumers\MQTT\DeviceHardwareMessageHandler}
+
+	- {factory: FastyBird\DevicesNode\Consumers\MQTT\DeviceFirmwareMessageHandler}
+
+	- {factory: FastyBird\DevicesNode\Consumers\MQTT\DevicePropertyMessageHandler}
+
+	- {factory: FastyBird\DevicesNode\Consumers\MQTT\DeviceControlMessageHandler}
+
+	- {factory: FastyBird\DevicesNode\Consumers\MQTT\ChannelMessageHandler}
+
+	- {factory: FastyBird\DevicesNode\Consumers\MQTT\ChannelPropertyMessageHandler}
+
+	- {factory: FastyBird\DevicesNode\Consumers\MQTT\ChannelControlMessageHandler}
 
 	# Node events
 	#############
@@ -216,32 +231,11 @@ services:
 
 	- {factory: FastyBird\DevicesNode\Events\ServerBeforeStartHandler}
 
-	- {factory: FastyBird\DevicesNode\Events\ServerStartHandler}
+	- {factory: FastyBird\DevicesNode\Events\ServerAfterStartHandler}
 
 	- {factory: FastyBird\DevicesNode\Events\PropertyStateUpdatedHandler}
-
-	- {factory: FastyBird\DevicesNode\Events\MqttMessageHandler}
 
 	# Events subscribers
 	####################
 
 	- {factory: FastyBird\DevicesNode\Subscribers\EntitiesSubscriber}
-
-	# Events handlers
-	####################
-
-	- {factory: FastyBird\DevicesNode\Handlers\MQTT\DeviceMessageHandler}
-
-	- {factory: FastyBird\DevicesNode\Handlers\MQTT\DeviceHardwareMessageHandler}
-
-	- {factory: FastyBird\DevicesNode\Handlers\MQTT\DeviceFirmwareMessageHandler}
-
-	- {factory: FastyBird\DevicesNode\Handlers\MQTT\DevicePropertyMessageHandler}
-
-	- {factory: FastyBird\DevicesNode\Handlers\MQTT\DeviceControlMessageHandler}
-
-	- {factory: FastyBird\DevicesNode\Handlers\MQTT\ChannelMessageHandler}
-
-	- {factory: FastyBird\DevicesNode\Handlers\MQTT\ChannelPropertyMessageHandler}
-
-	- {factory: FastyBird\DevicesNode\Handlers\MQTT\ChannelControlMessageHandler}

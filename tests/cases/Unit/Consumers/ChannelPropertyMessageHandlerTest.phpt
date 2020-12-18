@@ -61,8 +61,8 @@ final class ChannelPropertyMessageHandlerTest extends DbTestCase
 			$sender
 		);
 
-		/** @var Consumers\ChannelPropertyMessageHandler $handler */
-		$handler = $this->getContainer()->getByType(Consumers\ChannelPropertyMessageHandler::class);
+		/** @var Consumers\Bus\ChannelPropertyMessageHandler $handler */
+		$handler = $this->getContainer()->getByType(Consumers\Bus\ChannelPropertyMessageHandler::class);
 
 		Assert::true($handler->process($routingKey, $origin, $payload));
 	}

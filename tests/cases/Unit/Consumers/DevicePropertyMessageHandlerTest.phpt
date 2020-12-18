@@ -61,8 +61,8 @@ final class DevicePropertyMessageHandlerTest extends DbTestCase
 			$sender
 		);
 
-		/** @var Consumers\DevicePropertyMessageHandler $handler */
-		$handler = $this->getContainer()->getByType(Consumers\DevicePropertyMessageHandler::class);
+		/** @var Consumers\Bus\DevicePropertyMessageHandler $handler */
+		$handler = $this->getContainer()->getByType(Consumers\Bus\DevicePropertyMessageHandler::class);
 
 		Assert::true($handler->process($routingKey, $origin, $payload));
 	}

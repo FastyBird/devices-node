@@ -1,10 +1,10 @@
 <?php declare(strict_types = 1);
 
 /**
- * DeviceFirmwareMessageHandler.php
+ * DeviceHardwareMessageHandler.php
  *
  * @license        More in license.md
- * @copyright      https://fastybird.com
+ * @copyright      https://www.fastybird.com
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  * @package        FastyBird:DevicesNode!
  * @subpackage     Handlers
@@ -13,7 +13,7 @@
  * @date           04.12.20
  */
 
-namespace FastyBird\DevicesNode\Handlers\MQTT;
+namespace FastyBird\DevicesNode\Consumers\MQTT;
 
 use Doctrine\Common;
 use Doctrine\DBAL;
@@ -22,45 +22,45 @@ use FastyBird\DevicesModule\Entities as DevicesModuleEntities;
 use FastyBird\DevicesModule\Models as DevicesModuleModels;
 use FastyBird\DevicesModule\Queries as DevicesModuleQueries;
 use FastyBird\DevicesNode\Exceptions;
-use FastyBird\MqttPlugin\Entities as MqttPluginEntities;
+use FastyBird\MqttPlugin;
 use Nette;
 use Nette\Utils;
 use Psr\Log;
 use Throwable;
 
 /**
- * Device firmware MQTT message handler
+ * Device hardware MQTT message handler
  *
  * @package        FastyBird:DevicesNode!
- * @subpackage     Consumers
+ * @subpackage     Handlers
  *
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  */
-final class DeviceFirmwareMessageHandler
+final class DeviceHardwareMessageHandler implements MqttPlugin\Consumers\IMessageHandler
 {
 
 	use Nette\SmartObject;
 
 	/** @var DevicesModuleModels\Devices\IDeviceRepository */
-	private $deviceRepository;
+	private DevicesModuleModels\Devices\IDeviceRepository $deviceRepository;
 
-	/** @var DevicesModuleModels\Devices\PhysicalDevice\IFirmwareManager */
-	private $firmwareManager;
+	/** @var DevicesModuleModels\Devices\PhysicalDevice\IHardwareManager */
+	private DevicesModuleModels\Devices\PhysicalDevice\IHardwareManager $hardwareManager;
 
 	/** @var Log\LoggerInterface */
-	private $logger;
+	private Log\LoggerInterface $logger;
 
 	/** @var Common\Persistence\ManagerRegistry */
-	private $managerRegistry;
+	private Common\Persistence\ManagerRegistry $managerRegistry;
 
 	public function __construct(
 		DevicesModuleModels\Devices\IDeviceRepository $deviceRepository,
-		DevicesModuleModels\Devices\PhysicalDevice\IFirmwareManager $firmwareManager,
+		DevicesModuleModels\Devices\PhysicalDevice\IHardwareManager $hardwareManager,
 		Common\Persistence\ManagerRegistry $managerRegistry,
 		?Log\LoggerInterface $logger = null
 	) {
 		$this->deviceRepository = $deviceRepository;
-		$this->firmwareManager = $firmwareManager;
+		$this->hardwareManager = $hardwareManager;
 
 		$this->managerRegistry = $managerRegistry;
 
@@ -74,8 +74,12 @@ final class DeviceFirmwareMessageHandler
 	 * @throws Exceptions\InvalidStateException
 	 */
 	public function process(
-		MqttPluginEntities\Firmware $entity
-	): void {
+		MqttPlugin\Entities\IEntity $entity
+	): bool {
+		if (!$entity instanceof MqttPlugin\Entities\Hardware) {
+			return false;
+		}
+
 		try {
 			$findQuery = new DevicesModuleQueries\FindDevicesQuery();
 			$findQuery->byIdentifier($entity->getDevice());
@@ -95,7 +99,7 @@ final class DeviceFirmwareMessageHandler
 		) {
 			$this->logger->error(sprintf('[FB:NODE:MQTT] Device "%s" is not registered', $entity->getDevice()));
 
-			return;
+			return false;
 		}
 
 		try {
@@ -106,24 +110,25 @@ final class DeviceFirmwareMessageHandler
 
 			foreach (
 				[
-					MqttPluginEntities\Firmware::MANUFACTURER,
-					MqttPluginEntities\Firmware::NAME,
-					MqttPluginEntities\Firmware::VERSION,
+					MqttPlugin\Entities\Hardware::MAC_ADDRESS,
+					MqttPlugin\Entities\Hardware::MANUFACTURER,
+					MqttPlugin\Entities\Hardware::MODEL,
+					MqttPlugin\Entities\Hardware::VERSION,
 				] as $attribute
 			) {
 				if ($entity->getParameter() === $attribute) {
-					$subResult = $this->setDeviceFirmwareInfo($attribute, $entity->getValue());
+					$subResult = $this->setDeviceHardwareInfo($attribute, $entity->getValue());
 
 					$toUpdate = array_merge($toUpdate, $subResult);
 				}
 			}
 
 			if ($toUpdate !== []) {
-				if ($device->getFirmware() !== null) {
-					$this->firmwareManager->update($device->getFirmware(), Utils\ArrayHash::from($toUpdate));
+				if ($device->getHardware() !== null) {
+					$this->hardwareManager->update($device->getHardware(), Utils\ArrayHash::from($toUpdate));
 
 				} else {
-					$this->firmwareManager->create(Utils\ArrayHash::from(array_merge($toUpdate, ['device' => $device])));
+					$this->hardwareManager->create(Utils\ArrayHash::from(array_merge($toUpdate, ['device' => $device])));
 				}
 			}
 
@@ -138,6 +143,8 @@ final class DeviceFirmwareMessageHandler
 
 			throw new Exceptions\InvalidStateException('An error occurred: ' . $ex->getMessage(), $ex->getCode(), $ex);
 		}
+
+		return true;
 	}
 
 	/**
@@ -160,14 +167,15 @@ final class DeviceFirmwareMessageHandler
 	 *
 	 * @return mixed[]
 	 */
-	private function setDeviceFirmwareInfo(
+	private function setDeviceHardwareInfo(
 		string $parameter,
 		string $value
 	): array {
 		$parametersMapping = [
-			MqttPluginEntities\Firmware::MANUFACTURER => 'manufacturer',
-			MqttPluginEntities\Firmware::NAME         => 'name',
-			MqttPluginEntities\Firmware::VERSION      => 'version',
+			MqttPlugin\Entities\Hardware::MAC_ADDRESS  => 'macAddress',
+			MqttPlugin\Entities\Hardware::MANUFACTURER => 'manufacturer',
+			MqttPlugin\Entities\Hardware::MODEL        => 'model',
+			MqttPlugin\Entities\Hardware::VERSION      => 'version',
 		];
 
 		foreach ($parametersMapping as $key => $field) {

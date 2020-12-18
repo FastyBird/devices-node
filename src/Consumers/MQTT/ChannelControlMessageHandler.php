@@ -1,10 +1,10 @@
 <?php declare(strict_types = 1);
 
 /**
- * ChannelMessageHandler.php
+ * ChannelControlMessageHandler.php
  *
  * @license        More in license.md
- * @copyright      https://fastybird.com
+ * @copyright      https://www.fastybird.com
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  * @package        FastyBird:DevicesNode!
  * @subpackage     Handlers
@@ -13,7 +13,7 @@
  * @date           04.12.20
  */
 
-namespace FastyBird\DevicesNode\Handlers\MQTT;
+namespace FastyBird\DevicesNode\Consumers\MQTT;
 
 use Doctrine\Common;
 use Doctrine\DBAL;
@@ -23,60 +23,51 @@ use FastyBird\DevicesModule\Entities as DevicesModuleEntities;
 use FastyBird\DevicesModule\Models as DevicesModuleModels;
 use FastyBird\DevicesModule\Queries as DevicesModuleQueries;
 use FastyBird\DevicesNode\Exceptions;
-use FastyBird\MqttPlugin\Entities as MqttPluginEntities;
+use FastyBird\MqttPlugin;
 use Nette;
 use Nette\Utils;
 use Psr\Log;
 use Throwable;
 
 /**
- * Device channel attributes MQTT message handler
+ * Device control MQTT message handler
  *
  * @package        FastyBird:DevicesNode!
- * @subpackage     Handlers
+ * @subpackage     Consumers
  *
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  */
-final class ChannelMessageHandler
+final class ChannelControlMessageHandler implements MqttPlugin\Consumers\IMessageHandler
 {
 
 	use Nette\SmartObject;
+	use TControlMessageHandler;
 
 	/** @var DevicesModuleModels\Devices\IDeviceRepository */
-	private $deviceRepository;
+	private DevicesModuleModels\Devices\IDeviceRepository $deviceRepository;
 
 	/** @var DevicesModuleModels\Channels\IChannelRepository */
-	private $channelRepository;
+	private DevicesModuleModels\Channels\IChannelRepository $channelRepository;
 
-	/** @var DevicesModuleModels\Channels\IChannelsManager */
-	private $channelsManager;
-
-	/** @var DevicesModuleModels\Channels\Properties\IPropertiesManager */
-	private $channelPropertiesManager;
-
-	/** @var DevicesModuleModels\Channels\Controls\IControlsManager */
-	private $channelControlManager;
-
-	/** @var Common\Persistence\ManagerRegistry */
-	private $managerRegistry;
+	/** @var DevicesModuleModels\Channels\Configuration\IRowsManager */
+	private DevicesModuleModels\Channels\Configuration\IRowsManager $rowsManager;
 
 	/** @var Log\LoggerInterface */
-	private $logger;
+	private Log\LoggerInterface $logger;
+
+	/** @var Common\Persistence\ManagerRegistry */
+	private Common\Persistence\ManagerRegistry $managerRegistry;
 
 	public function __construct(
 		DevicesModuleModels\Devices\IDeviceRepository $deviceRepository,
 		DevicesModuleModels\Channels\IChannelRepository $channelRepository,
-		DevicesModuleModels\Channels\IChannelsManager $channelsManager,
-		DevicesModuleModels\Channels\Properties\IPropertiesManager $channelPropertiesManager,
-		DevicesModuleModels\Channels\Controls\IControlsManager $channelControlManager,
+		DevicesModuleModels\Channels\Configuration\IRowsManager $rowsManager,
 		Common\Persistence\ManagerRegistry $managerRegistry,
 		?Log\LoggerInterface $logger = null
 	) {
 		$this->deviceRepository = $deviceRepository;
 		$this->channelRepository = $channelRepository;
-		$this->channelsManager = $channelsManager;
-		$this->channelPropertiesManager = $channelPropertiesManager;
-		$this->channelControlManager = $channelControlManager;
+		$this->rowsManager = $rowsManager;
 
 		$this->managerRegistry = $managerRegistry;
 
@@ -90,8 +81,12 @@ final class ChannelMessageHandler
 	 * @throws Exceptions\InvalidStateException
 	 */
 	public function process(
-		MqttPluginEntities\ChannelAttribute $entity
-	): void {
+		MqttPlugin\Entities\IEntity $entity
+	): bool {
+		if (!$entity instanceof MqttPlugin\Entities\ChannelControl) {
+			return false;
+		}
+
 		try {
 			$findQuery = new DevicesModuleQueries\FindDevicesQuery();
 			$findQuery->byIdentifier($entity->getDevice());
@@ -105,7 +100,7 @@ final class ChannelMessageHandler
 		if ($device === null) {
 			$this->logger->error(sprintf('[FB:NODE:MQTT] Device "%s" is not registered', $entity->getDevice()));
 
-			return;
+			return false;
 		}
 
 		try {
@@ -122,29 +117,29 @@ final class ChannelMessageHandler
 		if ($channel === null) {
 			$this->logger->error(sprintf('[FB:NODE:MQTT] Device channel "%s" is not registered', $entity->getChannel()));
 
-			return;
+			return false;
+		}
+
+		$control = $channel->getControl($entity->getControl());
+
+		if ($control === null) {
+			$this->logger->error(sprintf('[FB:NODE:MQTT] Channel control "%s" could not be loaded', $entity->getControl()));
+
+			return false;
 		}
 
 		try {
 			// Start transaction connection to the database
 			$this->getOrmConnection()->beginTransaction();
 
-			$toUpdate = [];
+			if ($control->getName() === DevicesModule\Constants::CONTROL_CONFIG) {
+				if ($entity->getSchema() !== null && is_array($entity->getSchema())) {
+					$this->setConfigurationSchema($channel, Utils\ArrayHash::from($entity->getSchema()));
+				}
 
-			if ($entity->getAttribute() === MqttPluginEntities\Attribute::NAME) {
-				$toUpdate['name'] = $entity->getValue();
-			}
-
-			if ($entity->getAttribute() === MqttPluginEntities\Attribute::PROPERTIES && is_array($entity->getValue())) {
-				$this->setChannelProperties($channel, Utils\ArrayHash::from($entity->getValue()));
-			}
-
-			if ($entity->getAttribute() === MqttPluginEntities\Attribute::CONTROL && is_array($entity->getValue())) {
-				$this->setChannelControl($channel, Utils\ArrayHash::from($entity->getValue()));
-			}
-
-			if ($toUpdate !== []) {
-				$this->channelsManager->update($channel, Utils\ArrayHash::from($toUpdate));
+				if ($entity->getValue() !== null && is_array($entity->getValue())) {
+					$this->setConfigurationValues($channel, Utils\ArrayHash::from($entity->getValue()));
+				}
 			}
 
 			// Commit all changes into database
@@ -158,6 +153,8 @@ final class ChannelMessageHandler
 
 			throw new Exceptions\InvalidStateException('An error occurred: ' . $ex->getMessage(), $ex->getCode(), $ex);
 		}
+
+		return true;
 	}
 
 	/**
@@ -176,60 +173,58 @@ final class ChannelMessageHandler
 
 	/**
 	 * @param DevicesModuleEntities\Channels\IChannel $channel
-	 * @param Utils\ArrayHash<string> $properties
+	 * @param Utils\ArrayHash $schema
 	 *
 	 * @return void
 	 */
-	private function setChannelProperties(
+	private function setConfigurationSchema(
 		DevicesModuleEntities\Channels\IChannel $channel,
-		Utils\ArrayHash $properties
+		Utils\ArrayHash $schema
 	): void {
-		foreach ($properties as $propertyName) {
-			if (!$channel->hasProperty($propertyName)) {
-				$this->channelPropertiesManager->create(Utils\ArrayHash::from([
-					'channel'  => $channel,
-					'property' => $propertyName,
-				]));
+		$elements = [];
+
+		$configurationRows = $this->handleControlConfigurationSchema($schema, false);
+
+		foreach ($configurationRows as $configurationRow) {
+			$configuration = $channel->findConfiguration($configurationRow['configuration']);
+
+			$configurationRow['channel'] = $channel;
+
+			$elements[] = $configurationRow['configuration'];
+
+			if ($configuration === null) {
+				$this->rowsManager->create(Utils\ArrayHash::from($configurationRow));
+
+			} else {
+				$this->rowsManager->update($configuration, Utils\ArrayHash::from($configurationRow));
 			}
 		}
 
-		// Cleanup for unused properties
-		foreach ($channel->getProperties() as $property) {
-			if (!in_array($property->getProperty(), (array) $properties, true)) {
-				$this->channelPropertiesManager->delete($property);
+		// Process cleanup of unused config rows
+		foreach ($channel->getConfiguration() as $row) {
+			if (!in_array($row->getConfiguration(), $elements, true)) {
+				$this->rowsManager->delete($row);
 			}
 		}
 	}
 
 	/**
 	 * @param DevicesModuleEntities\Channels\IChannel $channel
-	 * @param Utils\ArrayHash<string> $controls
+	 * @param Utils\ArrayHash $values
 	 *
 	 * @return void
 	 */
-	private function setChannelControl(
+	private function setConfigurationValues(
 		DevicesModuleEntities\Channels\IChannel $channel,
-		Utils\ArrayHash $controls
+		Utils\ArrayHash $values
 	): void {
-		$availableControls = [
-			DevicesModule\Constants::CONTROL_CONFIG,
-		];
+		foreach ($values as $name => $value) {
+			$configuration = $channel->findConfiguration($name);
 
-		foreach ($controls as $controlName) {
-			if (in_array($controlName, $availableControls, true)) {
-				if (!$channel->hasControl($controlName)) {
-					$this->channelControlManager->create(Utils\ArrayHash::from([
-						'channel' => $channel,
-						'name'    => $controlName,
-					]));
-				}
-			}
-		}
-
-		// Cleanup for unused control
-		foreach ($channel->getControls() as $control) {
-			if (!in_array($control->getName(), (array) $controls, true)) {
-				$this->channelControlManager->delete($control);
+			if ($configuration !== null) {
+				$this->rowsManager->update($configuration, Utils\ArrayHash::from([
+					'value' => $value !== null ? (string) $value : null,
+				]));
 			}
 		}
 	}

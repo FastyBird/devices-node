@@ -6,7 +6,6 @@ use FastyBird\Bootstrap\Boot;
 use FastyBird\DevicesNode\Commands;
 use FastyBird\DevicesNode\Consumers;
 use FastyBird\DevicesNode\Events;
-use FastyBird\DevicesNode\Handlers;
 use FastyBird\DevicesNode\Subscribers;
 use Ninjify\Nunjuck\TestCase\BaseTestCase;
 use Tester\Assert;
@@ -32,24 +31,23 @@ final class ServicesTest extends BaseTestCase
 
 		Assert::notNull($container->getByType(Commands\InitializeCommand::class));
 
-		Assert::notNull($container->getByType(Consumers\DevicePropertyMessageHandler::class));
-		Assert::notNull($container->getByType(Consumers\ChannelPropertyMessageHandler::class));
+		Assert::notNull($container->getByType(Consumers\Bus\DevicePropertyMessageHandler::class));
+		Assert::notNull($container->getByType(Consumers\Bus\ChannelPropertyMessageHandler::class));
+
+		Assert::notNull($container->getByType(Consumers\MQTT\DeviceMessageHandler::class));
+		Assert::notNull($container->getByType(Consumers\MQTT\DeviceFirmwareMessageHandler::class));
+		Assert::notNull($container->getByType(Consumers\MQTT\DeviceHardwareMessageHandler::class));
+		Assert::notNull($container->getByType(Consumers\MQTT\DevicePropertyMessageHandler::class));
+		Assert::notNull($container->getByType(Consumers\MQTT\DeviceControlMessageHandler::class));
+		Assert::notNull($container->getByType(Consumers\MQTT\ChannelMessageHandler::class));
+		Assert::notNull($container->getByType(Consumers\MQTT\ChannelPropertyMessageHandler::class));
+		Assert::notNull($container->getByType(Consumers\MQTT\ChannelControlMessageHandler::class));
 
 		Assert::notNull($container->getByType(Events\ServerBeforeStartHandler::class));
 		Assert::notNull($container->getByType(Events\PropertyStateUpdatedHandler::class));
-		Assert::notNull($container->getByType(Events\MqttMessageHandler::class));
 		Assert::notNull($container->getByType(Events\AfterConsumeHandler::class));
 
 		Assert::notNull($container->getByType(Subscribers\EntitiesSubscriber::class));
-
-		Assert::notNull($container->getByType(Handlers\MQTT\DeviceMessageHandler::class));
-		Assert::notNull($container->getByType(Handlers\MQTT\DeviceFirmwareMessageHandler::class));
-		Assert::notNull($container->getByType(Handlers\MQTT\DeviceHardwareMessageHandler::class));
-		Assert::notNull($container->getByType(Handlers\MQTT\DevicePropertyMessageHandler::class));
-		Assert::notNull($container->getByType(Handlers\MQTT\DeviceControlMessageHandler::class));
-		Assert::notNull($container->getByType(Handlers\MQTT\ChannelMessageHandler::class));
-		Assert::notNull($container->getByType(Handlers\MQTT\ChannelPropertyMessageHandler::class));
-		Assert::notNull($container->getByType(Handlers\MQTT\ChannelControlMessageHandler::class));
 	}
 
 }
