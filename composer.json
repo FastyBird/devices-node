@@ -1,7 +1,7 @@
 {
   "name": "fastybird/devices-node",
   "type": "project",
-  "description": "FastyBird IOT server Devices node for device storage & basic logic service",
+  "description": "FastyBird IoT devices node for devices storage & basic logic services",
   "keywords": [
     "fastybird",
     "fb",
