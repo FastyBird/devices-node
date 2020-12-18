@@ -1,12 +1,12 @@
 <?php declare(strict_types = 1);
 
 use FastyBird\DevicesModule;
-use FastyBird\DevicesNode;
+use FastyBird\ModulesMetadata;
 use Nette\Utils;
 
 return [
 	'messageWithoutUpdate' => [
-		DevicesNode\Constants::RABBIT_MQ_CHANNELS_CONTROLS_DATA_ROUTING_KEY,
+		ModulesMetadata\Constants::MESSAGE_BUS_CHANNELS_CONTROLS_ROUTING_KEY,
 		Utils\ArrayHash::from([
 			'device'  => 'first-device',
 			'parent'  => null,
@@ -95,7 +95,7 @@ return [
 		[],
 	],
 	'messageWithUpdate'    => [
-		DevicesNode\Constants::RABBIT_MQ_CHANNELS_CONTROLS_DATA_ROUTING_KEY,
+		ModulesMetadata\Constants::MESSAGE_BUS_CHANNELS_CONTROLS_ROUTING_KEY,
 		Utils\ArrayHash::from([
 			'device'  => 'first-device',
 			'parent'  => null,
@@ -182,7 +182,7 @@ return [
 			],
 		]),
 		[
-			'fb.bus.node.entity.updated.channel.configuration' => [
+			'fb.bus.entity.updated.channel.configuration' => [
 				'id'            => 'c747cfdd-654c-4e50-9715-6d14dbf20552',
 				'configuration' => 'on_disconnect',
 				'name'          => null,
@@ -203,7 +203,7 @@ return [
 		],
 	],
 	'messageWithDelete'    => [
-		DevicesNode\Constants::RABBIT_MQ_CHANNELS_CONTROLS_DATA_ROUTING_KEY,
+		ModulesMetadata\Constants::MESSAGE_BUS_CHANNELS_CONTROLS_ROUTING_KEY,
 		Utils\ArrayHash::from([
 			'device'  => 'first-device',
 			'parent'  => null,
@@ -269,7 +269,7 @@ return [
 			],
 		]),
 		[
-			'fb.bus.node.entity.deleted.channel.configuration' => [
+			'fb.bus.entity.deleted.channel.configuration' => [
 				'id'            => 'c747cfdd-654c-4e50-9715-6d14dbf20552',
 				'configuration' => 'on_disconnect',
 				'name'          => null,
@@ -290,7 +290,7 @@ return [
 		],
 	],
 	'messageWithCreate'    => [
-		DevicesNode\Constants::RABBIT_MQ_CHANNELS_CONTROLS_DATA_ROUTING_KEY,
+		ModulesMetadata\Constants::MESSAGE_BUS_CHANNELS_CONTROLS_ROUTING_KEY,
 		Utils\ArrayHash::from([
 			'device'  => 'first-device',
 			'parent'  => null,
@@ -387,7 +387,7 @@ return [
 			],
 		]),
 		[
-			'fb.bus.node.entity.created.channel.configuration' => [
+			'fb.bus.entity.created.channel.configuration' => [
 				'configuration' => 'new_attribute',
 				'name'          => null,
 				'comment'       => null,

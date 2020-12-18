@@ -146,25 +146,45 @@ final class EntitiesSubscriber implements Common\EventSubscriber
 			}
 		}
 
-		foreach (DevicesNode\Constants::RABBIT_MQ_ENTITIES_ROUTING_KEYS_MAPPING as $class => $routingKey) {
-			if (
-			$this->validateEntity($entity, $class)
-			) {
-				$routingKey = str_replace(DevicesNode\Constants::RABBIT_MQ_ENTITIES_ROUTING_KEY_ACTION_REPLACE_STRING, $action, $routingKey);
+		$publishRoutingKey = null;
 
-				if (
-					$entity instanceof DevicesModuleEntities\Devices\Properties\IProperty
-					|| $entity instanceof DevicesModuleEntities\Channels\Properties\IProperty
-				) {
-					$state = $this->propertyStateRepository->findOne($entity->getId());
-
-					$this->publisher->publish($routingKey, array_merge($state !== null ? $state->toArray() : [], $this->toArray($entity)));
-
-				} else {
-					$this->publisher->publish($routingKey, $this->toArray($entity));
+		switch ($action) {
+			case self::ACTION_CREATED:
+				foreach (DevicesNode\Constants::MESSAGE_BUS_CREATED_ENTITIES_ROUTING_KEYS_MAPPING as $class => $routingKey) {
+					if ($this->validateEntity($entity, $class)) {
+						$publishRoutingKey = $routingKey;
+					}
 				}
+				break;
 
-				return;
+			case self::ACTION_UPDATED:
+				foreach (DevicesNode\Constants::MESSAGE_BUS_UPDATED_ENTITIES_ROUTING_KEYS_MAPPING as $class => $routingKey) {
+					if ($this->validateEntity($entity, $class)) {
+						$publishRoutingKey = $routingKey;
+					}
+				}
+				break;
+
+			case self::ACTION_DELETED:
+				foreach (DevicesNode\Constants::MESSAGE_BUS_DELETED_ENTITIES_ROUTING_KEYS_MAPPING as $class => $routingKey) {
+					if ($this->validateEntity($entity, $class)) {
+						$publishRoutingKey = $routingKey;
+					}
+				}
+				break;
+		}
+
+		if ($publishRoutingKey !== null) {
+			if (
+				$entity instanceof DevicesModuleEntities\Devices\Properties\IProperty
+				|| $entity instanceof DevicesModuleEntities\Channels\Properties\IProperty
+			) {
+				$state = $this->propertyStateRepository->findOne($entity->getId());
+
+				$this->publisher->publish($publishRoutingKey, array_merge($state !== null ? $state->toArray() : [], $this->toArray($entity)));
+
+			} else {
+				$this->publisher->publish($publishRoutingKey, $this->toArray($entity));
 			}
 		}
 	}

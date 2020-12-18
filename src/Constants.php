@@ -16,6 +16,7 @@
 namespace FastyBird\DevicesNode;
 
 use FastyBird\DevicesModule\Entities as DevicesModuleEntities;
+use FastyBird\ModulesMetadata;
 
 /**
  * Service constants
@@ -31,36 +32,31 @@ final class Constants
 	/**
 	 * Message bus routing keys mapping
 	 */
-	public const RABBIT_MQ_ENTITIES_ROUTING_KEYS_MAPPING = [
-		DevicesModuleEntities\Devices\Device::class                  => 'fb.bus.node.entity.[ACTION].device',
-		DevicesModuleEntities\Devices\Properties\Property::class     => 'fb.bus.node.entity.[ACTION].device.property',
-		DevicesModuleEntities\Devices\Configuration\Row::class       => 'fb.bus.node.entity.[ACTION].device.configuration',
-		DevicesModuleEntities\Devices\PhysicalDevice\Hardware::class => 'fb.bus.node.entity.[ACTION].device.hardware',
-		DevicesModuleEntities\Devices\PhysicalDevice\Firmware::class => 'fb.bus.node.entity.[ACTION].device.firmware',
-		DevicesModuleEntities\Channels\Channel::class                => 'fb.bus.node.entity.[ACTION].channel',
-		DevicesModuleEntities\Channels\Properties\Property::class    => 'fb.bus.node.entity.[ACTION].channel.property',
-		DevicesModuleEntities\Channels\Configuration\Row::class      => 'fb.bus.node.entity.[ACTION].channel.configuration',
+	public const MESSAGE_BUS_CREATED_ENTITIES_ROUTING_KEYS_MAPPING = [
+		DevicesModuleEntities\Devices\Device::class               => ModulesMetadata\Constants::MESSAGE_BUS_DEVICES_CREATED_ENTITY_ROUTING_KEY,
+		DevicesModuleEntities\Devices\Properties\Property::class  => ModulesMetadata\Constants::MESSAGE_BUS_DEVICES_PROPERTY_CREATED_ENTITY_ROUTING_KEY,
+		DevicesModuleEntities\Devices\Configuration\Row::class    => ModulesMetadata\Constants::MESSAGE_BUS_DEVICES_CONFIGURATION_CREATED_ENTITY_ROUTING_KEY,
+		DevicesModuleEntities\Channels\Channel::class             => ModulesMetadata\Constants::MESSAGE_BUS_CHANNELS_CREATED_ENTITY_ROUTING_KEY,
+		DevicesModuleEntities\Channels\Properties\Property::class => ModulesMetadata\Constants::MESSAGE_BUS_CHANNELS_PROPERTY_CREATED_ENTITY_ROUTING_KEY,
+		DevicesModuleEntities\Channels\Configuration\Row::class   => ModulesMetadata\Constants::MESSAGE_BUS_CHANNELS_CONFIGURATION_CREATED_ENTITY_ROUTING_KEY,
 	];
 
-	public const RABBIT_MQ_ENTITIES_ROUTING_KEY_ACTION_REPLACE_STRING = '[ACTION]';
+	public const MESSAGE_BUS_UPDATED_ENTITIES_ROUTING_KEYS_MAPPING = [
+		DevicesModuleEntities\Devices\Device::class               => ModulesMetadata\Constants::MESSAGE_BUS_DEVICES_UPDATED_ENTITY_ROUTING_KEY,
+		DevicesModuleEntities\Devices\Properties\Property::class  => ModulesMetadata\Constants::MESSAGE_BUS_DEVICES_PROPERTY_UPDATED_ENTITY_ROUTING_KEY,
+		DevicesModuleEntities\Devices\Configuration\Row::class    => ModulesMetadata\Constants::MESSAGE_BUS_DEVICES_CONFIGURATION_UPDATED_ENTITY_ROUTING_KEY,
+		DevicesModuleEntities\Channels\Channel::class             => ModulesMetadata\Constants::MESSAGE_BUS_CHANNELS_UPDATED_ENTITY_ROUTING_KEY,
+		DevicesModuleEntities\Channels\Properties\Property::class => ModulesMetadata\Constants::MESSAGE_BUS_CHANNELS_PROPERTY_UPDATED_ENTITY_ROUTING_KEY,
+		DevicesModuleEntities\Channels\Configuration\Row::class   => ModulesMetadata\Constants::MESSAGE_BUS_CHANNELS_CONFIGURATION_UPDATED_ENTITY_ROUTING_KEY,
+	];
 
-	/**
-	 * Message bus routing key for devices & channels properties messages
-	 */
-
-	// Devices
-	public const RABBIT_MQ_DEVICES_PROPERTIES_DATA_ROUTING_KEY = 'fb.bus.node.data.device.property';
-	public const RABBIT_MQ_DEVICES_CONTROLS_DATA_ROUTING_KEY = 'fb.bus.node.data.device.control';
-
-	// Channels
-	public const RABBIT_MQ_CHANNELS_PROPERTIES_DATA_ROUTING_KEY = 'fb.bus.node.data.channel.property';
-	public const RABBIT_MQ_CHANNELS_CONTROLS_DATA_ROUTING_KEY = 'fb.bus.node.data.channel.control';
-
-	/**
-	 * Message bus origins
-	 */
-
-	public const NODE_UI_ORIGIN = 'com.fastybird.ui-module';
-	public const NODE_TRIGGERS_ORIGIN = 'com.fastybird.triggers-module';
+	public const MESSAGE_BUS_DELETED_ENTITIES_ROUTING_KEYS_MAPPING = [
+		DevicesModuleEntities\Devices\Device::class               => ModulesMetadata\Constants::MESSAGE_BUS_DEVICES_DELETED_ENTITY_ROUTING_KEY,
+		DevicesModuleEntities\Devices\Properties\Property::class  => ModulesMetadata\Constants::MESSAGE_BUS_DEVICES_PROPERTY_DELETED_ENTITY_ROUTING_KEY,
+		DevicesModuleEntities\Devices\Configuration\Row::class    => ModulesMetadata\Constants::MESSAGE_BUS_DEVICES_CONFIGURATION_DELETED_ENTITY_ROUTING_KEY,
+		DevicesModuleEntities\Channels\Channel::class             => ModulesMetadata\Constants::MESSAGE_BUS_CHANNELS_DELETED_ENTITY_ROUTING_KEY,
+		DevicesModuleEntities\Channels\Properties\Property::class => ModulesMetadata\Constants::MESSAGE_BUS_CHANNELS_PROPERTY_DELETED_ENTITY_ROUTING_KEY,
+		DevicesModuleEntities\Channels\Configuration\Row::class   => ModulesMetadata\Constants::MESSAGE_BUS_CHANNELS_CONFIGURATION_DELETED_ENTITY_ROUTING_KEY,
+	];
 
 }

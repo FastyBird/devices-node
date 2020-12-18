@@ -2309,12 +2309,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/FastyBird/modules-metadata.git",
-                "reference": "33fbeb810cada60bc8de1bb4d27f5390969bb006"
+                "reference": "54f00aac3af286ad2afade1d43fa005ea5ef1b8f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FastyBird/modules-metadata/zipball/33fbeb810cada60bc8de1bb4d27f5390969bb006",
-                "reference": "33fbeb810cada60bc8de1bb4d27f5390969bb006",
+                "url": "https://api.github.com/repos/FastyBird/modules-metadata/zipball/54f00aac3af286ad2afade1d43fa005ea5ef1b8f",
+                "reference": "54f00aac3af286ad2afade1d43fa005ea5ef1b8f",
                 "shasum": ""
             },
             "require": {
@@ -2372,7 +2372,7 @@
                 "issues": "https://github.com/FastyBird/modules-metadata/issues",
                 "source": "https://github.com/FastyBird/modules-metadata/tree/master"
             },
-            "time": "2020-12-18T18:30:41+00:00"
+            "time": "2020-12-18T22:32:11+00:00"
         },
         {
             "name": "fastybird/mqtt-plugin",

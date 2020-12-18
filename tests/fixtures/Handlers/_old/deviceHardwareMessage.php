@@ -21,7 +21,7 @@ return [
 			'manufacturer' => 'fastybird',
 		]),
 		[
-			'fb.bus.node.entity.updated.device.hardware' => [
+			'fb.bus.entity.updated.device.hardware' => [
 				'id'           => '8059b830-b76d-4f98-be9c-53bd06eab9a5',
 				'manufacturer' => 'fastybird',
 				'model'        => 'sonoff_basic',
@@ -42,7 +42,7 @@ return [
 			'version'      => 'rev2',
 		]),
 		[
-			'fb.bus.node.entity.updated.device.hardware' => [
+			'fb.bus.entity.updated.device.hardware' => [
 				'id'           => '8059b830-b76d-4f98-be9c-53bd06eab9a5',
 				'manufacturer' => 'fastybird',
 				'model'        => 'sonoff_basic',
@@ -62,7 +62,7 @@ return [
 			'manufacturer' => 'fastybird',
 		]),
 		[
-			'fb.bus.node.entity.created.device.hardware' => [
+			'fb.bus.entity.created.device.hardware' => [
 				'manufacturer' => 'fastybird',
 				'model'        => 'custom',
 				'version'      => null,

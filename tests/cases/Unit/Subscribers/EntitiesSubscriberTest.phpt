@@ -46,7 +46,7 @@ final class EntitiesSubscriberTest extends BaseMockeryTestCase
 			->withArgs(function (string $key, array $data): bool {
 				unset($data['id']);
 
-				Assert::same('fb.bus.node.entity.created.device', $key);
+				Assert::same('fb.bus.entity.created.device', $key);
 				Assert::equal([
 					'identifier' => 'device-name',
 					'type'       => 'local',
@@ -142,7 +142,7 @@ final class EntitiesSubscriberTest extends BaseMockeryTestCase
 			->withArgs(function (string $key, array $data): bool {
 				unset($data['id']);
 
-				Assert::same('fb.bus.node.entity.updated.device', $key);
+				Assert::same('fb.bus.entity.updated.device', $key);
 				Assert::equal([
 					'identifier' => 'device-name',
 					'type'       => 'local',
@@ -193,7 +193,7 @@ final class EntitiesSubscriberTest extends BaseMockeryTestCase
 			->withArgs(function (string $key, array $data): bool {
 				unset($data['id']);
 
-				Assert::same('fb.bus.node.entity.deleted.device', $key);
+				Assert::same('fb.bus.entity.deleted.device', $key);
 				Assert::equal([
 					'identifier' => 'device-name',
 					'type'       => 'local',

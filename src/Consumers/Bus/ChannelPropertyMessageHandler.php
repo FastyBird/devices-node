@@ -19,7 +19,6 @@ use FastyBird\CouchDbStoragePlugin\Models as CouchDbStoragePluginModels;
 use FastyBird\DevicesModule\Helpers as DevicesModuleHelpers;
 use FastyBird\DevicesModule\Models as DevicesModuleModels;
 use FastyBird\DevicesModule\Queries as DevicesModuleQueries;
-use FastyBird\DevicesNode;
 use FastyBird\DevicesNode\Exceptions;
 use FastyBird\ModulesMetadata;
 use FastyBird\ModulesMetadata\Loaders as ModulesMetadataLoaders;
@@ -142,7 +141,7 @@ final class ChannelPropertyMessageHandler extends MessageHandler
 
 		try {
 			switch ($routingKey) {
-				case DevicesNode\Constants::RABBIT_MQ_CHANNELS_PROPERTIES_DATA_ROUTING_KEY:
+				case ModulesMetadata\Constants::MESSAGE_BUS_CHANNELS_PROPERTIES_DATA_ROUTING_KEY:
 					// Property have to be configured & have to be settable
 					if ($property->isSettable()) {
 						$state = $this->propertyStateRepository->findOne($property->getId());
@@ -203,10 +202,10 @@ final class ChannelPropertyMessageHandler extends MessageHandler
 	protected function getSchemaFile(string $routingKey, string $origin): ?string
 	{
 		switch ($routingKey) {
-			case DevicesNode\Constants::RABBIT_MQ_CHANNELS_PROPERTIES_DATA_ROUTING_KEY:
+			case ModulesMetadata\Constants::MESSAGE_BUS_CHANNELS_PROPERTIES_DATA_ROUTING_KEY:
 				if (
-					$origin === DevicesNode\Constants::NODE_TRIGGERS_ORIGIN
-					|| $origin === DevicesNode\Constants::NODE_UI_ORIGIN
+					$origin === ModulesMetadata\Constants::MODULE_TRIGGERS_ORIGIN
+					|| $origin === ModulesMetadata\Constants::MODULE_UI_ORIGIN
 				) {
 					return ModulesMetadata\Constants::RESOURCES_FOLDER . '/schemas/data/data.channel.property.json';
 				}

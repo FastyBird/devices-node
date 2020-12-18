@@ -1,12 +1,12 @@
 <?php declare(strict_types = 1);
 
 use FastyBird\DevicesModule\Types as DevicesModuleTypes;
-use FastyBird\DevicesNode;
+use FastyBird\ModulesMetadata;
 use Nette\Utils;
 
 return [
 	'messageWithoutUpdate'       => [
-		DevicesNode\Constants::RABBIT_MQ_CHANNELS_PROPERTIES_DATA_ROUTING_KEY,
+		ModulesMetadata\Constants::MESSAGE_BUS_CHANNELS_PROPERTIES_DATA_ROUTING_KEY,
 		Utils\ArrayHash::from([
 			'device'   => 'first-device',
 			'parent'   => null,
@@ -17,7 +17,7 @@ return [
 		[],
 	],
 	'messageWithUpdate'          => [
-		DevicesNode\Constants::RABBIT_MQ_CHANNELS_PROPERTIES_DATA_ROUTING_KEY,
+		ModulesMetadata\Constants::MESSAGE_BUS_CHANNELS_PROPERTIES_DATA_ROUTING_KEY,
 		Utils\ArrayHash::from([
 			'device'   => 'first-device',
 			'parent'   => null,
@@ -26,7 +26,7 @@ return [
 			'name'     => 'Relay switch',
 		]),
 		[
-			'fb.bus.node.entity.updated.channel.property' => [
+			'fb.bus.entity.updated.channel.property' => [
 				'id'        => 'bbcccf8c-33ab-431b-a795-d7bb38b6b6db',
 				'property'  => 'switch',
 				'name'      => 'Relay switch',
@@ -46,7 +46,7 @@ return [
 		],
 	],
 	'messageWithMultiRowUpdate'  => [
-		DevicesNode\Constants::RABBIT_MQ_CHANNELS_PROPERTIES_DATA_ROUTING_KEY,
+		ModulesMetadata\Constants::MESSAGE_BUS_CHANNELS_PROPERTIES_DATA_ROUTING_KEY,
 		Utils\ArrayHash::from([
 			'device'   => 'first-device',
 			'parent'   => null,
@@ -56,7 +56,7 @@ return [
 			'datatype' => DevicesModuleTypes\DatatypeType::DATA_TYPE_STRING,
 		]),
 		[
-			'fb.bus.node.entity.updated.channel.property' => [
+			'fb.bus.entity.updated.channel.property' => [
 				'id'        => 'bbcccf8c-33ab-431b-a795-d7bb38b6b6db',
 				'property'  => 'switch',
 				'name'      => 'Relay switch',
@@ -76,7 +76,7 @@ return [
 		],
 	],
 	'messageWithFormatUpdate'    => [
-		DevicesNode\Constants::RABBIT_MQ_CHANNELS_PROPERTIES_DATA_ROUTING_KEY,
+		ModulesMetadata\Constants::MESSAGE_BUS_CHANNELS_PROPERTIES_DATA_ROUTING_KEY,
 		Utils\ArrayHash::from([
 			'device'   => 'first-device',
 			'parent'   => null,
@@ -87,7 +87,7 @@ return [
 			'format'   => '10:50',
 		]),
 		[
-			'fb.bus.node.entity.updated.channel.property' => [
+			'fb.bus.entity.updated.channel.property' => [
 				'id'        => 'bbcccf8c-33ab-431b-a795-d7bb38b6b6db',
 				'property'  => 'switch',
 				'name'      => 'Relay switch',
@@ -107,7 +107,7 @@ return [
 		],
 	],
 	'messageWithBadFormatUpdate' => [
-		DevicesNode\Constants::RABBIT_MQ_CHANNELS_PROPERTIES_DATA_ROUTING_KEY,
+		ModulesMetadata\Constants::MESSAGE_BUS_CHANNELS_PROPERTIES_DATA_ROUTING_KEY,
 		Utils\ArrayHash::from([
 			'device'   => 'first-device',
 			'parent'   => null,
@@ -118,7 +118,7 @@ return [
 			'format'   => 'on,off',
 		]),
 		[
-			'fb.bus.node.entity.updated.channel.property' => [
+			'fb.bus.entity.updated.channel.property' => [
 				'id'        => 'bbcccf8c-33ab-431b-a795-d7bb38b6b6db',
 				'property'  => 'switch',
 				'name'      => 'Relay switch',

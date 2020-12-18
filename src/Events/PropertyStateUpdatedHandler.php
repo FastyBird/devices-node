@@ -36,8 +36,6 @@ final class PropertyStateUpdatedHandler
 
 	use Nette\SmartObject;
 
-	private const ACTION = 'updated';
-
 	/** @var DevicesModuleModels\Devices\Properties\IPropertyRepository */
 	private DevicesModuleModels\Devices\Properties\IPropertyRepository $devicePropertyRepository;
 
@@ -87,9 +85,8 @@ final class PropertyStateUpdatedHandler
 			throw new Exceptions\InvalidArgumentException('Property for provided state could not be found.');
 		}
 
-		if (array_key_exists(get_class($property), DevicesNode\Constants::RABBIT_MQ_ENTITIES_ROUTING_KEYS_MAPPING)) {
-			$routingKey = DevicesNode\Constants::RABBIT_MQ_ENTITIES_ROUTING_KEYS_MAPPING[get_class($property)];
-			$routingKey = str_replace(DevicesNode\Constants::RABBIT_MQ_ENTITIES_ROUTING_KEY_ACTION_REPLACE_STRING, self::ACTION, $routingKey);
+		if (array_key_exists(get_class($property), DevicesNode\Constants::MESSAGE_BUS_UPDATED_ENTITIES_ROUTING_KEYS_MAPPING)) {
+			$routingKey = DevicesNode\Constants::MESSAGE_BUS_UPDATED_ENTITIES_ROUTING_KEYS_MAPPING[get_class($property)];
 
 		} else {
 			throw new Exceptions\InvalidArgumentException('Provided state is not supported by RabbitMQ exchange publisher.');

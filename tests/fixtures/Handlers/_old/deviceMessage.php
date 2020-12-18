@@ -24,7 +24,7 @@ return [
 		]),
 		1,
 		[
-			'fb.bus.node.entity.updated.device' => [
+			'fb.bus.entity.updated.device' => [
 				'id'         => '69786d15-fd0c-4d9f-9378-33287c2009fa',
 				'identifier' => 'first-device',
 				'type'       => 'physical',
@@ -52,7 +52,7 @@ return [
 		]),
 		1,
 		[
-			'fb.bus.node.entity.updated.device' => [
+			'fb.bus.entity.updated.device' => [
 				'id'         => '69786d15-fd0c-4d9f-9378-33287c2009fa',
 				'identifier' => 'first-device',
 				'type'       => 'physical',
@@ -79,7 +79,7 @@ return [
 		]),
 		2,
 		[
-			'fb.bus.node.entity.updated.device'          => [
+			'fb.bus.entity.updated.device'          => [
 				'id'         => '69786d15-fd0c-4d9f-9378-33287c2009fa',
 				'identifier' => 'first-device',
 				'type'       => 'physical',
@@ -93,7 +93,7 @@ return [
 				'owner'      => '455354e8-96bd-4c29-84e7-9f10e1d4db4b',
 				'parent'     => null,
 			],
-			'fb.bus.node.entity.created.device.property' => [
+			'fb.bus.entity.created.device.property' => [
 				'property'  => 'led',
 				'name'      => null,
 				'settable'  => false,
@@ -119,7 +119,7 @@ return [
 		]),
 		1,
 		[
-			'fb.bus.node.entity.created.device.property' => [
+			'fb.bus.entity.created.device.property' => [
 				'property'  => 'led',
 				'name'      => null,
 				'settable'  => false,
@@ -145,7 +145,7 @@ return [
 		]),
 		1,
 		[
-			'fb.bus.node.entity.deleted.device.property' => [
+			'fb.bus.entity.deleted.device.property' => [
 				'value'     => null,
 				'expected'  => null,
 				'pending'   => false,
@@ -174,7 +174,7 @@ return [
 		]),
 		2,
 		[
-			'fb.bus.node.entity.updated.device'  => [
+			'fb.bus.entity.updated.device'  => [
 				'id'         => '69786d15-fd0c-4d9f-9378-33287c2009fa',
 				'identifier' => 'first-device',
 				'type'       => 'physical',
@@ -188,7 +188,7 @@ return [
 				'owner'      => '455354e8-96bd-4c29-84e7-9f10e1d4db4b',
 				'parent'     => null,
 			],
-			'fb.bus.node.entity.created.channel' => [
+			'fb.bus.entity.created.channel' => [
 				'name'    => null,
 				'comment' => null,
 				'channel' => 'channel-three',
@@ -209,7 +209,7 @@ return [
 		]),
 		1,
 		[
-			'fb.bus.node.entity.created.channel' => [
+			'fb.bus.entity.created.channel' => [
 				'name'    => null,
 				'comment' => null,
 				'channel' => 'channel-three',
@@ -230,7 +230,7 @@ return [
 		]),
 		6,
 		[
-			'fb.bus.node.entity.deleted.channel'               => [
+			'fb.bus.entity.deleted.channel'               => [
 				'id'      => '6821f8e9-ae69-4d5c-9b7c-d2b213f1ae0a',
 				'name'    => 'Channel two',
 				'comment' => null,
@@ -241,7 +241,7 @@ return [
 				'owner'   => '455354e8-96bd-4c29-84e7-9f10e1d4db4b',
 				'parent'  => null,
 			],
-			'fb.bus.node.entity.deleted.channel.property'      => [
+			'fb.bus.entity.deleted.channel.property'      => [
 				'primaryKey'  => 'property',
 				'humidity'    => [
 					'value'     => null,
@@ -278,7 +278,7 @@ return [
 					'channel'   => 'channel-two',
 				],
 			],
-			'fb.bus.node.entity.deleted.channel.configuration' => [
+			'fb.bus.entity.deleted.channel.configuration' => [
 				'primaryKey'    => 'configuration',
 				'pulse_mode'    => [
 					'id'            => '1fa8e5ac-d2fb-4531-ba64-3c69863aeea3',
@@ -347,7 +347,7 @@ return [
 		]),
 		1,
 		[
-			'fb.bus.node.entity.updated.device' => [
+			'fb.bus.entity.updated.device' => [
 				'id'         => '69786d15-fd0c-4d9f-9378-33287c2009fa',
 				'identifier' => 'first-device',
 				'type'       => 'physical',
@@ -372,7 +372,7 @@ return [
 		]),
 		10,
 		[
-			'fb.bus.node.entity.updated.device'               => [
+			'fb.bus.entity.updated.device'               => [
 				'id'         => '69786d15-fd0c-4d9f-9378-33287c2009fa',
 				'identifier' => 'first-device',
 				'type'       => 'physical',
@@ -386,7 +386,7 @@ return [
 				'owner'      => '455354e8-96bd-4c29-84e7-9f10e1d4db4b',
 				'parent'     => null,
 			],
-			'fb.bus.node.entity.deleted.device.configuration' => [
+			'fb.bus.entity.deleted.device.configuration' => [
 				'primaryKey'              => 'configuration',
 				'sensor_expected_power'   => [
 					'id'            => '138c6cfc-ed49-476b-9f1e-6ee1dcb24f0b',

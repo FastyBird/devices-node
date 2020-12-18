@@ -24,7 +24,7 @@ return [
 		]),
 		1,
 		[
-			'fb.bus.node.entity.updated.channel' => [
+			'fb.bus.entity.updated.channel' => [
 				'id'      => '17c59dfa-2edd-438e-8c49-faa4e38e5a5e',
 				'name'    => 'Name from message bus',
 				'comment' => null,
@@ -47,7 +47,7 @@ return [
 		]),
 		1,
 		[
-			'fb.bus.node.entity.updated.channel' => [
+			'fb.bus.entity.updated.channel' => [
 				'id'      => '17c59dfa-2edd-438e-8c49-faa4e38e5a5e',
 				'name'    => 'Name from message bus',
 				'comment' => null,
@@ -71,7 +71,7 @@ return [
 		]),
 		2,
 		[
-			'fb.bus.node.entity.updated.channel'          => [
+			'fb.bus.entity.updated.channel'          => [
 				'id'      => '17c59dfa-2edd-438e-8c49-faa4e38e5a5e',
 				'name'    => 'Name from message bus',
 				'comment' => null,
@@ -82,7 +82,7 @@ return [
 				'parent'  => null,
 				'channel' => 'channel-one',
 			],
-			'fb.bus.node.entity.created.channel.property' => [
+			'fb.bus.entity.created.channel.property' => [
 				'property'  => 'button',
 				'name'      => null,
 				'settable'  => false,
@@ -110,7 +110,7 @@ return [
 		]),
 		1,
 		[
-			'fb.bus.node.entity.created.channel.property' => [
+			'fb.bus.entity.created.channel.property' => [
 				'property'  => 'button',
 				'name'      => null,
 				'settable'  => false,
@@ -138,7 +138,7 @@ return [
 		]),
 		1,
 		[
-			'fb.bus.node.entity.deleted.channel.property' => [
+			'fb.bus.entity.deleted.channel.property' => [
 				'value'     => null,
 				'expected'  => null,
 				'pending'   => false,
@@ -167,7 +167,7 @@ return [
 		]),
 		1,
 		[
-			'fb.bus.node.entity.updated.channel' => [
+			'fb.bus.entity.updated.channel' => [
 				'id'      => 'bbcccf8c-33ab-431b-a795-d7bb38b6b6db',
 				'name'    => null,
 				'comment' => null,
@@ -201,7 +201,7 @@ return [
 		]),
 		5,
 		[
-			'fb.bus.node.entity.updated.channel'               => [
+			'fb.bus.entity.updated.channel'               => [
 				'id'      => '17c59dfa-2edd-438e-8c49-faa4e38e5a5e',
 				'name'    => 'Channel one',
 				'comment' => null,
@@ -212,7 +212,7 @@ return [
 				'owner'   => '455354e8-96bd-4c29-84e7-9f10e1d4db4b',
 				'parent'  => null,
 			],
-			'fb.bus.node.entity.deleted.channel.configuration' => [
+			'fb.bus.entity.deleted.channel.configuration' => [
 				'primaryKey'    => 'configuration',
 				'pulse_mode'    => [
 					'id'            => '008d911f-e6d4-4b17-aa28-939839581cde',

@@ -20,10 +20,10 @@ parameters:
 	rabbitmq:
 		queueName: fb.devices.node.exchange
 		routing:
-			- fb.bus.node.data.device
-			- fb.bus.node.data.device.*
-			- fb.bus.node.data.channel
-			- fb.bus.node.data.channel.*
+			- fb.bus.data.device
+			- fb.bus.data.device.*
+			- fb.bus.data.channel
+			- fb.bus.data.channel.*
 
 #########################
 # Used Nette extensions #

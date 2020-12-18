@@ -21,7 +21,7 @@ return [
 			'name'   => 'Custom firmware',
 		]),
 		[
-			'fb.bus.node.entity.updated.device.firmware' => [
+			'fb.bus.entity.updated.device.firmware' => [
 				'id'           => '06feddf4-63e2-48bc-af13-f355f01ffbe0',
 				'name'         => 'Custom firmware',
 				'manufacturer' => 'fastybird',
@@ -41,7 +41,7 @@ return [
 			'version' => '2.0.0',
 		]),
 		[
-			'fb.bus.node.entity.updated.device.firmware' => [
+			'fb.bus.entity.updated.device.firmware' => [
 				'id'           => '06feddf4-63e2-48bc-af13-f355f01ffbe0',
 				'name'         => 'Custom firmware',
 				'manufacturer' => 'fastybird',
@@ -60,7 +60,7 @@ return [
 			'manufacturer' => 'fastybird',
 		]),
 		[
-			'fb.bus.node.entity.created.device.firmware' => [
+			'fb.bus.entity.created.device.firmware' => [
 				'name'         => null,
 				'manufacturer' => 'fastybird',
 				'version'      => null,

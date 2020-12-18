@@ -1,12 +1,12 @@
 <?php declare(strict_types = 1);
 
 use FastyBird\DevicesModule;
-use FastyBird\DevicesNode;
+use FastyBird\ModulesMetadata;
 use Nette\Utils;
 
 return [
 	'messageWithoutUpdate' => [
-		DevicesNode\Constants::RABBIT_MQ_DEVICES_CONTROLS_DATA_ROUTING_KEY,
+		ModulesMetadata\Constants::MESSAGE_BUS_DEVICES_CONTROLS_ROUTING_KEY,
 		Utils\ArrayHash::from([
 			'device'  => 'first-device',
 			'parent'  => null,
@@ -164,7 +164,7 @@ return [
 		[],
 	],
 	'messageWithUpdate'    => [
-		DevicesNode\Constants::RABBIT_MQ_DEVICES_CONTROLS_DATA_ROUTING_KEY,
+		ModulesMetadata\Constants::MESSAGE_BUS_DEVICES_CONTROLS_ROUTING_KEY,
 		Utils\ArrayHash::from([
 			'device'  => 'first-device',
 			'parent'  => null,
@@ -320,7 +320,7 @@ return [
 			],
 		]),
 		[
-			'fb.bus.node.entity.updated.device.configuration' => [
+			'fb.bus.entity.updated.device.configuration' => [
 				'id'            => '138c6cfc-ed49-476b-9f1e-6ee1dcb24f0b',
 				'configuration' => 'sensor_expected_power',
 				'name'          => null,
@@ -338,7 +338,7 @@ return [
 		],
 	],
 	'messageWithDelete'    => [
-		DevicesNode\Constants::RABBIT_MQ_DEVICES_CONTROLS_DATA_ROUTING_KEY,
+		ModulesMetadata\Constants::MESSAGE_BUS_DEVICES_CONTROLS_ROUTING_KEY,
 		Utils\ArrayHash::from([
 			'device'  => 'first-device',
 			'parent'  => null,
@@ -477,7 +477,7 @@ return [
 			],
 		]),
 		[
-			'fb.bus.node.entity.deleted.device.configuration' => [
+			'fb.bus.entity.deleted.device.configuration' => [
 				'id'            => '8d933e4c-1fc9-4361-ba09-eebee4592776',
 				'configuration' => 'sensor_power_units',
 				'name'          => null,
@@ -496,7 +496,7 @@ return [
 		],
 	],
 	'messageWithCreate'    => [
-		DevicesNode\Constants::RABBIT_MQ_DEVICES_CONTROLS_DATA_ROUTING_KEY,
+		ModulesMetadata\Constants::MESSAGE_BUS_DEVICES_CONTROLS_ROUTING_KEY,
 		Utils\ArrayHash::from([
 			'device'  => 'first-device',
 			'parent'  => null,
@@ -669,7 +669,7 @@ return [
 			],
 		]),
 		[
-			'fb.bus.node.entity.created.device.configuration' => [
+			'fb.bus.entity.created.device.configuration' => [
 				'configuration' => 'testing_text',
 				'name'          => null,
 				'comment'       => null,

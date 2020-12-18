@@ -1,12 +1,12 @@
 <?php declare(strict_types = 1);
 
-use FastyBird\DevicesNode;
+use FastyBird\ModulesMetadata;
 use Nette\Utils;
 
 return [
 	'messageWithUpdate'    => [
-		DevicesNode\Constants::RABBIT_MQ_CHANNELS_PROPERTIES_DATA_ROUTING_KEY,
-		DevicesNode\Constants::NODE_UI_ORIGIN,
+		ModulesMetadata\Constants::MESSAGE_BUS_CHANNELS_PROPERTIES_DATA_ROUTING_KEY,
+		ModulesMetadata\Constants::MODULE_UI_ORIGIN,
 		Utils\Json::encode([
 			'device'   => 'first-device',
 			'parent'   => null,
@@ -21,8 +21,8 @@ return [
 		],
 	],
 	'messageWithoutUpdate' => [
-		DevicesNode\Constants::RABBIT_MQ_CHANNELS_PROPERTIES_DATA_ROUTING_KEY,
-		DevicesNode\Constants::NODE_UI_ORIGIN,
+		ModulesMetadata\Constants::MESSAGE_BUS_CHANNELS_PROPERTIES_DATA_ROUTING_KEY,
+		ModulesMetadata\Constants::MODULE_UI_ORIGIN,
 		Utils\Json::encode([
 			'device'   => 'first-device',
 			'parent'   => null,
