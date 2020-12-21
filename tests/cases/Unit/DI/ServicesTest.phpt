@@ -39,9 +39,7 @@ final class ServicesTest extends BaseTestCase
 		Assert::notNull($container->getByType(Consumers\MQTT\ChannelPropertyMessageHandler::class));
 		Assert::notNull($container->getByType(Consumers\MQTT\ChannelControlMessageHandler::class));
 
-		Assert::notNull($container->getByType(Events\ServerBeforeStartHandler::class));
 		Assert::notNull($container->getByType(Events\PropertyStateUpdatedHandler::class));
-		Assert::notNull($container->getByType(Events\AfterConsumeHandler::class));
 	}
 
 }

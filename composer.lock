@@ -1893,6 +1893,75 @@
             "time": "2017-07-23T21:35:13+00:00"
         },
         {
+            "name": "fastybird/application-events",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/FastyBird/application-events.git",
+                "reference": "b60b22fa841dafd736ee6e53d649c685237a0b3a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/FastyBird/application-events/zipball/b60b22fa841dafd736ee6e53d649c685237a0b3a",
+                "reference": "b60b22fa841dafd736ee6e53d649c685237a0b3a",
+                "shasum": ""
+            },
+            "require": {
+                "contributte/event-dispatcher": "^0.8.0",
+                "nette/utils": "^3.0",
+                "php": ">=7.4.0",
+                "psr/http-message": "^1.0"
+            },
+            "require-dev": {
+                "mockery/mockery": "^1.3",
+                "ninjify/nunjuck": "^0.3",
+                "ninjify/qa": "^0.10",
+                "pds/skeleton": "~1.0",
+                "phpstan/extension-installer": "^1.0",
+                "phpstan/phpstan": "^0.12",
+                "phpstan/phpstan-deprecation-rules": "^0.12",
+                "phpstan/phpstan-nette": "^0.12",
+                "phpstan/phpstan-strict-rules": "^0.12",
+                "tracy/tracy": "~2.4"
+            },
+            "default-branch": true,
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "FastyBird\\ApplicationEvents\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "FastyBird s.r.o.",
+                    "email": "code@fastybird.com",
+                    "homepage": "https://www.fastybird.com/"
+                },
+                {
+                    "name": "Adam Kadlec",
+                    "email": "adam.kadlec@fastybird.com"
+                }
+            ],
+            "description": "FastyBird application events interface",
+            "homepage": "https://www.fastybird.com",
+            "keywords": [
+                "events",
+                "fastybird",
+                "fb",
+                "library",
+                "libs"
+            ],
+            "support": {
+                "issues": "https://github.com/FastyBird/application-events/issues",
+                "source": "https://github.com/FastyBird/application-events/tree/master"
+            },
+            "time": "2020-12-21T17:55:38+00:00"
+        },
+        {
             "name": "fastybird/application-exchange",
             "version": "dev-master",
             "source": {
@@ -1970,12 +2039,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/FastyBird/bootstrap.git",
-                "reference": "c1ce22b1c64fb2f62054ceb88d6e4e9c4f36cc82"
+                "reference": "25127bdae069891ae32ad419c7084b77114faf36"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FastyBird/bootstrap/zipball/c1ce22b1c64fb2f62054ceb88d6e4e9c4f36cc82",
-                "reference": "c1ce22b1c64fb2f62054ceb88d6e4e9c4f36cc82",
+                "url": "https://api.github.com/repos/FastyBird/bootstrap/zipball/25127bdae069891ae32ad419c7084b77114faf36",
+                "reference": "25127bdae069891ae32ad419c7084b77114faf36",
                 "shasum": ""
             },
             "require": {
@@ -2042,7 +2111,7 @@
                 "issues": "https://github.com/FastyBird/bootstrap/issues",
                 "source": "https://github.com/FastyBird/bootstrap/tree/master"
             },
-            "time": "2020-12-07T20:54:14+00:00"
+            "time": "2020-12-21T18:37:22+00:00"
         },
         {
             "name": "fastybird/couchdb-storage-plugin",
@@ -2050,12 +2119,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/FastyBird/couchdb-storage-plugin.git",
-                "reference": "edd664224765ef311e857d5e9670361be1210ff0"
+                "reference": "8e652676d883b27696b82e61f683a23d530f9177"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FastyBird/couchdb-storage-plugin/zipball/edd664224765ef311e857d5e9670361be1210ff0",
-                "reference": "edd664224765ef311e857d5e9670361be1210ff0",
+                "url": "https://api.github.com/repos/FastyBird/couchdb-storage-plugin/zipball/8e652676d883b27696b82e61f683a23d530f9177",
+                "reference": "8e652676d883b27696b82e61f683a23d530f9177",
                 "shasum": ""
             },
             "require": {
@@ -2128,7 +2197,7 @@
                 "issues": "https://github.com/FastyBird/couchdb-storage-plugin/issues",
                 "source": "https://github.com/FastyBird/couchdb-storage-plugin/tree/master"
             },
-            "time": "2020-12-21T09:32:05+00:00"
+            "time": "2020-12-21T15:00:49+00:00"
         },
         {
             "name": "fastybird/database",
@@ -2136,15 +2205,17 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/FastyBird/database.git",
-                "reference": "497fbb71387f88924d66da729cb060cb926bbb88"
+                "reference": "48a69c8966452cbd4cf2a0f5718f3ec769984fae"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FastyBird/database/zipball/497fbb71387f88924d66da729cb060cb926bbb88",
-                "reference": "497fbb71387f88924d66da729cb060cb926bbb88",
+                "url": "https://api.github.com/repos/FastyBird/database/zipball/48a69c8966452cbd4cf2a0f5718f3ec769984fae",
+                "reference": "48a69c8966452cbd4cf2a0f5718f3ec769984fae",
                 "shasum": ""
             },
             "require": {
+                "fastybird/application-events": "@dev",
+                "fastybird/application-exchange": "@dev",
                 "fastybird/web-server": "@dev",
                 "ipub/doctrine-crud": "^2.3",
                 "ipub/doctrine-orm-query": "^0.0.6",
@@ -2207,7 +2278,7 @@
                 "issues": "https://github.com/FastyBird/database/issues",
                 "source": "https://github.com/FastyBird/database/tree/master"
             },
-            "time": "2020-12-18T20:43:13+00:00"
+            "time": "2020-12-21T18:54:44+00:00"
         },
         {
             "name": "fastybird/datetime-factory",
@@ -2284,12 +2355,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/FastyBird/devices-module.git",
-                "reference": "ccd0e0467c0ef991c6809671a062f2efe59a736a"
+                "reference": "785a81d52dab0e937691514d12ae14b094b1e506"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FastyBird/devices-module/zipball/ccd0e0467c0ef991c6809671a062f2efe59a736a",
-                "reference": "ccd0e0467c0ef991c6809671a062f2efe59a736a",
+                "url": "https://api.github.com/repos/FastyBird/devices-module/zipball/785a81d52dab0e937691514d12ae14b094b1e506",
+                "reference": "785a81d52dab0e937691514d12ae14b094b1e506",
                 "shasum": ""
             },
             "require": {
@@ -2368,7 +2439,7 @@
                 "issues": "https://github.com/FastyBird/devices-module/issues",
                 "source": "https://github.com/FastyBird/devices-module/tree/master"
             },
-            "time": "2020-12-21T11:03:37+00:00"
+            "time": "2020-12-21T16:33:10+00:00"
         },
         {
             "name": "fastybird/json-api",
@@ -2376,12 +2447,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/FastyBird/json-api.git",
-                "reference": "103d033763746c8b23824cf0571ccf80e59cfc21"
+                "reference": "0c472e577dbaba8596c95469c6ca213c7bec55f6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FastyBird/json-api/zipball/103d033763746c8b23824cf0571ccf80e59cfc21",
-                "reference": "103d033763746c8b23824cf0571ccf80e59cfc21",
+                "url": "https://api.github.com/repos/FastyBird/json-api/zipball/0c472e577dbaba8596c95469c6ca213c7bec55f6",
+                "reference": "0c472e577dbaba8596c95469c6ca213c7bec55f6",
                 "shasum": ""
             },
             "require": {
@@ -2448,7 +2519,7 @@
                 "issues": "https://github.com/FastyBird/json-api/issues",
                 "source": "https://github.com/FastyBird/json-api/tree/master"
             },
-            "time": "2020-12-18T18:30:25+00:00"
+            "time": "2020-12-21T18:33:37+00:00"
         },
         {
             "name": "fastybird/modules-metadata",
@@ -2527,16 +2598,17 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/FastyBird/mqtt-plugin.git",
-                "reference": "bd2a54ba1dccebcc02859b7e07375c1e1ec543c4"
+                "reference": "14407cd77978bfd8cac5b9ff64cd3643428ac786"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FastyBird/mqtt-plugin/zipball/bd2a54ba1dccebcc02859b7e07375c1e1ec543c4",
-                "reference": "bd2a54ba1dccebcc02859b7e07375c1e1ec543c4",
+                "url": "https://api.github.com/repos/FastyBird/mqtt-plugin/zipball/14407cd77978bfd8cac5b9ff64cd3643428ac786",
+                "reference": "14407cd77978bfd8cac5b9ff64cd3643428ac786",
                 "shasum": ""
             },
             "require": {
                 "cweagans/composer-patches": "^1.6",
+                "fastybird/application-events": "@dev",
                 "ipub/mqtt-client": "^1.0",
                 "nette/bootstrap": "^3.0",
                 "nette/di": "^3.0",
@@ -2596,7 +2668,7 @@
                 "issues": "https://github.com/FastyBird/mqtt-plugin/issues",
                 "source": "https://github.com/FastyBird/mqtt-plugin/tree/master"
             },
-            "time": "2020-12-18T17:50:38+00:00"
+            "time": "2020-12-21T19:05:36+00:00"
         },
         {
             "name": "fastybird/rabbitmq-plugin",
@@ -2604,19 +2676,20 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/FastyBird/rabbitmq-plugin.git",
-                "reference": "8659eeb446b2d46eb200b297642b8a9e1650118a"
+                "reference": "c67012b16857eaba93a3f16bec845d174c22a859"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FastyBird/rabbitmq-plugin/zipball/8659eeb446b2d46eb200b297642b8a9e1650118a",
-                "reference": "8659eeb446b2d46eb200b297642b8a9e1650118a",
+                "url": "https://api.github.com/repos/FastyBird/rabbitmq-plugin/zipball/c67012b16857eaba93a3f16bec845d174c22a859",
+                "reference": "c67012b16857eaba93a3f16bec845d174c22a859",
                 "shasum": ""
             },
             "require": {
                 "bunny/bunny": "^0.4",
                 "contributte/console": "^0.8",
+                "fastybird/application-events": "@dev",
                 "fastybird/application-exchange": "@dev",
-                "fastybird/datetime-factory": "@dev",
+                "fastybird/datetime-factory": "^0.1",
                 "fastybird/modules-metadata": "@dev",
                 "nette/bootstrap": "^3.0",
                 "nette/di": "^3.0",
@@ -2674,7 +2747,7 @@
                 "issues": "https://github.com/FastyBird/rabbitmq-plugin/issues",
                 "source": "https://github.com/FastyBird/rabbitmq-plugin/tree/master"
             },
-            "time": "2020-12-20T00:07:24+00:00"
+            "time": "2020-12-21T18:45:54+00:00"
         },
         {
             "name": "fastybird/simple-auth",
@@ -2766,12 +2839,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/FastyBird/vernemq-auth-plugin.git",
-                "reference": "6e82095b8b74ea5321986ea69170a77939be3759"
+                "reference": "d873461e32180d7b4167f13b9807b0d381d78c63"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FastyBird/vernemq-auth-plugin/zipball/6e82095b8b74ea5321986ea69170a77939be3759",
-                "reference": "6e82095b8b74ea5321986ea69170a77939be3759",
+                "url": "https://api.github.com/repos/FastyBird/vernemq-auth-plugin/zipball/d873461e32180d7b4167f13b9807b0d381d78c63",
+                "reference": "d873461e32180d7b4167f13b9807b0d381d78c63",
                 "shasum": ""
             },
             "require": {
@@ -2857,7 +2930,7 @@
                 "issues": "https://github.com/FastyBird/vernemq-auth-plugin/issues",
                 "source": "https://github.com/FastyBird/vernemq-auth-plugin/tree/master"
             },
-            "time": "2020-12-21T09:43:53+00:00"
+            "time": "2020-12-21T14:45:43+00:00"
         },
         {
             "name": "fastybird/web-server",
@@ -2865,16 +2938,17 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/FastyBird/web-server.git",
-                "reference": "5190a1f4493de269c29a57f2138753a9f3d4ab52"
+                "reference": "60c9c633e499ffe3e077e2f732b5334799bbdf2b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FastyBird/web-server/zipball/5190a1f4493de269c29a57f2138753a9f3d4ab52",
-                "reference": "5190a1f4493de269c29a57f2138753a9f3d4ab52",
+                "url": "https://api.github.com/repos/FastyBird/web-server/zipball/60c9c633e499ffe3e077e2f732b5334799bbdf2b",
+                "reference": "60c9c633e499ffe3e077e2f732b5334799bbdf2b",
                 "shasum": ""
             },
             "require": {
                 "contributte/console": "^0.8",
+                "fastybird/application-events": "@dev",
                 "ipub/slim-router": "^0.1",
                 "nette/bootstrap": "^3.0",
                 "nette/di": "^3.0",
@@ -2931,7 +3005,7 @@
                 "issues": "https://github.com/FastyBird/web-server/issues",
                 "source": "https://github.com/FastyBird/web-server/tree/master"
             },
-            "time": "2020-12-18T18:31:35+00:00"
+            "time": "2020-12-21T18:06:57+00:00"
         },
         {
             "name": "fig/http-message-util",
@@ -10028,16 +10102,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "0.12.63",
+            "version": "0.12.64",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "c97ec4754bd53099a06c24847bd2870b99966b6a"
+                "reference": "23eb1cb7ae125f45f1d0e48051bcf67a9a9b08aa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/c97ec4754bd53099a06c24847bd2870b99966b6a",
-                "reference": "c97ec4754bd53099a06c24847bd2870b99966b6a",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/23eb1cb7ae125f45f1d0e48051bcf67a9a9b08aa",
+                "reference": "23eb1cb7ae125f45f1d0e48051bcf67a9a9b08aa",
                 "shasum": ""
             },
             "require": {
@@ -10068,7 +10142,7 @@
             "description": "PHPStan - PHP Static Analysis Tool",
             "support": {
                 "issues": "https://github.com/phpstan/phpstan/issues",
-                "source": "https://github.com/phpstan/phpstan/tree/0.12.63"
+                "source": "https://github.com/phpstan/phpstan/tree/0.12.64"
             },
             "funding": [
                 {
@@ -10084,7 +10158,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-12-15T16:37:16+00:00"
+            "time": "2020-12-21T11:59:02+00:00"
         },
         {
             "name": "phpstan/phpstan-deprecation-rules",

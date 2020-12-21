@@ -169,15 +169,6 @@ nettrineOrmAnnotations:
 #############################
 
 decorator:
-	FastyBird\WebServer\Commands\HttpServerCommand:
-		setup:
-			- '$onBeforeServerStart[]' = @FastyBird\DevicesNode\Events\ServerBeforeStartHandler
-			- '$onAdterServerStart[]' = @FastyBird\DevicesNode\Events\ServerAfterStartHandler
-
-	FastyBird\RabbitMqPlugin\Exchange:
-		setup:
-			- '$onAfterConsumeMessage[]' = @FastyBird\DevicesNode\Events\AfterConsumeHandler
-
 	FastyBird\CouchDbStoragePlugin\Models\PropertiesManager:
 		setup:
 			- '$onAfterUpdate[]' = @FastyBird\DevicesNode\Events\PropertyStateUpdatedHandler
@@ -218,12 +209,6 @@ services:
 
 	# Node events
 	#############
-
-	- {factory: FastyBird\DevicesNode\Events\AfterConsumeHandler}
-
-	- {factory: FastyBird\DevicesNode\Events\ServerBeforeStartHandler}
-
-	- {factory: FastyBird\DevicesNode\Events\ServerAfterStartHandler}
 
 	- {factory: FastyBird\DevicesNode\Events\PropertyStateUpdatedHandler}
 
