@@ -1,7 +1,7 @@
 <?php declare(strict_types = 1);
 
 /**
- * PropertyUpdatedHandler.php
+ * PropertyStateUpdatedHandler.php
  *
  * @license        More in license.md
  * @copyright      https://www.fastybird.com
@@ -10,61 +10,74 @@
  * @subpackage     Events
  * @since          0.1.0
  *
- * @date           03.03.20
+ * @date           20.12.20
  */
 
 namespace FastyBird\DevicesNode\Events;
 
-use FastyBird\CouchDbStoragePlugin\States as CouchDbStoragePluginStates;
+use FastyBird\ApplicationExchange\Publisher as ApplicationExchangePublisher;
+use FastyBird\DevicesModule;
+use FastyBird\DevicesModule\Helpers as DevicesModuleHelpers;
 use FastyBird\DevicesModule\Models as DevicesModuleModels;
 use FastyBird\DevicesModule\Queries as DevicesModuleQueries;
-use FastyBird\DevicesNode;
+use FastyBird\DevicesModule\States as DevicesModuleStates;
 use FastyBird\DevicesNode\Exceptions;
-use FastyBird\RabbitMqPlugin\Publishers as RabbitMqPluginPublishers;
+use FastyBird\MqttPlugin\Senders as MqttPluginSenders;
 use Nette;
 
 /**
- * State property created|changed handler
+ * After property state updated handler
  *
  * @package         FastyBird:DevicesNode!
  * @subpackage      Events
  *
  * @author          Adam Kadlec <adam.kadlec@fastybird.com>
  */
-final class PropertyStateUpdatedHandler
+class PropertyStateUpdatedHandler
 {
 
 	use Nette\SmartObject;
 
+	/** @var DevicesModuleHelpers\PropertyHelper */
+	protected DevicesModuleHelpers\PropertyHelper $propertyHelper;
+
 	/** @var DevicesModuleModels\Devices\Properties\IPropertyRepository */
-	private DevicesModuleModels\Devices\Properties\IPropertyRepository $devicePropertyRepository;
+	protected DevicesModuleModels\Devices\Properties\IPropertyRepository $devicePropertyRepository;
 
 	/** @var DevicesModuleModels\Channels\Properties\IPropertyRepository */
-	private DevicesModuleModels\Channels\Properties\IPropertyRepository $channelPropertyRepository;
+	protected DevicesModuleModels\Channels\Properties\IPropertyRepository $channelPropertyRepository;
 
-	/** @var RabbitMqPluginPublishers\IRabbitMqPublisher */
-	private RabbitMqPluginPublishers\IRabbitMqPublisher $publisher;
+	/** @var ApplicationExchangePublisher\IPublisher */
+	private ApplicationExchangePublisher\IPublisher $publisher;
+
+	/** @var MqttPluginSenders\ISender */
+	private MqttPluginSenders\ISender $mqttV1sender;
 
 	public function __construct(
+		DevicesModuleHelpers\PropertyHelper $propertyHelper,
 		DevicesModuleModels\Devices\Properties\IPropertyRepository $devicePropertyRepository,
 		DevicesModuleModels\Channels\Properties\IPropertyRepository $channelPropertyRepository,
-		RabbitMqPluginPublishers\IRabbitMqPublisher $publisher
+		ApplicationExchangePublisher\IPublisher $publisher,
+		MqttPluginSenders\ISender $mqttV1sender
 	) {
+		$this->propertyHelper = $propertyHelper;
 		$this->devicePropertyRepository = $devicePropertyRepository;
 		$this->channelPropertyRepository = $channelPropertyRepository;
 
 		$this->publisher = $publisher;
+
+		$this->mqttV1sender = $mqttV1sender;
 	}
 
 	/**
-	 * @param CouchDbStoragePluginStates\IProperty $state
-	 * @param CouchDbStoragePluginStates\IProperty $previous
+	 * @param DevicesModuleStates\IProperty $state
+	 * @param DevicesModuleStates\IProperty $previous
 	 *
 	 * @return void
 	 */
 	public function __invoke(
-		CouchDbStoragePluginStates\IProperty $state,
-		CouchDbStoragePluginStates\IProperty $previous
+		DevicesModuleStates\IProperty $state,
+		DevicesModuleStates\IProperty $previous
 	): void {
 		$findProperty = new DevicesModuleQueries\FindDevicePropertiesQuery();
 		$findProperty->byId($state->getId());
@@ -85,8 +98,8 @@ final class PropertyStateUpdatedHandler
 			throw new Exceptions\InvalidArgumentException('Property for provided state could not be found.');
 		}
 
-		if (array_key_exists(get_class($property), DevicesNode\Constants::MESSAGE_BUS_UPDATED_ENTITIES_ROUTING_KEYS_MAPPING)) {
-			$routingKey = DevicesNode\Constants::MESSAGE_BUS_UPDATED_ENTITIES_ROUTING_KEYS_MAPPING[get_class($property)];
+		if (array_key_exists(get_class($property), DevicesModule\Constants::MESSAGE_BUS_UPDATED_ENTITIES_ROUTING_KEYS_MAPPING)) {
+			$routingKey = DevicesModule\Constants::MESSAGE_BUS_UPDATED_ENTITIES_ROUTING_KEYS_MAPPING[get_class($property)];
 
 		} else {
 			throw new Exceptions\InvalidArgumentException('Provided state is not supported by RabbitMQ exchange publisher.');
@@ -99,6 +112,40 @@ final class PropertyStateUpdatedHandler
 			],
 			$property->toArray()
 		));
+
+		if ($state->getExpected() !== null && $state->isPending()) {
+			$findDeviceProperty = new DevicesModuleQueries\FindDevicePropertiesQuery();
+			$findDeviceProperty->byId($state->getId());
+
+			$property = $this->devicePropertyRepository->findOneBy($findDeviceProperty);
+
+			if ($property !== null) {
+				$this->mqttV1sender->sendDeviceProperty(
+					$property->getDevice()->getIdentifier(),
+					$property->getProperty(),
+					(string) $this->propertyHelper->normalizeValue($property, $state->getExpected()),
+					$property->getDevice()->getParent() !== null ? $property->getDevice()->getParent()->getIdentifier() : null
+				)
+					->done();
+
+			} else {
+				$findChannelProperty = new DevicesModuleQueries\FindChannelPropertiesQuery();
+				$findChannelProperty->byId($state->getId());
+
+				$property = $this->channelPropertyRepository->findOneBy($findChannelProperty);
+
+				if ($property !== null) {
+					$this->mqttV1sender->sendChannelProperty(
+						$property->getChannel()->getDevice()->getIdentifier(),
+						$property->getChannel()->getChannel(),
+						$property->getProperty(),
+						(string) $this->propertyHelper->normalizeValue($property, $state->getExpected()),
+						$property->getChannel()->getDevice()->getParent() !== null ? $property->getChannel()->getDevice()->getParent()->getIdentifier() : null
+					)
+						->done();
+				}
+			}
+		}
 	}
 
 }

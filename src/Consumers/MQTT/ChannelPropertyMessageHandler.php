@@ -18,7 +18,6 @@ namespace FastyBird\DevicesNode\Consumers\MQTT;
 use Doctrine\Common;
 use Doctrine\DBAL;
 use Doctrine\DBAL\Connection;
-use FastyBird\CouchDbStoragePlugin\Models as CouchDbStoragePluginModels;
 use FastyBird\DevicesModule\Models as DevicesModuleModels;
 use FastyBird\DevicesModule\Queries as DevicesModuleQueries;
 use FastyBird\DevicesNode\Exceptions;
@@ -51,11 +50,11 @@ final class ChannelPropertyMessageHandler implements MqttPlugin\Consumers\IMessa
 	/** @var DevicesModuleModels\Channels\Properties\IPropertiesManager */
 	private DevicesModuleModels\Channels\Properties\IPropertiesManager $propertiesManager;
 
-	/** @var CouchDbStoragePluginModels\IPropertiesManager */
-	private CouchDbStoragePluginModels\IPropertiesManager $propertiesStatesManager;
+	/** @var DevicesModuleModels\States\IPropertiesManager */
+	private DevicesModuleModels\States\IPropertiesManager $propertiesStatesManager;
 
-	/** @var CouchDbStoragePluginModels\IPropertyRepository */
-	private CouchDbStoragePluginModels\IPropertyRepository $propertyStateRepository;
+	/** @var DevicesModuleModels\States\IPropertyRepository */
+	private DevicesModuleModels\States\IPropertyRepository $propertyStateRepository;
 
 	/** @var Common\Persistence\ManagerRegistry */
 	private Common\Persistence\ManagerRegistry $managerRegistry;
@@ -67,8 +66,8 @@ final class ChannelPropertyMessageHandler implements MqttPlugin\Consumers\IMessa
 		DevicesModuleModels\Devices\IDeviceRepository $deviceRepository,
 		DevicesModuleModels\Channels\IChannelRepository $channelRepository,
 		DevicesModuleModels\Channels\Properties\IPropertiesManager $propertiesManager,
-		CouchDbStoragePluginModels\IPropertiesManager $propertiesStatesManager,
-		CouchDbStoragePluginModels\IPropertyRepository $propertyStateRepository,
+		DevicesModuleModels\States\IPropertiesManager $propertiesStatesManager,
+		DevicesModuleModels\States\IPropertyRepository $propertyStateRepository,
 		Common\Persistence\ManagerRegistry $managerRegistry,
 		?Log\LoggerInterface $logger = null
 	) {

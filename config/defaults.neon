@@ -1,6 +1,6 @@
 parameters:
 	logger:
-		level: \Monolog\Logger::DEBUG
+		level: 100
 
 	database:
 		version: 5.7

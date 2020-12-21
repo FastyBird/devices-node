@@ -17,20 +17,13 @@
 parameters:
 	origin: com.fastybird.devices-module
 
-	rabbitmq:
-		queueName: fb.devices.node.exchange
-		routing:
-			- fb.bus.data.device
-			- fb.bus.data.device.*
-			- fb.bus.data.channel
-			- fb.bus.data.channel.*
-
 #########################
 # Used Nette extensions #
 #########################
 
 extensions:
 	contributteTranslation				: Contributte\Translation\DI\TranslationExtension
+	contributeEvents					: Contributte\EventDispatcher\DI\EventDispatcherExtension
 	nettrineAnnotations					: Nettrine\Annotations\DI\AnnotationsExtension
 	nettrineCache						: Nettrine\Cache\DI\CacheExtension
 	nettrineDbal						: Nettrine\DBAL\DI\DbalExtension
@@ -39,6 +32,7 @@ extensions:
 	nettrineOrmConsole					: Nettrine\ORM\DI\OrmConsoleExtension
 	nettrineOrmCache					: Nettrine\ORM\DI\OrmCacheExtension
 	fbDateTimeFactory					: FastyBird\DateTimeFactory\DI\DateTimeFactoryExtension
+	fbApplicationExchange				: FastyBird\ApplicationExchange\DI\ApplicationExchangeExtension
 	fbSimpleAuth						: FastyBird\SimpleAuth\DI\SimpleAuthExtension
 	fbDatabase							: FastyBird\Database\DI\DatabaseExtension
 	fbJsonApi							: FastyBird\JsonApi\DI\JsonApiExtension
@@ -83,10 +77,6 @@ fbRabbitMqPlugin:
 			vhost: %exchange.vhost%
 			username: %exchange.username%
 			password: %exchange.password%
-		queue:
-			name: %rabbitmq.queueName%
-		routing:
-			keys: %rabbitmq.routing%
 
 # CouchDB storage
 #################
@@ -198,12 +188,7 @@ services:
 
 	- {factory: FastyBird\DevicesNode\Commands\InitializeCommand}
 
-	# Message bus messages handlers
-	###############################
-
-	- {factory: FastyBird\DevicesNode\Consumers\Bus\DevicePropertyMessageHandler}
-
-	- {factory: FastyBird\DevicesNode\Consumers\Bus\ChannelPropertyMessageHandler}
+	- {factory: FastyBird\DevicesNode\Commands\SynchroniseCommand}
 
 	# MQTT bus messages handlers
 	############################
@@ -224,6 +209,13 @@ services:
 
 	- {factory: FastyBird\DevicesNode\Consumers\MQTT\ChannelControlMessageHandler}
 
+	# Models
+	########
+
+	- {factory: FastyBird\DevicesNode\Models\PropertiesManager}
+
+	- {factory: FastyBird\DevicesNode\Models\PropertyRepository}
+
 	# Node events
 	#############
 
@@ -235,7 +227,7 @@ services:
 
 	- {factory: FastyBird\DevicesNode\Events\PropertyStateUpdatedHandler}
 
-	# Events subscribers
-	####################
+	# Subscribers
+	#############
 
 	- {factory: FastyBird\DevicesNode\Subscribers\EntitiesSubscriber}

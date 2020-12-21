@@ -15,21 +15,18 @@
 
 namespace FastyBird\DevicesNode\Subscribers;
 
-use Consistence;
 use Doctrine\Common;
 use Doctrine\ORM;
 use Doctrine\Persistence;
-use FastyBird\CouchDbStoragePlugin\Models as CouchDbStoragePluginModels;
 use FastyBird\Database\Entities as DatabaseEntities;
-use FastyBird\DevicesModule;
 use FastyBird\DevicesModule\Entities as DevicesModuleEntities;
-use FastyBird\DevicesNode;
-use FastyBird\DevicesNode\Exceptions;
-use FastyBird\RabbitMqPlugin\Publishers as RabbitMqPluginPublishers;
+use FastyBird\DevicesModule\Models as DevicesModuleModels;
+use FastyBird\VerneMqAuthPlugin\Entities as VerneMqAuthPluginEntities;
+use FastyBird\VerneMqAuthPlugin\Models as VerneMqAuthPluginModels;
+use FastyBird\VerneMqAuthPlugin\Queries as VerneMqAuthPluginQueries;
+use FastyBird\VerneMqAuthPlugin\Types as VerneMqAuthPluginTypes;
 use Nette;
-use Ramsey\Uuid;
-use ReflectionClass;
-use ReflectionException;
+use Throwable;
 
 /**
  * Doctrine entities events
@@ -48,28 +45,29 @@ final class EntitiesSubscriber implements Common\EventSubscriber
 
 	use Nette\SmartObject;
 
-	/** @var CouchDbStoragePluginModels\IPropertiesManager */
-	private CouchDbStoragePluginModels\IPropertiesManager $propertiesStatesManager;
+	/** @var DevicesModuleModels\States\IPropertiesManager */
+	private DevicesModuleModels\States\IPropertiesManager $propertiesStatesManager;
 
-	/** @var CouchDbStoragePluginModels\IPropertyRepository */
-	private CouchDbStoragePluginModels\IPropertyRepository $propertyStateRepository;
+	/** @var DevicesModuleModels\States\IPropertyRepository */
+	private DevicesModuleModels\States\IPropertyRepository $propertyStateRepository;
 
-	/** @var RabbitMqPluginPublishers\IRabbitMqPublisher */
-	private RabbitMqPluginPublishers\IRabbitMqPublisher $publisher;
+	/** @var VerneMqAuthPluginModels\Accounts\IAccountRepository */
+	private VerneMqAuthPluginModels\Accounts\IAccountRepository $verneMqAccountRepository;
 
 	/** @var ORM\EntityManagerInterface */
 	private ORM\EntityManagerInterface $entityManager;
 
 	public function __construct(
-		CouchDbStoragePluginModels\IPropertiesManager $propertiesStatesManager,
-		CouchDbStoragePluginModels\IPropertyRepository $propertyStateRepository,
-		RabbitMqPluginPublishers\IRabbitMqPublisher $publisher,
+		DevicesModuleModels\States\IPropertiesManager $propertiesStatesManager,
+		DevicesModuleModels\States\IPropertyRepository $propertyStateRepository,
+		VerneMqAuthPluginModels\Accounts\IAccountRepository $verneMqAccountRepository,
 		ORM\EntityManagerInterface $entityManager
 	) {
 		$this->propertiesStatesManager = $propertiesStatesManager;
 		$this->propertyStateRepository = $propertyStateRepository;
 
-		$this->publisher = $publisher;
+		$this->verneMqAccountRepository = $verneMqAccountRepository;
+
 		$this->entityManager = $entityManager;
 	}
 
@@ -81,306 +79,13 @@ final class EntitiesSubscriber implements Common\EventSubscriber
 	public function getSubscribedEvents(): array
 	{
 		return [
-			ORM\Events::preFlush,
 			ORM\Events::onFlush,
+			ORM\Events::preFlush,
+			ORM\Events::preUpdate,
+			ORM\Events::preRemove,
 			ORM\Events::postPersist,
 			ORM\Events::postUpdate,
 		];
-	}
-
-	/**
-	 * @param ORM\Event\LifecycleEventArgs $eventArgs
-	 *
-	 * @return void
-	 */
-	public function postPersist(ORM\Event\LifecycleEventArgs $eventArgs): void
-	{
-		// onFlush was executed before, everything already initialized
-		$entity = $eventArgs->getObject();
-
-		// Check for valid entity
-		if (!$entity instanceof DatabaseEntities\IEntity) {
-			return;
-		}
-
-		$this->processEntityAction($entity, self::ACTION_CREATED);
-	}
-
-	/**
-	 * @param DatabaseEntities\IEntity $entity
-	 * @param string $action
-	 *
-	 * @return void
-	 */
-	private function processEntityAction(DatabaseEntities\IEntity $entity, string $action): void
-	{
-		if ($entity instanceof DevicesModuleEntities\Devices\Controls\IControl) {
-			$entity = $entity->getDevice();
-			$action = self::ACTION_UPDATED;
-		}
-
-		if ($entity instanceof DevicesModuleEntities\Channels\Controls\IControl) {
-			$entity = $entity->getChannel();
-			$action = self::ACTION_UPDATED;
-		}
-
-		if (
-			$entity instanceof DevicesModuleEntities\Devices\Properties\IProperty ||
-			$entity instanceof DevicesModuleEntities\Channels\Properties\IProperty
-		) {
-			$state = $this->propertyStateRepository->findOne($entity->getId());
-
-			switch ($action) {
-				case self::ACTION_CREATED:
-				case self::ACTION_UPDATED:
-					if ($state === null) {
-						$this->propertiesStatesManager->create($entity->getId(), Nette\Utils\ArrayHash::from($entity->toArray()));
-					}
-					break;
-
-				case self::ACTION_DELETED:
-					if ($state !== null) {
-						$this->propertiesStatesManager->delete($state);
-					}
-					break;
-			}
-		}
-
-		$publishRoutingKey = null;
-
-		switch ($action) {
-			case self::ACTION_CREATED:
-				foreach (DevicesNode\Constants::MESSAGE_BUS_CREATED_ENTITIES_ROUTING_KEYS_MAPPING as $class => $routingKey) {
-					if ($this->validateEntity($entity, $class)) {
-						$publishRoutingKey = $routingKey;
-					}
-				}
-				break;
-
-			case self::ACTION_UPDATED:
-				foreach (DevicesNode\Constants::MESSAGE_BUS_UPDATED_ENTITIES_ROUTING_KEYS_MAPPING as $class => $routingKey) {
-					if ($this->validateEntity($entity, $class)) {
-						$publishRoutingKey = $routingKey;
-					}
-				}
-				break;
-
-			case self::ACTION_DELETED:
-				foreach (DevicesNode\Constants::MESSAGE_BUS_DELETED_ENTITIES_ROUTING_KEYS_MAPPING as $class => $routingKey) {
-					if ($this->validateEntity($entity, $class)) {
-						$publishRoutingKey = $routingKey;
-					}
-				}
-				break;
-		}
-
-		if ($publishRoutingKey !== null) {
-			if (
-				$entity instanceof DevicesModuleEntities\Devices\Properties\IProperty
-				|| $entity instanceof DevicesModuleEntities\Channels\Properties\IProperty
-			) {
-				$state = $this->propertyStateRepository->findOne($entity->getId());
-
-				$this->publisher->publish($publishRoutingKey, array_merge($state !== null ? $state->toArray() : [], $this->toArray($entity)));
-
-			} else {
-				$this->publisher->publish($publishRoutingKey, $this->toArray($entity));
-			}
-		}
-	}
-
-	/**
-	 * @param DatabaseEntities\IEntity $entity
-	 * @param string $class
-	 *
-	 * @return bool
-	 */
-	private function validateEntity(DatabaseEntities\IEntity $entity, string $class): bool
-	{
-		$result = false;
-
-		if (get_class($entity) === $class) {
-			$result = true;
-		}
-
-		if (is_subclass_of($entity, $class)) {
-			$result = true;
-		}
-
-		return $result;
-	}
-
-	/**
-	 * @param DatabaseEntities\IEntity $entity
-	 *
-	 * @return mixed[]
-	 */
-	private function toArray(DatabaseEntities\IEntity $entity): array
-	{
-		if (method_exists($entity, 'toArray')) {
-			return $entity->toArray();
-		}
-
-		$metadata = $this->entityManager->getClassMetadata(get_class($entity));
-
-		$fields = [];
-
-		foreach ($metadata->fieldMappings as $field) {
-			if (isset($field['fieldName'])) {
-				$fields[] = $field['fieldName'];
-			}
-		}
-
-		try {
-			$rc = new ReflectionClass(get_class($entity));
-
-			foreach ($rc->getProperties() as $property) {
-				$fields[] = $property->getName();
-			}
-
-		} catch (ReflectionException $ex) {
-			// Nothing to do, reflection could not be loaded
-		}
-
-		$fields = array_unique($fields);
-
-		$values = [];
-
-		foreach ($fields as $field) {
-			try {
-				$value = $this->getPropertyValue($entity, $field);
-
-				if ($value instanceof Consistence\Enum\Enum) {
-					$value = $value->getValue();
-
-				} elseif ($value instanceof Uuid\UuidInterface) {
-					$value = $value->toString();
-				}
-
-				if (is_object($value)) {
-					continue;
-				}
-
-				$key = preg_replace('/(?<!^)[A-Z]/', '_$0', $field);
-
-				if ($key !== null) {
-					$values[strtolower($key)] = $value;
-				}
-
-			} catch (Exceptions\PropertyNotExistsException $ex) {
-				// No need to do anything
-			}
-		}
-
-		return $values;
-	}
-
-	/**
-	 * @param DatabaseEntities\IEntity $entity
-	 * @param string $property
-	 *
-	 * @return mixed
-	 *
-	 * @throws Exceptions\PropertyNotExistsException
-	 */
-	private function getPropertyValue(DatabaseEntities\IEntity $entity, string $property)
-	{
-		$ucFirst = ucfirst($property);
-
-		$methods = [
-			'get' . $ucFirst,
-			'is' . $ucFirst,
-			'has' . $ucFirst,
-		];
-
-		foreach ($methods as $method) {
-			$callable = [$entity, $method];
-
-			if (is_callable($callable)) {
-				return call_user_func($callable);
-			}
-		}
-
-		if (!property_exists($entity, $property)) {
-			throw new Exceptions\PropertyNotExistsException(sprintf('Property "%s" does not exists on entity', $property));
-		}
-
-		return $entity->{$property};
-	}
-
-	/**
-	 * @param ORM\Event\LifecycleEventArgs $eventArgs
-	 *
-	 * @return void
-	 */
-	public function postUpdate(ORM\Event\LifecycleEventArgs $eventArgs): void
-	{
-		$uow = $this->entityManager->getUnitOfWork();
-
-		// onFlush was executed before, everything already initialized
-		$entity = $eventArgs->getObject();
-
-		// Get changes => should be already computed here (is a listener)
-		$changeset = $uow->getEntityChangeSet($entity);
-
-		// If we have no changes left => don't create revision log
-		if (count($changeset) === 0) {
-			return;
-		}
-
-		// Check for valid entity
-		if (
-			!$entity instanceof DatabaseEntities\IEntity
-			|| $uow->isScheduledForDelete($entity)
-		) {
-			return;
-		}
-
-		if (
-			$entity instanceof DevicesModuleEntities\Channels\Controls\IControl
-			&& $uow->isScheduledForUpdate($entity->getChannel())
-		) {
-			return;
-		}
-
-		if (
-			$entity instanceof DevicesModuleEntities\Devices\Controls\IControl
-			&& $uow->isScheduledForUpdate($entity->getDevice())
-		) {
-			return;
-		}
-
-		$this->processEntityAction($entity, self::ACTION_UPDATED);
-	}
-
-	/**
-	 * @return void
-	 */
-	public function preFlush(): void
-	{
-		$uow = $this->entityManager->getUnitOfWork();
-
-		foreach ($uow->getScheduledEntityDeletions() as $entity) {
-			if (
-				(
-					$entity instanceof DevicesModuleEntities\Devices\Controls\IControl
-					|| $entity instanceof DevicesModuleEntities\Channels\Controls\IControl
-				)
-				&& $entity->getName() === DevicesModule\Constants::CONTROL_CONFIG
-			) {
-				if ($entity instanceof DevicesModuleEntities\Devices\Controls\IControl) {
-					foreach ($entity->getDevice()->getConfiguration() as $row) {
-						$uow->scheduleForDelete($row);
-					}
-				}
-
-				if ($entity instanceof DevicesModuleEntities\Channels\Controls\IControl) {
-					foreach ($entity->getChannel()->getConfiguration() as $row) {
-						$uow->scheduleForDelete($row);
-					}
-				}
-			}
-		}
 	}
 
 	/**
@@ -405,20 +110,9 @@ final class EntitiesSubscriber implements Common\EventSubscriber
 			$processedEntities[] = $hash;
 
 			// Check for valid entity
-			if (!$entity instanceof DatabaseEntities\IEntity) {
-				continue;
-			}
-
 			if (
-				$entity instanceof DevicesModuleEntities\Devices\Controls\IControl
-				&& $uow->isScheduledForDelete($entity->getDevice())
-			) {
-				continue;
-			}
-
-			if (
-				$entity instanceof DevicesModuleEntities\Channels\Controls\IControl
-				&& $uow->isScheduledForDelete($entity->getChannel())
+				!$entity instanceof DevicesModuleEntities\Devices\Properties\IProperty &&
+				!$entity instanceof DevicesModuleEntities\Channels\Properties\IProperty
 			) {
 				continue;
 			}
@@ -428,6 +122,157 @@ final class EntitiesSubscriber implements Common\EventSubscriber
 
 		foreach ($processEntities as $entity) {
 			$this->processEntityAction($entity, self::ACTION_DELETED);
+		}
+	}
+
+	/**
+	 * @param ORM\Event\PreFlushEventArgs $eventArgs
+	 *
+	 * @return void
+	 *
+	 * @throws Throwable
+	 */
+	public function preFlush(ORM\Event\PreFlushEventArgs $eventArgs): void
+	{
+		$em = $eventArgs->getEntityManager();
+		$uow = $em->getUnitOfWork();
+
+		// Check all scheduled updates
+		foreach ($uow->getScheduledEntityInsertions() as $object) {
+			if ($object instanceof DevicesModuleEntities\Devices\Credentials\Credentials) {
+				$this->processCredentialsEntity($object, $em, $uow);
+			}
+		}
+	}
+
+	/**
+	 * @param ORM\Event\PreUpdateEventArgs $eventArgs
+	 *
+	 * @return void
+	 *
+	 * @throws Throwable
+	 */
+	public function preUpdate(ORM\Event\PreUpdateEventArgs $eventArgs): void
+	{
+		$em = $eventArgs->getEntityManager();
+		$uow = $em->getUnitOfWork();
+
+		// Check all scheduled updates
+		foreach ($uow->getScheduledEntityUpdates() as $object) {
+			if ($object instanceof DevicesModuleEntities\Devices\Credentials\Credentials) {
+				$this->processCredentialsEntity($object, $em, $uow);
+			}
+		}
+	}
+
+	/**
+	 * @param ORM\Event\LifecycleEventArgs $eventArgs
+	 *
+	 * @return void
+	 *
+	 * @throws Throwable
+	 */
+	public function preRemove(ORM\Event\LifecycleEventArgs $eventArgs): void
+	{
+		$em = $eventArgs->getEntityManager();
+		$uow = $em->getUnitOfWork();
+
+		foreach (array_merge($uow->getScheduledEntityDeletions(), $uow->getScheduledCollectionDeletions()) as $object) {
+			if ($object instanceof DevicesModuleEntities\Devices\Credentials\Credentials) {
+				$findAccount = new VerneMqAuthPluginQueries\FindAccountQuery();
+				$findAccount->byUsername($object->getUsername());
+
+				$accounts = $this->verneMqAccountRepository->findAllBy($findAccount);
+
+				foreach ($accounts as $account) {
+					$uow->scheduleForDelete($account);
+				}
+			}
+		}
+	}
+
+	/**
+	 * @param ORM\Event\LifecycleEventArgs $eventArgs
+	 *
+	 * @return void
+	 */
+	public function postPersist(ORM\Event\LifecycleEventArgs $eventArgs): void
+	{
+		// onFlush was executed before, everything already initialized
+		$entity = $eventArgs->getObject();
+
+		// Check for valid entity
+		if (
+			!$entity instanceof DevicesModuleEntities\Devices\Properties\IProperty &&
+			!$entity instanceof DevicesModuleEntities\Channels\Properties\IProperty
+		) {
+			return;
+		}
+
+		$this->processEntityAction($entity, self::ACTION_CREATED);
+	}
+
+	/**
+	 * @param ORM\Event\LifecycleEventArgs $eventArgs
+	 *
+	 * @return void
+	 */
+	public function postUpdate(ORM\Event\LifecycleEventArgs $eventArgs): void
+	{
+		$uow = $this->entityManager->getUnitOfWork();
+
+		// onFlush was executed before, everything already initialized
+		$entity = $eventArgs->getObject();
+
+		// Get changes => should be already computed here (is a listener)
+		$changeset = $uow->getEntityChangeSet($entity);
+
+		// If we have no changes left => don't create revision log
+		if (count($changeset) === 0) {
+			return;
+		}
+
+		// Check for valid entity
+		if (
+			(
+				!$entity instanceof DevicesModuleEntities\Devices\Properties\IProperty &&
+				!$entity instanceof DevicesModuleEntities\Channels\Properties\IProperty
+			) || $uow->isScheduledForDelete($entity)
+		) {
+			return;
+		}
+
+		$this->processEntityAction($entity, self::ACTION_UPDATED);
+	}
+
+	/**
+	 * @param DatabaseEntities\IEntity $entity
+	 * @param string $action
+	 *
+	 * @return void
+	 */
+	private function processEntityAction(DatabaseEntities\IEntity $entity, string $action): void
+	{
+		if (
+			$entity instanceof DevicesModuleEntities\Devices\Properties\IProperty ||
+			$entity instanceof DevicesModuleEntities\Channels\Properties\IProperty
+		) {
+			$state = $this->propertyStateRepository->findOne($entity->getId());
+
+			switch ($action) {
+				case self::ACTION_CREATED:
+				case self::ACTION_UPDATED:
+					if ($state === null) {
+						$this->propertiesStatesManager->create($entity->getId(), Nette\Utils\ArrayHash::from($entity->toArray()));
+					}
+					break;
+
+				case self::ACTION_DELETED:
+					if ($state !== null) {
+						$this->propertiesStatesManager->delete($state);
+					}
+					break;
+			}
 		}
 	}
 
@@ -462,6 +307,127 @@ final class EntitiesSubscriber implements Common\EventSubscriber
 		}
 
 		return substr($class, $pos + Persistence\Proxy::MARKER_LENGTH + 2);
+	}
+
+	/**
+	 * @param DevicesModuleEntities\Devices\Credentials\Credentials $credentials
+	 * @param ORM\EntityManager $em
+	 * @param ORM\UnitOfWork $uow
+	 *
+	 * @return void
+	 *
+	 * @throws Throwable
+	 */
+	private function processCredentialsEntity(
+		DevicesModuleEntities\Devices\Credentials\Credentials $credentials,
+		ORM\EntityManager $em,
+		ORM\UnitOfWork $uow
+	): void {
+		$changeSet = $uow->getEntityChangeSet($credentials);
+
+		if (isset($changeSet['username']) && isset($changeSet['username'][0])) {
+			$username = $changeSet['username'][0];
+
+		} else {
+			$username = $credentials->getUsername();
+		}
+
+		$account = $this->findAccount($username);
+
+		if ($account === null) {
+			$this->createAccount($credentials, $uow);
+
+		} else {
+			$this->updateAccount($account, $credentials, $em, $uow);
+		}
+	}
+
+	/**
+	 * @param string $username
+	 *
+	 * @return VerneMqAuthPluginEntities\Accounts\IAccount|null
+	 */
+	private function findAccount(
+		string $username
+	): ?VerneMqAuthPluginEntities\Accounts\IAccount {
+		$findAccount = new VerneMqAuthPluginQueries\FindAccountQuery();
+		$findAccount->byUsername($username);
+
+		return $this->verneMqAccountRepository->findOneBy($findAccount);
+	}
+
+	/**
+	 * @param DevicesModuleEntities\Devices\Credentials\Credentials $credentials
+	 * @param ORM\UnitOfWork $uow
+	 *
+	 * @return void
+	 *
+	 * @throws Throwable
+	 */
+	private function createAccount(
+		DevicesModuleEntities\Devices\Credentials\Credentials $credentials,
+		ORM\UnitOfWork $uow
+	): void {
+		$account = new VerneMqAuthPluginEntities\Accounts\Account(
+			$credentials->getUsername(),
+			$credentials->getPassword(),
+			VerneMqAuthPluginTypes\AccountType::get(VerneMqAuthPluginTypes\AccountType::TYPE_DEVICE)
+		);
+
+		$account->setClientId($credentials->getDevice()->getIdentifier());
+
+		$account->addPublishAcl('/fb/+/' . $credentials->getUsername() . '/#');
+		$account->addSubscribeAcl('/fb/+/' . $credentials->getUsername() . '/#');
+
+		$uow->scheduleForInsert($account);
+	}
+
+	/**
+	 * @param VerneMqAuthPluginEntities\Accounts\IAccount $account
+	 * @param DevicesModuleEntities\Devices\Credentials\Credentials $credentials
+	 * @param ORM\EntityManager $em
+	 * @param ORM\UnitOfWork $uow
+	 *
+	 * @return void
+	 */
+	private function updateAccount(
+		VerneMqAuthPluginEntities\Accounts\IAccount $account,
+		DevicesModuleEntities\Devices\Credentials\Credentials $credentials,
+		ORM\EntityManager $em,
+		ORM\UnitOfWork $uow
+	): void {
+		$classMetadata = $em->getClassMetadata(get_class($account));
+
+		$passwordProperty = $classMetadata->getReflectionProperty('password');
+		$usernameProperty = $classMetadata->getReflectionProperty('username');
+
+		$account->setPassword($credentials->getPassword());
+		$account->setUsername($credentials->getUsername());
+
+		$uow->propertyChanged(
+			$account,
+			'password',
+			$passwordProperty->getValue($account),
+			$credentials->getPassword()
+		);
+
+		$uow->propertyChanged(
+			$account,
+			'username',
+			$usernameProperty->getValue($account),
+			$credentials->getUsername()
+		);
+
+		$uow->scheduleExtraUpdate($account, [
+			'password' => [
+				$passwordProperty->getValue($account),
+				$credentials->getPassword(),
+			],
+			'username' => [
+				$usernameProperty->getValue($account),
+				$credentials->getUsername(),
+			],
+		]);
 	}
 
 }
