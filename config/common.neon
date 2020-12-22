@@ -169,7 +169,7 @@ nettrineOrmAnnotations:
 #############################
 
 decorator:
-	FastyBird\CouchDbStoragePlugin\Models\PropertiesManager:
+	FastyBird\CouchDbStoragePlugin\Models\StatesManager:
 		setup:
 			- '$onAfterUpdate[]' = @FastyBird\DevicesNode\Events\PropertyStateUpdatedHandler
 

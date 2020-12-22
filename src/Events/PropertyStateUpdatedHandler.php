@@ -50,15 +50,15 @@ class PropertyStateUpdatedHandler
 	/** @var ApplicationExchangePublisher\IPublisher */
 	private ApplicationExchangePublisher\IPublisher $publisher;
 
-	/** @var MqttPluginSenders\ISender */
-	private MqttPluginSenders\ISender $mqttV1sender;
+	/** @var Nette\DI\Container */
+	private Nette\DI\Container $di;
 
 	public function __construct(
 		DevicesModuleHelpers\PropertyHelper $propertyHelper,
 		DevicesModuleModels\Devices\Properties\IPropertyRepository $devicePropertyRepository,
 		DevicesModuleModels\Channels\Properties\IPropertyRepository $channelPropertyRepository,
 		ApplicationExchangePublisher\IPublisher $publisher,
-		MqttPluginSenders\ISender $mqttV1sender
+		Nette\DI\Container $di
 	) {
 		$this->propertyHelper = $propertyHelper;
 		$this->devicePropertyRepository = $devicePropertyRepository;
@@ -66,7 +66,7 @@ class PropertyStateUpdatedHandler
 
 		$this->publisher = $publisher;
 
-		$this->mqttV1sender = $mqttV1sender;
+		$this->di = $di;
 	}
 
 	/**
@@ -120,7 +120,7 @@ class PropertyStateUpdatedHandler
 			$property = $this->devicePropertyRepository->findOneBy($findDeviceProperty);
 
 			if ($property !== null) {
-				$this->mqttV1sender->sendDeviceProperty(
+				$this->di->getByType(MqttPluginSenders\ISender::class)->sendDeviceProperty(
 					$property->getDevice()->getIdentifier(),
 					$property->getProperty(),
 					(string) $this->propertyHelper->normalizeValue($property, $state->getExpected()),
@@ -135,7 +135,7 @@ class PropertyStateUpdatedHandler
 				$property = $this->channelPropertyRepository->findOneBy($findChannelProperty);
 
 				if ($property !== null) {
-					$this->mqttV1sender->sendChannelProperty(
+					$this->di->getByType(MqttPluginSenders\ISender::class)->sendChannelProperty(
 						$property->getChannel()->getDevice()->getIdentifier(),
 						$property->getChannel()->getChannel(),
 						$property->getProperty(),
