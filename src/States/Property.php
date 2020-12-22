@@ -18,6 +18,7 @@ namespace FastyBird\DevicesNode\States;
 use DateTimeImmutable;
 use DateTimeInterface;
 use FastyBird\CouchDbStoragePlugin\States as CouchDbStoragePluginStates;
+use FastyBird\DevicesModule\States as DevicesModuleStates;
 
 /**
  * Property state
@@ -27,7 +28,7 @@ use FastyBird\CouchDbStoragePlugin\States as CouchDbStoragePluginStates;
  *
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  */
-class Property extends CouchDbStoragePluginStates\State implements IProperty
+class Property extends CouchDbStoragePluginStates\State implements IProperty, DevicesModuleStates\IProperty
 {
 
 	public const CREATE_FIELDS = [

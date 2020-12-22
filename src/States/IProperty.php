@@ -16,7 +16,6 @@
 namespace FastyBird\DevicesNode\States;
 
 use DateTimeInterface;
-use FastyBird\DevicesModule\States as DevicesModuleStates;
 
 /**
  * Property interface
@@ -26,7 +25,7 @@ use FastyBird\DevicesModule\States as DevicesModuleStates;
  *
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  */
-interface IProperty extends DevicesModuleStates\IProperty
+interface IProperty
 {
 
 	/**

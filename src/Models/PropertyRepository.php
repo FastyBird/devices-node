@@ -18,6 +18,7 @@ namespace FastyBird\DevicesNode\Models;
 use FastyBird\CouchDbStoragePlugin\Models as CouchDbStoragePluginModels;
 use FastyBird\DevicesModule\Models as DevicesModuleModels;
 use FastyBird\DevicesModule\States as DevicesModuleStates;
+use FastyBird\DevicesNode\States;
 use Nette;
 use Ramsey\Uuid;
 
@@ -50,7 +51,7 @@ class PropertyRepository implements DevicesModuleModels\States\IPropertyReposito
 		Uuid\UuidInterface $id
 	): ?DevicesModuleStates\IProperty {
 		/** @var DevicesModuleStates\IProperty $state */
-		$state = $this->stateRepository->findOne($id);
+		$state = $this->stateRepository->findOne($id, States\Property::class);
 
 		return $state;
 	}
