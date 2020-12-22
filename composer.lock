@@ -2355,12 +2355,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/FastyBird/devices-module.git",
-                "reference": "785a81d52dab0e937691514d12ae14b094b1e506"
+                "reference": "b8949a36dafe8a9eafe3ebf86fd1d3b480eac5de"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FastyBird/devices-module/zipball/785a81d52dab0e937691514d12ae14b094b1e506",
-                "reference": "785a81d52dab0e937691514d12ae14b094b1e506",
+                "url": "https://api.github.com/repos/FastyBird/devices-module/zipball/b8949a36dafe8a9eafe3ebf86fd1d3b480eac5de",
+                "reference": "b8949a36dafe8a9eafe3ebf86fd1d3b480eac5de",
                 "shasum": ""
             },
             "require": {
@@ -2439,7 +2439,7 @@
                 "issues": "https://github.com/FastyBird/devices-module/issues",
                 "source": "https://github.com/FastyBird/devices-module/tree/master"
             },
-            "time": "2020-12-21T16:33:10+00:00"
+            "time": "2020-12-22T10:39:54+00:00"
         },
         {
             "name": "fastybird/json-api",
